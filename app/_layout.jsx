@@ -7,7 +7,7 @@ return ( <>
             headerStyle: {backgroundColor: Colors.navBackground},
             headerTintColor:Colors.title,
         }}>
-         <Stack.Screen name="index" options={{ title: "Home" }} />
+         <Stack.Screen name="index" options={{ headerShown:false }} />
         </Stack>
 </>)
 }
