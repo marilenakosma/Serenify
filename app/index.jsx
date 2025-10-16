@@ -3,6 +3,7 @@ import LogoGreen from "../assets/images/leaf-green.png";
 //import LogoBeige from "../assets/images/leaf-beige.png";
 import { Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
 import { useFonts } from 'expo-font';
+import { Link } from 'expo-router';
 import ThemedText from "../components/ThemedText";
 import ThemedView from "../components/ThemedView";
 
@@ -28,6 +29,11 @@ export default function Index() {
       <ThemedText title={true} style={styles.title_alt}>
        Serenify
       </ThemedText>
+
+      <Link href="/login" replace>
+        <ThemedText style={{textAlign:'center'}}>
+            Login</ThemedText>
+        </Link>
 
     </ThemedView>
   );
