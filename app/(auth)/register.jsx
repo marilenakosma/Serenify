@@ -1,17 +1,44 @@
 import { Link } from "expo-router";
-import { StyleSheet } from "react-native";
+import { useState } from "react";
+import { StyleSheet, Text } from "react-native";
+import Spacer from "../../components/Spacer";
+import ThemedButton from "../../components/ThemedButton";
+import ThemedInput from "../../components/ThemedInput";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
 const Register = () => {
+    const [email,setEmail] = useState('')
+    const [password,setPassword] = useState('')
+
   return (
       <ThemedView style={styles.container}>
-        <ThemedText>Register</ThemedText>
-  
-         <Link href="/register" replace>
+      <ThemedText style={styles.title}>Register</ThemedText>
+         
+        <ThemedInput 
+      style={{width:'80%',marginBottom:20}}
+      placeholder="Email"
+      keyboardType="email-address"
+      onChangeText={setEmail}
+      value={email}/>
+
+      <ThemedInput 
+      style={{width:'80%',marginBottom:20}}
+      placeholder="Password"
+      onChangeText={setPassword}
+      value={password}
+      secureTextEntry/>
+
+        <ThemedButton>
+          <Text style={{color:'#f2f2f2'}}>Register</Text>
+        </ThemedButton>
+
+        <Spacer height={30}/>
+
+         <Link href="/login" replace>
                 <ThemedText style={{textAlign:'center'}}>
-                    Login</ThemedText>
+                    Have an account? Login</ThemedText>
                 </Link>
   
       </ThemedView>
