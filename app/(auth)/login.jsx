@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedInput from "../../components/ThemedInput";
@@ -13,10 +13,11 @@ const Login = () => {
     const [password,setPassword] = useState('')
     
     const handleSubmit =() => {
-     console.log('Login form submitted')
+     console.log('Login form submitted',email,password)
     }
     
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <ThemedView style={styles.container}>
       <ThemedText style={styles.title}>
         Login to Your Account
@@ -36,7 +37,7 @@ const Login = () => {
       value={password}
       secureTextEntry/>
 
-      <ThemedButton>
+      <ThemedButton onPress={handleSubmit}>
         <Text style={{color:'#f2f2f2'}}>Login</Text>
       </ThemedButton>
 
@@ -48,7 +49,7 @@ const Login = () => {
               </Link>
 
     </ThemedView>
-    
+</TouchableWithoutFeedback>    
   )
 }
 

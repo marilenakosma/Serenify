@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedInput from "../../components/ThemedInput";
@@ -11,10 +11,17 @@ import { Colors } from "../../constants/Colors";
 const Register = () => {
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
-
+    
+    const handleSubmit =() => {
+     console.log('Login form submitted',email,password)
+    }
+    
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Register</ThemedText>
+      <ThemedText style={styles.title}>
+        Register for an Account
+        </ThemedText>
          
         <ThemedInput 
       style={{width:'80%',marginBottom:20}}
@@ -30,7 +37,7 @@ const Register = () => {
       value={password}
       secureTextEntry/>
 
-        <ThemedButton>
+        <ThemedButton onPress={handleSubmit}>
           <Text style={{color:'#f2f2f2'}}>Register</Text>
         </ThemedButton>
 
@@ -42,6 +49,7 @@ const Register = () => {
                 </Link>
   
       </ThemedView>
+      </TouchableWithoutFeedback>
       
     )
 }
