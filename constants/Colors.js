@@ -7,7 +7,8 @@ export const Colors = {
   text: "#2F3529",
   title: "#1D241A",
   border: "#B5BDAA",
-  warning: "#CC6E5D", // optional: a warm muted coral for alerts
+  warning: "#CC6E5D", 
+  tabGroupBackground: "#fcf9f4" // optional: a warm muted coral for alerts
 };
 
 //background: "#dbe7d3", PRASINO

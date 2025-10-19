@@ -7,7 +7,7 @@ const _layout = () => {
     <Tabs
     screenOptions={{ headerShown:true,
         tabBarStyle: {
-         backgroundColor:Colors.uiBackground,
+         backgroundColor:Colors.tabGroupBackground,
          paddingTop:10,
          height:90
         },

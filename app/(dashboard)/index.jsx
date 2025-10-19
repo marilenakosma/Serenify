@@ -6,7 +6,7 @@ import { Colors } from "../../constants/Colors";
 const index = () => {
  return (
      <ThemedView style={styles.container}>
-       <ThemedText title={true} style={styles.title}>index</ThemedText>
+       <ThemedText title={true} style={styles.title}>Home</ThemedText>
      </ThemedView>
    )
 }
