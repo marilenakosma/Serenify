@@ -1,13 +1,24 @@
-import { StyleSheet } from "react-native";
+import { useRouter } from 'expo-router';
+import { StyleSheet, Text } from "react-native";
+import ThemedButton from '../../components/ThemedButton';
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
 const index = () => {
+    const router=useRouter()
  return (
      <ThemedView style={styles.container}>
        <ThemedText title={true} style={styles.title}>index</ThemedText>
+
+       <ThemedButton onPress={() => 
+        router.navigate("questions")}>
+          <Text style={{color:'#f2f2f2'}}>Start Quiz</Text>
+        </ThemedButton>
+
      </ThemedView>
+
+     
    )
 }
 

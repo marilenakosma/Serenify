@@ -46,7 +46,8 @@ const Login = () => {
       value={password}
       secureTextEntry/>
 
-      <ThemedButton onPress={() => router.navigate("/(dashboard)/activities")}>
+      <ThemedButton onPress={() =>
+         router.navigate("/(questionnaire)")}>
         <Text style={{color:'#f2f2f2'}}>Login</Text>
       </ThemedButton>
 
