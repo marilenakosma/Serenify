@@ -3,15 +3,15 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
-const Questions = () => {
-  return (
-    <ThemedView style={styles.container}>
-      <ThemedText title={true} style={styles.title}>questions</ThemedText>
-    </ThemedView>
-  )
+const index = () => {
+ return (
+     <ThemedView style={styles.container}>
+       <ThemedText title={true} style={styles.title}>index</ThemedText>
+     </ThemedView>
+   )
 }
 
-export default Questions
+export default index
 
 const styles = StyleSheet.create({
     container: {

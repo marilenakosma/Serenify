@@ -1,17 +1,17 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
-const Questions = () => {
+const activities = () => {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText title={true} style={styles.title}>questions</ThemedText>
+      <ThemedText title={true} style={styles.title}>activities</ThemedText>
     </ThemedView>
   )
 }
 
-export default Questions
+export default activities
 
 const styles = StyleSheet.create({
     container: {

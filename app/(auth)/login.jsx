@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import Spacer from "../../components/Spacer";
@@ -15,6 +15,15 @@ const Login = () => {
     const handleSubmit =() => {
      console.log('Login form submitted',email,password)
     }
+   
+    const router = useRouter();
+
+    const handleLogin = () => {
+    // After successful login:
+    router.replace("/(dashboard)");
+  };
+
+
     
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -37,7 +46,7 @@ const Login = () => {
       value={password}
       secureTextEntry/>
 
-      <ThemedButton onPress={handleSubmit}>
+      <ThemedButton onPress={() => router.navigate("/(dashboard)/activities")}>
         <Text style={{color:'#f2f2f2'}}>Login</Text>
       </ThemedButton>
 
