@@ -9,7 +9,12 @@ const index = () => {
     const router=useRouter()
  return (
      <ThemedView style={styles.container}>
-       <ThemedText title={true} style={styles.title}>index</ThemedText>
+        
+        <ThemedText  title={true} style={styles.title}>Welcome to Serenify</ThemedText>
+
+        <ThemedText style={{paddingBottom:20}}> 
+          We would like to begin by you asking a few questions
+        </ThemedText>
 
        <ThemedButton onPress={() => 
         router.navigate("questions")}>
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
         textAlign:"center",
         fontWeight: 'bold',
         fontSize: 18,
-        marginBottom:30
+        marginBottom:10
     },
     btn: {
         backgroundColor:Colors.primary,
