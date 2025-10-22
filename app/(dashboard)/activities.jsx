@@ -46,15 +46,15 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   grid: {
-    paddingVertical: 20,
+    padding: 20,
   },
   row: {
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
   activityItem: {
     flex: 1,
-    margin: 5,
+    marginHorizontal: 5,
     maxWidth: '45%', // Ensures proper spacing
   }
 })

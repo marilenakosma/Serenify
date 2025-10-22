@@ -37,8 +37,8 @@ export default function Index() {
       <Spacer height={20}/>
       
       <ThemedButton onPress={() => 
-        router.navigate("/(auth)/login")}>
-          <Text style={{color:'#f2f2f2'}}>Start</Text>
+        router.navigate("/(auth)/register")}>
+          <Text style={{color:'#f2f2f2'}}>Sign Up</Text>
         </ThemedButton>
 
     </ThemedView>
