@@ -1,6 +1,8 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
+import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedInput from "../../components/ThemedInput";
@@ -18,43 +20,87 @@ const Register = () => {
 
     const router = useRouter()
     
-  return (
+    return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>
-        Register for an Account
-        </ThemedText>
+      <ThemedView style={{flex:1}}>
+        <SafeAreaView>
+
+           <ThemedView style={{flexDirection:'row',justifyContent:'start'}}> 
+             <TouchableOpacity onPress={router.back} style={styles.button}>
+            <ArrowLeftIcon size="20" color="black"/>
+          </TouchableOpacity>
+        </ThemedView>
+
+        <ThemedView style={{flexDirection:'row',justifyContent:'center'}}>
+          <Image source={require('../../assets/images/leaf-green.png')}
+            style={{width:200,height:200}} />   
+        </ThemedView>
+     </SafeAreaView>
+
+       <ThemedView style={styles.container}>
+         <ThemedText style={styles.title}>
+          Register for an account
+         </ThemedText>
          
-        <ThemedInput 
-      style={{width:'80%',marginBottom:20}}
-      placeholder="Email"
-      keyboardType="email-address"
-      onChangeText={setEmail}
-      value={email}/>
+         <ThemedInput 
+           style={{width:'80%',marginBottom:20}}
+           placeholder="Name"
+           keyboardType="email-address"
+           onChangeText={setEmail}
+           value={email}/>
 
-      <ThemedInput 
-      style={{width:'80%',marginBottom:20}}
-      placeholder="Password"
-      onChangeText={setPassword}
-      value={password}
-      secureTextEntry/>
+         <ThemedInput 
+           style={{width:'80%',marginBottom:20}}
+           placeholder="Email"
+           keyboardType="email-address"
+           onChangeText={setEmail}
+           value={email}/>
 
-        <ThemedButton onPress={() => 
-            router.navigate("/(questionnaire)")}>
-          <Text style={{color:'#f2f2f2'}}>Register</Text>
-        </ThemedButton>
+         <ThemedInput 
+           style={{width:'80%',marginBottom:20}}
+           placeholder="Password"
+           onChangeText={setPassword}
+           value={password}
+           secureTextEntry />
+        
+          <Spacer height={10}/>
 
-        <Spacer height={30}/>
+         <ThemedButton onPress={() =>
+           router.navigate("/(questionnaire)")}>
+           <Text style={{color:'#f2f2f2'}}>Sign Up</Text>
+         </ThemedButton>
+         
+         <Spacer height={20}/>
+
+         <ThemedText style={styles.title}>Or</ThemedText>
+          
+        <View style={{flexDirection:'row'}}>
+          <TouchableOpacity style={styles.image}>
+          <Image source={require('../../assets/images/google.png')}
+            style={{width:40,height:40}} />  
+         </TouchableOpacity>
+
+         <TouchableOpacity style={styles.image}>
+          <Image source={require('../../assets/images/apple.png')}
+            style={{width:40,height:40}} />  
+         </TouchableOpacity>
+
+         <TouchableOpacity style={styles.image}>
+          <Image source={require('../../assets/images/facebook.png')}
+            style={{width:40,height:40}} />  
+         </TouchableOpacity>
+         </View>
+
+         <Spacer height={30}/>
 
          <Link href="/login" replace>
-                <ThemedText style={{textAlign:'center'}}>
-                    Have an account? Login</ThemedText>
-                </Link>
-  
-      </ThemedView>
-      </TouchableWithoutFeedback>
-      
-    )
+              <ThemedText style={{textAlign:'center'}}>
+                  Login instead</ThemedText>
+              </Link>        
+    </ThemedView>
+</ThemedView>
+</TouchableWithoutFeedback>    
+  )
 }
 
 export default Register
@@ -63,7 +109,12 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         alignItems:'center',
-        justifyContent:'center'
+        backgroundColor:"white",
+        paddingLeft: 32,
+        paddingRight: 32, 
+        paddingTop: 40,
+        borderTopLeftRadius: 50,
+        borderTopRightRadius: 50
     },
     title: {
         textAlign:"center",
@@ -71,12 +122,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom:30
     },
-    btn: {
-        backgroundColor:Colors.primary,
-        padding:15,
-        borderRadius:5
+    image:{
+         backgroundColor:Colors.uiBackground,
+         padding:8,
+         borderRadius:16,
+         marginHorizontal: 10 
     },
-    pressed: {
-        opacity:0.8
+    button: {
+      padding: 8,
+      marginLeft: 16,
+      borderTopRightRadius: 16, 
+      borderBottomLeftRadius:16,
+      backgroundColor: Colors.primary,
     }
 })
