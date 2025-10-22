@@ -1,7 +1,6 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
@@ -25,11 +24,7 @@ const Register = () => {
       <ThemedView style={{flex:1}}>
         <SafeAreaView>
 
-           <ThemedView style={{flexDirection:'row',justifyContent:'start'}}> 
-             <TouchableOpacity onPress={router.back} style={styles.button}>
-            <ArrowLeftIcon size="20" color="black"/>
-          </TouchableOpacity>
-        </ThemedView>
+        <BackButton/>
 
         <ThemedView style={{flexDirection:'row',justifyContent:'center'}}>
           <Image source={require('../../assets/images/leaf-green.png')}

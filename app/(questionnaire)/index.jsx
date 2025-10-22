@@ -1,5 +1,7 @@
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '../../components/BackButton';
 import ThemedButton from '../../components/ThemedButton';
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
@@ -8,10 +10,17 @@ import { Colors } from "../../constants/Colors";
 const index = () => {
     const router=useRouter()
  return (
-     <ThemedView style={styles.container}>
-        
-        <ThemedText  title={true} style={styles.title}>Welcome to Serenify</ThemedText>
+    <View style={{flex:1}}>
 
+        <SafeAreaView style={{backgroundColor:Colors.background}}>
+          <BackButton/>
+        </SafeAreaView>
+
+        <ThemedView style={styles.container}>
+
+        <ThemedText  title={true} style={styles.title}>Welcome to Serenify</ThemedText>
+        
+        
         <ThemedText style={{paddingBottom:20}}> 
           We would like to begin by you asking a few questions
         </ThemedText>
@@ -22,6 +31,7 @@ const index = () => {
         </ThemedButton>
 
      </ThemedView>
+     </View>
 
      
    )
