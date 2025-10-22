@@ -1,13 +1,31 @@
 import { StyleSheet } from "react-native";
-import ThemedText from "../../components/ThemedText";
+import Spacer from "../../components/Spacer";
+import ThemedGoal from "../../components/ThemedGoal";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
 const quests = () => {
   return (
         <ThemedView style={styles.container}>
-          <ThemedText title={true} style={styles.title}>quests</ThemedText>
-        </ThemedView>
+          <ThemedGoal name="create-outline" 
+          text="Complete a goal"></ThemedGoal>
+        
+        <Spacer height={10}/>
+        
+          <ThemedGoal name="phone-portrait-outline" 
+          text="Change one interior item"></ThemedGoal>
+         
+         <Spacer height={10}/>
+
+          <ThemedGoal name="journal-outline" 
+          text="Practice Gratitude"></ThemedGoal>
+        
+        <Spacer height={10}/>
+
+          <ThemedGoal name="person-remove-outline" 
+          text="Name your emotion"></ThemedGoal>
+        
+     </ThemedView>
       )
 }
 

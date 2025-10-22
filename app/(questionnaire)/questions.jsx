@@ -45,7 +45,8 @@ const Questions = () => {
       {quizData[currentQuestion].options.map((option, index) => (
 			<TouchableOpacity key={index}
 							style={styles.option}
-							onPress={() => handleAnswer(option,index)}>
+							onPress={() => handleAnswer(option,index)}
+              >
                   
 	      <ThemedText style={styles.text}>{option}</ThemedText>
 
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
         marginBottom:10
     },
     option: {
-		   backgroundColor: Colors.primary,
+		   backgroundColor: Colors.tabGroupBackground,
 		   padding: 10,
 		   marginBottom: 10,
 		   alignItems: 'center',
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
 	},
   text: {
     fontSize: 16,
-    color: 'black'
+    color: Colors.primary
   },
     btn: {
         backgroundColor:Colors.primary,

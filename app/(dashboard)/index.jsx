@@ -1,12 +1,36 @@
 import { StyleSheet } from "react-native";
-import ThemedText from "../../components/ThemedText";
+import Spacer from "../../components/Spacer";
+import ThemedGoal from "../../components/ThemedGoal";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
 const index = () => {
  return (
      <ThemedView style={styles.container}>
-       <ThemedText title={true} style={styles.title}>Home</ThemedText>
+
+        <ThemedGoal name="book" 
+        text="Read a book"></ThemedGoal>
+        
+        <Spacer height={10}/>
+
+         <ThemedGoal name="person" 
+         text="Email people at work"></ThemedGoal>
+
+        <Spacer height={10}/>
+        
+         <ThemedGoal name="battery-full-outline" 
+         text="Discharge my battery"></ThemedGoal>
+         
+         <Spacer height={10}/>
+
+         <ThemedGoal name="bulb-outline" 
+         text="Buy new light bulbs"></ThemedGoal>
+        
+        <Spacer height={10}/>
+
+         <ThemedGoal name="clipboard-outline" 
+         text="A random goal for today"></ThemedGoal>
+        
      </ThemedView>
    )
 }

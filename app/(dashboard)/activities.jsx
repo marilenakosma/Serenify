@@ -1,13 +1,12 @@
-import { StyleSheet } from 'react-native';
-import ThemedText from "../../components/ThemedText";
+import { StyleSheet } from "react-native";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
 const activities = () => {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText title={true} style={styles.title}>activities</ThemedText>
-    </ThemedView>
+        
+     </ThemedView>
   )
 }
 
