@@ -1,32 +1,37 @@
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import Spacer from "../../components/Spacer";
 import ThemedGoal from "../../components/ThemedGoal";
 import ThemedView from "../../components/ThemedView";
-import { Colors } from "../../constants/Colors";
 
 const quests = () => {
-  return (
-        <ThemedView style={styles.container}>
-          <ThemedGoal name="create-outline" 
-          text="Complete a goal"></ThemedGoal>
-        
-        <Spacer height={10}/>
-        
-          <ThemedGoal name="phone-portrait-outline" 
-          text="Change one interior item"></ThemedGoal>
-         
-         <Spacer height={10}/>
+  const questData = [
+    { id:1, name:"create-outline",text:"Complete a goal" },
+    { id:2, name:"phone-portrait-outline", text:"Change one interior item"},
+    { id:3, name:"journal-outline", text:"Practice Gratitude"},
+    { id:4, name:"person-remove-outline", text:"Name your emotion"},
+    { id:5, name:"clipboard-outline", text:"A random goal for today"}
+  ]
 
-          <ThemedGoal name="journal-outline" 
-          text="Practice Gratitude"></ThemedGoal>
-        
-        <Spacer height={10}/>
+  const renderQuest = ({item}) => (
+   <ThemedGoal
+     name={item.name}
+     text={item.text}
+   />
+  )
 
-          <ThemedGoal name="person-remove-outline" 
-          text="Name your emotion"></ThemedGoal>
-        
+  const Separator = () => <Spacer height={20}/>
+
+ return (
+     <ThemedView style={styles.container}>
+        <FlatList
+        data={questData}
+        renderItem={renderQuest}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle = {styles.grid}
+        ItemSeparatorComponent={Separator}
+        />
      </ThemedView>
-      )
+   )
 }
 
 export default quests
@@ -34,21 +39,11 @@ export default quests
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        alignItems:'center',
-        justifyContent:'center'
     },
-    title: {
-        textAlign:"center",
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom:30
-    },
-    btn: {
-        backgroundColor:Colors.primary,
-        padding:15,
-        borderRadius:5
-    },
-    pressed: {
-        opacity:0.8
+    grid: {
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
     }
+     
 })
