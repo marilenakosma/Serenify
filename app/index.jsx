@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Image, StyleSheet } from 'react-native';
-import LogoGreen from "../assets/images/leaf-green.png";
+import { StyleSheet } from 'react-native';
+//import LogoGreen from "../assets/images/leaf-green.png";
 //import LogoBeige from "../assets/images/leaf-beige.png";
 import { Montserrat_400Regular, Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
+import LottieView from 'lottie-react-native';
 import Spacer from '../components/Spacer';
 import SplashScreen from '../components/SplashScreen';
 import ThemedButton from '../components/ThemedButton';
@@ -23,16 +24,21 @@ export default function Index() {
   if (!fontsLoaded || showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
-
+//<Image source={LogoGreen} style={styles.image}/>
   return (
     <ThemedView style={styles.container}>
-      <Image source={LogoGreen} style={styles.image}/>
+       <LottieView
+              source={require('../assets/animations/MapleLeaves.json')} 
+              autoPlay
+              loop={false}
+              style={styles.animation}
+            />
       <ThemedText title={true} style={styles.title}>
         Serenify
       </ThemedText>
 
       <ThemedText style={styles.subtitle}>
-        Finding your inner peace...
+        Find your inner peace...
       </ThemedText>
       
       <Spacer height={20}/>
@@ -55,6 +61,10 @@ const styles = StyleSheet.create({
         width:220,
         height:220
     },
+    animation: {
+    width: 200,
+    height: 200,
+  },
     title: {
         fontSize: 25,
         marginTop: 20,

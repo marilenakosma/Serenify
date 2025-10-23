@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     },
     grid: {
       padding: 20,
-      marginVertical: 8,
+      marginVertical: 50,
       marginHorizontal: 16,
     }
      

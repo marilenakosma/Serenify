@@ -11,6 +11,7 @@ import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
 const Register = () => {
+    const [name,setName] = useState('')
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
     
@@ -41,9 +42,9 @@ const Register = () => {
          <ThemedInput 
            style={{width:'80%',marginBottom:20}}
            placeholder="Name"
-           keyboardType="email-address"
-           onChangeText={setEmail}
-           value={email}/>
+           keyboardType="default"
+           onChangeText={setName}
+           value={name}/>
 
          <ThemedInput 
            style={{width:'80%',marginBottom:20}}

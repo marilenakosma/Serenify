@@ -1,7 +1,6 @@
-import { Ionicons } from '@expo/vector-icons'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Image, Pressable, StyleSheet, View } from 'react-native'
 import ThemedText from './ThemedText'
-const ThemedCategory = ({name,text}) => {
+const ThemedCategory = ({image,text}) => {
   function handlePress() {
       console.log("pressed!")
     }
@@ -10,9 +9,8 @@ const ThemedCategory = ({name,text}) => {
     <View style={styles.container}>
       <Pressable style={styles.button} 
         onPress={handlePress}> 
-        <Ionicons style={{padding:5}}
-        size={24} 
-        name={name} /> 
+        <Image source={image}
+            style={{width:30,height:30,padding:10}} /> 
         <ThemedText style={{padding:10}}>{text}</ThemedText>
         </Pressable>
     </View>
@@ -30,5 +28,6 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
         flexDirection:"row",
         borderRadius:5,
+        padding:7
     }
 })

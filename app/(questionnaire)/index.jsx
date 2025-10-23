@@ -24,21 +24,20 @@ const index = () => {
         </ThemedText>
 
           <LottieView
-                source={require('../../assets/animations/HappyDog.json')} 
+                source={require('../../assets/animations/Dog.json')} 
                 autoPlay
                 loop={true}
                 style={styles.animation}
               />
        
-            
-
         <ThemedText style={styles.description}> 
           We would like to begin by asking you a few questions
         </ThemedText>
 
        <ThemedButton onPress={() => 
         router.navigate("questions")}>
-          <ThemedText title={true} style={{color:'#f2f2f2'}}>Start Quiz</ThemedText>
+          <ThemedText title={true} 
+          style={{color:'#f2f2f2'}}>Start Quiz</ThemedText>
         </ThemedButton>
 
      </ThemedView>

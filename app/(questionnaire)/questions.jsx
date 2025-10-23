@@ -20,6 +20,7 @@ const Questions = () => {
      const router=useRouter()
      
      const handleAnswer = (selectedOption, index) => {
+      
       setAnswers(prevAnswers => ({
         ...prevAnswers,
         [currentQuestion]: {
@@ -44,10 +45,13 @@ const Questions = () => {
         </SafeAreaView>
         
       <ThemedView style={styles.container}>
-      <ThemedText title={true} style={styles.title}>
-        {quizData[currentQuestion].question}               
+        <ThemedText style={styles.title}>
+        {quizData[currentQuestion].length}               
       </ThemedText>
 
+       <ThemedText title={true} style={styles.title}>
+        {quizData[currentQuestion].question}               
+      </ThemedText>
       <Spacer height={20}/>
 
       {quizData[currentQuestion].options.map((option, index) => (
@@ -84,26 +88,22 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign:"center",
-        fontSize: 18,
+        fontSize: 25,
         marginBottom:10
     },
     option: {
 		   backgroundColor: Colors.tabGroupBackground,
-		   padding: 10,
+		   padding: 15,
 		   marginBottom: 10,
 		   alignItems: 'center',
-       color: '#31362bff',
-       borderRadius:5
+       borderRadius:5,
+       borderColor:'#31362bff',
+       borderWidth:0.2
 	},
   text: {
     fontSize: 16,
-    color: Colors.primary
+    color: '#31362bff'
   },
-    btn: {
-        backgroundColor:Colors.primary,
-        padding:15,
-        borderRadius:5
-    },
     pressed: {
         opacity:0.8
     }

@@ -5,7 +5,7 @@ import { Colors } from '../../constants/Colors';
 const _layout = () => {
   return (
     <Tabs
-    screenOptions={{ headerShown:true,
+    screenOptions={{ headerShown:false,
         tabBarStyle: {
          backgroundColor:Colors.tabGroupBackground,
          paddingTop:10,

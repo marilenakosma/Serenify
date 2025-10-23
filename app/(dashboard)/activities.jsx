@@ -1,22 +1,29 @@
 import { FlatList, StyleSheet } from "react-native";
+import Sounds from "../../assets/images/cassette.png";
+import Goal from "../../assets/images/clipboard.png";
+import Diary from "../../assets/images/diary.png";
+import Kit from "../../assets/images/first-aid-kit.png";
+import Gift from "../../assets/images/gift.png";
+import Timers from "../../assets/images/smartwatch.png";
+import Breathe from "../../assets/images/yoga-master.png";
 import ThemedCategory from "../../components/ThemedCategory";
 import ThemedView from "../../components/ThemedView";
 
 const activities = () => {
   const categoryData = [
-    { id:1, name:"bulb-outline",text:"Goal Ideas" },
-    { id:2, name:"person", text:"Reflections"},
-    { id:3, name:"person", text:"Breathe"},
-    { id:4, name:"person", text:"Soundscapes"},
-    { id:5, name:"person", text:"Movements"},
-    { id:6, name:"person", text:"Timers"},
-    { id:7, name:"person", text:"Act of Kindness"},
-    { id:8, name:"person", text:"First Aid Kit"},
+    { id:1, image:Goal,text:"Goal Ideas" },
+    { id:2, image:Diary, text:"Reflections"},
+    { id:3, image:Breathe, text:"Breathe"},
+    { id:4, image:Sounds, text:"Soundscapes"},
+    { id:5, image:Breathe, text:"Movements"},
+    { id:6, image:Timers, text:"Timers"},
+    { id:7, image:Gift, text:"Act of Kindness"},
+    { id:8, image:Kit, text:"First Aid Kit"},
   ]
 
   const renderActivity = ({item}) => (
    <ThemedCategory
-     name={item.name}
+     image={item.image}
      text={item.text}
      style={styles.activityItem}
    />
@@ -43,10 +50,10 @@ export default activities
 const styles = StyleSheet.create({
     container: {
     flex: 1,
-    padding: 10,
   },
   grid: {
     padding: 20,
+    marginVertical:50
   },
   row: {
     justifyContent: 'space-between',
