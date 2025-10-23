@@ -1,6 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '../../components/BackButton';
 import Spacer from "../../components/Spacer";
 import ThemedButton from '../../components/ThemedButton';
 import ThemedText from '../../components/ThemedText';
@@ -35,8 +37,14 @@ const Questions = () => {
      }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>
+    <ThemedView style={{flex:1}}>
+
+      <SafeAreaView style={{backgroundColor:Colors.background}}>
+          <BackButton/>
+        </SafeAreaView>
+        
+      <ThemedView style={styles.container}>
+      <ThemedText title={true} style={styles.title}>
         {quizData[currentQuestion].question}               
       </ThemedText>
 
@@ -54,10 +62,12 @@ const Questions = () => {
 						))}
 
       {quizCompleted ? <ThemedButton onPress={() => router.navigate("/(dashboard)")}>
-        <ThemedText style={{color:'#f2f2f2'}}>Go to Dashboard</ThemedText>
+        <ThemedText title={true} style={{color:'#f2f2f2'}}>Go to Dashboard</ThemedText>
       </ThemedButton> : null }
 
     </ThemedView>
+    </ThemedView>
+    
   )
   
 }
@@ -74,7 +84,6 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign:"center",
-        fontWeight: 'bold',
         fontSize: 18,
         marginBottom:10
     },

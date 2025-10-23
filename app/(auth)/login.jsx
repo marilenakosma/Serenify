@@ -1,6 +1,6 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Keyboard, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/BackButton";
 import Spacer from "../../components/Spacer";
@@ -42,7 +42,7 @@ const Login = () => {
      </SafeAreaView>
 
        <ThemedView style={styles.container}>
-         <ThemedText style={styles.title}>
+         <ThemedText title={true} style={styles.title}>
           Login to your Account
          </ThemedText>
          
@@ -70,12 +70,14 @@ const Login = () => {
 
          <ThemedButton onPress={() =>
            router.navigate("/(questionnaire)")}>
-           <Text style={{color:'#f2f2f2'}}>Login</Text>
+           <ThemedText title={true} style={{color:'#f2f2f2'}}>Login</ThemedText>
          </ThemedButton>
          
          <Spacer height={20}/>
 
-         <ThemedText style={styles.title}>Or</ThemedText>
+         <ThemedText title={true} 
+         style={styles.title}>Or
+         </ThemedText>
           
         <View style={{flexDirection:'row'}}>
           <TouchableOpacity style={styles.image}>
@@ -123,7 +125,6 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign:"center",
-        fontWeight: 'bold',
         fontSize: 18,
         marginBottom:30
     },

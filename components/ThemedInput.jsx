@@ -9,7 +9,8 @@ const ThemedInput = ({style,...props}) => {
         backgroundColor:Colors.uiBackground,
         color:Colors.text,
         padding:20,
-        borderRadius:6
+        borderRadius:6,
+        fontFamily:'Montserrat_400Regular'
        },
        style
     ]}

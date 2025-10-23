@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import LogoGreen from "../assets/images/leaf-green.png";
 //import LogoBeige from "../assets/images/leaf-beige.png";
-import { Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
+import { Montserrat_400Regular, Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
 import Spacer from '../components/Spacer';
@@ -13,7 +13,8 @@ import ThemedView from "../components/ThemedView";
 
 export default function Index() {
   const [fontsLoaded] = useFonts({
-    Montserrat_600SemiBold
+    Montserrat_600SemiBold,
+    Montserrat_400Regular
   });
    
   const [showSplash, setShowSplash] = useState(true);
@@ -29,11 +30,15 @@ export default function Index() {
       <ThemedText title={true} style={styles.title}>
         Serenify
       </ThemedText>
+
+      <ThemedText style={styles.subtitle}>
+        Finding your inner peace...
+      </ThemedText>
       
       <Spacer height={20}/>
       
       <ThemedButton onPress={() => router.navigate("/(auth)/register")}>
-        <ThemedText style={{color:'#f2f2f2'}}>Get Started</ThemedText>
+        <ThemedText title={true} style={{color:'#f2f2f2'}}>Get Started</ThemedText>
       </ThemedButton>
     </ThemedView>
   );
@@ -51,11 +56,14 @@ const styles = StyleSheet.create({
         height:220
     },
     title: {
-        fontSize: 20,
+        fontSize: 25,
         marginTop: 20,
         textAlign: 'center',
         fontFamily: 'Montserrat_600SemiBold'
          },
+    subtitle: {
+        fontSize: 16,
+    },
     link: {
         marginVertical: 10,
         borderBottomWidth:1
