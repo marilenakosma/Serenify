@@ -2,6 +2,7 @@ import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import BackButton from "../../components/BackButton";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedInput from "../../components/ThemedInput";
@@ -27,8 +28,8 @@ const Register = () => {
         <BackButton/>
 
         <ThemedView style={{flexDirection:'row',justifyContent:'center'}}>
-          <Image source={require('../../assets/images/leaf-green.png')}
-            style={{width:200,height:200}} />   
+          <Image source={require('../../assets/images/tropical.png')}
+            style={{width:180,height:180}} />   
         </ThemedView>
      </SafeAreaView>
 

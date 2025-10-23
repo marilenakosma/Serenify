@@ -141,3 +141,12 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.primary,
     }
 })
+
+/*import LottieView from 'lottie-react-native';
+
+<LottieView
+  source={require('../assets/duck-walk.json')}
+  autoPlay
+  loop
+/>
+ */

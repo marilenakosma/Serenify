@@ -18,6 +18,7 @@ const index = () => {
      text={item.text}
    />
   )
+  
 const Separator = () => <Spacer height={20}/>
 
  return (
