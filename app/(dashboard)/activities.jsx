@@ -5,6 +5,7 @@ import Diary from "../../assets/images/diary.png";
 import Kit from "../../assets/images/first-aid-kit.png";
 import Gift from "../../assets/images/gift.png";
 import Timers from "../../assets/images/smartwatch.png";
+import Movements from "../../assets/images/sneakers.png";
 import Breathe from "../../assets/images/yoga-master.png";
 import ThemedCategory from "../../components/ThemedCategory";
 import ThemedView from "../../components/ThemedView";
@@ -15,7 +16,7 @@ const activities = () => {
     { id:2, image:Diary, text:"Reflections"},
     { id:3, image:Breathe, text:"Breathe"},
     { id:4, image:Sounds, text:"Soundscapes"},
-    { id:5, image:Breathe, text:"Movements"},
+    { id:5, image:Movements, text:"Movements"},
     { id:6, image:Timers, text:"Timers"},
     { id:7, image:Gift, text:"Act of Kindness"},
     { id:8, image:Kit, text:"First Aid Kit"},
