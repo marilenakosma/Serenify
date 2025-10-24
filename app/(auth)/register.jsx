@@ -123,12 +123,5 @@ const styles = StyleSheet.create({
          padding:8,
          borderRadius:16,
          marginHorizontal: 10 
-    },
-    button: {
-      padding: 8,
-      marginLeft: 16,
-      borderTopRightRadius: 16, 
-      borderBottomLeftRadius:16,
-      backgroundColor: Colors.primary,
     }
 })

@@ -39,6 +39,7 @@ export default quests
 const styles = StyleSheet.create({
     container: {
         flex:1,
+        backgroundColor:'#f1f5eeff'
     },
     grid: {
       padding: 20,

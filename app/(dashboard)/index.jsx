@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, ImageBackground, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Angry from "../../assets/images/angry.png";
 import Neutral from "../../assets/images/neutral.png";
@@ -45,30 +45,40 @@ const index = () => {
   const Separator = () => <Spacer height={15}/>
 
   return (
-    <ThemedView style={{flex:1}}>
+    <ThemedView style={{flex:1}}> 
       <SafeAreaView style={styles.container}>
-        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-          {/* Mood Section */}
-          <ThemedView style={styles.section}>
-            <ThemedText style={styles.sectionTitle}>
-              Hello,Sol
-            </ThemedText>
-            <ThemedText title={true} style={styles.sectionTitle}>
-              How are you feeling today?
-            </ThemedText>
-            <FlatList
-              data={moodData}
-              renderItem={renderMood}
-              keyExtractor={(item) => item.id.toString()}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.moodList}
-              ItemSeparatorComponent={() => <View style={{width: 5}} />}
-            />
-          </ThemedView>
+          
+          {/* Mood Section with Background Image */}
+          <ImageBackground 
+            source={require('../../assets/images/vector.jpg')}
+            style={styles.backgroundImage}
+            resizeMode="cover"
+          >
+            {/* Optional overlay for better text readability */}
+            <View style={styles.overlay}>
+              <ThemedView style={styles.moodSection}>  
+                <ThemedText style={styles.greeting}>
+                  Hello, Sol
+                </ThemedText>
+                <ThemedText title={true} style={styles.moodTitle}>
+                  How are you feeling today?
+                </ThemedText>
+                <FlatList
+                  data={moodData}
+                  renderItem={renderMood}
+                  keyExtractor={(item) => item.id.toString()}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.moodList}
+                  ItemSeparatorComponent={() => <View style={{width: 12}} />}
+                />
+              </ThemedView>
+            </View>
+          </ImageBackground>
 
           {/* Goals Section */}
-          <ThemedView style={styles.section}>
+          <ThemedView style={[styles.section,
+          styles.other]}>
             <ThemedText title={true} style={styles.sectionTitle}>
               Today's Goals
             </ThemedText>
@@ -76,13 +86,12 @@ const index = () => {
               data={goalData}
               renderItem={renderGoal}
               keyExtractor={(item) => item.id.toString()}
-              scrollEnabled={false} // Disable internal scrolling
+              scrollEnabled={false}
               ItemSeparatorComponent={Separator}
             />
           </ThemedView>
 
           <Spacer height={30}/>
-        </ScrollView>
       </SafeAreaView>
     </ThemedView>
   )
@@ -93,31 +102,58 @@ export default index
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:'#f1f5eeff'
     },
-    header: {
-        alignItems: 'center',
-        paddingVertical: 20,
+    backgroundImage: {
+        width: '100%',
+        minHeight: 300,
+        justifyContent: 'center',
+        backgroundColor:'white'
+        //overflow: 'hidden', // Important: clips the image to the border radius
+    },
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Dark overlay for text readability
+        flex: 1,
+        justifyContent: 'center',
+    },
+    moodSection: {
+        backgroundColor: 'transparent',
         paddingHorizontal: 16,
+        paddingVertical: 25,
     },
     greeting: {
         fontSize: 18,
         marginBottom: 8,
+        textAlign: 'center',
+        color: 'white', // White text over image
+        fontWeight: '500',
     },
-    title: {
-        textAlign: "center",
-        fontSize: 24,
-        marginBottom: 10,
+    moodTitle: {
+        fontSize: 22,
+        marginBottom: 20,
+        textAlign: 'center',
+        color: 'white', // White text over image
+    },
+    moodList: {
+        paddingHorizontal: 8,
+        justifyContent: 'center',
     },
     section: {
         marginBottom: 30,
         paddingHorizontal: 16,
+        paddingTop: 20,
+        backgroundColor:'#f1f5eeff'
     },
     sectionTitle: {
         fontSize: 20,
         marginBottom: 15,
         textAlign: 'center',
     },
-    moodList: {
-        paddingHorizontal: 8,
-    },
+    other: {
+        paddingLeft: 32,
+        paddingRight: 32, 
+        //borderTopLeftRadius: 25,
+        //borderTopRightRadius: 25,
+        //marginTop: -15, // Negative margin to overlap slightly with image
+    }
 })
