@@ -166,6 +166,8 @@ const styles = StyleSheet.create({
         borderColor: Colors.primary, 
         borderWidth: 2,
         backgroundColor: '#f0f8f0', 
+        width: '100%',
+        minHeight: 50,
     },
   text: {
     fontSize: 16,

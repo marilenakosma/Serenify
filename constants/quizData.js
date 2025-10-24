@@ -27,7 +27,7 @@ export const quizData = [
     },
     {
         question: "Do you struggle with any of these mental health challenges?",
-        options:["Anxiety","PTSD","Bipolar Disorder","ADHD","OCD"],
+        options:["Anxiety","PTSD","Bipolar Disorder","ADHD","OCD","None of the above"],
         selectedAnswer:null
     }
 ]

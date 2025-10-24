@@ -27,7 +27,11 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
         flexDirection:"row",
         borderRadius:5,
-        justifyContent:'center'
+        justifyContent:'center',
+        elevation: 2, 
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
     },
     button: {
         backgroundColor:"white",
