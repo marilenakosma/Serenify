@@ -1,4 +1,5 @@
-import { FlatList, ImageBackground, StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { FlatList, ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Angry from "../../assets/images/angry.png";
 import Neutral from "../../assets/images/neutral.png";
@@ -10,8 +11,9 @@ import ThemedGoal from "../../components/ThemedGoal";
 import ThemedMood from "../../components/ThemedMood";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
-
 const index = () => {
+  const [completedGoals, setCompletedGoals] = useState(new Set());
+
   const goalData = [
     { id:1, name:"book",text:"Read a book" },
     { id:2, name:"person", text:"Email people at work"},
@@ -28,12 +30,26 @@ const index = () => {
     { id:5, image:VeryHappy, text:"Happy"}
   ]
 
-  const renderGoal = ({item}) => (
-   <ThemedGoal
-     name={item.name}
-     text={item.text}
-   />
-  )
+    const handleToggleGoal = (goalId) => {
+    setCompletedGoals(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(goalId)) {
+        newSet.delete(goalId);
+      } else {
+        newSet.add(goalId);
+      }
+      return newSet;
+    });
+  };
+
+  const renderGoal = ({ item }) => (
+    <ThemedGoal
+      name={item.name}
+      text={item.text}
+      completed={completedGoals.has(item.id)}
+      onToggle={() => handleToggleGoal(item.id)}
+    />
+  );
 
   const renderMood = ({item}) => (
    <ThemedMood
@@ -47,10 +63,10 @@ const index = () => {
   return (
     <ThemedView style={{flex:1}}> 
       <SafeAreaView style={styles.container}>
-          
+          <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           {/* Mood Section with Background Image */}
           <ImageBackground 
-            source={require('../../assets/images/vector.jpg')}
+            source={require('../../assets/images/canola.jpg')}
             style={styles.backgroundImage}
             resizeMode="cover"
           >
@@ -92,6 +108,7 @@ const index = () => {
           </ThemedView>
 
           <Spacer height={30}/>
+          </ScrollView>
       </SafeAreaView>
     </ThemedView>
   )
@@ -108,13 +125,16 @@ const styles = StyleSheet.create({
         width: '100%',
         minHeight: 300,
         justifyContent: 'center',
-        backgroundColor:'white'
-        //overflow: 'hidden', // Important: clips the image to the border radius
+        backgroundColor:'white',
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+        overflow: 'hidden', // Important: clips the image to the border radius
     },
     overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Dark overlay for text readability
+        //backgroundColor: 'rgba(0, 0, 0, 0.3)', // Dark overlay for text readability
         flex: 1,
         justifyContent: 'center',
+       // backgroundColor:Colors.secondary
     },
     moodSection: {
         backgroundColor: 'transparent',
@@ -125,14 +145,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 8,
         textAlign: 'center',
-        color: 'white', // White text over image
+        color: 'black', // White text over image
         fontWeight: '500',
     },
     moodTitle: {
         fontSize: 22,
         marginBottom: 20,
         textAlign: 'center',
-        color: 'white', // White text over image
+        color: 'black', // White text over image
     },
     moodList: {
         paddingHorizontal: 8,
@@ -153,7 +173,7 @@ const styles = StyleSheet.create({
         paddingLeft: 32,
         paddingRight: 32, 
         //borderTopLeftRadius: 25,
-        //borderTopRightRadius: 25,
-        //marginTop: -15, // Negative margin to overlap slightly with image
+       // borderTopRightRadius: 25,
+        marginTop: -15, // Negative margin to overlap slightly with image
     }
 })
