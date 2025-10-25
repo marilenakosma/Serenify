@@ -8,7 +8,8 @@ const BackButton = ({style}) => {
     const router = useRouter();
   return (
      <ThemedView style={[{flexDirection:'row',justifyContent:'start'},style]}>
-       <TouchableOpacity onPress={router.back} style={styles.button}>
+       <TouchableOpacity 
+       onPress={router.back} style={styles.button}>
         <ArrowLeftIcon size="20" color="black"/>
        </TouchableOpacity>
      </ThemedView>

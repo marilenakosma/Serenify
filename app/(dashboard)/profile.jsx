@@ -1,12 +1,33 @@
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import GrowthChart from "../../components/GrowthChart";
+import MoodTracker from "../../components/MoodTracker";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
-import { Colors } from "../../constants/Colors";
 
 const profile = () => {
   return (
         <ThemedView style={styles.container}>
-          <ThemedText title={true} style={styles.title}>profile</ThemedText>
+          <SafeAreaView style={styles.safeArea}>
+           <ScrollView showVerticalScrollIndicator={false}>
+
+            <View style={styles.header}>
+            <ThemedText title={true} style={styles.sectionTitle}>
+               Growth Area
+            </ThemedText>
+            <GrowthChart/>
+            </View>
+
+
+            <View style={styles.section}>
+            <ThemedText title={true} style={styles.sectionTitle}>
+               Mood Tracker
+            </ThemedText>
+            <MoodTracker/>
+            </View>
+
+           </ScrollView>
+          </SafeAreaView>
         </ThemedView>
       )
 }
@@ -16,22 +37,25 @@ export default profile
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        alignItems:'center',
-        justifyContent:'center',
         backgroundColor:'#f1f5eeff'
     },
-    title: {
-        textAlign:"center",
-        fontWeight: 'bold',
-        fontSize: 18,
-        marginBottom:30
-    },
-    btn: {
-        backgroundColor:Colors.primary,
-        padding:15,
-        borderRadius:5
-    },
-    pressed: {
-        opacity:0.8
-    }
+    safeArea: {
+    flex: 1,
+  },
+  header: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  section: {
+    marginBottom: 30,
+    paddingHorizontal: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    marginBottom: 15,
+  },
 })

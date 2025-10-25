@@ -66,7 +66,7 @@ const index = () => {
           <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           {/* Mood Section with Background Image */}
           <ImageBackground 
-            source={require('../../assets/images/canola.jpg')}
+            source={require('../../assets/images/field.jpg')}
             style={styles.backgroundImage}
             resizeMode="cover"
           >
@@ -126,9 +126,9 @@ const styles = StyleSheet.create({
         minHeight: 300,
         justifyContent: 'center',
         backgroundColor:'white',
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        overflow: 'hidden', // Important: clips the image to the border radius
+        //borderTopLeftRadius: 25,
+       // borderTopRightRadius: 25,
+       // overflow: 'hidden', // Important: clips the image to the border radius
     },
     overlay: {
         //backgroundColor: 'rgba(0, 0, 0, 0.3)', // Dark overlay for text readability
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     other: {
         paddingLeft: 32,
         paddingRight: 32, 
-        //borderTopLeftRadius: 25,
-       // borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
         marginTop: -15, // Negative margin to overlap slightly with image
     }
 })

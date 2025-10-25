@@ -1,6 +1,8 @@
 import { FlatList, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Spacer from "../../components/Spacer";
 import ThemedGoal from "../../components/ThemedGoal";
+import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 
 const quests = () => {
@@ -23,6 +25,11 @@ const quests = () => {
 
  return (
      <ThemedView style={styles.container}>
+      <SafeAreaView>
+
+      <ThemedText title={true} style={styles.title}>
+         My Quests
+      </ThemedText>
         <FlatList
         data={questData}
         renderItem={renderQuest}
@@ -30,6 +37,7 @@ const quests = () => {
         contentContainerStyle = {styles.grid}
         ItemSeparatorComponent={Separator}
         />
+        </SafeAreaView>
      </ThemedView>
    )
 }
@@ -43,8 +51,13 @@ const styles = StyleSheet.create({
     },
     grid: {
       padding: 20,
-      marginVertical: 50,
-      marginHorizontal: 16,
-    }
+      marginVertical: 20,
+      marginHorizontal: 15,
+    },
+    title: {
+        fontSize: 22,
+        marginTop: 20,
+        textAlign: 'center',
+         },
      
 })

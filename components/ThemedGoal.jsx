@@ -5,13 +5,13 @@ import ThemedText from './ThemedText';
 
 export default function ThemedGoal({ name, text, completed = false, onToggle, style, ...props }) {
   return (
-    <TouchableOpacity style={[styles.container, style]} onPress={onToggle} {...props}>
-      {/* Circle element */}
+    <TouchableOpacity style={[styles.container, style]} 
+    onPress={onToggle} {...props}>
+
       <View style={styles.iconContainer}>
         <Ionicons name={name} size={24} color={Colors.primary} />
       </View>
       
-      {/* Goal content */}
       <View style={styles.content}>
         <ThemedText style={[styles.text, completed && styles.completedText]}>
           {text}
