@@ -51,6 +51,18 @@ const _layout = () => {
       }}
       />
 
+      <Tabs.Screen name="statistics"
+      options={{ title:"Statistics",
+        tabBarIcon: ({focused}) => (
+            <Ionicons
+            size={24}
+            name={focused ? "stats-chart" : "stats-chart-outline"}
+            //color={focused ? }
+            />
+        )
+      }}
+      />
+
       <Tabs.Screen name="profile"
       options={{ title:"Profile",
         tabBarIcon: ({focused}) => (

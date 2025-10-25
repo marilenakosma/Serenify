@@ -1,32 +1,43 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GrowthChart from "../../components/GrowthChart";
-import MoodTracker from "../../components/MoodTracker";
+import Spacer from "../../components/Spacer";
+import ThemedSetting from "../../components/ThemedSetting";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 
 const profile = () => {
+    const settingData = [
+        { id:1, name:"trophy-outline",text:"My badges" },
+        { id:2, name:"time-outline", text:"Daily Reminder"},
+        { id:3, name:"settings-outline", text:"Preferences"},
+        { id:4, name:"accessibility-outline", text:"Account and Security"},
+        { id:5, name:"stats-chart-outline", text:"Data and Analytics"}
+      ]
+    
+      const renderSettings = ({item}) => (
+       <ThemedSetting
+         name={item.name}
+         text={item.text}
+       />
+      )
+
+      const Separator = () => <Spacer height={20}/>
+
   return (
         <ThemedView style={styles.container}>
-          <SafeAreaView style={styles.safeArea}>
-           <ScrollView showVerticalScrollIndicator={false}>
+          <SafeAreaView>
 
-            <View style={styles.header}>
-            <ThemedText title={true} style={styles.sectionTitle}>
-               Growth Area
+            <ThemedText title={true} style={styles.title}>
+               My Profile
             </ThemedText>
-            <GrowthChart/>
-            </View>
+                <FlatList
+                        data={settingData}
+                        renderItem={renderSettings}
+                        keyExtractor={(item) => item.id.toString()}
+                        contentContainerStyle = {styles.grid}
+                        ItemSeparatorComponent={Separator}
+                        />
 
-
-            <View style={styles.section}>
-            <ThemedText title={true} style={styles.sectionTitle}>
-               Mood Tracker
-            </ThemedText>
-            <MoodTracker/>
-            </View>
-
-           </ScrollView>
           </SafeAreaView>
         </ThemedView>
       )
@@ -45,10 +56,11 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     paddingVertical: 20,
+    
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   section: {
     marginBottom: 30,
@@ -58,4 +70,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 15,
   },
+  grid: {
+      padding: 20,
+      marginVertical: 20,
+      marginHorizontal: 15,
+    },
 })
