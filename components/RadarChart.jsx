@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
 import { Colors } from '../constants/Colors';
+
 const screenWidth = Dimensions.get('window').width;
 
 const RadarChart = () => {
@@ -14,7 +15,7 @@ const RadarChart = () => {
     'Stress Management'
   ];
 
-  const size = 250;
+  const size = 340;
   const center = size / 2;
   const maxRadius = 100;
   const levels = 5; // Number of concentric circles

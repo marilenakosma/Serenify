@@ -1,4 +1,5 @@
 import { FlatList, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Sounds from "../../assets/images/cassette.png";
 import Goal from "../../assets/images/clipboard.png";
 import Diary from "../../assets/images/diary.png";
@@ -8,6 +9,7 @@ import Timers from "../../assets/images/smartwatch.png";
 import Movements from "../../assets/images/sneakers.png";
 import Breathe from "../../assets/images/yoga-master.png";
 import ThemedCategory from "../../components/ThemedCategory";
+import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 
 const activities = () => {
@@ -32,6 +34,10 @@ const activities = () => {
 
   return (
     <ThemedView style={styles.container}>
+      <SafeAreaView>
+        <ThemedText title={true} style={styles.title}>
+               My Activities
+            </ThemedText>
       <FlatList
          data={categoryData}  // Array of data to render
          renderItem={renderActivity}  // Function that renders each item
@@ -40,8 +46,7 @@ const activities = () => {
          contentContainerStyle = {styles.grid}  // Styles the scrollable content
          columnWrapperStyle={styles.row}  // Styles each row (when numColumns > 1)
       />
-
-
+      </SafeAreaView>
      </ThemedView>
   )
 }
@@ -65,5 +70,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
     maxWidth: '45%', // Ensures proper spacing
-  }
+  },
+  title: {
+        fontSize: 22,
+        marginTop: 30,
+        textAlign: 'center',
+         },
 })

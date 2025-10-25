@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     marginBottom: 15,
+    textAlign:'center'
   },
 })

@@ -43,12 +43,13 @@ export default function Index() {
       
       <Spacer height={20}/>
       
-      <ThemedButton onPress={() => router.navigate("/(dashboard)")}>
+      <ThemedButton onPress={() => router.navigate("/(auth)/register")}>
         <ThemedText title={true} style={{color:'#f2f2f2'}}>Get Started</ThemedText>
       </ThemedButton>
     </ThemedView>
   );
 }
+//<ThemedButton onPress={() => router.navigate("/(dashboard)")}>
 //<ThemedButton onPress={() => router.navigate("/(auth)/register")}>
 const styles = StyleSheet.create({
     container: {

@@ -1,5 +1,10 @@
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import Angry from "../assets/images/angry.png";
+import Neutral from "../assets/images/neutral.png";
+import Sad from "../assets/images/sad.png";
+import Happy from "../assets/images/shy.png";
+import VeryHappy from "../assets/images/smile.png";
 import { Colors } from '../constants/Colors';
 import ThemedText from './ThemedText';
 
@@ -50,11 +55,11 @@ const MoodTracker = () => {
 
       {/* Mood emoji legend */}
       <View style={styles.moodLegend}>
-        <Text style={styles.moodEmoji}>😢</Text>
-        <Text style={styles.moodEmoji}>😔</Text>
-        <Text style={styles.moodEmoji}>😐</Text>
-        <Text style={styles.moodEmoji}>😊</Text>
-        <Text style={styles.moodEmoji}>😄</Text>
+        <Image source={Angry} style={styles.moodEmoji}/>
+        <Image source={Sad} style={styles.moodEmoji}/>
+        <Image source={Neutral} style={styles.moodEmoji}/>
+        <Image source={Happy} style={styles.moodEmoji}/>
+        <Image source={VeryHappy} style={styles.moodEmoji}/>
       </View>
 
       {/* Line Chart */}
@@ -122,6 +127,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   moodEmoji: {
-    fontSize: 24,
+    width:25,
+    height:25
   },
 });
