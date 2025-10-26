@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 //import LogoGreen from "../assets/images/leaf-green.png";
 //import LogoBeige from "../assets/images/leaf-beige.png";
-import { Montserrat_400Regular, Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
-import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import Spacer from '../components/Spacer';
@@ -13,15 +11,12 @@ import ThemedText from "../components/ThemedText";
 import ThemedView from "../components/ThemedView";
 
 export default function Index() {
-  const [fontsLoaded] = useFonts({
-    Montserrat_600SemiBold,
-    Montserrat_400Regular
-  });
    
   const [showSplash, setShowSplash] = useState(true);
   const router=useRouter()
 
-  if (!fontsLoaded || showSplash) {
+
+  if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
 //<Image source={LogoGreen} style={styles.image}/>

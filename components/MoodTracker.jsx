@@ -37,7 +37,7 @@ const MoodTracker = () => {
     <View style={styles.chartContainer}>
       {/* Time period buttons */}
       <View style={styles.periodButtons}>
-        <TouchableOpacity style={[styles.periodButton, styles.activeButton]}>
+        <TouchableOpacity style={styles.periodButton}>
           <ThemedText style={styles.buttonText}>Weekly</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.periodButton}>
