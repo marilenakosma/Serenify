@@ -1,7 +1,8 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, Keyboard, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import validator from 'validator';
 import BackButton from "../../components/BackButton";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
@@ -10,14 +11,37 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 
+/* Email validation - Check if email format is correct
+Password requirements - Minimum length, complexity
+Real-time feedback - Show errors as user types
+Submit validation - Prevent submission with invalid data
+Loading states - Show when form is being processed
+Error handling - Display meaningful error messages */
 
 const Login = () => {
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
+    const [error,setError] = useState(null)
     
     const handleSubmit =() => {
      console.log('Login form submitted',email,password)
     }
+
+    const validateEmail = (input) => {
+      setEmail(input)
+
+      if(!input) {
+        setError('Email is required')
+        return;
+      }
+
+      if(validator.isEmail(input)) {
+        setError('');
+      } else {
+        setError("Please enter a valid email address.")
+      }
+    }
+
    
     const router = useRouter();
 
@@ -45,13 +69,27 @@ const Login = () => {
          <ThemedText title={true} style={styles.title}>
           Login to your Account
          </ThemedText>
-         
+
          <ThemedInput 
            style={{width:'80%',marginBottom:20}}
            placeholder="Email"
            keyboardType="email-address"
-           onChangeText={setEmail}
+           onChangeText={validateEmail}
            value={email}/>
+
+           <View style={styles.validationContainer}>
+         {error !== null && (
+            error ? (
+              <Text style={styles.invalidMark}>X</Text>
+            ) : (
+              <Text style={styles.validMark}>✓</Text>
+            )
+           )}
+
+            {error ? 
+            <Text style={styles.errorMessage}>{error}</Text> 
+            : null}
+           </View>
 
          <ThemedInput 
            style={{width:'80%',marginBottom:20}}
@@ -126,16 +164,31 @@ const styles = StyleSheet.create({
     title: {
         textAlign:"center",
         fontSize: 18,
-        marginBottom:30
+        marginBottom:30,
     },
     image:{
          backgroundColor:Colors.uiBackground,
          padding:8,
          borderRadius:16,
          marginHorizontal: 10 
+    },
+     errorMessage: {
+        color: '#ff6b6b',
+        fontSize: 13,
+        marginLeft: 6,
+        flex:1
+    },
+    validMark: {
+        color: '#4CAF50',
+        fontSize: 13,
+        fontWeight: '500',
+    },
+    invalidMark: {
+        color: '#ff6b6b',
+        fontSize: 14,
+        marginLeft: 5,
     }
 })
-
 /*import LottieView from 'lottie-react-native';
 
 <LottieView
