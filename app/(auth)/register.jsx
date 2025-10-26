@@ -1,7 +1,6 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import PasswordValidator from 'react-native-password-validator';
 import { SafeAreaView } from "react-native-safe-area-context";
 import validator from 'validator';
 import BackButton from "../../components/BackButton";
@@ -20,10 +19,47 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [passwordStrength, setPasswordStrength] = useState(0);
-    const [passwordsEqual, setPasswordsEqual] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     
     const router = useRouter();
+
+    // Custom Password Strength Component - MOVED TO CORRECT LOCATION
+    const PasswordStrengthMeter = ({ strength, password }) => {
+        const getStrengthText = () => {
+            if (strength < 0.3) return 'Very Weak';
+            if (strength < 0.6) return 'Weak';
+            if (strength < 0.9) return 'Good';
+            return 'Strong';
+        };
+
+        const getStrengthColor = () => {
+            if (strength < 0.3) return '#ff6b6b';
+            if (strength < 0.6) return '#ffa726';
+            if (strength < 0.9) return '#42a5f5';
+            return '#66bb6a';
+        };
+
+        if (!password) return null;
+
+        return (
+            <View style={styles.strengthMeter}>
+                <View style={styles.strengthBarContainer}>
+                    <View 
+                        style={[
+                            styles.strengthBar, 
+                            { 
+                                width: `${strength * 100}%`, 
+                                backgroundColor: getStrengthColor() 
+                            }
+                        ]} 
+                    />
+                </View>
+                <Text style={[styles.strengthText, { color: getStrengthColor() }]}>
+                    {getStrengthText()}
+                </Text>
+            </View>
+        );
+    };
 
     // Validation functions
     const validateName = (input) => {
@@ -52,37 +88,38 @@ const Register = () => {
         }
     };
 
-    // Password validator callbacks
-    const handleStrengthChange = (strength) => {
-        setPasswordStrength(strength);
-        console.log('Password strength:', strength);
-        
-        // Update password error based on strength
+    const validatePassword = (input) => {
+        setPassword(input);
         if (touched.password) {
-            if (strength < 0.6) { // Less than 60% strength
-                setErrors(prev => ({ ...prev, password: 'Password is too weak' }));
+            const validationErrors = [];
+            
+            if (input.length < 8) validationErrors.push('At least 8 characters');
+            if (!/[A-Z]/.test(input)) validationErrors.push('One uppercase letter');
+            if (!/[a-z]/.test(input)) validationErrors.push('One lowercase letter');
+            if (!/\d/.test(input)) validationErrors.push('One number');
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(input)) validationErrors.push('One special character');
+            
+            if (validationErrors.length > 0) {
+                setErrors(prev => ({ ...prev, password: `Missing: ${validationErrors.join(', ')}` }));
+                setPasswordStrength(Math.max(0, (5 - validationErrors.length) / 5));
             } else {
                 setErrors(prev => ({ ...prev, password: '' }));
+                setPasswordStrength(1);
             }
         }
-    };
-
-    const handlePasswordChange = (newPassword) => {
-        setPassword(newPassword);
-        console.log("Current password:", newPassword);
         
-        // Mark as touched when user starts typing
-        if (!touched.password && newPassword.length > 0) {
-            setTouched(prev => ({ ...prev, password: true }));
+        // Also re-validate confirm password if it exists
+        if (confirmPassword && touched.confirmPassword) {
+            validateConfirmPassword(confirmPassword);
         }
     };
 
-    const handleEqualPasswords = (isEqual) => {
-        setPasswordsEqual(isEqual);
-        console.log('Passwords equal:', isEqual);
-        
+    const validateConfirmPassword = (input) => {
+        setConfirmPassword(input);
         if (touched.confirmPassword) {
-            if (!isEqual && confirmPassword.length > 0) {
+            if (!input) {
+                setErrors(prev => ({ ...prev, confirmPassword: 'Please confirm your password' }));
+            } else if (input !== password) {
                 setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
             } else {
                 setErrors(prev => ({ ...prev, confirmPassword: '' }));
@@ -93,12 +130,12 @@ const Register = () => {
     // Focus handlers
     const handleNameFocus = () => {
         setTouched(prev => ({ ...prev, name: true }));
-        validateName(name); // Validate on focus
+        validateName(name);
     };
 
     const handleEmailFocus = () => {
         setTouched(prev => ({ ...prev, email: true }));
-        validateEmail(email); // Validate on focus
+        validateEmail(email);
     };
 
     const handlePasswordFocus = () => {
@@ -113,8 +150,8 @@ const Register = () => {
     const validateForm = () => {
         const nameError = !name.trim() ? 'Name is required' : name.trim().length < 2 ? 'Name too short' : '';
         const emailError = !email ? 'Email is required' : !validator.isEmail(email) ? 'Invalid email' : '';
-        const passwordError = passwordStrength < 0.6 ? 'Password is too weak' : '';
-        const confirmPasswordError = !passwordsEqual ? 'Passwords do not match' : '';
+        const passwordError = passwordStrength < 1 ? 'Password requirements not met' : '';
+        const confirmPasswordError = confirmPassword !== password ? 'Passwords do not match' : '';
 
         setErrors({
             name: nameError,
@@ -123,7 +160,6 @@ const Register = () => {
             confirmPassword: confirmPasswordError
         });
 
-        // Mark all as touched to show errors
         setTouched({ name: true, email: true, password: true, confirmPassword: true });
 
         return !nameError && !emailError && !passwordError && !confirmPasswordError;
@@ -140,7 +176,6 @@ const Register = () => {
         setIsLoading(true);
         
         try {
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             Alert.alert('Success', 'Account created successfully!', [
@@ -161,7 +196,7 @@ const Register = () => {
                     <BackButton/>
                     <ThemedView style={{flexDirection:'row', justifyContent:'center', paddingVertical: 20}}>
                         <Image source={require('../../assets/images/tropical.png')}
-                            style={{width:180, height:180}} />   
+                            style={{width:150, height:150}} />   
                     </ThemedView>
                 </SafeAreaView>
 
@@ -220,58 +255,60 @@ const Register = () => {
                         )}
                     </View>
 
-                    {/* Password Input with Validator */}
+                    {/* Password Input - FIXED LOCATION */}
                     <View style={styles.inputContainer}>
-                        <ThemedText style={styles.passwordLabel}>Password</ThemedText>
-                        <PasswordValidator
-                            password={password}
-                            confirmPassword={confirmPassword}
-                            nrOfChars={8}
-                            hasAtLeastOneUpperCase={true}
-                            hasAtLeastOneSpecialChar={true}
-                            hasAtLeastOneNumber={true}
-                            onStrengthChange={handleStrengthChange}
-                            onPasswordChange={handlePasswordChange}
-                            isEqualPasswords={handleEqualPasswords}
-                            showRecomendations={true}
-                            inputStyle={[
-                                styles.passwordInput,
+                        <ThemedInput 
+                            style={[
+                                styles.input,
                                 touched.password && (errors.password ? styles.inputError : styles.inputFocused)
                             ]}
-                            confirmPasswordInputStyle={[
-                                styles.passwordInput,
-                                touched.confirmPassword && (errors.confirmPassword ? styles.inputError : styles.inputFocused)
-                            ]}
-                            onPasswordFocus={handlePasswordFocus}
-                            onConfirmPasswordFocus={handleConfirmPasswordFocus}
-                            colorPalette={{
-                                firstColor: "#ffcccc",   // Very weak
-                                secondColor: "#ffe066",  // Weak
-                                thirdColor: "#9bf6ff",   // Good
-                                fourthColor: "#2a9d8f",  // Strong
-                                warning: "#e76f51",
-                            }}
-                            strengthText={["Very Weak", "Weak", "Good", "Strong"]}
+                            placeholder="Password"
+                            onChangeText={validatePassword}
+                            onFocus={handlePasswordFocus}
+                            value={password}
+                            secureTextEntry 
                         />
                         
-                        {/* Password Error */}
+                        {/* Password Strength Meter - CORRECT LOCATION */}
+                        <PasswordStrengthMeter strength={passwordStrength} password={password} />
+                        
                         {touched.password && errors.password && (
                             <View style={styles.validationContainer}>
                                 <Text style={styles.invalidMark}>⚠</Text>
                                 <Text style={styles.errorMessage}>{errors.password}</Text>
                             </View>
                         )}
+                    </View>
+
+                    {/* Confirm Password Input - CLEANED UP */}
+                    <View style={styles.inputContainer}>
+                        <ThemedInput 
+                            style={[
+                                styles.input,
+                                touched.confirmPassword && (errors.confirmPassword ? styles.inputError : styles.inputFocused)
+                            ]}
+                            placeholder="Confirm Password"
+                            onChangeText={validateConfirmPassword}
+                            onFocus={handleConfirmPasswordFocus}
+                            value={confirmPassword}
+                            secureTextEntry 
+                        />
                         
-                        {/* Confirm Password Error */}
-                        {touched.confirmPassword && errors.confirmPassword && (
+                        {touched.confirmPassword && (
                             <View style={styles.validationContainer}>
-                                <Text style={styles.invalidMark}>⚠</Text>
-                                <Text style={styles.errorMessage}>{errors.confirmPassword}</Text>
+                                {errors.confirmPassword ? (
+                                    <>
+                                        <Text style={styles.invalidMark}>⚠</Text>
+                                        <Text style={styles.errorMessage}>{errors.confirmPassword}</Text>
+                                    </>
+                                ) : confirmPassword && confirmPassword === password ? (
+                                    <Text style={styles.validMark}>✓ Passwords match</Text>
+                                ) : null}
                             </View>
                         )}
                     </View>
 
-                    <Spacer height={20}/>
+                    <Spacer height={15}/>
 
                     {/* Submit Button */}
                     <ThemedButton 
@@ -287,7 +324,7 @@ const Register = () => {
                         </ThemedText>
                     </ThemedButton>
                     
-                    <Spacer height={20}/>
+                    <Spacer height={15}/>
 
                     {/* Or Divider */}
                     <View style={styles.orContainer}>
@@ -341,7 +378,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "white",
         paddingHorizontal: 32,
-        paddingTop: 40,
+        paddingTop: 20, // Reduced from 40
+        paddingBottom: 20, // Add bottom padding
         borderTopLeftRadius: 50,
         borderTopRightRadius: 50,
         shadowColor: '#000',
@@ -352,24 +390,28 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: "center",
-        fontSize: 24,
+        fontSize: 22, // Reduced from 24
         fontWeight: '600',
-        marginBottom: 30,
+        marginBottom: 20, // Reduced from 30
         color: Colors.title,
     },
     inputContainer: {
         width: '100%',
-        marginBottom: 20,
+        marginBottom: 15, // Reduced from 20
     },
     input: {
         width: '100%',
-        height: 55,
+        height: 50, // Reduced from 55
         borderWidth: 1,
         borderColor: '#e1e1e1',
         borderRadius: 12,
         paddingHorizontal: 16,
+        paddingVertical: 12, // Add vertical padding for placeholder
         fontSize: 16,
         backgroundColor: '#fafafa',
+        // Fix text alignment
+        textAlignVertical: 'center', // Android
+        includeFontPadding: false, // Android
     },
     inputFocused: {
         borderColor: Colors.primary,
@@ -383,22 +425,6 @@ const styles = StyleSheet.create({
     inputError: {
         borderColor: '#ff6b6b',
         backgroundColor: '#fff5f5',
-    },
-    passwordLabel: {
-        fontSize: 16,
-        fontWeight: '500',
-        marginBottom: 8,
-        color: Colors.title,
-    },
-    passwordInput: {
-        height: 55,
-        borderWidth: 1,
-        borderColor: '#e1e1e1',
-        borderRadius: 12,
-        paddingHorizontal: 16,
-        fontSize: 16,
-        backgroundColor: '#fafafa',
-        marginBottom: 10,
     },
     validationContainer: {
         flexDirection: 'row',
@@ -468,5 +494,24 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         fontWeight: '600',
         marginLeft: 4,
+    },
+    strengthMeter: {
+        marginTop: 8,
+        marginBottom: 8,
+    },
+    strengthBarContainer: {
+        height: 4,
+        backgroundColor: '#e0e0e0',
+        borderRadius: 2,
+        marginBottom: 4,
+    },
+    strengthBar: {
+        height: '100%',
+        borderRadius: 2,
+    },
+    strengthText: {
+        fontSize: 12,
+        fontWeight: '500',
+        textAlign: 'right',
     },
 });
