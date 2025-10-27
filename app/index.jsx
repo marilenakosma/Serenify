@@ -15,7 +15,6 @@ export default function Index() {
   const [showSplash, setShowSplash] = useState(true);
   const router=useRouter()
 
-
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }

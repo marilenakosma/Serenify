@@ -1,5 +1,5 @@
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Alert, Image, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import validator from 'validator';
@@ -19,43 +19,67 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     
     const router = useRouter();
-
+   
+    const debounce = (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
     // Validation functions
-    const validateEmail = (input) => {
-        setEmail(input);
-        if (touched.email) {
-            if (!input) {
-                setErrors(prev => ({ ...prev, email: 'Email is required' }));
-            } else if (!validator.isEmail(input)) {
-                setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
-            } else {
-                setErrors(prev => ({ ...prev, email: '' }));
+    const validateEmail = useCallback(
+        debounce((input) => {
+            if (touched.email) {
+                if (!input) {
+                    setErrors(prev => ({ ...prev, email: 'Email is required' }));
+                } else if (!validator.isEmail(input)) {
+                    setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                } else {
+                    setErrors(prev => ({ ...prev, email: '' }));
+                }
             }
-        }
+        }, 300),
+        [touched.email]
+    );
+
+    const validatePassword = useCallback(
+        debounce((input) => {
+            if (touched.password) {
+                if (!input) {
+                    setErrors(prev => ({ ...prev, password: 'Password is required' }));
+                } else if (input.length < 6) {
+                    setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));
+                } else {
+                    setErrors(prev => ({ ...prev, password: '' }));
+                }
+            }
+        }, 300),
+        [touched.password]
+    );
+
+    // Handle input changes
+    const handleEmailChange = (input) => {
+        setEmail(input);
+        validateEmail(input);
     };
 
-    const validatePassword = (input) => {
+    const handlePasswordChange = (input) => {
         setPassword(input);
-        if (touched.password) {
-            if (!input) {
-                setErrors(prev => ({ ...prev, password: 'Password is required' }));
-            } else if (input.length < 6) {
-                setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));
-            } else {
-                setErrors(prev => ({ ...prev, password: '' }));
-            }
-        }
+        validatePassword(input);
     };
 
     // Focus handlers
     const handleEmailFocus = () => {
         setTouched(prev => ({ ...prev, email: true }));
-        validateEmail(email);
     };
 
     const handlePasswordFocus = () => {
         setTouched(prev => ({ ...prev, password: true }));
-        validatePassword(password);
     };
 
     // Form validation
@@ -74,8 +98,6 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
-        console.log('Login form submitted', { email, password });
-        
         if (!validateForm()) {
             Alert.alert('Validation Error', 'Please fix the errors before submitting');
             return;
@@ -84,20 +106,14 @@ const Login = () => {
         setIsLoading(true);
         
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            Alert.alert('Success', 'Login successful!', [
-                { text: 'OK', onPress: () => router.replace("/(dashboard)") }
-            ]);
-            
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Reduced from 2000
+            router.replace("/(dashboard)");
         } catch (error) {
             Alert.alert('Error', 'Invalid email or password. Please try again.');
         } finally {
             setIsLoading(false);
         }
     };
-
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ThemedView style={{flex:1}}>
@@ -105,7 +121,8 @@ const Login = () => {
                     <BackButton/>
                     <ThemedView style={{flexDirection:'row', justifyContent:'center', paddingVertical: 15}}>
                         <Image source={require('../../assets/images/leaf-green.png')}
-                            style={{width: 200, height: 200}} />   
+                            style={{width: 200, height: 200}}   
+                            resizeMode="contain" />
                     </ThemedView>
                 </SafeAreaView>
 
@@ -131,7 +148,7 @@ const Login = () => {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 autoCorrect={false}
-                                onChangeText={validateEmail}
+                                onChangeText={handleEmailChange}
                                 onFocus={handleEmailFocus}
                                 value={email}
                             />
@@ -157,7 +174,7 @@ const Login = () => {
                                     touched.password && (errors.password ? styles.inputError : styles.inputFocused)
                                 ]}
                                 placeholder="Password"
-                                onChangeText={validatePassword}
+                                onChangeText={handlePasswordChange}
                                 onFocus={handlePasswordFocus}
                                 value={password}
                                 secureTextEntry 
@@ -202,17 +219,17 @@ const Login = () => {
                         
                         {/* Social Login */}
                         <View style={{flexDirection:'row'}}>
-                                                <TouchableOpacity style={styles.image}>
+                                                <TouchableOpacity style={styles.socialButton}>
                                                     <Image source={require('../../assets/images/google.png')}
                                                         style={{width:24, height:24}} />  
                                                 </TouchableOpacity>
                         
-                                                <TouchableOpacity style={styles.image}>
+                                                <TouchableOpacity style={styles.socialButton}>
                                                     <Image source={require('../../assets/images/apple.png')}
                                                         style={{width:24, height:24}} />  
                                                 </TouchableOpacity>
                         
-                                                <TouchableOpacity style={styles.image}>
+                                                <TouchableOpacity style={styles.socialButton}>
                                                     <Image source={require('../../assets/images/facebook.png')}
                                                         style={{width:24, height:24}} />  
                                                 </TouchableOpacity>
@@ -357,7 +374,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: 15,
     },
-    image: {
+    socialButton: {
         backgroundColor: Colors.uiBackground,
         width: 60,
         height: 60,

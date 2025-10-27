@@ -14,6 +14,8 @@ export default function RootLayout() {
     Montserrat_400Regular
   });
 
+   const isAuthenticated = false;
+
   useEffect(() => {
     if(fontsLoaded) {
       SplashScreen.hideAsync()
