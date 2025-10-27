@@ -1,20 +1,72 @@
 import { Montserrat_400Regular, Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
 import { useFonts } from 'expo-font';
-import { Stack } from "expo-router";
+import { Stack,Slot,useSegments,useRouter } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { use, useEffect } from 'react';
 import { Colors } from "../constants/Colors";
+import { useAuthStore } from "../store/authStore";
+import { useState } from "react";
 
 SplashScreen.preventAutoHideAsync();
 
+function RootLayoutNav() {
+  const {isAuthenticated,hasCompletedQuestionnaire,checkAuth} = useAuthStore();
+  const segments = useSegments();
+  const router = useRouter();
+  const [isNavigationReady, setIsNavigationReady] = useState(false);
+
+ useEffect(() => {
+        const initAuth = async () => {
+            await checkAuth();
+            // Small delay to ensure navigation is ready
+            setTimeout(() => setIsNavigationReady(true), 100);
+        };
+        initAuth();
+    }, []);
+
+  
+    //Check where the user is
+    /* // Route: /(auth)/login
+    segments = ['(auth)', 'login'] */
+  useEffect(() => {
+        if (!isNavigationReady) return;
+
+        console.log('Navigation check:', { 
+            isAuthenticated, 
+            hasCompletedQuestionnaire, 
+            currentRoute: segments,
+            navigationReady: isNavigationReady
+        });
+
+  const inAuthGroup = segments[0] === '(auth)';
+        const inQuestionnaireGroup = segments[0] === '(questionnaire)';
+
+        if (!isAuthenticated) {
+            if (!inAuthGroup && segments.length > 0) {
+                console.log('Redirecting to login');
+                router.replace('/(auth)/login');
+            }
+        } else if (!hasCompletedQuestionnaire) {
+            if (!inQuestionnaireGroup) {
+                console.log('Redirecting to questionnaire');
+                router.replace('/(questionnaire)');
+            }
+        } else {
+            if (inAuthGroup || inQuestionnaireGroup) {
+                console.log('Redirecting to dashboard');
+                router.replace('/(dashboard)');
+            }
+        }
+    }, [isAuthenticated, hasCompletedQuestionnaire, segments, isNavigationReady]);
+
+  return <Slot/>;
+}
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Montserrat_600SemiBold,
     Montserrat_400Regular
   });
-
-   const isAuthenticated = false;
 
   useEffect(() => {
     if(fontsLoaded) {
@@ -26,17 +78,7 @@ export default function RootLayout() {
     return null;
   }
 return ( <>
-
         <StatusBar value="auto" />
-        <Stack screenOptions={{
-            headerStyle: {backgroundColor: Colors.navBackground},
-            headerTintColor:Colors.title,
-        }}>
-          
-          <Stack.Screen name="index" options={{ headerShown:false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(dashboard)" options={{ headerShown: false }} />
-          <Stack.Screen name="(questionnaire)" options={{ headerShown: false }} />
-        </Stack>
+        <RootLayoutNav/>
 </>)
 }

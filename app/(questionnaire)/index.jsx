@@ -7,9 +7,15 @@ import ThemedButton from '../../components/ThemedButton';
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
+import { useAuthStore } from '../../store/authStore';
 
-const index = () => {
-    const router=useRouter()
+const Questionnaire = () => {
+    const {completeQuestionnaire} = useAuthStore();
+
+    const handleComplete = () => {
+      completeQuestionnaire({completed: true,timestamp:Date.now()});
+    }
+
  return (
     <View style={{flex:1}} >
 
@@ -47,7 +53,7 @@ const index = () => {
    )
 }
 
-export default index
+export default Questionnaire
 
 const styles = StyleSheet.create({
     container: {

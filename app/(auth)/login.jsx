@@ -1,4 +1,4 @@
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { useCallback, useState } from "react";
 import { Alert, Image, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,15 +10,16 @@ import ThemedInput from "../../components/ThemedInput";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
+import { useAuthStore } from "../../store/authStore";
 
 const Login = () => {
+    const {login,isLoading} = useAuthStore();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
-    const [isLoading, setIsLoading] = useState(false);
     
-    const router = useRouter();
+    
    
     const debounce = (func, wait) => {
         let timeout;
@@ -102,16 +103,16 @@ const Login = () => {
             Alert.alert('Validation Error', 'Please fix the errors before submitting');
             return;
         }
-
-        setIsLoading(true);
         
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Reduced from 2000
-            router.replace("/(dashboard)");
-        } catch (error) {
-            Alert.alert('Error', 'Invalid email or password. Please try again.');
-        } finally {
-            setIsLoading(false);
+            const result = await login(email,password);
+            if(result.success) {
+              Alert.alert('Success','Login successful')
+            } else {
+                Alert.alert('Error', 'Invalid email or password. Please try again.');
+            }
+        } catch(error) {
+            Alert.alert('Error','Failed to login.Please try again')
         }
     };
     return (

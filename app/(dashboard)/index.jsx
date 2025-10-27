@@ -11,8 +11,18 @@ import ThemedGoal from "../../components/ThemedGoal";
 import ThemedMood from "../../components/ThemedMood";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import { useAuthStore } from "../../store/authStore";
 const index = () => {
+  const {user,isAuthenticated} = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
+
+  if (!isAuthenticated) {
+    return (
+        <ThemedView style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ThemedText>Please log in to continue</ThemedText>
+        </ThemedView>
+    );
+}
 
   const goalData = [
     { id:1, name:"book",text:"Read a book" },
@@ -74,7 +84,7 @@ const index = () => {
             <View style={styles.overlay}>
               <ThemedView style={styles.moodSection}>  
                 <ThemedText style={styles.greeting}>
-                  Hello, Sol
+                  Hello, {user.username}
                 </ThemedText>
                 <ThemedText title={true} style={styles.moodTitle}>
                   How are you feeling today?

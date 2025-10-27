@@ -10,8 +10,11 @@ import ThemedInput from "../../components/ThemedInput";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
+import { useAuthStore } from "../../store/authStore";
 
 const Register = () => {
+    const { register, isLoading } = useAuthStore();
+    
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,7 +22,6 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [passwordStrength, setPasswordStrength] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
     
     const router = useRouter();
 
@@ -169,23 +171,15 @@ const Register = () => {
         console.log('Register form submitted', { name, email, password });
         
         if (!validateForm()) {
-            Alert.alert('Validation Error', 'Please fix the errors before submitting');
+            //Alert.alert('Validation Error', 'Please fix the errors before submitting');
             return;
         }
 
-        setIsLoading(true);
-        
-        try {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            Alert.alert('Success', 'Account created successfully!', [
-                { text: 'OK', onPress: () => router.replace("/(questionnaire)") }
-            ]);
-            
-        } catch (error) {
-            Alert.alert('Error', 'Failed to create account. Please try again.');
-        } finally {
-            setIsLoading(false);
+        const result = await register(name,email,password);
+        if (result.success) {
+            Alert.alert('Success', 'Account created successfully!');
+        } else {
+            Alert.alert('Error', result.error);
         }
     };
 
