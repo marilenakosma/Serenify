@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,11 +10,13 @@ import { Colors } from "../../constants/Colors";
 import { useAuthStore } from '../../store/authStore';
 
 const Questionnaire = () => {
-    const {completeQuestionnaire} = useAuthStore();
+    
+    const router=useRouter()
 
-    const handleComplete = () => {
-      completeQuestionnaire({completed: true,timestamp:Date.now()});
+    const handleStartQuiz = () => {
+      router.navigate("questions");
     }
+
 
  return (
     <View style={{flex:1}} >
@@ -40,8 +42,7 @@ const Questionnaire = () => {
           We would like to begin by asking you a few questions
         </ThemedText>
 
-       <ThemedButton onPress={() => 
-        router.navigate("questions")}>
+       <ThemedButton onPress={handleStartQuiz}>
           <ThemedText title={true} 
           style={{color:'#f2f2f2'}}>Start Quiz</ThemedText>
         </ThemedButton>

@@ -9,6 +9,7 @@ import ThemedText from '../../components/ThemedText';
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 import { quizData } from '../../constants/quizData';
+import { useAuthStore } from '../../store/authStore';
 
 const Questions = () => {
      const [answers, setAnswers] = useState({});
@@ -17,6 +18,8 @@ const Questions = () => {
      const [quizCompleted, setQuizCompleted] = useState(false);
 
      const router = useRouter();
+     const {completeQuestionnaire} = useAuthStore();
+      
      
      const handleAnswerSelection = (selectedAnswer, index) => {
        setSelectedOption(index); // Just highlight the selection
@@ -26,14 +29,15 @@ const Questions = () => {
        if (selectedOption === null) return; // Don't proceed if no answer selected
 
        // Save the answer
-       setAnswers(prevAnswers => ({
-         ...prevAnswers,
+       const newAnswers = {
+         ...answers,
          [currentQuestion]: {
            question: quizData[currentQuestion].question,
            selectedAnswer: quizData[currentQuestion].options[selectedOption],
            optionIndex: selectedOption
          }
-       }));
+       };
+       setAnswers(newAnswers);
 
        // Reset selection for next question
        setSelectedOption(null);
@@ -42,8 +46,20 @@ const Questions = () => {
        if (currentQuestion < quizData.length - 1) {
          setCurrentQuestion(currentQuestion + 1);
        } else {
+         // ✅ Complete the questionnaire when quiz is done
+         completeQuestionnaire({
+           completed: true,
+           timestamp: Date.now(),
+           answers: newAnswers
+         });
          setQuizCompleted(true);
        }
+     
+     }
+     
+     const handleGoToDashboard = () => {
+       // The completion already happened, just navigate
+       router.replace("/(dashboard)"); // Use replace to prevent going back
      }
 
      // Calculate progress
@@ -101,7 +117,7 @@ const Questions = () => {
             </ThemedText>
           </ThemedButton>
         ) : (
-          <ThemedButton onPress={() => router.navigate("/(dashboard)")}>
+          <ThemedButton onPress={handleGoToDashboard}>
             <ThemedText style={{color:'#f2f2f2'}}>Go to Dashboard</ThemedText>
           </ThemedButton>
         )}
