@@ -1,72 +1,60 @@
+// components/ThemedSetting.jsx - Add press handling and logout styling
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../constants/Colors';
 import ThemedText from './ThemedText';
+import ThemedView from './ThemedView';
+import { Colors } from '../constants/Colors';
 
-export default function ThemedSetting({ name, text, style, ...props }) {
-  return (
-    <TouchableOpacity style={[styles.container, style]} 
-    {...props}>
+const ThemedSetting = ({ name, text, onPress, isLogout = false }) => {
+    return (
+        <TouchableOpacity 
+            style={[styles.container, isLogout && styles.logoutContainer]}
+            onPress={onPress}
+        >
+            <ThemedView style={styles.content}>
+                <Ionicons 
+                    name={name} 
+                    size={24} 
+                    color={isLogout ? "#e74c3c" : "#666"} 
+                />
+                <ThemedText style={[styles.text, isLogout && styles.logoutText]}>
+                    {text}
+                </ThemedText>
+                <Ionicons 
+                    name="chevron-forward" 
+                    size={20} 
+                    color="#999" 
+                />
+            </ThemedView>
+        </TouchableOpacity>
+    );
+};
 
-      <View style={styles.iconContainer}>
-        <Ionicons name={name} size={24} color={Colors.primary} />
-      </View>
-      
-      <View style={styles.content}>
-        <ThemedText style={styles.text}>
-          {text}
-        </ThemedText>
-      </View>
-      
-      <View style={styles.arrowContainer}>
-        <View style={styles.arrow}>
-            <Ionicons name="arrow-forward-outline" size={16} color="white" />
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-}
+export default ThemedSetting;
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 5,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  arrowContainer: {
-    marginRight: 8,
-  },
-  arrow: {
-    width: 24,
-    height: 24,
-    borderRadius: 15,
-    backgroundColor: Colors.primary,  // ← Fixed: solid background
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  content: {
-    flex: 1,
-  },
-  text: {
-    fontSize: 16,
-  },
-  metadata: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  category: {
-    fontSize: 12,
-    color: Colors.primary,
-    marginRight: 12,
-  },
-  iconContainer: {
-    margin:15,
-  },
+    container: {
+        backgroundColor: '#ffffff',
+        borderRadius: 12,
+        padding: 16,
+        borderLeftWidth: 4,
+        borderLeftColor: Colors.primary,
+    },
+    logoutContainer: {
+        borderLeftColor: '#e74c3c',
+    },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
+    },
+    text: {
+        flex: 1,
+        marginLeft: 12,
+        fontSize: 16,
+    },
+    logoutText: {
+        color: '#e74c3c',
+        fontWeight: '500',
+    },
 });

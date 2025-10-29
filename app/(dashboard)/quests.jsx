@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spacer from "../../components/Spacer";
+import BackButton from "../../components/BackButton";
 import ThemedGoal from "../../components/ThemedGoal";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
@@ -26,6 +27,8 @@ const quests = () => {
  return (
      <ThemedView style={styles.container}>
       <SafeAreaView>
+
+        <BackButton style={{backgroundColor:'#f1f5eeff'}}/> 
 
       <ThemedText title={true} style={styles.title}>
          My Quests

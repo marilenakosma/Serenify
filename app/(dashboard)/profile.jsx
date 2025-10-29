@@ -1,78 +1,145 @@
-import { FlatList, StyleSheet } from "react-native";
+import { Alert, FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import BackButton from "../../components/BackButton";
 import Spacer from "../../components/Spacer";
 import ThemedSetting from "../../components/ThemedSetting";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import { useAuthStore } from "../../store/authStore";
 
 const profile = () => {
+    const { user, logout } = useAuthStore();
+
+    const handleLogout = () => {
+        Alert.alert(
+            'Logout',
+            'Are you sure you want to logout?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Logout',
+                    style: 'destructive',
+                    onPress: async () => {
+                        const result = await logout();
+                        if (!result.success) {
+                            Alert.alert('Error', 'Failed to logout');
+                        }
+                        // Navigation happens automatically via _layout.jsx
+                    },
+                },
+            ]
+        );
+    };
+
+    const handleSettingPress = (settingId, settingText) => {
+        switch (settingId) {
+            case 6: // Logout
+                handleLogout();
+                break;
+            default:
+                // For now, just show which setting was pressed
+                Alert.alert('Coming Soon', `${settingText} feature coming soon!`);
+                break;
+        }
+    };
+
     const settingData = [
-        { id:1, name:"trophy-outline",text:"My badges" },
-        { id:2, name:"time-outline", text:"Daily Reminder"},
-        { id:3, name:"settings-outline", text:"Preferences"},
-        { id:4, name:"accessibility-outline", text:"Account and Security"},
-        { id:5, name:"stats-chart-outline", text:"Data and Analytics"}
-      ]
-    
-      const renderSettings = ({item}) => (
-       <ThemedSetting
-         name={item.name}
-         text={item.text}
-       />
-      )
+        { id: 1, name: "trophy-outline", text: "My badges" },
+        { id: 2, name: "time-outline", text: "Daily Reminder" },
+        { id: 3, name: "settings-outline", text: "Preferences" },
+        { id: 4, name: "accessibility-outline", text: "Account and Security" },
+        { id: 5, name: "stats-chart-outline", text: "Data and Analytics" },
+        { id: 6, name: "log-out-outline", text: "Logout" }, // ✅ Added logout option
+    ];
 
-      const Separator = () => <Spacer height={20}/>
+    const renderSettings = ({ item }) => (
+        <ThemedSetting
+            name={item.name}
+            text={item.text}
+            onPress={() => handleSettingPress(item.id, item.text)} // ✅ Add press handler
+            isLogout={item.id === 6} // ✅ Mark logout for special styling
+        />
+    );
 
-  return (
+    const Separator = () => <Spacer height={20} />;
+
+    return (
         <ThemedView style={styles.container}>
-          <SafeAreaView>
+            <SafeAreaView>
+                <BackButton style={{backgroundColor: '#f1f5eeff'}}/>
 
-            <ThemedText title={true} style={styles.title}>
-               My Profile
-            </ThemedText>
+                {/* User Info Section */}
+                <ThemedView style={styles.userSection}>
+                    <View style={styles.userInfo}>
+                        <ThemedText style={styles.username}>
+                            {user?.username || 'User'}
+                        </ThemedText>
+                        <ThemedText style={styles.email}>
+                            {user?.email || 'No email'}
+                        </ThemedText>
+                    </View>
+                </ThemedView>
+
+                {/* Settings List */}
                 <FlatList
-                        data={settingData}
-                        renderItem={renderSettings}
-                        keyExtractor={(item) => item.id.toString()}
-                        contentContainerStyle = {styles.grid}
-                        ItemSeparatorComponent={Separator}
-                        />
-
-          </SafeAreaView>
+                    data={settingData}
+                    renderItem={renderSettings}
+                    keyExtractor={(item) => item.id.toString()}
+                    contentContainerStyle={styles.grid}
+                    ItemSeparatorComponent={Separator}
+                />
+            </SafeAreaView>
         </ThemedView>
-      )
-}
+    );
+};
 
-export default profile
+export default profile;
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-        backgroundColor:'#f1f5eeff'
+        flex: 1,
+        backgroundColor: '#f1f5eeff'
     },
-    safeArea: {
-    flex: 1,
-  },
-  header: {
-    alignItems: 'center',
-    paddingVertical: 20,
-    
-  },
-  title: {
-    fontSize: 24,
-    textAlign: 'center',
-  },
-  section: {
-    marginBottom: 30,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    marginBottom: 15,
-  },
-  grid: {
-      padding: 20,
-      marginVertical: 20,
-      marginHorizontal: 15,
+    userSection: {
+        alignItems: 'center',
+        paddingVertical: 20,
+        backgroundColor: '#f1f5eeff'
     },
-})
+    title: {
+        fontSize: 24,
+        textAlign: 'center',
+        marginBottom: 16,
+        backgroundColor: '#f1f5eeff'
+    },
+    userInfo: {
+        alignItems: 'center',
+        backgroundColor: 'white',
+        paddingVertical: 16,
+        paddingHorizontal: 24,
+        borderRadius: 12,
+        marginHorizontal: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    username: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#2c3e50',
+        marginBottom: 4,
+    },
+    email: {
+        fontSize: 14,
+        color: '#7f8c8d',
+    },
+    grid: {
+        padding: 20,
+        marginVertical: 10,
+        marginHorizontal: 15,
+    },
+});

@@ -30,14 +30,21 @@ const Questions = () => {
 
        // Save the answer
        const newAnswers = {
-         ...answers,
-         [currentQuestion]: {
+         ...answers, // Spread existing answers (keeps all previous answers)
+         [currentQuestion]: { //[currentQuestion] uses the question index as the key (0, 1, 2, etc.)
            question: quizData[currentQuestion].question,
            selectedAnswer: quizData[currentQuestion].options[selectedOption],
            optionIndex: selectedOption
          }
        };
-       setAnswers(newAnswers);
+       setAnswers(newAnswers); // Save the updated answers to state
+       /* newAnswers = {
+  0: {
+    question: "How are you feeling today?",
+    selectedAnswer: "Great",
+    optionIndex: 1
+  }
+} */
 
        // Reset selection for next question
        setSelectedOption(null);
