@@ -6,9 +6,11 @@ import ThemedSetting from "../../components/ThemedSetting";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { useAuthStore } from "../../store/authStore";
-
+import { removeItem } from "../../store/storage";
+import { useRouter } from "expo-router";
 const profile = () => {
-    const { user, logout } = useAuthStore();
+    const { user, logout,retakeQuestionnaire } = useAuthStore();
+    const router = useRouter()
 
     const handleLogout = () => {
         Alert.alert(
@@ -33,11 +35,28 @@ const profile = () => {
             ]
         );
     };
+    
+    
+    const handleRetakeQuestionnaire = () => {
+       console.log('🚀 handleRetakeQuestionnaire called');
+        // Use the authStore function which handles both storage and state
+        retakeQuestionnaire();
+        //console.log('✅ retakeQuestionnaire completed');
+        //router.push('/(questionnaire)/?retake=true&timestamp=' + Date.now());
+         const navigationPath = '/(questionnaire)/?retake=true';
+       //  console.log('🎯 About to navigate to:', navigationPath);
+    
+         router.push(navigationPath);
+        // console.log('✅ Navigation called');
+    }
 
     const handleSettingPress = (settingId, settingText) => {
         switch (settingId) {
-            case 6: // Logout
+            case 7: // Logout
                 handleLogout();
+                break;
+            case 6:
+                handleRetakeQuestionnaire();
                 break;
             default:
                 // For now, just show which setting was pressed
@@ -52,15 +71,16 @@ const profile = () => {
         { id: 3, name: "settings-outline", text: "Preferences" },
         { id: 4, name: "accessibility-outline", text: "Account and Security" },
         { id: 5, name: "stats-chart-outline", text: "Data and Analytics" },
-        { id: 6, name: "log-out-outline", text: "Logout" }, // ✅ Added logout option
+        { id: 6, name: "albums-outline", text: "Retake Quiz" },
+        { id: 7, name: "log-out-outline", text: "Logout" }, 
     ];
 
     const renderSettings = ({ item }) => (
         <ThemedSetting
             name={item.name}
             text={item.text}
-            onPress={() => handleSettingPress(item.id, item.text)} // ✅ Add press handler
-            isLogout={item.id === 6} // ✅ Mark logout for special styling
+            onPress={() => handleSettingPress(item.id, item.text)} //  Add press handler
+            isLogout={item.id === 7} //  Mark logout for special styling.TODO:dynamic
         />
     );
 

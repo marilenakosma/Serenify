@@ -51,6 +51,7 @@ export const useAuthStore = create((set,get) => ({
     isLoading: false,
     hasCompletedQuestionnaire: !!existingQuestionnaire, //existingQuestionnaire ? true : false,
     questionnaireResults: existingQuestionnaire?.results || null,
+    isRetakingQuestionnaire: false, 
   };
    
   //save in MMKV
@@ -127,6 +128,7 @@ export const useAuthStore = create((set,get) => ({
                 isLoading: false,
                 hasCompletedQuestionnaire: false,
                 questionnaireResults: null,
+                isRetakingQuestionnaire: false,
             });
             
             return { success: true };
@@ -151,6 +153,7 @@ export const useAuthStore = create((set,get) => ({
         const updatedData = {
           hasCompletedQuestionnaire: true,
           questionnaireResults:results,
+          isRetakingQuestionnaire: false, 
         };
 
         const currentAuthData = getItem("authData");
@@ -159,6 +162,31 @@ export const useAuthStore = create((set,get) => ({
         }
 
         set(updatedData)
+    },
+
+    retakeQuestionnaire:() => {
+        const state = get();
+        const userId = state.user?.id;
+
+        if (userId) {
+            // Clear user's questionnaire data
+            removeItem(`questionnaire_${userId}`);
+            
+            // Update current session to show questionnaire incomplete
+            const updatedData = {
+                hasCompletedQuestionnaire: false,
+                questionnaireResults: null,
+                isRetakingQuestionnaire: true,
+            };
+            
+            // Update session storage
+            const currentAuthData = getItem("authData");
+            if (currentAuthData) {
+                setItem("authData", { ...currentAuthData, ...updatedData });
+            }
+            
+            set(updatedData);
+        }
     },
 
   checkAuth: async () => {
@@ -215,6 +243,7 @@ export const useAuthStore = create((set,get) => ({
             isLoading: false,
             hasCompletedQuestionnaire: false,
             questionnaireResults: null,
+            isRetakingQuestionnaire: false, 
         });
     },
 }))

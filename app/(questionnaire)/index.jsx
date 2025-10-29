@@ -1,4 +1,4 @@
-import { router, useRouter } from 'expo-router';
+import { router, useRouter,useLocalSearchParams } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,12 +11,26 @@ import { useAuthStore } from '../../store/authStore';
 import { getItem } from '../../store/storage';
 
 const Questionnaire = () => {
-    const {user} = useAuthStore();
+    const {user,isRetakingQuestionnaire} = useAuthStore();
     const router=useRouter();
+    const params = useLocalSearchParams();
 
     const existingQuestionnaire = getItem(`questionnaire_${user?.id}`);
-    const isReturningUser = !!existingQuestionnaire;
-
+ /*
+    console.log('🐛 Debug Everything:', {
+        userId: user?.id,
+        params: params,
+        allKeys: Object.keys(params),
+        paramCount: Object.keys(params).length,
+        retakeFromParams: params.retake,
+        testFromParams: params.test,
+        retakeFromStore: isRetakingQuestionnaire, 
+        existingQuestionnaire: existingQuestionnaire,
+        currentPath: router.pathname
+    });
+*/
+    const isReturningUser = !!existingQuestionnaire || isRetakingQuestionnaire;
+    
     const handleStartQuiz = () => {
       router.navigate("questions");
     }
@@ -25,8 +39,7 @@ const Questionnaire = () => {
  return (
     <View style={{flex:1}} >
 
-        <SafeAreaView style={{backgroundColor:Colors.background}}>
-          <BackButton/>
+        <SafeAreaView style={{backgroundColor:Colors.background}}>        
         </SafeAreaView>
 
         <ThemedView style={styles.container}>
@@ -43,10 +56,10 @@ const Questionnaire = () => {
               />
        
         <ThemedText style={styles.description}> 
-          {isReturningUser ?
-          "It looks like you've used Serenify before.Let's update your preferences!" :
-          "We would like to begin by asking you a few questions"}
-        </ThemedText>
+                    {isReturningUser ?
+                             "It looks like you've used Serenify before. Let's update your preferences!" 
+                        : "We would like to begin by asking you a few questions"}
+                </ThemedText>
 
        <ThemedButton onPress={handleStartQuiz}>
           <ThemedText title={true} 
