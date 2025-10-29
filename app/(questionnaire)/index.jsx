@@ -8,10 +8,14 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
 import { useAuthStore } from '../../store/authStore';
+import { getItem } from '../../store/storage';
 
 const Questionnaire = () => {
-    
-    const router=useRouter()
+    const {user} = useAuthStore();
+    const router=useRouter();
+
+    const existingQuestionnaire = getItem(`questionnaire_${user?.id}`);
+    const isReturningUser = !!existingQuestionnaire;
 
     const handleStartQuiz = () => {
       router.navigate("questions");
@@ -28,7 +32,7 @@ const Questionnaire = () => {
         <ThemedView style={styles.container}>
 
         <ThemedText title={true} 
-        style={styles.title}>Welcome to Serenify
+        style={styles.title}> {isReturningUser ? "Welcome Back!" : "Welcome to Serenify" }
         </ThemedText>
 
           <LottieView
@@ -39,12 +43,15 @@ const Questionnaire = () => {
               />
        
         <ThemedText style={styles.description}> 
-          We would like to begin by asking you a few questions
+          {isReturningUser ?
+          "It looks like you've used Serenify before.Let's update your preferences!" :
+          "We would like to begin by asking you a few questions"}
         </ThemedText>
 
        <ThemedButton onPress={handleStartQuiz}>
           <ThemedText title={true} 
-          style={{color:'#f2f2f2'}}>Start Quiz</ThemedText>
+          style={{color:'#f2f2f2'}}>
+            {isReturningUser ? "Update Preferences" : "Start Quiz"}</ThemedText>
         </ThemedButton>
 
      </ThemedView>

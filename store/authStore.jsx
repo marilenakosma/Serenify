@@ -34,6 +34,9 @@ export const useAuthStore = create((set,get) => ({
             };
 
   const data = await mockLogin();
+   
+  // Check if this user has completed questionnaire before  
+  const existingQuestionnaire = getItem(`questionnaire_${data.id}`);
 
   const authData = {
     isAuthenticated: true,
@@ -46,6 +49,8 @@ export const useAuthStore = create((set,get) => ({
                 },
     accessTokenExpiration:Date.now() + (60*60 * 1000), //1 hour
     isLoading: false,
+    hasCompletedQuestionnaire: !!existingQuestionnaire, //existingQuestionnaire ? true : false,
+    questionnaireResults: existingQuestionnaire?.results || null,
   };
    
   //save in MMKV
@@ -132,6 +137,17 @@ export const useAuthStore = create((set,get) => ({
     },
 
     completeQuestionnaire: (results) => {
+        const state = get();
+        const userId = state.user?.id;
+
+        if(userId) {
+            setItem(`questionnaire_${userId}`, {
+                completed:true,
+                timestamp:Date.now(),
+                results:results
+            })
+        }
+
         const updatedData = {
           hasCompletedQuestionnaire: true,
           questionnaireResults:results,

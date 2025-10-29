@@ -53,7 +53,7 @@ const Questions = () => {
        if (currentQuestion < quizData.length - 1) {
          setCurrentQuestion(currentQuestion + 1);
        } else {
-         // ✅ Complete the questionnaire when quiz is done
+         //  Complete the questionnaire when quiz is done
          completeQuestionnaire({
            completed: true,
            timestamp: Date.now(),
