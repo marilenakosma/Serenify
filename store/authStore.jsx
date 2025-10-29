@@ -52,6 +52,7 @@ export const useAuthStore = create((set,get) => ({
     hasCompletedQuestionnaire: !!existingQuestionnaire, //existingQuestionnaire ? true : false,
     questionnaireResults: existingQuestionnaire?.results || null,
     isRetakingQuestionnaire: false, 
+    showingResults: false,
   };
    
   //save in MMKV
@@ -154,6 +155,7 @@ export const useAuthStore = create((set,get) => ({
           hasCompletedQuestionnaire: true,
           questionnaireResults:results,
           isRetakingQuestionnaire: false, 
+          showingResults: true,
         };
 
         const currentAuthData = getItem("authData");
@@ -162,6 +164,9 @@ export const useAuthStore = create((set,get) => ({
         }
 
         set(updatedData)
+    },
+    finishShowingResults: () => {
+        set({ showingResults: false }); 
     },
 
     retakeQuestionnaire:() => {

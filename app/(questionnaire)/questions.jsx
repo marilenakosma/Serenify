@@ -15,7 +15,6 @@ const Questions = () => {
      const [answers, setAnswers] = useState({});
      const [currentQuestion, setCurrentQuestion] = useState(0);
      const [selectedOption, setSelectedOption] = useState(null);
-     const [quizCompleted, setQuizCompleted] = useState(false);
 
      const router = useRouter();
      const {completeQuestionnaire} = useAuthStore();
@@ -59,18 +58,15 @@ const Questions = () => {
            timestamp: Date.now(),
            answers: newAnswers
          });
-         setQuizCompleted(true);
+          router.push("/(questionnaire)/results");
        }
      
      }
      
-     const handleGoToDashboard = () => {
-       // The completion already happened, just navigate
-       router.replace("/(dashboard)"); // Use replace to prevent going back
-     }
 
      // Calculate progress
      const progress = ((currentQuestion + 1) / quizData.length) * 100;
+     const isLastQuestion = currentQuestion === quizData.length - 1;
 
   return (
     <ThemedView style={{flex:1}}>
@@ -111,23 +107,17 @@ const Questions = () => {
 
         <Spacer height={30}/>
 
-        {!quizCompleted ? (
-          <ThemedButton 
-            onPress={handleNext}
-            style={[
-              styles.nextButton, 
-              selectedOption === null && styles.disabledButton
-            ]}
-          >
-            <ThemedText style={{color:'#f2f2f2'}}>
-            Next
-            </ThemedText>
-          </ThemedButton>
-        ) : (
-          <ThemedButton onPress={handleGoToDashboard}>
-            <ThemedText style={{color:'#f2f2f2'}}>Go to Dashboard</ThemedText>
-          </ThemedButton>
-        )}
+        <ThemedButton 
+          onPress={handleNext}
+          style={[
+            styles.nextButton, 
+            selectedOption === null && styles.disabledButton
+          ]}
+        >
+          <ThemedText style={{color:'#f2f2f2'}}>
+            {isLastQuestion ? 'Complete Quiz' : 'Next'} {/* ✅ Dynamic text */}
+          </ThemedText>
+        </ThemedButton>
 
       </ThemedView>
     </ThemedView>

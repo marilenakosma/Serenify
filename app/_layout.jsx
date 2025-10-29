@@ -32,16 +32,21 @@ function RootLayoutNav() {
   useEffect(() => {
         if (!isNavigationReady) return;
 
+        const {showingResults} = useAuthStore.getState();
+
         console.log('Navigation check:', { 
             isAuthenticated, 
             hasCompletedQuestionnaire, 
+            showingResults,
             currentRoute: segments,
-            navigationReady: isNavigationReady
+            navigationReady: isNavigationReady,
+            segmentDetails: segments.map((seg, index) => `[${index}]: ${seg}`) 
         });
 
-  const inAuthGroup = segments[0] === '(auth)';
+        const inAuthGroup = segments[0] === '(auth)';
         const inQuestionnaireGroup = segments[0] === '(questionnaire)';
-
+        const onResultsPage = segments[1] === 'results'; // ✅ Check for results page
+  
         if (!isAuthenticated) {
             if (!inAuthGroup && segments.length > 0) {
                 console.log('Redirecting to login');
@@ -52,7 +57,7 @@ function RootLayoutNav() {
                 console.log('Redirecting to questionnaire');
                 router.replace('/(questionnaire)');
             }
-        } else {
+        } else if(!showingResults){
             if (inAuthGroup || inQuestionnaireGroup) {
                 console.log('Redirecting to dashboard');
                 router.replace('/(dashboard)');
