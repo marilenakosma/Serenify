@@ -194,6 +194,22 @@ export const useAuthStore = create((set,get) => ({
         }
     },
 
+    updateUser: (userData) => {
+        //Partially update user data(update data from quiz results)
+        const currentState = get(); //το χρειαζόμαστε γιατι χωρίς αυτο το set updated User 
+        // θα αντικαταστούσε το αντικείμενο(με μονο την ανάλυση των απαντήσεων) αντι να κάνει overwrite την αντίστοιχη ιδιότητα
+        const updatedUser= {...currentState.user, ...userData};
+        
+        // Update Zustand (in-memory)
+        set({user:updatedUser})
+        
+        // Update MMKV (persistent storage)
+        const currentAuthData = getItem("authData");
+        if (currentAuthData) {
+            setItem("authData", { ...currentAuthData, user: updatedUser });
+        }
+    },
+
   checkAuth: async () => {
         try {
             const authData = getItem("authData");

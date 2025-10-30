@@ -1,66 +1,191 @@
-import { FlatList, StyleSheet } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spacer from "../../components/Spacer";
 import BackButton from "../../components/BackButton";
 import ThemedGoal from "../../components/ThemedGoal";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import { useAuthStore } from "../../store/authStore";
+import { questContent } from "../../constants/questContent";
 
 const quests = () => {
-  const questData = [
-    { id:1, name:"create-outline",text:"Complete a goal" },
-    { id:2, name:"phone-portrait-outline", text:"Change one interior item"},
-    { id:3, name:"journal-outline", text:"Practice Gratitude"},
-    { id:4, name:"person-remove-outline", text:"Name your emotion"},
-    { id:5, name:"clipboard-outline", text:"A random goal for today"}
-  ]
+  const { user } = useAuthStore();
+  const [completedQuests, setCompletedQuests] = useState(new Set());
+  
+  const focusArea = user?.focusArea || 'General Wellness';
+  const content = questContent[focusArea];
 
-  const renderQuest = ({item}) => (
-   <ThemedGoal
-     name={item.name}
-     text={item.text}
-   />
-  )
+  const handleToggleQuest = (questId) => {
+    setCompletedQuests(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(questId)) {
+        newSet.delete(questId);
+      } else {
+        newSet.add(questId);
+      }
+      return newSet;
+    });
+  };
 
-  const Separator = () => <Spacer height={20}/>
+  const completedCount = completedQuests.size;
+  const totalQuests = content.weeklyQuests.length + content.challengeQuests.length;
 
- return (
-     <ThemedView style={styles.container}>
-      <SafeAreaView>
+  return (
+    <ThemedView style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <BackButton style={{ backgroundColor: '#f1f5eeff' }} />
 
-        <BackButton style={{backgroundColor:'#f1f5eeff'}}/> 
+        <ThemedText title={true} style={styles.title}>
+          My Quests {user?.focusEmoji || '🎯'}
+        </ThemedText>
 
-      <ThemedText title={true} style={styles.title}>
-         My Quests
-      </ThemedText>
-        <FlatList
-        data={questData}
-        renderItem={renderQuest}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle = {styles.grid}
-        ItemSeparatorComponent={Separator}
-        />
-        </SafeAreaView>
-     </ThemedView>
-   )
-}
+        <ScrollView 
+          style={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Progress Header */}
+          <ThemedView style={styles.progressCard}>
+            <ThemedText style={styles.progressTitle}>
+              {content.questTheme}
+            </ThemedText>
+            <ThemedText style={styles.progressText}>
+              {completedCount} of {totalQuests} completed
+            </ThemedText>
+            <View style={styles.progressBarContainer}>
+              <View style={styles.progressBarBackground}>
+                <View 
+                  style={[
+                    styles.progressBar, 
+                    { width: `${(completedCount / totalQuests) * 100}%` }
+                  ]} 
+                />
+              </View>
+            </View>
+          </ThemedView>
 
-export default quests
+          {/* Weekly Challenges Section */}
+          <ThemedView style={styles.sectionHeader}>
+            <ThemedText style={[styles.sectionTitle, { color: content.primaryColor }]}>
+              Weekly Challenges
+            </ThemedText>
+          </ThemedView>
+
+          {content.weeklyQuests.map((quest, index) => (
+            <View key={quest.id}>
+              <ThemedGoal
+                name={quest.name}
+                text={quest.text}
+                points={quest.points}
+                category={quest.category}
+                duration={quest.duration}
+                completed={completedQuests.has(quest.id)}
+                onToggle={() => handleToggleQuest(quest.id)}
+              />
+              {index < content.weeklyQuests.length - 1 && <Spacer height={20} />}
+            </View>
+          ))}
+
+          <Spacer height={30} />
+
+          {/* Special Quests Section */}
+          <ThemedView style={styles.sectionHeader}>
+            <ThemedText style={[styles.sectionTitle, { color: content.secondaryColor }]}>
+              Special Quests
+            </ThemedText>
+          </ThemedView>
+
+          {content.challengeQuests.map((quest, index) => (
+            <View key={quest.id}>
+              <ThemedGoal
+                name={quest.name}
+                text={quest.text}
+                points={quest.points}
+                category={quest.category}
+                duration={quest.duration}
+                completed={completedQuests.has(quest.id)}
+                onToggle={() => handleToggleQuest(quest.id)}
+              />
+              {index < content.challengeQuests.length - 1 && <Spacer height={20} />}
+            </View>
+          ))}
+
+          <Spacer height={30} />
+        </ScrollView>
+      </SafeAreaView>
+    </ThemedView>
+  );
+};
+
+export default quests;
 
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        backgroundColor:'#f1f5eeff'
-    },
-    grid: {
-      padding: 20,
-      marginVertical: 20,
-      marginHorizontal: 15,
-    },
-    title: {
-        fontSize: 22,
-        marginTop: 20,
-        textAlign: 'center',
-         },
-     
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#f1f5eeff'
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 30,
+  },
+  title: {
+    fontSize: 22,
+    marginTop: 20,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  progressCard: {
+    backgroundColor: 'white',
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  progressTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  progressText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 16,
+  },
+  progressBarContainer: {
+    width: '100%',
+  },
+  progressBarBackground: {
+    height: 8,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 4,
+    width: '100%',
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: '#4CAF50',
+    borderRadius: 4,
+  },
+  sectionHeader: {
+    backgroundColor: 'transparent',
+    paddingVertical: 15,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});

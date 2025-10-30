@@ -12,9 +12,14 @@ import ThemedMood from "../../components/ThemedMood";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { useAuthStore } from "../../store/authStore";
-const index = () => {
+import { dashboardContent } from "../../constants/dashboardContent";
+
+const Dashboard = () => {
   const {user,isAuthenticated} = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
+
+  const focusArea = user?.focusArea || 'General Wellness';
+  const content = dashboardContent[focusArea];
 
   if (!isAuthenticated) {
     return (
@@ -23,14 +28,6 @@ const index = () => {
         </ThemedView>
     );
 }
-
-  const goalData = [
-    { id:1, name:"book",text:"Read a book" },
-    { id:2, name:"person", text:"Email people at work"},
-    { id:3, name:"battery-full-outline", text:"Discharge my battery"},
-    { id:4, name:"bulb-outline", text:"Buy new light bulbs"},
-    { id:5, name:"clipboard-outline", text:"A random goal for today"}
-  ]
 
   const moodData = [
     { id:1, image:Angry,text:"Angry" },
@@ -51,15 +48,6 @@ const index = () => {
       return newSet;
     });
   };
-
-  const renderGoal = ({ item }) => (
-    <ThemedGoal
-      name={item.name}
-      text={item.text}
-      completed={completedGoals.has(item.id)}
-      onToggle={() => handleToggleGoal(item.id)}
-    />
-  );
 
   const renderMood = ({item}) => (
    <ThemedMood
@@ -84,10 +72,10 @@ const index = () => {
             <View style={styles.overlay}>
               <ThemedView style={styles.moodSection}>  
                 <ThemedText style={styles.greeting}>
-                  Hello, {user.username}
+                  Hello, {user?.username || 'User'}! {user?.focusEmoji || '🌱'}
                 </ThemedText>
                 <ThemedText title={true} style={styles.moodTitle}>
-                  How are you feeling today?
+                  {content.greeting}
                 </ThemedText>
                 <FlatList
                   data={moodData}
@@ -106,15 +94,23 @@ const index = () => {
           <ThemedView style={[styles.section,
           styles.other]}>
             <ThemedText title={true} style={styles.sectionTitle}>
-              Today's Goals
+              Recommended for You
             </ThemedText>
-            <FlatList
-              data={goalData}
-              renderItem={renderGoal}
-              keyExtractor={(item) => item.id.toString()}
-              scrollEnabled={false}
-              ItemSeparatorComponent={Separator}
-            />
+
+            {content.recommendedGoals.map((goal, index) => (
+              <View key={goal.id}>
+                <ThemedGoal
+                  name={goal.name}
+                  text={goal.text}
+                  points={goal.points}
+                  category={goal.category}  
+                  duration={goal.duration}  
+                  completed={completedGoals.has(goal.id)}
+                  onToggle={() => handleToggleGoal(goal.id)}
+               />
+               {index < content.recommendedGoals.length - 1 && <Spacer height={15} />}
+             </View>
+             ))}
           </ThemedView>
 
           <Spacer height={30}/>
@@ -124,7 +120,7 @@ const index = () => {
   )
 }
 
-export default index
+export default Dashboard
 
 const styles = StyleSheet.create({
     container: {

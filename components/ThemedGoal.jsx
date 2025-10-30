@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Colors';
 import ThemedText from './ThemedText';
 
-export default function ThemedGoal({ name, text, completed = false, onToggle, style, ...props }) {
+export default function ThemedGoal({ name, text, points, completed = false, onToggle, category, duration, style, ...props }) {
   return (
     <TouchableOpacity style={[styles.container, style]} 
     onPress={onToggle} {...props}>
@@ -17,8 +17,11 @@ export default function ThemedGoal({ name, text, completed = false, onToggle, st
           {text}
         </ThemedText>
         <View style={styles.metadata}>
-          <ThemedText style={styles.category}>Goal</ThemedText>
-          <ThemedText style={styles.time}>5 min</ThemedText>
+          <ThemedText style={styles.category}>{category || 'Wellness'}</ThemedText>
+          {points && (
+            <ThemedText style={styles.points}>{points} pts</ThemedText>
+          )}
+          <ThemedText style={styles.time}>{duration || '5 min'}</ThemedText>
         </View>
       </View>
       
@@ -91,5 +94,11 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     margin:15,
+  },
+  points: {
+    fontSize: 12,
+    color: '#FF9800',
+    marginRight: 12,
+    fontWeight: '600',
   },
 });
