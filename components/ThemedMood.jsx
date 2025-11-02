@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     image: {
       width:45,
-      height:45,
+      height:40,
     },
     text: {
         textAlign: 'center',

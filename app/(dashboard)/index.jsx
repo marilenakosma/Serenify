@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { FlatList, ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Angry from "../../assets/images/angry.png";
-import Neutral from "../../assets/images/neutral.png";
-import Sad from "../../assets/images/sad.png";
-import Happy from "../../assets/images/shy.png";
-import VeryHappy from "../../assets/images/smile.png";
+import Angry from "../../assets/images/storm.png";
+import Neutral from "../../assets/images/hail.png";
+import Sad from "../../assets/images/rain.png";
+import Happy from "../../assets/images/overcast.png";
+import VeryHappy from "../../assets/images/sun.png";
 import Spacer from "../../components/Spacer";
 import ThemedGoal from "../../components/ThemedGoal";
 import ThemedMood from "../../components/ThemedMood";
@@ -13,6 +13,7 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { useAuthStore } from "../../store/authStore";
 import { dashboardContent } from "../../constants/dashboardContent";
+import LinearGradient from "react-native-linear-gradient";
 
 const Dashboard = () => {
   const {user,isAuthenticated} = useAuthStore();
@@ -33,7 +34,7 @@ const Dashboard = () => {
     { id:1, image:Angry,text:"Angry" },
     { id:2, image:Sad, text:"Sad"},
     { id:3, image:Neutral, text:"Neutral"},
-    { id:4, image:Happy, text:"Shy"},
+    { id:4, image:Happy, text:"Good"},
     { id:5, image:VeryHappy, text:"Happy"}
   ]
 
@@ -55,8 +56,7 @@ const Dashboard = () => {
      text={item.text}
    />
   )
-  
-  const Separator = () => <Spacer height={15}/>
+
 
   return (
     <ThemedView style={{flex:1}}> 
@@ -64,7 +64,7 @@ const Dashboard = () => {
           <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           {/* Mood Section with Background Image */}
           <ImageBackground 
-            source={require('../../assets/images/field.jpg')}
+            source={require('../../assets/images/field-alt.png')}
             style={styles.backgroundImage}
             resizeMode="cover"
           >
@@ -72,7 +72,7 @@ const Dashboard = () => {
             <View style={styles.overlay}>
               <ThemedView style={styles.moodSection}>  
                 <ThemedText style={styles.greeting}>
-                  Hello, {user?.username || 'User'}! {user?.focusEmoji || '🌱'}
+                  Hello, {user?.username || 'User'}! 
                 </ThemedText>
                 <ThemedText title={true} style={styles.moodTitle}>
                   {content.greeting}
@@ -125,13 +125,12 @@ export default Dashboard
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'#f1f5eeff'
+        backgroundColor: '#f1f5eeff'
     },
     backgroundImage: {
         width: '100%',
-        minHeight: 300,
+        minHeight: 320,
         justifyContent: 'center',
-        backgroundColor:'white',
         //borderTopLeftRadius: 25,
        // borderTopRightRadius: 25,
        // overflow: 'hidden', // Important: clips the image to the border radius
@@ -140,6 +139,7 @@ const styles = StyleSheet.create({
         //backgroundColor: 'rgba(0, 0, 0, 0.3)', // Dark overlay for text readability
         flex: 1,
         justifyContent: 'center',
+       // backgroundColor:'#F0F8FF'
        // backgroundColor:Colors.secondary
     },
     moodSection: {
@@ -149,16 +149,14 @@ const styles = StyleSheet.create({
     },
     greeting: {
         fontSize: 18,
-        marginBottom: 8,
         textAlign: 'center',
-        color: 'black', // White text over image
-        fontWeight: '500',
+        color: "black"
     },
     moodTitle: {
         fontSize: 22,
         marginBottom: 20,
         textAlign: 'center',
-        color: 'black', // White text over image
+        color: 'black', 
     },
     moodList: {
         paddingHorizontal: 8,
