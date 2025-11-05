@@ -278,6 +278,11 @@ export const useAuthStore = create((set,get) => ({
         }
 
     },
+    updateHabit: (habitId, updatedHabit) => set((state) => ({
+    userHabits: state.userHabits.map(habit => 
+      habit.id === habitId ? updatedHabit : habit
+    )
+  })),
 
     getHabitCompletion: (habitId, date = null) => {
         const today = date || new Date().toISOString().split('T')[0];

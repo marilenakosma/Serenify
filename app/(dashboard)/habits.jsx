@@ -50,8 +50,10 @@ const quests = () => {
   };
 
  const handleStatsPress = (habitId) => {
-    console.log('Navigate to stats page for habit:', habitId);
-    // router.push(`/(modals)/habit-stats?habitId=${habitId}`);
+    router.push({
+    pathname: '/(modals)/habit-stats',
+    params: { habitId }
+  });
   };
 
  const handleAddHabit = () => {
