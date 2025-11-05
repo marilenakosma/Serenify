@@ -8,11 +8,13 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { useAuthStore } from "../../store/authStore";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const quests = () => {
-  const { user } = useAuthStore();
+  const { user,userHabits,toggleHabitCompletion,getHabitCompletion } = useAuthStore();
   const [completedQuests, setCompletedQuests] = useState(new Set());
-  
+  const router = useRouter()
+
   const focusArea = user?.focusArea || 'General Wellness';
 
   const defaultGoals = [
@@ -22,38 +24,39 @@ const quests = () => {
     { id: 'exercise', name: 'fitness-outline', text: 'Do some form of exercise', category: 'Foundation', points: 20, duration: '20 min' },
   ];
 
-  // Mock user habits 
-  const userHabits = [
-    { id: 'clean-room', name: 'home-outline', text: 'Clean Room', streak: 0, frequency: 'Everyday', category: 'Lifestyle', points: 15, duration: '30 min' },
-    { id: 'eat-fruit', name: 'nutrition-outline', text: 'Eat Fruit', streak: 0, frequency: 'Everyday', category: 'Health', points: 10, duration: '5 min' },
-    { id: 'practice-music', name: 'musical-notes-outline', text: 'Practice Music', streak: 0, frequency: 'Everyday', category: 'Learning', points: 25, duration: '45 min' },
-    { id: 'drink-water', name: 'water-outline', text: 'Drink 8 glasses', streak: 1, frequency: 'Everyday', category: 'Health', points: 15, duration: 'All day' },
-  ];
-
-
   // Combine goals properly
   const allGoals = [...defaultGoals, ...userHabits];
   const goalsByCategory = groupGoalsByCategory(allGoals);
 
-  const handleToggleQuest = (questId) => {
-    setCompletedQuests(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(questId)) {
-        newSet.delete(questId);
-      } else {
-        newSet.add(questId);
-      }
-      return newSet;
-    });
+   const handleToggleQuest = (questId) => {
+    // Check if it's a user habit or default goal
+    const isUserHabit = userHabits.some(habit => habit.id === questId);
+    
+    if (isUserHabit) {
+      //  Use store method for habits
+      toggleHabitCompletion(questId);
+    } else {
+      // Handle default goals locally for now
+      setCompletedQuests(prev => {
+        const newSet = new Set(prev);
+        if (newSet.has(questId)) {
+          newSet.delete(questId);
+        } else {
+          newSet.add(questId);
+        }
+        return newSet;
+      });
+    }
   };
 
-  const handleStatsPress = () => {
-    console.log('Navigate to stats page');
+ const handleStatsPress = (habitId) => {
+    console.log('Navigate to stats page for habit:', habitId);
+    // router.push(`/(modals)/habit-stats?habitId=${habitId}`);
   };
 
-  const handleAddHabit = () => {
-    console.log('Navigate to add habits page');
-  };
+ const handleAddHabit = () => {
+  router.push('/(modals)/add-habits');
+};
 
   return (
     <ThemedView style={styles.container}>
@@ -61,8 +64,8 @@ const quests = () => {
         <BackButton style={{ backgroundColor: '#f1f5eeff' }} />
         
         <ThemedText title={true} style={styles.title}>
-                Habits
-              </ThemedText>
+          Habits
+        </ThemedText>
 
         <ScrollView 
           style={styles.scrollContainer}
@@ -81,59 +84,72 @@ const quests = () => {
               </TouchableOpacity>
             </View>
 
-            {/* Habit Cards Row */}
-            <ScrollView 
-              horizontal 
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.habitCardsContainer}
-            >
-              {userHabits.map((habit) => (
-                <TouchableOpacity 
-                  key={habit.id} 
-                  style={styles.habitCard}
-                  onPress={handleStatsPress}
-                >
-                  <Ionicons name={habit.name} size={32} color="#4CAF50" />
-
-                  <View style={styles.streakRow}>
-                  <ThemedText title={true} style={styles.habitStreak}>
-                    {habit.streak}
-                  </ThemedText>
-                  <ThemedText style={styles.habitStreakLabel}>Days</ThemedText>
-
-                  </View>
-
-                  <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>
-                  <ThemedText style={styles.habitFrequency}>{habit.frequency}</ThemedText>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+            {/* Show real user habits or empty state */}
+            {userHabits.length > 0 ? (
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.habitCardsContainer}
+              >
+                {userHabits.map((habit) => (
+                  <TouchableOpacity 
+                    key={habit.id} 
+                    style={styles.habitCard}
+                    onPress={() => handleStatsPress(habit.id)}
+                  >
+                    <Ionicons name={habit.name} size={32} color="#4CAF50" />
+                    <View style={styles.streakRow}>
+                      <ThemedText title={true} style={styles.habitStreak}>
+                        {habit.streak || 0}
+                      </ThemedText>
+                      <ThemedText style={styles.habitStreakLabel}>Days</ThemedText>
+                    </View>
+                    <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>
+                    <ThemedText style={styles.habitFrequency}>{habit.frequency}</ThemedText>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            ) : (
+              <View style={styles.emptyHabitsContainer}>
+                <ThemedText style={styles.emptyHabitsText}>
+                  No habits yet! Tap "Add New" to get started 🌱
+                </ThemedText>
+              </View>
+            )}
           </View>
 
+          {/* Categories with Goals */}
           {Object.entries(goalsByCategory).map(([categoryName, categoryGoals]) => {
             if (categoryGoals.length === 0) return null;
 
             return (
               <View key={categoryName} style={styles.categorySection}>
-                {/* Category Header */}
                 <ThemedText title={true} style={styles.categoryTitle}>
                   {categoryName}
                 </ThemedText>
 
-                {categoryGoals.map((goal, index) => (
-                  <View key={goal.id}>
-                    <ThemedGoal
-                      name={goal.name || goal.icon}
-                      text={goal.text || goal.title}
-                      points={goal.points}
-                      category={goal.category}
-                      duration={goal.duration || goal.defaultDuration}
-                      completed={completedQuests.has(goal.id)}
-                      onToggle={() => handleToggleQuest(goal.id)}
-                    />
-                    {index < categoryGoals.length - 1 && <Spacer height={12} />}
-                  </View>
-                ))}
+                {categoryGoals.map((goal, index) => {
+                  //  Check completion correctly
+                  const isUserHabit = userHabits.some(habit => habit.id === goal.id);
+                  const isCompleted = isUserHabit 
+                    ? getHabitCompletion(goal.id) 
+                    : completedQuests.has(goal.id);
+
+                  return (
+                    <View key={goal.id}>
+                      <ThemedGoal
+                        name={goal.name || goal.icon}
+                        text={goal.text || goal.title}
+                        points={goal.points}
+                        category={goal.category}
+                        duration={goal.duration || goal.defaultDuration}
+                        completed={isCompleted}
+                        onToggle={() => handleToggleQuest(goal.id)}
+                      />
+                      {index < categoryGoals.length - 1 && <Spacer height={12} />}
+                    </View>
+                  );
+                })}
 
                 <Spacer height={25} />
               </View>
@@ -261,5 +277,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#2c3e50',
     marginBottom: 15,
+  },
+  // 
+  emptyHabitsContainer: {
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(76, 175, 80, 0.2)',
+  },
+  emptyHabitsText: {
+    color: '#4CAF50',
+    textAlign: 'center',
+    fontSize: 16,
   },
 });

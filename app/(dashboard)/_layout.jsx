@@ -27,8 +27,8 @@ const _layout = () => {
       }}
       />
 
-      <Tabs.Screen name="quests"
-      options={{ title:"Quests",
+      <Tabs.Screen name="habits"
+      options={{ title:"Habits",
         tabBarIcon: ({focused}) => (
             <Ionicons
             size={24}

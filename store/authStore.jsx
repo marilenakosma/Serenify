@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { getItem, removeItem, setItem } from "./storage";
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export const useAuthStore = create((set,get) => ({
     //STATE
@@ -9,9 +10,12 @@ export const useAuthStore = create((set,get) => ({
   user:null,
   accessTokenExpiration:null,
   isLoading: false,
-  // Serenify-specific state
-    hasCompletedQuestionnaire: false,
-    questionnaireResults: null,
+  // Questionnaire specific state
+  hasCompletedQuestionnaire: false,
+  questionnaireResults: null,
+
+  userHabits: [],
+  habitCompletions: {}, // { habitId: { '2024-11-02': true } }
 
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
 
@@ -130,6 +134,8 @@ export const useAuthStore = create((set,get) => ({
                 hasCompletedQuestionnaire: false,
                 questionnaireResults: null,
                 isRetakingQuestionnaire: false,
+                userHabits:[],
+                habitCompletions: {},
             });
             
             return { success: true };
@@ -194,6 +200,91 @@ export const useAuthStore = create((set,get) => ({
         }
     },
 
+    addHabits: (newHabits) => {
+     const currentState = get();
+     const updatedHabits = [...currentState.userHabits,...newHabits];
+     
+     // Update Zustand (in-memory)
+     set({userHabits:updatedHabits})
+
+     // Update MMKV (persistent storage)
+     const currentAuthData = getItem("authData");
+        if (currentAuthData) {
+            setItem("authData", { ...currentAuthData, userHabits: updatedHabits });
+        }
+    },
+
+    removeHabit:(habitId) => {
+     const currentState = get();
+     const filteredHabits = currentState.userHabits.filter(h => h.id !== habitId);
+    
+     set({userHabits:filteredHabits});
+
+     const currentAuthData = getItem("authData");
+        if (currentAuthData) {
+            setItem("authData", { ...currentAuthData, userHabits: filteredHabits });
+        }
+    },
+
+    toggleHabitCompletion: (habitId,date = null) => {
+     const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
+     const currentState = get();
+
+     const completions = {...currentState.habitCompletions};
+     /* completions = {
+        "morning-run": {
+          "2025-11-01": true,
+          "2025-11-02": false,
+          "2025-11-03": true,
+          "2025-11-04": true
+        },
+        "meditation": {
+        "2025-11-04": false
+       }
+     }
+    */
+
+     //Initialize habit tracking
+     if(!completions[habitId]) {
+        completions[habitId] = {};
+     }
+
+     const isCurrentlyCompleted = completions[habitId][today] || false; // completions["morning-run"]["2025-11-04"]  
+        completions[habitId][today] = !isCurrentlyCompleted;
+
+     const updatedHabits = currentState.userHabits.map(habit => {
+      if(habit.id === habitId) {
+        return {
+          ...habit,
+          streak:calculateStreak(habitId,completions),
+          lastCompleted: !isCurrentlyCompleted ? today : habit.lastCompleted
+        };
+      }
+      return habit;
+     })
+
+     set({
+        habitCompletions:completions,
+        userHabits:updatedHabits
+     })
+
+     const currentAuthData = getItem("authData");
+        if (currentAuthData) {
+            setItem("authData", { 
+                ...currentAuthData, 
+                habitCompletions: completions,
+                userHabits: updatedHabits 
+            });
+        }
+
+    },
+
+    getHabitCompletion: (habitId, date = null) => {
+        const today = date || new Date().toISOString().split('T')[0];
+        const state = get();
+        return state.habitCompletions[habitId]?.[today] || false;
+    },
+
     updateUser: (userData) => {
         //Partially update user data(update data from quiz results)
         const currentState = get(); //το χρειαζόμαστε γιατι χωρίς αυτο το set updated User 
@@ -216,7 +307,11 @@ export const useAuthStore = create((set,get) => ({
             if (authData) {
                 // Check if token is still valid
                 if (authData.accessTokenExpiration && Date.now() < authData.accessTokenExpiration) {
-                    set(authData);
+                    set({
+                        ...authData,
+                        userHabits: authData.userHabits || [],
+                        habitCompletions: authData.habitCompletions || {}
+                    });
                     return true;
                 } else {
                     // Token expired, clear auth
@@ -265,6 +360,30 @@ export const useAuthStore = create((set,get) => ({
             hasCompletedQuestionnaire: false,
             questionnaireResults: null,
             isRetakingQuestionnaire: false, 
+            userHabits:[],
+            habitCompletions: {},
         });
     },
 }))
+
+const calculateStreak = (habitId, completions) => {
+    if (!completions[habitId]) return 0;
+    
+    const habitCompletions = completions[habitId];
+    const today = new Date();
+    let streak = 0;
+    
+    for (let i = 0; i < 365; i++) {
+        const checkDate = new Date(today);
+        checkDate.setDate(today.getDate() - i);
+        const dateStr = checkDate.toISOString().split('T')[0];
+        
+        if (habitCompletions[dateStr]) {
+            streak++;
+        } else {
+            break;
+        }
+    }
+    
+    return streak;
+};

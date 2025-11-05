@@ -142,7 +142,7 @@ export const dashboardContent = {
             { 
                 id: 'mindful', 
                 name: 'flower-outline', 
-                text: 'Practice mindfulness', 
+                text: 'Practice gratitude', 
                 points: 15,
                 category: 'Mindfulness',
                 duration: '10 min'
@@ -150,7 +150,7 @@ export const dashboardContent = {
             { 
                 id: 'move', 
                 name: 'walk-outline', 
-                text: 'Move your body', 
+                text: 'Take a walk', 
                 points: 10,
                 category: 'Movement',
                 duration: '15 min'
