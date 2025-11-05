@@ -128,25 +128,16 @@ const AddHabits = () => {
 
   const handleSave = () => {
     if (selectedHabits.size === 0) return;
-    
-    const newHabits = Array.from(selectedHabits).map(habitId => {
-      const habit = safeHabits.find(h => h.id === habitId);
-      return {
-        id: habit.id,
-        name: habit.icon || 'checkmark-outline',
-        text: habit.title,
-        streak: 0,
-        frequency: 'Everyday',
-        category: habit.category,
-        points: habit.points || 10,
-        duration: habit.duration || '5 min',
-        dateAdded: new Date().toISOString(),
-        lastCompleted: null,
-      };
-    });
 
-    addHabits(newHabits);
-    router.back();
+    const habitIdsArray = Array.from(selectedHabits);
+    const habitIdsParam = JSON.stringify(habitIdsArray);
+
+    router.push({
+    pathname: '/(modals)/habit-frequency',
+    params: { habitIds: habitIdsParam }
+  });
+    
+
   };
 
   return (
@@ -340,6 +331,7 @@ const styles = StyleSheet.create({
   // Bottom Button
   bottomButtonContainer: {
     position: 'absolute',
+    alignItems:'center',
     bottom: 0,
     left: 0,
     right: 0,

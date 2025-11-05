@@ -10,6 +10,13 @@ export default function ModalsLayout() {
           animation: 'slide_from_bottom',
         }}
       />
+      <Stack.Screen 
+        name="habit-frequency"
+        options={{
+          presentation: 'card', 
+          animation: 'slide_from_right',
+        }}
+      />
       {/* Add other modals here later like habit-stats, edit-habit, etc. */}
     </Stack>
   );
