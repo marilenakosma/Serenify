@@ -9,11 +9,23 @@ import ThemedView from "../../components/ThemedView";
 import { useAuthStore } from "../../store/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { 
+  isHabitCompleteForPeriod, 
+  getCompletionsThisWeek, 
+  getRequiredCompletionsPerWeek 
+} from "../../constants/habitFrequency.js";
 
-const quests = () => {
-  const { user,userHabits,toggleHabitCompletion,getHabitCompletion } = useAuthStore();
+const habits = () => {
+  const { 
+    user,
+    userHabits,
+    toggleHabitCompletion,
+    habitCompletions,
+    getHabitCompletion 
+  } = useAuthStore();
+
   const [completedQuests, setCompletedQuests] = useState(new Set());
-  const router = useRouter()
+  const router = useRouter();
 
   const focusArea = user?.focusArea || 'General Wellness';
 
@@ -60,6 +72,20 @@ const quests = () => {
   router.push('/(modals)/add-habits');
 };
 
+const getHabitStatus = (habit) => {
+    const completions = habitCompletions[habit.id] || {};
+    const isComplete = isHabitCompleteForPeriod(habit.frequency, completions);
+    const weeklyCompletions = getCompletionsThisWeek(completions);
+    const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
+    
+    return {
+      isComplete,
+      weeklyCompletions,
+      requiredPerWeek,
+      progress: requiredPerWeek > 0 ? weeklyCompletions / requiredPerWeek : 0
+    };
+  };
+
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
@@ -91,29 +117,63 @@ const quests = () => {
               <ScrollView 
                 horizontal 
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.habitCardsContainer}
+                contentContainerStyle={styles.habitsScrollContent}
+                style={styles.habitsScroll}
               >
-                {userHabits.map((habit) => (
-                  <TouchableOpacity 
-                    key={habit.id} 
-                    style={styles.habitCard}
-                    onPress={() => handleStatsPress(habit.id)}
-                  >
-                    <Ionicons name={habit.name} size={32} color="#4CAF50" />
-                    <View style={styles.streakRow}>
-                      <ThemedText title={true} style={styles.habitStreak}>
-                        {habit.streak || 0}
+                {userHabits.map((habit) => {
+                  const status = getHabitStatus(habit);
+                  
+                  return (
+                    <TouchableOpacity 
+                      key={habit.id} 
+                      style={[
+                        styles.habitCard,
+                        status.isComplete && styles.completedHabitCard
+                      ]}
+                      onPress={() => handleStatsPress(habit.id)}
+                    >
+                      {/* Completion status indicator */}
+                      <View style={[
+                        styles.statusIndicator,
+                        status.isComplete ? styles.completeIndicator : styles.pendingIndicator
+                      ]}>
+                        <Ionicons 
+                          name={status.isComplete ? "checkmark-circle" : "time-outline"} 
+                          size={16} 
+                          color="#fff" 
+                        />
+                      </View>
+
+                      <Ionicons 
+                        name={habit.name} 
+                        size={32} 
+                        color={status.isComplete ? "#4CAF50" : "#666"} 
+                      />
+                      
+                      <View style={styles.streakRow}>
+                        <ThemedText title={true} style={styles.habitStreak}>
+                          {habit.streak || 0}
+                        </ThemedText>
+                        <ThemedText style={styles.habitStreakLabel}>
+                          {habit.frequency === 'Everyday' ? 'Days' : 'Weeks'}
+                        </ThemedText>
+                      </View>
+                      
+                      <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>
+                      
+                      <ThemedText style={styles.habitFrequency}>
+                        {habit.frequency}
                       </ThemedText>
-                      <ThemedText style={styles.habitStreakLabel}>Days</ThemedText>
-                    </View>
-                    <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>
-                    <ThemedText style={styles.habitFrequency}>{habit.frequency || 'Everyday'}</ThemedText>
-                    {habit.duration && (
-                      <ThemedText style={styles.habitDuration}>{habit.duration}
-                      </ThemedText>
-                    )}
-                  </TouchableOpacity>
-                ))}
+
+                      {/*  Frequency-aware progress text */}
+                      {status.requiredPerWeek > 1 && (
+                        <ThemedText style={styles.weeklyProgress}>
+                          {status.weeklyCompletions}/{status.requiredPerWeek} this week
+                        </ThemedText>
+                      )}
+                    </TouchableOpacity>
+                  );
+                })}
               </ScrollView>
             ) : (
               <View style={styles.emptyHabitsContainer}>
@@ -181,7 +241,7 @@ const groupGoalsByCategory = (goals) => {
   }, {});
 };
 
-export default quests;
+export default habits;
 
 const styles = StyleSheet.create({
   container: {
@@ -205,6 +265,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#2c3e50',
   },
+  
   // Habits Overview Section
   habitsOverview: {
     marginBottom: 30,
@@ -230,48 +291,70 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginRight: 4,
   },
+
   
-  // Habit Cards
-  habitCardsContainer: {
-    paddingRight: 10,
+  habitsScroll: {
+    marginBottom: 20,
   },
+  habitsScrollContent: {
+    paddingHorizontal: 0,
+    gap: 16,
+  },
+
+  
   habitCard: {
     backgroundColor: 'white',
     borderRadius: 16,
     padding: 16,
-    marginRight: 12,
-    width: 120,
     alignItems: 'center',
+    width: 140, 
+    minHeight: 160, 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    position: 'relative',
   },
+  
+  
   streakRow: {
+    alignItems: 'center',
+    marginVertical: 12,
     flexDirection: 'row',
-    alignItems: 'baseline', // Aligns text baselines nicely
-    marginTop: 8,
-    marginBottom: 8,
+    gap:7,
+    alignItems: 'baseline',
   },
+  
   habitStreak: {
     fontSize: 24,
     color: '#2c3e50',
-    marginRight:4,
   },
+  
   habitStreakLabel: {
     fontSize: 12,
     color: '#666',
   },
+  
   habitTitle: {
     fontSize: 14,
     color: '#2c3e50',
-    marginBottom: 4,
     textAlign: 'center',
+    marginBottom: 8,
+    lineHeight: 18,
   },
+  
   habitFrequency: {
     fontSize: 12,
     color: '#666',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+
+  weeklyProgress: {
+    fontSize: 11,
+    color: '#4CAF50',
+    fontWeight: '600',
     textAlign: 'center',
   },
   
@@ -284,7 +367,8 @@ const styles = StyleSheet.create({
     color: '#2c3e50',
     marginBottom: 15,
   },
-  // 
+  
+  // Empty state
   emptyHabitsContainer: {
     backgroundColor: 'rgba(76, 175, 80, 0.1)',
     borderRadius: 12,
@@ -297,5 +381,32 @@ const styles = StyleSheet.create({
     color: '#4CAF50',
     textAlign: 'center',
     fontSize: 16,
+  },
+  
+  // Completion states
+  completedHabitCard: {
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    borderColor: '#4CAF50',
+    borderWidth: 1,
+  },
+  
+  // ✅ Status indicator (top-right corner)
+  statusIndicator: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
+  completeIndicator: {
+    backgroundColor: '#4CAF50',
+  },
+  
+  pendingIndicator: {
+    backgroundColor: '#FF9800',
   },
 });

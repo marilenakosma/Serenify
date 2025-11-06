@@ -1,6 +1,11 @@
 import { create } from "zustand";
 import { getItem, removeItem, setItem } from "./storage";
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { Alert } from "react-native";
+import { shouldTrackHabitOnDate,
+         isHabitCompleteForPeriod,getCompletionsThisWeek,
+         calculateFrequencyAwareStreak,
+         getRequiredCompletionsPerWeek} from "../constants/habitFrequency";
+
 
 export const useAuthStore = create((set,get) => ({
     //STATE
@@ -263,6 +268,21 @@ export const useAuthStore = create((set,get) => ({
      const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
      const currentState = get();
 
+     const habit = currentState.userHabits.find(h => h.id === habitId);
+
+     if(!habit) return;
+
+     const targetDate = date ? new Date(date) : new Date();
+     const dateStr = targetDate.toISOString().split('T')[0];
+
+     if (!shouldTrackHabitOnDate(habit.frequency, targetDate)) {
+    Alert.alert(
+      'Not Trackable',
+      `This habit (${habit.frequency}) cannot be completed on this day.`
+    );
+    return;
+  }
+
      const completions = {...currentState.habitCompletions};
      /* completions = {
         "morning-run": {
@@ -282,15 +302,35 @@ export const useAuthStore = create((set,get) => ({
         completions[habitId] = {};
      }
 
-     const isCurrentlyCompleted = completions[habitId][today] || false; // completions["morning-run"]["2025-11-04"]  
-        completions[habitId][today] = !isCurrentlyCompleted;
+     const isCurrentlyCompleted = completions[habitId][dateStr] || false; 
+     // completions["morning-run"]["2025-11-04"]  
 
+     if (!isCurrentlyCompleted) {
+    const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
+    const currentWeekCompletions = getCompletionsThisWeek(completions[habitId], targetDate);
+    
+    // Check limits for weekly habits
+    if (requiredPerWeek < 7 && requiredPerWeek > 0) {
+      if (currentWeekCompletions >= requiredPerWeek) {
+        Alert.alert(
+          'Weekly Limit Reached',
+          `You've already completed this habit ${requiredPerWeek} time${requiredPerWeek > 1 ? 's' : ''} this week.`
+        );
+        return;
+      }
+    }
+  }
+
+    completions[habitId][dateStr] = !isCurrentlyCompleted;
+     
+    const newStreak = calculateFrequencyAwareStreak(habit.frequency, completions[habitId], targetDate);
+     
      const updatedHabits = currentState.userHabits.map(habit => {
       if(habit.id === habitId) {
         return {
           ...habit,
-          streak:calculateStreak(habitId,completions),
-          lastCompleted: !isCurrentlyCompleted ? today : habit.lastCompleted
+          streak:newStreak,
+          lastCompleted: !isCurrentlyCompleted ? dateStr : null
         };
       }
       return habit;
