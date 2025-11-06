@@ -214,25 +214,50 @@ export const useAuthStore = create((set,get) => ({
         }
     },
 
-    removeHabit:(habitId) => {
-     const currentState = get();
-     const filteredHabits = currentState.userHabits.filter(h => h.id !== habitId);
-     
-     const updatedCompletions = {...currentState.habitCompletions};
-     delete updatedCompletions[habitId];
+    removeHabit: (habitId) => {
+  console.log('removeHabit called with ID:', habitId);
+  
+  const currentState = get();
+  console.log('Current habits before removal:', currentState.userHabits);
+  
+  // Check if habit exists
+  const habitToRemove = currentState.userHabits.find(h => h.id === habitId);
+  if (!habitToRemove) {
+    console.log('Habit not found with ID:', habitId);
+    return;
+  }
+  
+  console.log('Found habit to remove:', habitToRemove);
+  
+  const filteredHabits = currentState.userHabits.filter(h => h.id !== habitId);
+  
+  // Remove completion data for this habit
+  const updatedCompletions = { ...currentState.habitCompletions };
+  delete updatedCompletions[habitId];
 
-     set({userHabits:filteredHabits,
-        habitCompletions:updatedCompletions
-     });
+  console.log('Filtered habits:', filteredHabits);
 
-     const currentAuthData = getItem("authData");
-        if (currentAuthData) {
-         setItem("authData", { 
-            ...currentAuthData, 
-            userHabits: filteredHabits,
-            habitCompletions:updatedCompletions });
-        }
-    },
+  // Update store 
+  set({ 
+    userHabits: filteredHabits,
+    habitCompletions: updatedCompletions 
+  });
+
+  // Persist to storage
+  try {
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", { 
+        ...currentAuthData, 
+        userHabits: filteredHabits,
+        habitCompletions: updatedCompletions 
+      });
+      console.log('Successfully persisted habit removal');
+    }
+  } catch (error) {
+    console.error('Error persisting habit removal:', error);
+  }
+},
 
     toggleHabitCompletion: (habitId,date = null) => {
      const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04

@@ -28,9 +28,14 @@ const HabitStats = () => {
   );
 
   const openEditModal = () => {
-    setEditedName(habit.text);
-    setEditedFrequency(habit.frequency);
-    setEditedDuration(habit.duration);
+    if (!habit) {
+    Alert.alert('Error', 'Habit data not available');
+    return;
+  }
+
+    setEditedName(habit.text || '');
+    setEditedFrequency(habit.frequency || 'Everyday');
+    setEditedDuration(habit.duration || '5 min'); // ✅ Add fallback
     setShowEditModal(true);
   };
 
@@ -246,6 +251,15 @@ const formatDate = (date) => {
     
 
   const handleDelete = () => {
+  console.log('Attempting to delete habit:', habit);
+  console.log('Habit ID:', habitId);
+  console.log('All user habits:', userHabits);
+
+  if (!habit) {
+    Alert.alert('Error', 'Habit not found');
+    return;
+  }
+
     Alert.alert(
       'Delete Habit',
       `Are you sure you want to delete "${habit?.text}"? This action cannot be undone.`,
@@ -255,6 +269,7 @@ const formatDate = (date) => {
           text: 'Delete',
           style: 'destructive',
           onPress: () => {
+            console.log('Calling removeHabit with ID:', habitId);
             removeHabit(habitId);
             router.back();
           }

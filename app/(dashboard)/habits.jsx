@@ -107,7 +107,11 @@ const quests = () => {
                       <ThemedText style={styles.habitStreakLabel}>Days</ThemedText>
                     </View>
                     <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>
-                    <ThemedText style={styles.habitFrequency}>{habit.frequency}</ThemedText>
+                    <ThemedText style={styles.habitFrequency}>{habit.frequency || 'Everyday'}</ThemedText>
+                    {habit.duration && (
+                      <ThemedText style={styles.habitDuration}>{habit.duration}
+                      </ThemedText>
+                    )}
                   </TouchableOpacity>
                 ))}
               </ScrollView>
