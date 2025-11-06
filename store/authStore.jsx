@@ -217,12 +217,20 @@ export const useAuthStore = create((set,get) => ({
     removeHabit:(habitId) => {
      const currentState = get();
      const filteredHabits = currentState.userHabits.filter(h => h.id !== habitId);
-    
-     set({userHabits:filteredHabits});
+     
+     const updatedCompletions = {...currentState.habitCompletions};
+     delete updatedCompletions[habitId];
+
+     set({userHabits:filteredHabits,
+        habitCompletions:updatedCompletions
+     });
 
      const currentAuthData = getItem("authData");
         if (currentAuthData) {
-            setItem("authData", { ...currentAuthData, userHabits: filteredHabits });
+         setItem("authData", { 
+            ...currentAuthData, 
+            userHabits: filteredHabits,
+            habitCompletions:updatedCompletions });
         }
     },
 
@@ -278,11 +286,33 @@ export const useAuthStore = create((set,get) => ({
         }
 
     },
-    updateHabit: (habitId, updatedHabit) => set((state) => ({
-    userHabits: state.userHabits.map(habit => 
-      habit.id === habitId ? updatedHabit : habit
-    )
-  })),
+    updateHabit:(habitId,updatedHabit) => {
+     const currentState = get();
+
+     const currentHabit = currentState.userHabits.find(h => h.id === habitId);
+     if(!currentHabit) return;
+
+     const habitToUpdate = {
+        ...updatedHabit,
+        streak:currentHabit.streak,
+        lastCompleted: currentHabit.lastCompleted,
+        dateAdded:currentHabit.dateAdded,
+     }
+
+     const updatedHabits = currentState.userHabits.map(habit => 
+        habit.id === habitId ? habitToUpdate : habit 
+     );
+
+     set({userHabits:updatedHabits});
+
+     const currentAuthData = getItem("authData");
+  if (currentAuthData) {
+    setItem("authData", { 
+      ...currentAuthData, 
+      userHabits: updatedHabits 
+    });
+  }
+    },
 
     getHabitCompletion: (habitId, date = null) => {
         const today = date || new Date().toISOString().split('T')[0];

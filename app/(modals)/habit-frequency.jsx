@@ -100,6 +100,8 @@ const HabitFrequency = () => {
       duration: habit.duration || '5 min',
       dateAdded: new Date().toISOString(),
       lastCompleted: null,
+      difficulty: habit.difficulty || 'Easy',
+      description: habit.description || '',
     }));
 
     addHabits(newHabits);

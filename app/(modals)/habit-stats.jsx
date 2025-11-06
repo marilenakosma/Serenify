@@ -40,15 +40,21 @@ const HabitStats = () => {
       return;
     }
 
+    console.log('Before update - streak:', habit.streak, 'lastCompleted:', habit.lastCompleted);
+
     const updatedHabit = {
       ...habit,
       text: editedName.trim(),
       frequency: editedFrequency,
       duration: editedDuration,
     };
+    
+    console.log('Updating habit with:', updatedHabit);
 
     updateHabit(habitId, updatedHabit);
     setShowEditModal(false);
+
+    console.log('After update - should preserve streak');
   };
 
   const frequencyOptions = [
