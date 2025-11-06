@@ -176,16 +176,25 @@ const HabitStats = () => {
 };
 
 const getFirstDayOfMonth = (date) => {
-  return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  return firstDay === 0 ? 6 : firstDay - 1;
 };
 
 const formatDate = (date) => {
-  return date.toISOString().split('T')[0];
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const getToday = () => {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
 };
 
   // Generate calendar data (last 30 days)
    const calendarData = useMemo(() => {
-    const today = new Date();
+    const today = getToday();
     const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const daysInMonth = getDaysInMonth(currentMonth);
     const firstDayOfWeek = getFirstDayOfMonth(currentMonth);
@@ -222,7 +231,7 @@ const formatDate = (date) => {
         isCurrentMonth: true,
         isToday,
         isCompleted: habitCompletions[habitId]?.[formatDate(date)] || false,
-        isPast
+        isPast: isPast || isToday
       });
     }
     
@@ -377,7 +386,7 @@ const formatDate = (date) => {
           
           {/* Calendar Header (Days of Week) */}
           <View style={styles.calendarHeader}>
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun'].map(day => (
               <View key={day} style={styles.dayHeader}>
                 <ThemedText style={styles.dayHeaderText}>{day}</ThemedText>
               </View>
@@ -717,22 +726,26 @@ const styles = StyleSheet.create({
   shadowRadius: 4,
   elevation: 2,
   marginBottom: 12,
-  padding:4,
-  maxHeight:340,
+  padding:5,
+  height:305,
 },
 calendar: {
   flexDirection: 'row',
   flexWrap: 'wrap',
-  backgroundColor: 'transparent', // Transparent since wrapper has white background
+  backgroundColor: 'transparent', 
+  justifyContent: 'space-between',
 },
   calendarDay: {
-    width: '16%', // 100% / 7 days
-    aspectRatio: 0.9,
+    width: '13%', 
+    aspectRatio: 0.8,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 6,
-    margin: 1,
+    padding:5,
+    margin:1,
     position: 'relative',
+    borderWidth: 0.5,
+    borderColor: 'transparent',
   },
   
   // Day States
@@ -741,6 +754,7 @@ calendar: {
   },
   futureDay: {
     backgroundColor: '#f8f9fa',
+    borderColor: '#f0f0f0',
   },
   completedDay: {
     backgroundColor: '#4CAF50',
@@ -755,6 +769,7 @@ calendar: {
     fontSize: 16,
     color: '#2c3e50',
     fontWeight: '500',
+    textAlign:'center'
   },
   otherMonthText: {
     color: '#ccc',
