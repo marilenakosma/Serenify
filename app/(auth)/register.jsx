@@ -412,6 +412,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fafafa',
         textAlignVertical: 'center', // Android
         includeFontPadding: false, // Android
+        color: '#000000',
     },
     inputFocused: {
         borderColor: Colors.primary,
@@ -421,10 +422,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 2,
+        color: '#000000',
     },
     inputError: {
         borderColor: '#ff6b6b',
         backgroundColor: '#fff5f5',
+        color: '#000000',
     },
     validationContainer: {
         flexDirection: 'row',

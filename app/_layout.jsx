@@ -7,6 +7,8 @@ import { use, useEffect } from 'react';
 import { Colors } from "../constants/Colors";
 import { useAuthStore } from "../store/authStore";
 import { useState } from "react";
+import { Platform } from 'react-native';
+import * as NavigationBar from 'expo-navigation-bar';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,6 +26,15 @@ function RootLayoutNav() {
         };
         initAuth();
     }, []);
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      // Hide navigation bar
+      NavigationBar.setVisibilityAsync('hidden');
+      // NavigationBar.setBehaviorAsync('inset-swipe'); //  gesture navigation
+      // NavigationBar.setBehaviorAsync('overlay-swipe'); // Alternative behavior
+    }
+  }, []);
 
   
     //Check where the user is
@@ -45,7 +56,7 @@ function RootLayoutNav() {
 
         const inAuthGroup = segments[0] === '(auth)';
         const inQuestionnaireGroup = segments[0] === '(questionnaire)';
-        const onResultsPage = segments[1] === 'results'; // ✅ Check for results page
+        const onResultsPage = segments[1] === 'results'; //  Check for results page
   
         if (!isAuthenticated) {
             if (!inAuthGroup && segments.length > 0) {
@@ -83,7 +94,7 @@ export default function RootLayout() {
     return null;
   }
 return ( <>
-        <StatusBar value="auto" />
+        <StatusBar value="auto" translucent={true} />
         <RootLayoutNav/>
 </>)
 }
