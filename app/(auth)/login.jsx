@@ -9,6 +9,7 @@ import ThemedButton from "../../components/ThemedButton";
 import ThemedInput from "../../components/ThemedInput";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import { ResponsiveDimensions as RD } from "../../constants/responsiveDimensions";
 import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
 
@@ -20,7 +21,6 @@ const Login = () => {
     const [touched, setTouched] = useState({});
     
     
-   
     const debounce = (func, wait) => {
         let timeout;
         return function executedFunction(...args) {
@@ -122,8 +122,7 @@ const Login = () => {
                     <BackButton/>
                     <ThemedView style={{flexDirection:'row', justifyContent:'center', paddingVertical: 15}}>
                         <Image source={require('../../assets/images/leaf-green.png')}
-                            style={{width: 200, height: 200}}   
-                            resizeMode="contain" />
+                           style={styles.headerImage}  />
                     </ThemedView>
                 </SafeAreaView>
 
@@ -209,7 +208,7 @@ const Login = () => {
                             </ThemedText>
                         </ThemedButton>
                         
-                        <Spacer height={20}/>
+                        <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
                         {/* Or Divider */}
                         <View style={styles.orContainer}>
@@ -219,24 +218,24 @@ const Login = () => {
                         </View>
                         
                         {/* Social Login */}
-                        <View style={{flexDirection:'row'}}>
-                                                <TouchableOpacity style={styles.socialButton}>
+                        <View style={styles.socialContainer}>
+                                                <TouchableOpacity style={styles.image}>
                                                     <Image source={require('../../assets/images/google.png')}
-                                                        style={{width:24, height:24}} />  
+                                                         style={styles.socialIcon} />  
                                                 </TouchableOpacity>
                         
-                                                <TouchableOpacity style={styles.socialButton}>
+                                                <TouchableOpacity style={styles.image}>
                                                     <Image source={require('../../assets/images/apple.png')}
-                                                        style={{width:24, height:24}} />  
+                                                         style={styles.socialIcon} />  
                                                 </TouchableOpacity>
                         
-                                                <TouchableOpacity style={styles.socialButton}>
+                                                <TouchableOpacity style={styles.image}>
                                                     <Image source={require('../../assets/images/facebook.png')}
-                                                        style={{width:24, height:24}} />  
+                                                         style={styles.socialIcon} />  
                                                 </TouchableOpacity>
-                                            </View>
+                        </View>
 
-                        <Spacer height={30}/>
+                        <Spacer height={RD.isSmallScreen ? 10 : 20}/>
 
                         {/* Register Link */}
                         <View style={styles.registerContainer}>
@@ -274,29 +273,35 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 5,
     },
+    headerImage: {
+        width: RD.wp(50), // 25% of screen width
+        height: RD.wp(50), // Keep it square
+        maxWidth: 150,    // Don't get too big on tablets
+        maxHeight: 150,
+        resizeMode: 'contain',
+    },
     title: {
         textAlign: "center",
-        fontSize: 24,
-        fontWeight: '600',
-        marginBottom: 20,
+        fontSize: RD.wp(5.7), 
+        marginBottom: RD.hp(2.5),
         color: Colors.title,
     },
     inputContainer: {
         width: '100%',
-        marginBottom: 15,
+        marginBottom: RD.hp(2),
     },
     input: {
         width: '100%',
-        height: 50,
+        height: RD.hp(5),
         borderWidth: 1,
         borderColor: '#e1e1e1',
-        borderRadius: 12,
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        fontSize: 16,
+        borderRadius: RD.wp(2.5),
+        paddingHorizontal: RD.wp(3),
+        paddingVertical: RD.hp(1),
+        fontSize: RD.wp(3.7),
         backgroundColor: '#fafafa',
-        textAlignVertical: 'center',
-        includeFontPadding: false,
+        textAlignVertical: 'center', // Android
+        includeFontPadding: false, // Android
     },
     inputFocused: {
         borderColor: Colors.primary,
@@ -370,6 +375,17 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#666',
     },
+    image: {
+        backgroundColor: Colors.uiBackground,
+        width: RD.wp(13), 
+        height: RD.wp(13), 
+        borderRadius: RD.wp(3),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: RD.wp(3),
+        borderWidth: 1,
+        borderColor: '#e1e1e1',
+    },
     socialContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -400,4 +416,15 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginLeft: 4,
     },
+    socialContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '100%',
+        paddingHorizontal: RD.wp(5),
+    },
+    socialIcon: {
+    width: RD.wp(6),  
+    height: RD.wp(6),
+    resizeMode: 'contain',
+},
 });

@@ -9,6 +9,7 @@ import ThemedButton from "../../components/ThemedButton";
 import ThemedInput from "../../components/ThemedInput";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import { ResponsiveDimensions as RD } from "../../constants/responsiveDimensions";
 import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
 
@@ -25,7 +26,7 @@ const Register = () => {
     
     const router = useRouter();
 
-    // Custom Password Strength Component - MOVED TO CORRECT LOCATION
+    // Custom Password Strength Component 
     const PasswordStrengthMeter = ({ strength, password }) => {
         const getStrengthText = () => {
             if (strength < 0.3) return 'Very Weak';
@@ -190,7 +191,7 @@ const Register = () => {
                     <BackButton/>
                     <ThemedView style={{flexDirection:'row', justifyContent:'center', paddingVertical: 20}}>
                         <Image source={require('../../assets/images/tropical.png')}
-                            style={{width:150, height:150}} />   
+                            style={styles.headerImage} />   
                     </ThemedView>
                 </SafeAreaView>
 
@@ -302,7 +303,7 @@ const Register = () => {
                         )}
                     </View>
 
-                    <Spacer height={15}/>
+                    <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
                     {/* Submit Button */}
                     <ThemedButton 
@@ -318,7 +319,7 @@ const Register = () => {
                         </ThemedText>
                     </ThemedButton>
                     
-                    <Spacer height={15}/>
+                    <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
                     {/* Or Divider */}
                     <View style={styles.orContainer}>
@@ -328,24 +329,24 @@ const Register = () => {
                     </View>
                     
                     {/* Social Login */}
-                    <View style={{flexDirection:'row'}}>
+                    <View style={styles.socialContainer}>
                         <TouchableOpacity style={styles.image}>
                             <Image source={require('../../assets/images/google.png')}
-                                style={{width:24, height:24}} />  
+                                 style={styles.socialIcon} />  
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.image}>
                             <Image source={require('../../assets/images/apple.png')}
-                                style={{width:24, height:24}} />  
+                                 style={styles.socialIcon} />  
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.image}>
                             <Image source={require('../../assets/images/facebook.png')}
-                                style={{width:24, height:24}} />  
+                                 style={styles.socialIcon} />  
                         </TouchableOpacity>
                     </View>
 
-                    <Spacer height={30}/>
+                    <Spacer height={RD.isSmallScreen ? 10 : 20}/>
 
                     {/* Login Link */}
                     <View style={styles.loginContainer}>
@@ -372,8 +373,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "white",
         paddingHorizontal: 32,
-        paddingTop: 20, // Reduced from 40
-        paddingBottom: 20, // Add bottom padding
+        paddingTop: 20,
+        paddingBottom: 20,
         borderTopLeftRadius: 50,
         borderTopRightRadius: 50,
         shadowColor: '#000',
@@ -382,28 +383,33 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 5,
     },
+    headerImage: {
+        width: RD.wp(30), // 25% of screen width
+        height: RD.wp(30), // Keep it square
+        maxWidth: 90,    // Don't get too big on tablets
+        maxHeight: 90,
+        resizeMode: 'contain',
+    },
     title: {
         textAlign: "center",
-        fontSize: 22, // Reduced from 24
-        fontWeight: '600',
-        marginBottom: 20, // Reduced from 30
+        fontSize: RD.wp(5.7), 
+        marginBottom: RD.hp(2.5),
         color: Colors.title,
     },
     inputContainer: {
         width: '100%',
-        marginBottom: 15, // Reduced from 20
+        marginBottom: RD.hp(2),
     },
     input: {
         width: '100%',
-        height: 50, // Reduced from 55
+        height: RD.hp(5),
         borderWidth: 1,
         borderColor: '#e1e1e1',
-        borderRadius: 12,
-        paddingHorizontal: 16,
-        paddingVertical: 12, // Add vertical padding for placeholder
-        fontSize: 16,
+        borderRadius: RD.wp(2.5),
+        paddingHorizontal: RD.wp(3),
+        paddingVertical: RD.hp(1),
+        fontSize: RD.wp(3.7),
         backgroundColor: '#fafafa',
-        // Fix text alignment
         textAlignVertical: 'center', // Android
         includeFontPadding: false, // Android
     },
@@ -428,14 +434,13 @@ const styles = StyleSheet.create({
     },
     errorMessage: {
         color: '#ff6b6b',
-        fontSize: 13,
+        fontSize: RD.wp(3.2),
         marginLeft: 6,
         flex: 1,
     },
     validMark: {
         color: '#4CAF50',
-        fontSize: 13,
-        fontWeight: '500',
+        fontSize: RD.wp(3.2),
     },
     invalidMark: {
         color: '#ff6b6b',
@@ -466,12 +471,12 @@ const styles = StyleSheet.create({
     },
     image: {
         backgroundColor: Colors.uiBackground,
-        width: 60,
-        height: 60,
-        borderRadius: 16,
+        width: RD.wp(13), 
+        height: RD.wp(13), 
+        borderRadius: RD.wp(3),
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 12,
+        marginHorizontal: RD.wp(3),
         borderWidth: 1,
         borderColor: '#e1e1e1',
     },
@@ -480,14 +485,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loginText: {
-        fontSize: 14,
+        fontSize: RD.wp(3.5),
         color: '#666',
     },
     loginLink: {
-        fontSize: 14,
+        fontSize: RD.wp(3.5),
         color: Colors.primary,
-        fontWeight: '600',
-        marginLeft: 4,
+        marginLeft: RD.wp(1),
     },
     strengthMeter: {
         marginTop: 8,
@@ -504,8 +508,18 @@ const styles = StyleSheet.create({
         borderRadius: 2,
     },
     strengthText: {
-        fontSize: 12,
-        fontWeight: '500',
+        fontSize: RD.wp(3),
         textAlign: 'right',
     },
+    socialContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '100%',
+        paddingHorizontal: RD.wp(5),
+    },
+    socialIcon: {
+    width: RD.wp(6),  
+    height: RD.wp(6),
+    resizeMode: 'contain',
+},
 });
