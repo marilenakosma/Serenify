@@ -13,7 +13,6 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { useAuthStore } from "../../store/authStore";
 import { dashboardContent } from "../../constants/dashboardContent";
-import LinearGradient from "react-native-linear-gradient";
 
 const Dashboard = () => {
   const {user,isAuthenticated} = useAuthStore();

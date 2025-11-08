@@ -94,7 +94,7 @@ export default function RootLayout() {
     return null;
   }
 return ( <>
-        <StatusBar value="auto" translucent={true} />
+        <StatusBar style="auto" translucent={true} />
         <RootLayoutNav/>
 </>)
 }
