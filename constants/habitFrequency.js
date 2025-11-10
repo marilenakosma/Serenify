@@ -28,6 +28,7 @@ export const shouldTrackHabitOnDate = (frequency,date) => {
     
     case FREQUENCY_TYPES.TWO_WEEKLY:
     case FREQUENCY_TYPES.THREE_WEEKLY:
+    case '3x/week':
     case FREQUENCY_TYPES.FOUR_WEEKLY:
     case FREQUENCY_TYPES.FIVE_WEEKLY:  
      return true;
@@ -59,16 +60,19 @@ export const getRequiredCompletionsPerWeek = (frequency) => {
     case FREQUENCY_TYPES.FOUR_WEEKLY:
       return 4;
     case FREQUENCY_TYPES.THREE_WEEKLY:
+      case '3x/week': 
       return 3;
     case FREQUENCY_TYPES.TWO_WEEKLY:
       return 2;
     case FREQUENCY_TYPES.WEEKLY:
+    case 'Once a week': 
       return 1;
     case FREQUENCY_TYPES.BIWEEKLY:
       return 0.5;
     case FREQUENCY_TYPES.MONTHLY:
       return 0.25;
     default:
+      console.log('No match found for frequency:', frequency);
       return 1;
  }
 };
@@ -91,6 +95,7 @@ export const isHabitCompleteForPeriod = (frequency, completions, date = new Date
         return getCompletionsThisWeek(completions,today) >= 2;
 
        case FREQUENCY_TYPES.THREE_WEEKLY:
+        case '3x/week':
         return getCompletionsThisWeek(completions,today) >= 3;
        
        case FREQUENCY_TYPES.FOUR_WEEKLY:
@@ -100,7 +105,7 @@ export const isHabitCompleteForPeriod = (frequency, completions, date = new Date
         return getCompletionsThisWeek(completions,today) >= 5;
     
        case FREQUENCY_TYPES.BIWEEKLY:
-         return getCompletionsThisNDays(completions,today,14) >= 1;
+         return getCompletionsLastNDays(completions,today,14) >= 1;
 
        case FREQUENCY_TYPES.MONTHLY:
         return getCompletionsThisMonth(completions,today) >= 1;
@@ -108,27 +113,6 @@ export const isHabitCompleteForPeriod = (frequency, completions, date = new Date
        default:
         return false;
     }
-}
-
-export const getCompletionsThisWeek = (completions, date = new Date()) => {
- const today = new Date(date);
- const dayOfWeek = today.getDay();
- const startOfWeek = new Date(today);
-
- const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
- startOfWeek.setDate(today.getDate() - daysToMonday);
-
- let count = 0;
- for (let i = 0; i < 7; i++) {
-    const checkDate = new Date(startOfWeek);
-    checkDate.setDate(startOfWeek.getDate() + i);
-    const dateStr = checkDate.toISOString().split('T')[0];
-    
-    if (completions[dateStr] && checkDate <= today) {
-      count++;
-    }
- }
- return count;
 }
 
 export const getCompletionsLastNDays = (completions, date = new Date(), days = 7) => {
@@ -171,8 +155,9 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
   const requiredPerWeek = getRequiredCompletionsPerWeek(frequency);
   let streak = 0;
   const today = new Date(endDate);
-  
-  
+
+  console.log('Calculating streak for:', frequency, 'Required per week:', requiredPerWeek);
+   
   if (frequency === FREQUENCY_TYPES.DAILY || 
       frequency === FREQUENCY_TYPES.WEEKDAYS || 
       frequency === FREQUENCY_TYPES.WEEKENDS) {
@@ -191,35 +176,81 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
       }
       
       currentDate.setDate(currentDate.getDate() - 1);
-      
-      
       if (streak > 365) break;
     }
     
+    console.log('Daily/weekday streak result:', streak);
     return streak;
   }
   
-  // For weekly habits, count completed weeks
-  let currentWeekStart = new Date(today);
-  const dayOfWeek = today.getDay();
-  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-  currentWeekStart.setDate(today.getDate() - daysToMonday);
+  //  Fixed weekly streak calculation
+  let currentWeekStart = getStartOfWeek(today);
   
   while (true) {
-    const weekCompletions = getCompletionsThisWeek(completions, currentWeekStart);
+    const weekCompletions = getCompletionsInWeek(completions, currentWeekStart);
+    const isCurrentWeek = isSameWeek(currentWeekStart, today);
+
+    console.log(`Week starting ${currentWeekStart.toDateString()}: ${weekCompletions}/${requiredPerWeek} completions, isCurrentWeek: ${isCurrentWeek}`);
     
+    //  Only count completed weeks (meeting the requirement)
     if (weekCompletions >= requiredPerWeek) {
       streak++;
+      console.log(`Week completed! Streak now: ${streak}`);
     } else {
-      break; 
+      // For current week, don't break streak if there's partial progress
+      if (isCurrentWeek && weekCompletions > 0) {
+        console.log('Current week with partial progress - not breaking streak yet');
+        // Don't increment streak, but don't break it either
+        break; // Stop counting but preserve existing streak
+      } else {
+        // Past week that wasn't completed - streak broken
+        console.log(`Week not completed, breaking streak at: ${streak}`);
+        break;
+      }
     }
     
     // Move to previous week
     currentWeekStart.setDate(currentWeekStart.getDate() - 7);
     
-    
-    if (streak > 52) break;
+    //  Prevent infinite loop
+    if (streak > 104) break;
   }
   
+  //  Move console.log and return OUTSIDE the while loop
+  console.log('Weekly streak final result:', streak);
   return streak;
+};
+
+export const getStartOfWeek = (date) => {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  return new Date(d.setDate(diff));
+};
+
+export const getCompletionsInWeek = (completions,weekStart) => {
+     let count = 0;
+
+     for (let i = 0; i < 7; i++) {
+       const checkDate = new Date(weekStart);
+       checkDate.setDate(weekStart.getDate() + i);
+       const dateStr = checkDate.toISOString().split('T')[0];
+    
+       if (completions[dateStr]) {
+         count++;
+       }
+     }
+  
+    return count;
+  };
+
+export const getCompletionsThisWeek = (completions, date = new Date()) => {
+  const startOfWeek = getStartOfWeek(date);
+  return getCompletionsInWeek(completions, startOfWeek);
+};
+
+const isSameWeek = (date1, date2) => {
+  const start1 = getStartOfWeek(date1);
+  const start2 = getStartOfWeek(date2);
+  return start1.getTime() === start2.getTime();
 };

@@ -82,7 +82,8 @@ const getHabitStatus = (habit) => {
       isComplete,
       weeklyCompletions,
       requiredPerWeek,
-      progress: requiredPerWeek > 0 ? weeklyCompletions / requiredPerWeek : 0
+      progress: requiredPerWeek > 0 ? weeklyCompletions / requiredPerWeek : 0,
+      isExceeding: weeklyCompletions > requiredPerWeek
     };
   };
 
@@ -154,9 +155,12 @@ const getHabitStatus = (habit) => {
                         <ThemedText title={true} style={styles.habitStreak}>
                           {habit.streak || 0}
                         </ThemedText>
-                        <ThemedText style={styles.habitStreakLabel}>
-                          {habit.frequency === 'Everyday' ? 'Days' : 'Weeks'}
-                        </ThemedText>
+                       <ThemedText style={styles.habitStreakLabel}>
+                         {/* Show correct unit based on frequency type */}
+                         {habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' ||  habit.frequency === 'Weekends only' 
+                         ? 'Days' 
+                         : 'Weeks'}
+                       </ThemedText>
                       </View>
                       
                       <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>

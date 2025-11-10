@@ -10,6 +10,7 @@ import ThemedView from "../../components/ThemedView";
 import Spacer from "../../components/Spacer";
 import { useAuthStore } from "../../store/authStore";
 import { availableHabits } from "../../constants/availableHabits";
+import { FREQUENCY_TYPES } from '../../constants/habitFrequency';
 import BackButton from "../../components/BackButton";
 
 const HabitFrequency = () => {
@@ -51,20 +52,20 @@ const HabitFrequency = () => {
   });
 
   const frequencyOptions = [
-    { value: 'Everyday', label: 'Every day', icon: 'calendar-outline' },
-    { value: 'Weekdays', label: 'Weekdays only', icon: 'business-outline' },
-    { value: 'Weekends', label: 'Weekends only', icon: 'home-outline' },
-    { value: '3x/week', label: '3 times per week', icon: 'fitness-outline' },
-    { value: 'Weekly', label: 'Once a week', icon: 'calendar-outline' },
+    { value: FREQUENCY_TYPES.DAILY, label: 'Every day', icon: 'calendar-outline' },
+    { value: FREQUENCY_TYPES.WEEKDAYS, label: 'Weekdays only', icon: 'business-outline' },
+    { value: FREQUENCY_TYPES.WEEKENDS, label: 'Weekends only', icon: 'home-outline' },
+    { value: FREQUENCY_TYPES.THREE_WEEKLY, label: '3 times per week', icon: 'fitness-outline' },
+    { value: FREQUENCY_TYPES.WEEKLY, label: 'Once a week', icon: 'calendar-outline' },
     { value: 'Custom', label: 'Custom schedule', icon: 'settings-outline' }
   ];
 
   const customOptions = [
-    { value: '2x/week', label: '2 times per week' },
-    { value: '4x/week', label: '4 times per week' },
-    { value: '5x/week', label: '5 times per week' },
-    { value: 'Biweekly', label: 'Every 2 weeks' },
-    { value: 'Monthly', label: 'Once a month' },
+    { value: FREQUENCY_TYPES.TWO_WEEKLY, label: '2 times per week' },
+    { value: FREQUENCY_TYPES.FOUR_WEEKLY, label: '4 times per week' },
+    { value: FREQUENCY_TYPES.FIVE_WEEKLY, label: '5 times per week' },
+    { value: FREQUENCY_TYPES.BIWEEKLY, label: 'Every 2 weeks' },
+    { value: FREQUENCY_TYPES.MONTHLY, label: 'Once a month' },
   ];
 
   const updateFrequency = (habitId, frequency) => {

@@ -4,5 +4,15 @@
     "source.organizeImports": "never",
     "source.sortMembers": "explicit"
   },
-  "java.compile.nullAnalysis.mode": "disabled"
+  "java.compile.nullAnalysis.mode": "disabled",
+  "java.configuration.workspaceCacheLimit": 20,
+  "files.exclude": {
+    "**/node_modules/**": true,
+    "android/build/**": true,
+    "android/.gradle/**": true,
+    "android/app/build/**": true
+  },
+  "java.project.sourcePaths": [],
+  "java.project.referencedLibraries": [],
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

@@ -265,7 +265,7 @@ export const useAuthStore = create((set,get) => ({
 },
 
     toggleHabitCompletion: (habitId,date = null) => {
-     const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
+     //const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
      const currentState = get();
 
      const habit = currentState.userHabits.find(h => h.id === habitId);
@@ -305,25 +305,11 @@ export const useAuthStore = create((set,get) => ({
      const isCurrentlyCompleted = completions[habitId][dateStr] || false; 
      // completions["morning-run"]["2025-11-04"]  
 
-     if (!isCurrentlyCompleted) {
-    const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
-    const currentWeekCompletions = getCompletionsThisWeek(completions[habitId], targetDate);
-    
-    // Check limits for weekly habits
-    if (requiredPerWeek < 7 && requiredPerWeek > 0) {
-      if (currentWeekCompletions >= requiredPerWeek) {
-        Alert.alert(
-          'Weekly Limit Reached',
-          `You've already completed this habit ${requiredPerWeek} time${requiredPerWeek > 1 ? 's' : ''} this week.`
-        );
-        return;
-      }
-    }
-  }
-
     completions[habitId][dateStr] = !isCurrentlyCompleted;
+
+    const today = new Date();
      
-    const newStreak = calculateFrequencyAwareStreak(habit.frequency, completions[habitId], targetDate);
+    const newStreak = calculateFrequencyAwareStreak(habit.frequency, completions[habitId], today);
      
      const updatedHabits = currentState.userHabits.map(habit => {
       if(habit.id === habitId) {
