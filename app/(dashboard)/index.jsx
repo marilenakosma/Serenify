@@ -11,12 +11,16 @@ import ThemedGoal from "../../components/ThemedGoal";
 import ThemedMood from "../../components/ThemedMood";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import DailySummary from "../../components/DailySummary";
+import DashboardHabitCard from "../../components/DashboardHabitCard";
 import { useAuthStore } from "../../store/authStore";
 import { dashboardContent } from "../../constants/dashboardContent";
+import { useRouter } from "expo-router";
 
 const Dashboard = () => {
-  const {user,isAuthenticated} = useAuthStore();
+  const {user,isAuthenticated,userHabits,habitCompletions } = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
+  const router = useRouter();
 
   const focusArea = user?.focusArea || 'General Wellness';
   const content = dashboardContent[focusArea];
@@ -48,13 +52,27 @@ const Dashboard = () => {
       return newSet;
     });
   };
-
+  
+  const handleHabitPress = (habitId) => {
+    router.push({
+      pathname: '/(modals)/habit-stats',
+      params: { habitId }
+    })
+  }
   const renderMood = ({item}) => (
    <ThemedMood
      image={item.image}
      text={item.text}
    />
   )
+
+  const renderHabitCard = ({item}) => (
+    <DashboardHabitCard 
+      habit={item}
+      completions={habitCompletions}
+      onPress={() => handleHabitPress(item.id)}
+    />
+  );
 
 
   return (
@@ -88,6 +106,24 @@ const Dashboard = () => {
               </ThemedView>
             </View>
           </ImageBackground>
+        
+
+          {userHabits.length > 0 && (
+            <ThemedView style={styles.section}>
+              <ThemedText title={true} style={styles.sectionTitle}>
+                Your Habits
+              </ThemedText>
+              <FlatList
+                data={userHabits}
+                renderItem={renderHabitCard}
+                keyExtractor={(item) => item.id}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.habitsContainer}
+                ItemSeparatorComponent={() => <View style={{width: 8}} />}
+              />
+            </ThemedView>
+          )}
 
           {/* Goals Section */}
           <ThemedView style={[styles.section,
@@ -112,7 +148,12 @@ const Dashboard = () => {
              ))}
           </ThemedView>
 
-          <Spacer height={30}/>
+          {userHabits.length > 0 && (
+            <DailySummary 
+              habits={userHabits}
+              habitCompletions={habitCompletions}
+            />
+          )}
           </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -171,6 +212,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 15,
         textAlign: 'center',
+    },
+    habitsContainer: {
+        paddingHorizontal: 8,
     },
     other: {
         paddingLeft: 32,

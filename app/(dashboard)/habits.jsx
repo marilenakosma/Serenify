@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   
-  // ✅ Status indicator (top-right corner)
+  //  Status indicator 
   statusIndicator: {
     position: 'absolute',
     top: 8,
