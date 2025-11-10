@@ -8,7 +8,7 @@ import {
   getRequiredCompletionsPerWeek 
 } from '../constants/habitFrequency';
 
-const DashboardHabitCard = ({ habit, completions, onPress }) => {
+const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) => {
   const habitCompletions = completions[habit.id] || {};
   const isComplete = isHabitCompleteForPeriod(habit.frequency, habitCompletions);
   const weeklyCompletions = getCompletionsThisWeek(habitCompletions);
@@ -30,6 +30,11 @@ const DashboardHabitCard = ({ habit, completions, onPress }) => {
     }
   }
 
+   const handleQuickComplete = (e) => {
+    e.stopPropagation(); // Prevent navigation to habit details
+    onToggleCompletion(habit.id);
+  };
+
   return (
     <TouchableOpacity 
       style={styles.habitCard}
@@ -42,12 +47,14 @@ const DashboardHabitCard = ({ habit, completions, onPress }) => {
           size={24} 
           color={isComplete ? "#4CAF50" : "#666"} 
         />
-        <HabitProgressRing 
-          progress={progress}
-          size={45}
-          strokeWidth={4}
-          color={isComplete ? "#4CAF50" : "#FF9800"}
-        />
+        <TouchableOpacity onPress={handleQuickComplete} activeOpacity={0.8}>
+          <HabitProgressRing 
+            progress={progress}
+            size={45}
+            strokeWidth={4}
+            color={isComplete ? "#4CAF50" : "#FF9800"}
+          />
+        </TouchableOpacity>
       </View>
       
       <ThemedText style={styles.habitTitle} numberOfLines={2}>

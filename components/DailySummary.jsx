@@ -62,7 +62,7 @@ const DailySummary = ({ habits, habitCompletions }) => {
               strokeWidth={8}
               color="#FF9800"
             />
-            <ThemedText style={styles.progressLabel}>Weekly Goals</ThemedText>
+            <ThemedText title={true} style={styles.progressLabel}>Weekly Goals</ThemedText>
             <ThemedText style={styles.progressSubtext}>
               {weeklyStats.completed}/{weeklyStats.total} this week
             </ThemedText>

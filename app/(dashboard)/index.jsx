@@ -18,7 +18,7 @@ import { dashboardContent } from "../../constants/dashboardContent";
 import { useRouter } from "expo-router";
 
 const Dashboard = () => {
-  const {user,isAuthenticated,userHabits,habitCompletions } = useAuthStore();
+  const {user,isAuthenticated,userHabits,habitCompletions,toggleHabitCompletion } = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
   const router = useRouter();
 
@@ -71,6 +71,7 @@ const Dashboard = () => {
       habit={item}
       completions={habitCompletions}
       onPress={() => handleHabitPress(item.id)}
+      onToggleCompletion={toggleHabitCompletion}
     />
   );
 
