@@ -389,7 +389,6 @@ const styles = StyleSheet.create({
   
   // Completion states
   completedHabitCard: {
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
     borderColor: '#4CAF50',
     borderWidth: 1,
   },
