@@ -6,12 +6,16 @@ export const availableHabits = {
     {
       id: 'water-intake',
       icon: 'water-outline',
-      title: 'Drink 8 glasses of water',
+      title: 'Drink more water',
       description: 'Stay hydrated throughout the day',
       category: 'Health',
       difficulty: 'Easy',
       duration: 'All day',
-      points: 15
+      points: 15,
+      type:'incremental',
+      target:2000,
+      unit:'ml',
+      increment:250
     },
     {
       id: 'no-screen-before-bed',

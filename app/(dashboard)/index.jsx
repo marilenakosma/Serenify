@@ -125,6 +125,7 @@ const Dashboard = () => {
               />
             </ThemedView>
           )}
+          
 
           {/* Goals Section */}
           <ThemedView style={[styles.section,
@@ -148,6 +149,7 @@ const Dashboard = () => {
              </View>
              ))}
           </ThemedView>
+          <View style={{height: 1, backgroundColor: '#E0E0E0', marginHorizontal: 32, marginBottom: 10}} />
 
           {userHabits.length > 0 && (
             <DailySummary 
@@ -155,6 +157,8 @@ const Dashboard = () => {
               habitCompletions={habitCompletions}
             />
           )}
+
+          
           </ScrollView>
       </SafeAreaView>
     </ThemedView>

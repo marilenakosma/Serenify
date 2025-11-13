@@ -1,4 +1,5 @@
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { useState,useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet,Animated} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import HabitProgressRing from './HabitProgressRing';
@@ -10,9 +11,17 @@ import {
 
 const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) => {
   const habitCompletions = completions[habit.id] || {};
-  const isComplete = isHabitCompleteForPeriod(habit.frequency, habitCompletions);
+  
+  const today = new Date().toISOString().split('T')[0];
+  const isComplete = Boolean(habitCompletions[today]); 
+  
+  
   const weeklyCompletions = getCompletionsThisWeek(habitCompletions);
   const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
+  
+  const [scaleAnim] = useState(new Animated.Value(1));
+  const [checkmarkAnim] = useState(new Animated.Value(isComplete ? 1 : 0));
+  const [cardColorAnim] = useState(new Animated.Value(isComplete ? 1 : 0));
   
   // Calculate progress based on frequency type
   let progress = 0;
@@ -30,16 +39,83 @@ const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) 
     }
   }
 
+  useEffect(() => {
+  
+  const targetValue = isComplete ? 1 : 0;
+  
+  // Force the animated values to the target value
+  Animated.timing(cardColorAnim, {
+    toValue: targetValue,
+    duration: 300,
+    useNativeDriver: false,
+  }).start();
+
+  if (isComplete) {
+    Animated.spring(checkmarkAnim, {
+      toValue: 1,
+      tension: 100,
+      friction: 8,
+      useNativeDriver: true,
+    }).start();
+  } else {
+    Animated.timing(checkmarkAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }
+}, [isComplete, cardColorAnim, checkmarkAnim]);
+
    const handleQuickComplete = (e) => {
-    e.stopPropagation(); // Prevent navigation to habit details
-    onToggleCompletion(habit.id);
-  };
+  e.stopPropagation();
+  
+
+  if (!isComplete) {
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 1.3,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }
+  
+  onToggleCompletion(habit.id);
+  
+};
+
+ const cardBackgroundColor = cardColorAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#FFFFFF', '#E8F5E8'] // White to light green
+  });
+
+  const cardBorderColor = cardColorAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['transparent', '#4CAF50'] // Transparent to green border
+  });
+
+  console.log(`Habit ${habit.id}: 
+    isComplete = ${isComplete}, 
+    cardColorAnim = ${cardColorAnim._value}`);
 
   return (
+    <Animated.View style={[
+    styles.habitCard,
+    { 
+      backgroundColor: cardBackgroundColor,
+      borderColor: cardBorderColor,
+      borderWidth: 2,
+    }
+  ]}>
     <TouchableOpacity 
-      style={styles.habitCard}
       onPress={onPress}
       activeOpacity={0.7}
+      style={{ flex: 1 }}
     >
       <View style={styles.habitHeader}>
         <Ionicons 
@@ -48,12 +124,33 @@ const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) 
           color={isComplete ? "#4CAF50" : "#666"} 
         />
         <TouchableOpacity onPress={handleQuickComplete} activeOpacity={0.8}>
-          <HabitProgressRing 
-            progress={progress}
-            size={45}
-            strokeWidth={4}
-            color={isComplete ? "#4CAF50" : "#FF9800"}
-          />
+          <View style={{ position: 'relative' }}>
+            <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+              <HabitProgressRing 
+                progress={progress}
+                size={45}
+                strokeWidth={4}
+                color={isComplete ? "#4CAF50" : "#FF9800"}
+              />
+            </Animated.View>
+            
+
+            <Animated.View style={[
+              styles.checkmarkOverlay,
+              {
+                transform: [
+                  { scale: checkmarkAnim },
+                  { rotate: checkmarkAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0deg', '360deg']
+                  })}
+                ],
+                opacity: checkmarkAnim
+              }
+            ]}>
+              <Ionicons name="checkmark" size={20} color="white" />
+            </Animated.View>
+          </View>
         </TouchableOpacity>
       </View>
       
@@ -74,12 +171,13 @@ const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) 
         </ThemedText>
       </View>
     </TouchableOpacity>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   habitCard: {
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -122,6 +220,17 @@ const styles = StyleSheet.create({
   streakLabel: {
     fontSize: 11,
     color: '#666',
+  },
+  checkmarkOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#4CAF50',
+    borderRadius: 22.5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
