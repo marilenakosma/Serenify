@@ -8,6 +8,7 @@ import ThemedButton from '../../components/ThemedButton';
 import ThemedText from '../../components/ThemedText';
 import ThemedView from '../../components/ThemedView';
 import Spacer from '../../components/Spacer';
+import WaterIntakeInput from '../../components/WaterIntakeInput';
 import { useAuthStore } from '../../store/authStore';
 
 const HabitStats = () => {
@@ -377,6 +378,17 @@ const getToday = () => {
               <Ionicons name="checkmark-circle" size={20} color="#2196F3" />
             </View>
           </View>
+
+          {habit.id === 'water-intake' && (
+           <WaterIntakeInput
+             currentAmount={habitCompletions[habit.id]?.[new Date().toISOString().split('T')[0]] || 0}
+             target={habit.target || 2000}
+             onUpdate={(newAmount) => {
+               const today = new Date().toISOString().split('T')[0];
+               toggleHabitCompletion(habit.id, today, newAmount);
+             }}
+          />
+        )}
 
           {/* Calendar */}
           <View style={styles.calendarSection}>

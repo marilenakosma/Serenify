@@ -3,41 +3,69 @@ import { View, TouchableOpacity, StyleSheet,Animated} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import HabitProgressRing from './HabitProgressRing';
+import { useAuthStore } from '../store/authStore';
 import { 
   isHabitCompleteForPeriod, 
   getCompletionsThisWeek, 
   getRequiredCompletionsPerWeek 
 } from '../constants/habitFrequency';
 
-const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) => {
-  const habitCompletions = completions[habit.id] || {};
+const DashboardHabitCard = ({ habit, onPress,onToggleCompletion }) => {
+  const { habitCompletions } = useAuthStore();
+  const thisHabitCompletions = habitCompletions[habit.id] || {};
   
   const today = new Date().toISOString().split('T')[0];
-  const isComplete = Boolean(habitCompletions[today]); 
-  
-  
-  const weeklyCompletions = getCompletionsThisWeek(habitCompletions);
+  const todayCompletion = thisHabitCompletions[today];
+  //const isComplete = Boolean(habitCompletions[today]); 
+  let isComplete,progress,progressText;
+
+  const weeklyCompletions = getCompletionsThisWeek(thisHabitCompletions);
   const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
-  
-  const [scaleAnim] = useState(new Animated.Value(1));
-  const [checkmarkAnim] = useState(new Animated.Value(isComplete ? 1 : 0));
-  const [cardColorAnim] = useState(new Animated.Value(isComplete ? 1 : 0));
-  
-  // Calculate progress based on frequency type
-  let progress = 0;
-  let progressText = '';
-  
-  if (habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' || habit.frequency === 'Weekends only') {
+
+  if(habit.type === "incremental") {
+    const todayAmount = thisHabitCompletions[today] || 0;
+    const target = habit.target || 2000;
+
+    progress = Math.min(todayAmount / target,1);
+    isComplete = todayAmount >= target;
+    progressText = `${todayAmount}/${target} ${habit.unit}`;
+
+    if(isComplete) {
+      progressText += ' ✅';
+    }
+  } else if (habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' || habit.frequency === 'Weekends only') {
+    isComplete = Boolean(thisHabitCompletions[today]);
     progress = isComplete ? 1 : 0;
     progressText = isComplete ? 'Done today!' : 'Tap to complete';
   } else {
-    progress = requiredPerWeek > 0 ? Math.min(weeklyCompletions / requiredPerWeek, 1) : 0;
+  // Weekly habits logic (3x/week, etc.)
+  const todayCompleted = Boolean(thisHabitCompletions[today]);
+  const canCompleteMore = weeklyCompletions < requiredPerWeek;
+  
+  // For animation purposes, use today's completion
+  isComplete = todayCompleted;
+
+  //console.log(`${habit.id}: todayCompletion=${todayCompletion}, isComplete=${isComplete}`);
+
+  
+  // For progress calculation, use weekly progress
+  progress = requiredPerWeek > 0 ? Math.min(weeklyCompletions / requiredPerWeek, 1) : 0;
+  
+  if (weeklyCompletions >= requiredPerWeek) {
+    progressText = 'Week complete! 🎉';
+  } else if (todayCompleted) {
+    progressText = `${weeklyCompletions}/${requiredPerWeek} this week - Done today!`;
+  } else if (canCompleteMore) {
+    progressText = `${weeklyCompletions}/${requiredPerWeek} this week - Tap to complete`;
+  } else {
     progressText = `${weeklyCompletions}/${requiredPerWeek} this week`;
-    
-    if (weeklyCompletions >= requiredPerWeek) {
-      progressText = 'Week complete! 🎉';
-    }
   }
+}
+  
+  
+  const [scaleAnim] = useState(new Animated.Value(1));
+  const [checkmarkAnim] = useState(() => new Animated.Value(0));
+  const [cardColorAnim] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
   
@@ -64,12 +92,18 @@ const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) 
       useNativeDriver: true,
     }).start();
   }
-}, [isComplete, cardColorAnim, checkmarkAnim]);
+}, [isComplete,todayCompletion]);
 
    const handleQuickComplete = (e) => {
   e.stopPropagation();
-  
 
+  if (habit.type === 'incremental') {
+      onPress(); // Navigate to habit detail screen for water input
+      return;
+    }
+
+   const todayCompleted = Boolean(thisHabitCompletions[today]);
+  
   if (!isComplete) {
     Animated.sequence([
       Animated.timing(scaleAnim, {
@@ -99,9 +133,9 @@ const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) 
     outputRange: ['transparent', '#4CAF50'] // Transparent to green border
   });
 
-  console.log(`Habit ${habit.id}: 
-    isComplete = ${isComplete}, 
-    cardColorAnim = ${cardColorAnim._value}`);
+  //console.log(`Habit ${habit.id}: 
+   // isComplete = ${isComplete}, 
+  //  cardColorAnim = ${cardColorAnim._value}`);
 
   return (
     <Animated.View style={[
@@ -130,37 +164,48 @@ const DashboardHabitCard = ({ habit, completions, onPress,onToggleCompletion }) 
                 progress={progress}
                 size={45}
                 strokeWidth={4}
-                color={isComplete ? "#4CAF50" : "#FF9800"}
+                //color={isComplete ? "#4CAF50" : "#FF9800"}
+                color={isComplete ? "#4CAF50" : "#2196F3"}
               />
             </Animated.View>
             
 
-            <Animated.View style={[
-              styles.checkmarkOverlay,
-              {
-                transform: [
-                  { scale: checkmarkAnim },
-                  { rotate: checkmarkAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['0deg', '360deg']
-                  })}
-                ],
-                opacity: checkmarkAnim
-              }
-            ]}>
-              <Ionicons name="checkmark" size={20} color="white" />
-            </Animated.View>
-          </View>
-        </TouchableOpacity>
-      </View>
+             {habit.type === 'incremental' ? (
+                <View style={[styles.incrementIcon]}>
+                  <Ionicons name="add" size={16} color="#2196F3" />
+                </View>
+              ) : (
+                <Animated.View style={[
+                  styles.checkmarkOverlay,
+                  {
+                    transform: [
+                      { scale: checkmarkAnim },
+                      { rotate: checkmarkAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['0deg', '360deg']
+                      })}
+                    ],
+                    opacity: checkmarkAnim
+                  }
+                ]}>
+                  <Ionicons name="checkmark" size={20} color="white" />
+                </Animated.View>
+              )}
+            </View>
+          </TouchableOpacity>
+        </View>
       
       <ThemedText style={styles.habitTitle} numberOfLines={2}>
         {habit.text}
       </ThemedText>
-      
-      <ThemedText style={styles.habitProgress}>
-        {progressText}
-      </ThemedText>
+    
+
+       <ThemedText style={[
+          styles.habitProgress,
+          { color: habit.type === 'incremental' ? '#2196F3' : '#4CAF50' }
+        ]}>
+          {progressText}
+        </ThemedText>
       
       <View style={styles.streakContainer}>
         <ThemedText style={styles.streakNumber}>
@@ -231,6 +276,22 @@ const styles = StyleSheet.create({
     borderRadius: 22.5,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  incrementIcon: {
+    position: 'absolute',
+    top: 2,
+    right: 2,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 

@@ -69,7 +69,7 @@ const Dashboard = () => {
   const renderHabitCard = ({item}) => (
     <DashboardHabitCard 
       habit={item}
-      completions={habitCompletions}
+      //completions={habitCompletions}
       onPress={() => handleHabitPress(item.id)}
       onToggleCompletion={toggleHabitCompletion}
     />
