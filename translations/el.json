@@ -21,6 +21,13 @@
   "dontHaveAccount":"Δεν έχετε λογαριασμό?",
   "signup":"Εγγράφη"
 },
+"moods": {
+    "angry": "Θυμός",
+    "sad": "Λύπη",
+    "neutral": "Ουδέτερη", 
+    "good": "Καλά",
+    "happy": "Χαρά"
+  },
 "dashboard": {
     "greetings": {
       "anxietyManagement": "Πάρτε μια βαθιά ανάσα, το έχετε! 🌸",
@@ -55,6 +62,8 @@
     "mindful": "Practice gratitude",
     "move": "Κάντε μια βόλτα"
   },"habits": {
+    "addNewHabits": "Προσθέστε Νέες Συνήθειες",
+    "chooseHabits": "Επιλέξτε συνήθειες για {{focusArea}}",
     "common": {
       "waterIntake": {
         "title": "Πίετε περισσότερο",
@@ -149,8 +158,8 @@
     "fitness": "Fitness",
     "mindfulness": "Ενσυνειδητότητα",
     "learning": "Μάθηση",
-    "reflection": "Διαλογισμός",
-    "productivity": "Παραγωγιkότητα",
+    "reflection": "Περισυλλογή",
+    "productivity": "Παραγωγικότητα",
     "meditation": "Διαλογισμός",
     "movement": "Γυμναστική",
     "relaxation": "Ξεκούραση",

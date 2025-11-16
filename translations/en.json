@@ -21,6 +21,13 @@
   "dontHaveAccount":"Don't have an account?",
   "signup":"Sign Up"
 },
+"moods": {
+    "angry": "Angry",
+    "sad": "Sad", 
+    "neutral": "Neutral",
+    "good": "Good",
+    "happy": "Happy"
+  },
 "dashboard": {
     "greetings": {
       "anxietyManagement": "Take a deep breath, you've got this! 🌸",

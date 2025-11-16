@@ -37,12 +37,12 @@ const Dashboard = () => {
 }
 
   const moodData = [
-    { id:1, image:Angry,text:"Angry" },
-    { id:2, image:Sad, text:"Sad"},
-    { id:3, image:Neutral, text:"Neutral"},
-    { id:4, image:Happy, text:"Good"},
-    { id:5, image:VeryHappy, text:"Happy"}
-  ]
+    { id: 1, image: Angry, text: t('moods.angry') },
+    { id: 2, image: Sad, text: t('moods.sad') },
+    { id: 3, image: Neutral, text: t('moods.neutral') },
+    { id: 4, image: Happy, text: t('moods.good') },
+    { id: 5, image: VeryHappy, text: t('moods.happy') }
+  ];
 
     const handleToggleGoal = (goalId) => {
     setCompletedGoals(prev => {

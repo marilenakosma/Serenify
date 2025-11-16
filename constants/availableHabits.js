@@ -1,8 +1,5 @@
-
-
 export const getAvailableHabits = (t) => ({
-  // Common habits everyone might want
-common: [
+  common: [
     {
       id: 'water-intake',
       icon: 'water-outline',
@@ -133,7 +130,7 @@ common: [
     {
       id: 'deep-breathing',
       icon: 'leaf-outline',
-      title:  t('habits.anxietyManagement.deepBreathing.title'),
+      title: t('habits.anxietyManagement.deepBreathing.title'),
       description: t('habits.anxietyManagement.deepBreathing.description'),
       category: t('categories.mindfulness'),
       difficulty: t('difficulties.easy'),
@@ -143,7 +140,7 @@ common: [
     {
       id: 'limit-caffeine',
       icon: 'cafe-outline',
-      title:  t('habits.anxietyManagement.limitCaffeine.title'),
+      title: t('habits.anxietyManagement.limitCaffeine.title'),
       description: t('habits.anxietyManagement.limitCaffeine.description'),
       category: t('categories.health'),
       difficulty: t('difficulties.medium'),
@@ -156,8 +153,8 @@ common: [
     {
       id: 'sunlight-exposure',
       icon: 'sunny-outline',
-      title: t('habits.anxietyManagement.sunlightExposure.title'),
-      description: t('habits.anxietyManagement.sunlightExposure.description'),
+      title: t('habits.depressionSupport.sunlightExposure.title'),
+      description: t('habits.depressionSupport.sunlightExposure.description'),
       category: t('categories.health'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.15min'),
@@ -166,8 +163,8 @@ common: [
     {
       id: 'social-connection',
       icon: 'people-outline',
-      title: t('habits.anxietyManagement.socialConnection.title'),
-      description: t('habits.anxietyManagement.socialConnection.description'),
+      title: t('habits.depressionSupport.socialConnection.title'),
+      description: t('habits.depressionSupport.socialConnection.description'),
       category: t('categories.social'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.10min'),
@@ -179,8 +176,8 @@ common: [
     {
       id: 'bedtime-routine',
       icon: 'bed-outline',
-      title: t('habits.anxietyManagement.bedtimeRoutine.title'),
-      description: t('habits.anxietyManagement.bedtimeRoutine.description'),
+      title: t('habits.sleepIssues.bedtimeRoutine.title'),
+      description: t('habits.sleepIssues.bedtimeRoutine.description'),
       category: t('categories.health'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.30min'),
@@ -189,11 +186,11 @@ common: [
     {
       id: 'bedroom-temperature',
       icon: 'thermometer-outline',
-      title: t('habits.anxietyManagement.bedroomTemperature.title'),
-      description: t('habits.anxietyManagement.bedroomTemperature.description'),
+      title: t('habits.sleepIssues.bedroomTemperature.title'),
+      description: t('habits.sleepIssues.bedroomTemperature.description'),
       category: t('categories.health'),
       difficulty: t('difficulties.easy'),
-      duration: t('difficulties.allNight'),
+      duration: t('durations.allNight'),
       points: 10
     }
   ],
@@ -202,23 +199,22 @@ common: [
     {
       id: 'meditation',
       icon: 'flower-outline',
-      title: t('habits.anxietyManagement.meditation.title'),
-      description: t('habits.anxietyManagement.meditation.description'),
+      title: t('habits.stressManagement.meditation.title'),
+      description: t('habits.stressManagement.meditation.description'),
       category: t('categories.mindfulness'),
       difficulty: t('difficulties.medium'),
-      duration: t('difficulties.10min'),
+      duration: t('durations.10min'),
       points: 20
     },
     {
       id: 'nature-time',
       icon: 'leaf-outline',
-      title: t('habits.anxietyManagement.natureTime.title'),
-      description: t('habits.anxietyManagement.natureTime.description'),
+      title: t('habits.stressManagement.natureTime.title'),
+      description: t('habits.stressManagement.natureTime.description'),
       category: t('categories.lifestyle'),
       difficulty: t('difficulties.easy'),
-      duration: t('difficulties.20min'),
+      duration: t('durations.20min'),
       points: 15
     }
   ]
-
 });
