@@ -8,7 +8,9 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "start:memory": "node --max-old-space-size=4096 --inspect node_modules/expo/bin/cli.js start",
+    "memory-check": "node --inspect --expose-gc node_modules/expo/bin/cli.js start"
   },
   "dependencies": {
     "@expo-google-fonts/montserrat": "^0.4.2",

@@ -103,6 +103,15 @@ const Dashboard = () => {
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.moodList}
                   ItemSeparatorComponent={() => <View style={{width: 12}} />}
+                  removeClippedSubviews={true}
+                  maxToRenderPerBatch={3}
+                  initialNumToRender={5}
+                  windowSize={5}
+                  getItemLayout={(data, index) => ({
+                  length: 80,
+                  offset: 92 * index, // 80 + 12 separator
+                  index,
+                  })}
                 />
               </ThemedView>
             </View>
@@ -122,6 +131,10 @@ const Dashboard = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.habitsContainer}
                 ItemSeparatorComponent={() => <View style={{width: 8}} />}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={3}
+                initialNumToRender={4}
+                windowSize={5}
               />
             </ThemedView>
           )}

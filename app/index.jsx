@@ -9,11 +9,14 @@ import SplashScreen from '../components/SplashScreen';
 import ThemedButton from '../components/ThemedButton';
 import ThemedText from "../components/ThemedText";
 import ThemedView from "../components/ThemedView";
+import { useTranslation } from '../constants/translations';
+import LanguageDebug from '../components/LanguageDebug';
 
 export default function Index() {
    
   const [showSplash, setShowSplash] = useState(true);
   const router=useRouter()
+  const { t } = useTranslation();
 
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
@@ -21,6 +24,7 @@ export default function Index() {
 //<Image source={LogoGreen} style={styles.image}/>
   return (
     <ThemedView style={styles.container}>
+      <LanguageDebug />
        <LottieView
               source={require('../assets/animations/MapleLeaves.json')} 
               autoPlay
@@ -28,17 +32,19 @@ export default function Index() {
               style={styles.animation}
             />
       <ThemedText title={true} style={styles.title}>
-        Serenify
+        {t('welcome.title')}
       </ThemedText>
 
       <ThemedText style={styles.subtitle}>
-        Find your inner peace...
+        {t('welcome.subtitle')}
       </ThemedText>
       
       <Spacer height={20}/>
       
       <ThemedButton onPress={() => router.navigate("/(auth)/register")}>
-        <ThemedText title={true} style={{color:'#f2f2f2'}}>Get Started</ThemedText>
+        <ThemedText title={true} style={{color:'#f2f2f2'}}>
+         {t('welcome.getStarted')}
+          </ThemedText>
       </ThemedButton>
     </ThemedView>
   );

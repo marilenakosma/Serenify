@@ -1,19 +1,26 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native'
+import {useState} from "react"
 import ThemedText from './ThemedText'
-const ThemedMood = ({image,text,style}) => {
+const ThemedMood = ({image, text, style}) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
   function handlePress() {
-      console.log("pressed!")
-    }
+    console.log("pressed!")
+  }
 
   return (
-    <View style={[styles.container,style]}>
-      <Pressable style={styles.button} 
-        onPress={handlePress}> 
+    <View style={[styles.container, style]}>
+      <Pressable style={styles.button} onPress={handlePress}> 
         <View style={styles.iconContainer}>
-          <Image source={image} style={styles.image} /> 
+          <Image 
+            source={image} 
+            style={styles.image}
+            onLoad={() => setImageLoaded(true)}
+            resizeMode="contain" // Add this to prevent memory bloat
+          /> 
         </View>
         <ThemedText title={true} style={styles.text}>{text}</ThemedText>
-        </Pressable>
+      </Pressable>
     </View>
   )
 }

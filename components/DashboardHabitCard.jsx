@@ -72,26 +72,33 @@ const DashboardHabitCard = ({ habit, onPress,onToggleCompletion }) => {
   const targetValue = isComplete ? 1 : 0;
   
   // Force the animated values to the target value
-  Animated.timing(cardColorAnim, {
+  const cardAnimation = Animated.timing(cardColorAnim, {
     toValue: targetValue,
     duration: 300,
     useNativeDriver: false,
-  }).start();
+  });
 
-  if (isComplete) {
-    Animated.spring(checkmarkAnim, {
-      toValue: 1,
-      tension: 100,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
-  } else {
-    Animated.timing(checkmarkAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
+  const checkmarkAnimation = isComplete 
+    ? Animated.spring(checkmarkAnim, {
+        toValue: 1,
+        tension: 100,
+        friction: 8,
+        useNativeDriver: true,
+      })
+    : Animated.timing(checkmarkAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      });
+
+  cardAnimation.start();
+  checkmarkAnimation.start();
+
+  // Cleanup function
+  return () => {
+    cardAnimation.stop();
+    checkmarkAnimation.stop();
+  };
 }, [isComplete,todayCompletion]);
 
    const handleQuickComplete = (e) => {

@@ -126,7 +126,7 @@ export const dashboardContent = {
             { 
                 id: 'water', 
                 name: 'water-outline', 
-                text: 'Stay hydrated (8 glasses)', 
+                text: 'Stay hydrated', 
                 points: 10,
                 category: 'Health',
                 duration: 'All day'

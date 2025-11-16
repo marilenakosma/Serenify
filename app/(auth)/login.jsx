@@ -12,6 +12,7 @@ import ThemedView from "../../components/ThemedView";
 import { ResponsiveDimensions as RD } from "../../constants/responsiveDimensions";
 import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
+import { useTranslation } from '../../constants/translations';
 
 const Login = () => {
     const {login,isLoading} = useAuthStore();
@@ -19,6 +20,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
+    const { t } = useTranslation();
     
     
     const debounce = (func, wait) => {
@@ -134,7 +136,7 @@ const Login = () => {
                 >
                     <ThemedView style={styles.container}>
                         <ThemedText title={true} style={styles.title}>
-                            Welcome Back
+                           {t('auth.login')}
                         </ThemedText>
                         
                         {/* Email Input */}
@@ -144,7 +146,7 @@ const Login = () => {
                                     styles.input,
                                     touched.email && (errors.email ? styles.inputError : styles.inputFocused)
                                 ]}
-                                placeholder="Email Address"
+                                placeholder = {t('auth.email')}
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 autoCorrect={false}
@@ -173,7 +175,7 @@ const Login = () => {
                                     styles.input,
                                     touched.password && (errors.password ? styles.inputError : styles.inputFocused)
                                 ]}
-                                placeholder="Password"
+                                placeholder = {t('auth.password')}
                                 onChangeText={handlePasswordChange}
                                 onFocus={handlePasswordFocus}
                                 value={password}
@@ -190,7 +192,7 @@ const Login = () => {
                         {/* Forgot Password */}
                         <TouchableOpacity style={styles.forgotPasswordContainer}>
                             <ThemedText style={styles.forgotPasswordText}>
-                                Forgot Password?
+                                {t('auth.forgotPassword')}
                             </ThemedText>
                         </TouchableOpacity>
 
@@ -204,7 +206,7 @@ const Login = () => {
                             disabled={isLoading}
                         >
                             <ThemedText title={true} style={styles.buttonText}>
-                                {isLoading ? 'Signing In...' : 'Sign In'}
+                                {isLoading ? 'Signing In...' : t('auth.signInBtn')}
                             </ThemedText>
                         </ThemedButton>
                         
@@ -213,7 +215,7 @@ const Login = () => {
                         {/* Or Divider */}
                         <View style={styles.orContainer}>
                             <View style={styles.orLine} />
-                            <ThemedText style={styles.orText}>Or continue with</ThemedText>
+                            <ThemedText style={styles.orText}>{t('auth.continue')}</ThemedText>
                             <View style={styles.orLine} />
                         </View>
                         
@@ -240,11 +242,11 @@ const Login = () => {
                         {/* Register Link */}
                         <View style={styles.registerContainer}>
                             <ThemedText style={styles.registerText}>
-                                Don't have an account?
+                                {t('auth.dontHaveAccount')}
                             </ThemedText>
                             <Link href="/register" replace>
                                 <ThemedText style={styles.registerLink}>
-                                    Sign Up
+                                    {t('auth.signup')}
                                 </ThemedText>
                             </Link>
                         </View>        

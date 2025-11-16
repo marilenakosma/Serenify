@@ -1,10 +1,29 @@
 {
-  "compilerOptions": {},
   "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": false,
+    "skipLibCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
+    "noEmit": true,
+    "isolatedModules": true
+  },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".expo",
+    "android",
+    "ios",
+    "web-build",
+    "**/*.log",
+    "coverage",
+    "**/build/**",
+    "**/.gradle/**",
+    "**/node_modules/.cache/**"
   ]
 }

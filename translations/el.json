@@ -1,0 +1,246 @@
+{
+  "welcome": {
+    "title": "Serenify",
+    "subtitle":"Βρείτε την εσωτερική σας γαλήνη...",
+    "getStarted":"Ας ξεκινήσουμε"
+},
+"auth": {
+  "register":"Δημιουργήστε το λογαριασμό σας",
+  "fullName":" Πλήρες Όνομα",
+  "email":"Διεύθυνση email",
+  "password":"Κωδικός",
+  "confirmPassword":"Επιβεβαίωση Κωδικού",
+  "creatingAccount":"Δημιουργία Λογαριασμού...",
+  "createAccount":"Δημιουργία Λογαριασμού",
+  "continue":"Η αλλιώς συνεχίστε με",
+  "haveAccount":"Έχετε ήδη λογαριασμό?",
+  "signin":"Συνδεθείτε",
+  "signInBtn":"Σύνδεση",
+  "login":"Καλώς ήρθατε",
+  "forgotPassword":"Ξεχάσατε τον κωδικό?",
+  "dontHaveAccount":"Δεν έχετε λογαριασμό?",
+  "signup":"Εγγράφη"
+},
+"dashboard": {
+    "greetings": {
+      "anxietyManagement": "Πάρτε μια βαθιά ανάσα, το έχετε! 🌸",
+      "stressRelief": "Ας ανακουφίσουμε το άγχος μαζί 😌",
+      "maintainingBalance": "Τα πάτε υπέροχα! Συνεχίστε έτσι! ⚖️",
+      "generalWellness": "Καλώς ήρθατε στο ταξίδι ευεξίας σας! 🌱"
+    },
+    "focus": {
+      "anxietyManagement": "Calming Your Mind",
+      "stressRelief": "Finding Your Balance",
+      "maintainingBalance": "Staying Consistent",
+      "generalWellness": "Building Healthy Habits"
+    },
+    "hello": "Hello, {{username}}!",
+    "yourHabits": "Your Habits",
+    "recommendedForYou": "Recommended for You"
+  },"goals": {
+    "breathing": "Practice deep breathing exercises",
+    "meditation": "Guided meditation session",
+    "journal": "Write down your worries",
+    "walk": "Take a gentle walk outside",
+    "organize": "Organize one small space",
+    "music": "Listen to calming music",
+    "stretch": "Do gentle stretches",
+    "tea": "Enjoy a warm drink mindfully",
+    "gratitude": "List 3 things you're grateful for",
+    "exercise": "Get moving for 20 minutes",
+    "connect": "Connect with a friend",
+    "learn": "Learn something new",
+    "water": "Stay hydrated (8 glasses)",
+    "sleep": "Get 8 hours of sleep",
+    "mindful": "Practice gratitude",
+    "move": "Take a walk"
+  },"habits": {
+    "common": {
+      "waterIntake": {
+        "title": "Drink more water",
+        "description": "Stay hydrated throughout the day"
+      },
+      "noScreenBeforeBed": {
+        "title": "No screens 1 hour before bed",
+        "description": "Improve sleep quality by avoiding blue light"
+      },
+      "morningExercise": {
+        "title": "Morning exercise",
+        "description": "20 minutes of physical activity"
+      },
+      "eatFruit": {
+        "title": "Eat 2 servings of fruit",
+        "description": "Daily fruit intake for vitamins"
+      },
+      "practiceGratitude": {
+        "title": "Practice gratitude",
+        "description": "Write 3 things you're grateful for"
+      },
+      "pray": {
+        "title": "Pray",
+        "description": "Prayer can help bring calm"
+      },
+      "readBook": {
+        "title": "Read for 30 minutes",
+        "description": "Daily reading habit for learning"
+      },
+      "breathingExercises": {
+        "title": "Deep breathing exercises",
+        "description": "5-minute breathing routine for calm"
+      },
+      "reduceSugar": {
+        "title": "Reduce sugar",
+        "description": "Improve your health"
+      },
+      "anxietyJournal": {
+        "title": "Write down worries",
+        "description": "Process anxious thoughts"
+      },
+      "organizeSpace": {
+        "title": "Organize one small area",
+        "description": "Declutter for mental clarity"
+      },
+      "takeBreaks": {
+        "title": "Take 5-minute breaks every hour",
+        "description": "Prevent overwhelm"
+      }
+    }, "anxietyManagement": {
+      "deepBreathing": {
+        "title": "Deep breathing exercise",
+        "description": "5-minute breathing routine to reduce anxiety"
+      },
+      "limitCaffeine": {
+        "title": "Limit caffeine after 2 PM",
+        "description": "Reduce anxiety triggers by avoiding late caffeine"
+      }
+    },
+    "depressionSupport": {
+      "sunlightExposure": {
+        "title": "Get 15 minutes of sunlight",
+        "description": "Natural light exposure to boost mood and energy"
+      },
+      "socialConnection": {
+        "title": "Connect with a friend",
+        "description": "Reach out to someone for social support"
+      }
+    },
+    "sleepIssues": {
+      "bedtimeRoutine": {
+        "title": "Consistent bedtime routine",
+        "description": "Same wind-down activities every night"
+      },
+      "bedroomTemperature": {
+        "title": "Keep bedroom cool (65-68°F)",
+        "description": "Optimal temperature for quality sleep"
+      }
+    },
+    "stressManagement": {
+      "meditation": {
+        "title": "10-minute meditation",
+        "description": "Daily mindfulness practice to reduce stress"
+      },
+      "natureTime": {
+        "title": "Spend time in nature",
+        "description": "Connect with nature to lower stress levels"
+      }
+    }
+  },"categories": {
+    "health": "Health",
+    "fitness": "Fitness",
+    "mindfulness": "Mindfulness",
+    "learning": "Learning",
+    "reflection": "Reflection",
+    "productivity": "Productivity",
+    "meditation": "Meditation",
+    "movement": "Movement",
+    "relaxation": "Relaxation",
+    "gratitude": "Gratitude",
+    "social": "Social",
+    "growth": "Growth",
+    "rest": "Rest",
+    "lifestyle": "Lifestyle"
+  },
+  "difficulties": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
+  },
+  "durations": {
+    "5min": "5 min",
+    "10min": "10 min",
+    "15min": "15 min",
+    "20min": "20 min",
+    "30min": "30 min",
+    "1hour": "1 hour",
+    "8hours": "8 hours",
+    "allDay": "All day",
+    "allNight": "All night",
+    "afternoon": "Afternoon",
+    "varies": "Varies"
+  },
+  "profile": {
+    "myBadges": "My badges",
+    "dailyReminder": "Daily Reminder",
+    "preferences": "Preferences",
+    "accountSecurity": "Account and Security",
+    "dataAnalytics": "Data and Analytics",
+    "retakeQuiz": "Retake Quiz",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "questionnaire": {
+    "welcome": "Welcome to Serenify",
+    "welcomeBack": "Welcome Back!",
+    "quizComplete": "Quiz Complete! 🎉",
+    "startQuiz": "Start Quiz",
+    "continue": "Continue",
+    "questions": [
+      {
+        "question": "What can we help you to do?",
+        "options": [
+          "Reduce stress and anxiety",
+          "Boost focus and manage ADHD",
+          "Discover your personality"
+        ]
+      },
+      {
+        "question": "Which topics make it harder for you to feel confident in yourself?",
+        "options": [
+          "Managing emotions",
+          "Energy levels",
+          "Relationships",
+          "Fitness level",
+          "Overall health"
+        ]
+      },
+      {
+        "question": "How easy is it for you to get out of bed?",
+        "options": [
+          "Very easy, I get up pretty quickly",
+          "Sometimes easy, some days can be hard",
+          "Hard, I often struggle to get out of bed"
+        ]
+      },
+      {
+        "question": "How often do you feel overwhelmed?",
+        "options": [
+          "I feel overwhelmed several times a week",
+          "I have a few stressful days each month",
+          "I manage and overcome stress pretty well"
+        ]
+      },
+      {
+        "question": "Do you struggle with any of these mental health challenges?",
+        "options": [
+          "Anxiety",
+          "PTSD",
+          "Bipolar Disorder",
+          "ADHD",
+          "OCD",
+          "None of the above"
+        ]
+      }
+    ]
+  }
+
+}

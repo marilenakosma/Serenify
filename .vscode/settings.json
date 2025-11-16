@@ -4,14 +4,70 @@
     "source.organizeImports": "never",
     "source.sortMembers": "explicit"
   },
+  "typescript.tsserver.maxTsServerMemory": 1024,
+  "typescript.tsserver.useSeparateSyntaxServer": false,
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "typescript.suggest.autoImports": false,
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "javascript.disableAutomaticTypeAcquisition": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.tsserver.log": "off",
+  "editor.inlayHints.enabled": "off",
+  "typescript.inlayHints.parameterNames.enabled": "none",
+  "typescript.inlayHints.variableTypes.enabled": false,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": false,
+  "extensions.autoUpdate": false,
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  // Disable heavy features for performance
+  "editor.hover.enabled": false,
+  "editor.parameterHints.enabled": false,
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.workspaceCacheLimit": 20,
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.expo/**": true,
+    "**/.gradle/**": true,
+    "**/android/build/**": true,
+    "**/android/.gradle/**": true,
+    "**/ios/build/**": true,
+    "**/build/**": true,
+    "**/dist/**": true,
+    "**/.git/**": true,
+    "**/coverage/**": true,
+    "**/*.log": true
+  },
   "files.exclude": {
     "**/node_modules/**": true,
     "android/build/**": true,
     "android/.gradle/**": true,
-    "android/app/build/**": true
+    "android/app/build/**": true,
+    "**/.gradle": true,
+    "**/gradle": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/out": true
   },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.gradle": true,
+    "**/gradle": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/out": true
+  },
+  "typescript.exclude": [
+    "**/node_modules/**",
+    "**/.expo/**",
+    "**/android/**",
+    "**/ios/**",
+    "**/web-build/**"
+  ],
+  
   "java.project.sourcePaths": [],
   "java.project.referencedLibraries": [],
   "java.configuration.updateBuildConfiguration": "interactive"

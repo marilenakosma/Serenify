@@ -4,11 +4,12 @@ import { Stack,Slot,useSegments,useRouter } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { use, useEffect } from 'react';
-import { Colors } from "../constants/Colors";
 import { useAuthStore } from "../store/authStore";
 import { useState } from "react";
 import { Platform } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../constants/translations';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -93,8 +94,8 @@ export default function RootLayout() {
   if(!fontsLoaded) {
     return null;
   }
-return ( <>
+return ( <I18nextProvider i18n={i18n}>
         <StatusBar style="auto" translucent={true} />
         <RootLayoutNav/>
-</>)
+</I18nextProvider>)
 }

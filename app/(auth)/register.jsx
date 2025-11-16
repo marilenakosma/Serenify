@@ -12,6 +12,7 @@ import ThemedView from "../../components/ThemedView";
 import { ResponsiveDimensions as RD } from "../../constants/responsiveDimensions";
 import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
+import { useTranslation } from '../../constants/translations';
 
 const Register = () => {
     const { register, isLoading } = useAuthStore();
@@ -23,6 +24,7 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [passwordStrength, setPasswordStrength] = useState(0);
+    const { t } = useTranslation();
     
     const router = useRouter();
 
@@ -197,7 +199,7 @@ const Register = () => {
 
                 <ThemedView style={styles.container}>
                     <ThemedText title={true} style={styles.title}>
-                        Create Your Account
+                        {t('auth.register')}
                     </ThemedText>
                     
                     {/* Name Input */}
@@ -207,7 +209,7 @@ const Register = () => {
                                 styles.input,
                                 touched.name && (errors.name ? styles.inputError : styles.inputFocused)
                             ]}
-                            placeholder="Full Name"
+                            placeholder={t('auth.fullName')}
                             keyboardType="default"
                             autoCapitalize="words"
                             onChangeText={validateName}
@@ -229,7 +231,7 @@ const Register = () => {
                                 styles.input,
                                 touched.email && (errors.email ? styles.inputError : styles.inputFocused)
                             ]}
-                            placeholder="Email Address"
+                            placeholder={t('auth.email')}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             onChangeText={validateEmail}
@@ -257,7 +259,7 @@ const Register = () => {
                                 styles.input,
                                 touched.password && (errors.password ? styles.inputError : styles.inputFocused)
                             ]}
-                            placeholder="Password"
+                            placeholder={t('auth.password')}
                             onChangeText={validatePassword}
                             onFocus={handlePasswordFocus}
                             value={password}
@@ -282,7 +284,7 @@ const Register = () => {
                                 styles.input,
                                 touched.confirmPassword && (errors.confirmPassword ? styles.inputError : styles.inputFocused)
                             ]}
-                            placeholder="Confirm Password"
+                            placeholder={t('auth.confirmPassword')}
                             onChangeText={validateConfirmPassword}
                             onFocus={handleConfirmPasswordFocus}
                             value={confirmPassword}
@@ -315,7 +317,7 @@ const Register = () => {
                         disabled={isLoading}
                     >
                         <ThemedText title={true} style={{color:'#f2f2f2'}}>
-                            {isLoading ? 'Creating Account...' : 'Create Account'}
+                            {isLoading ? t('auth.creatingAccount') : t('auth.createAccount') }
                         </ThemedText>
                     </ThemedButton>
                     
@@ -324,7 +326,7 @@ const Register = () => {
                     {/* Or Divider */}
                     <View style={styles.orContainer}>
                         <View style={styles.orLine} />
-                        <ThemedText style={styles.orText}>Or continue with</ThemedText>
+                        <ThemedText style={styles.orText}>{t('auth.continue')}</ThemedText>
                         <View style={styles.orLine} />
                     </View>
                     
@@ -351,11 +353,11 @@ const Register = () => {
                     {/* Login Link */}
                     <View style={styles.loginContainer}>
                         <ThemedText style={styles.loginText}>
-                            Already have an account?
+                            {t('auth.haveAccount')}
                         </ThemedText>
                         <Link href="/login" replace>
                             <ThemedText style={styles.loginLink}>
-                                Sign In
+                                {t('auth.signin')}
                             </ThemedText>
                         </Link>
                     </View>        
