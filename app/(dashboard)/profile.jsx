@@ -8,9 +8,12 @@ import ThemedView from "../../components/ThemedView";
 import { useAuthStore } from "../../store/authStore";
 import { removeItem } from "../../store/storage";
 import { useRouter } from "expo-router";
+import { useTranslation } from '../../constants/translations';
+
 const profile = () => {
     const { user, logout,retakeQuestionnaire } = useAuthStore();
     const router = useRouter()
+    const { t } = useTranslation();
 
     const handleLogout = () => {
         Alert.alert(
@@ -66,13 +69,13 @@ const profile = () => {
     };
 
     const settingData = [
-        { id: 1, name: "trophy-outline", text: "My badges" },
-        { id: 2, name: "time-outline", text: "Daily Reminder" },
-        { id: 3, name: "settings-outline", text: "Preferences" },
-        { id: 4, name: "accessibility-outline", text: "Account and Security" },
-        { id: 5, name: "stats-chart-outline", text: "Data and Analytics" },
-        { id: 6, name: "albums-outline", text: "Retake Quiz" },
-        { id: 7, name: "log-out-outline", text: "Logout" }, 
+        { id: 1, name: "trophy-outline", text: t('profile.myBadges') },
+        { id: 2, name: "time-outline", text: t('profile.dailyReminder') },
+        { id: 3, name: "settings-outline", text: t('profile.preferences') },
+        { id: 4, name: "accessibility-outline", text: t('profile.accountSecurity')},
+        { id: 5, name: "stats-chart-outline", text: t('profile.dataAnalytics') },
+        { id: 6, name: "albums-outline", text: t('profile.retakeQuiz') },
+        { id: 7, name: "log-out-outline", text: t('profile.logout') }, 
     ];
 
     const renderSettings = ({ item }) => (

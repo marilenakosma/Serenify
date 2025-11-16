@@ -67,6 +67,22 @@
     "**/ios/**",
     "**/web-build/**"
   ],
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  },
+  "github.copilot.advanced": {
+    "listCount": 0,
+    "inlineSuggestCount": 0
+  },
+  // Disable AI-powered features that trigger analysis
+  "workbench.experimental.enableNewProfileUI": false,
+  "workbench.enableExperiments": false,
+  // Prevent file indexing for AI context
+  "files.associations": {},
+  "workbench.editorAssociations": {},
   
   "java.project.sourcePaths": [],
   "java.project.referencedLibraries": [],

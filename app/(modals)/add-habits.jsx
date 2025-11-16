@@ -9,13 +9,16 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import Spacer from "../../components/Spacer";
 import { useAuthStore } from "../../store/authStore";
-import { availableHabits } from "../../constants/availableHabits";
+import { availableHabits,getAvailableHabits } from "../../constants/availableHabits";
+import { useTranslation } from '../../constants/translations';
 
 const AddHabits = () => {
   const { user, userHabits, addHabits } = useAuthStore();
   const [selectedHabits, setSelectedHabits] = useState(new Set());
+  const { t } = useTranslation();
   
   const focusArea = user?.focusArea || 'General Wellness';
+  const availableHabits = getAvailableHabits(t);
   
   //  Completely safe habit loading with guaranteed unique keys
   const safeHabits = useMemo(() => {
@@ -150,14 +153,14 @@ const AddHabits = () => {
           </TouchableOpacity>
           
           <ThemedText title style={styles.title}>
-            Add New Habits
+            {t('habits.addNewHabits')}
           </ThemedText>
           
           <View style={styles.placeholder} />
         </View>
         
         <ThemedText style={styles.subtitle}>
-          Choose habits to track. Recommended for {focusArea}
+          {t('habits.chooseHabits', { focusArea })}
         </ThemedText>
 
         {/* Completely safe rendering using Object.entries with guaranteed unique keys */}

@@ -14,15 +14,18 @@ import ThemedView from "../../components/ThemedView";
 import DailySummary from "../../components/DailySummary";
 import DashboardHabitCard from "../../components/DashboardHabitCard";
 import { useAuthStore } from "../../store/authStore";
-import { dashboardContent } from "../../constants/dashboardContent";
+import { dashboardContent,getDashboardContent } from "../../constants/dashboardContent";
 import { useRouter } from "expo-router";
+import { useTranslation } from '../../constants/translations';
 
 const Dashboard = () => {
   const {user,isAuthenticated,userHabits,habitCompletions,toggleHabitCompletion } = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
   const router = useRouter();
+  const { t } = useTranslation();
 
   const focusArea = user?.focusArea || 'General Wellness';
+  const dashboardContent = getDashboardContent(t);
   const content = dashboardContent[focusArea];
 
   if (!isAuthenticated) {
@@ -90,7 +93,7 @@ const Dashboard = () => {
             <View style={styles.overlay}>
               <ThemedView style={styles.moodSection}>  
                 <ThemedText style={styles.greeting}>
-                  Hello, {user?.username || 'User'}! 
+                  {t('dashboard.hello', { username: user?.username || 'User' })} 
                 </ThemedText>
                 <ThemedText title={true} style={styles.moodTitle}>
                   {content.greeting}
@@ -121,7 +124,7 @@ const Dashboard = () => {
           {userHabits.length > 0 && (
             <ThemedView style={styles.section}>
               <ThemedText title={true} style={styles.sectionTitle}>
-                Your Habits
+                {t('dashboard.yourHabits')}
               </ThemedText>
               <FlatList
                 data={userHabits}
@@ -144,7 +147,7 @@ const Dashboard = () => {
           <ThemedView style={[styles.section,
           styles.other]}>
             <ThemedText title={true} style={styles.sectionTitle}>
-              Recommended for You
+              {t('dashboard.recommendedForYou')}
             </ThemedText>
 
             {content.recommendedGoals.map((goal, index) => (

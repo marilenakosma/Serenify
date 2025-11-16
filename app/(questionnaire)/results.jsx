@@ -7,11 +7,13 @@ import ThemedView from '../../components/ThemedView';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../store/authStore';
 import LottieView from 'lottie-react-native';
+import { useTranslation } from '../../constants/translations';
 
 const results = () => {
     const router = useRouter();
     const { finishShowingResults, questionnaireResults,updateUser } = useAuthStore();
     const [analysis, setAnalysis] = useState(null);
+    const { t } = useTranslation();
 
     // Simple analysis of quiz answers
     useEffect(() => {
@@ -118,7 +120,7 @@ const results = () => {
         <ThemedView style={styles.container}>
             <SafeAreaView style={styles.content}>
                 <ThemedText title={true} style={styles.title}>
-                    Quiz Complete! 🎉
+                    {t('questionnaire.quizComplete')}
                 </ThemedText>
 
                 <LottieView
@@ -131,19 +133,19 @@ const results = () => {
                 {analysis && (
                     <ThemedView style={styles.analysisCard}>
                         <ThemedText style={styles.analysisTitle}>
-                            Your Focus Area: {analysis.focusEmoji}
+                            {t('questionnaire.yourFocusArea')}: {analysis.focusEmoji}
                         </ThemedText>
                         <ThemedText style={styles.analysisText}>
                             {analysis.focusArea}
                         </ThemedText>
                         <ThemedText style={styles.analysisSubtext}>
-                            We've personalized your dashboard with activities tailored to help you!
+                           {t('questionnaire.personalizedMessage')}
                         </ThemedText>
                     </ThemedView>
                 )}
 
                 <ThemedText style={styles.subtitle}>
-                    Your personalized wellness journey starts now.
+                    {t('questionnaire.journeyStartsNow')}
                 </ThemedText>
 
                 <ThemedButton 
@@ -151,7 +153,7 @@ const results = () => {
                     style={styles.button}
                 >
                     <ThemedText title={true} style={styles.buttonText}>
-                        View My Dashboard
+                        {t('questionnaire.viewDashboard')}
                     </ThemedText>
                 </ThemedButton>
             </SafeAreaView>

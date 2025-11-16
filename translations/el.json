@@ -29,218 +29,228 @@
       "generalWellness": "Καλώς ήρθατε στο ταξίδι ευεξίας σας! 🌱"
     },
     "focus": {
-      "anxietyManagement": "Calming Your Mind",
-      "stressRelief": "Finding Your Balance",
-      "maintainingBalance": "Staying Consistent",
-      "generalWellness": "Building Healthy Habits"
+      "anxietyManagement": "Ψυχική ηρεμία",
+      "stressRelief": "Βρίσκοντας εσωτερική ηρεμία",
+      "maintainingBalance": "Διατήρηση της συνέχειας",
+      "generalWellness": "Χτίζοντας Υγιείς Συνήθειες"
     },
-    "hello": "Hello, {{username}}!",
-    "yourHabits": "Your Habits",
-    "recommendedForYou": "Recommended for You"
+    "hello": "Γεια, {{username}}!",
+    "yourHabits": "Οι συνήθειές σας",
+    "recommendedForYou": "Συνίσταται για εσένα"
   },"goals": {
-    "breathing": "Practice deep breathing exercises",
-    "meditation": "Guided meditation session",
-    "journal": "Write down your worries",
-    "walk": "Take a gentle walk outside",
-    "organize": "Organize one small space",
-    "music": "Listen to calming music",
-    "stretch": "Do gentle stretches",
-    "tea": "Enjoy a warm drink mindfully",
-    "gratitude": "List 3 things you're grateful for",
-    "exercise": "Get moving for 20 minutes",
-    "connect": "Connect with a friend",
-    "learn": "Learn something new",
-    "water": "Stay hydrated (8 glasses)",
-    "sleep": "Get 8 hours of sleep",
+    "breathing": "Κάντε ασκήσεις αναπνοής",
+    "meditation": "Κάντε διαλογισμό",
+    "journal": "Καταγράψτε τις ανησυχίες σας",
+    "walk": "Κάντε μια βόλτα",
+    "organize": "Οργανώστε έναν μικρό χώρο",
+    "music": "Ακούστε χαλαρωτική μουσική",
+    "stretch": "Κάντε λίγο stretching",
+    "tea": "Απολαύστε ένα ζεστό ρόφημα",
+    "gratitude": "Αναφέρετε 3 πράγματα για τα οποία νιώθετε ευγνώμονες",
+    "exercise": "Κινηθείτε για 20 λεπτά ",
+    "connect": "Μιλήστε σε ένα φίλο",
+    "learn": "Μάθετε κάτι νέο",
+    "water": "Μείνετε ενυδατωμένοι",
+    "sleep": "Κοιμηθείτε 8 ώρες",
     "mindful": "Practice gratitude",
-    "move": "Take a walk"
+    "move": "Κάντε μια βόλτα"
   },"habits": {
     "common": {
       "waterIntake": {
-        "title": "Drink more water",
-        "description": "Stay hydrated throughout the day"
+        "title": "Πίετε περισσότερο",
+        "description": "Μείνετε ενυδατωμένοι όλη τη μέρα"
       },
       "noScreenBeforeBed": {
-        "title": "No screens 1 hour before bed",
-        "description": "Improve sleep quality by avoiding blue light"
+        "title": "Καμία οθόνη 1 ώρα πριν τον ύπνο",
+        "description": "Βελτιώστε την ποιότητα του ύπνου αποφεύγοντας το μπλε φώς"
       },
       "morningExercise": {
-        "title": "Morning exercise",
-        "description": "20 minutes of physical activity"
+        "title": "Πρωινή άσκηση",
+        "description": "20 λεπτά σωματικής δραστηριότητας"
       },
       "eatFruit": {
-        "title": "Eat 2 servings of fruit",
-        "description": "Daily fruit intake for vitamins"
+        "title": "Φάτε φρούτα",
+        "description": "Ημερήσια κατανάλωση φρούτων για βιταμίνες"
       },
       "practiceGratitude": {
-        "title": "Practice gratitude",
-        "description": "Write 3 things you're grateful for"
+        "title": "Νιώστε ευγνωμοσύνη",
+        "description": "Γράψτε 3 πράγματα για τα οποία είστε ευγνώμονες"
       },
       "pray": {
-        "title": "Pray",
-        "description": "Prayer can help bring calm"
+        "title": "Προσευχηθείτε",
+        "description": "Η προσευχή μπορεί να φέρει ηρεμία"
       },
       "readBook": {
-        "title": "Read for 30 minutes",
-        "description": "Daily reading habit for learning"
+       "title": "Διαβάστε για 30 λεπτά",
+        "description": "Το καθημερινό διαβάσμα εξασκεί τον εγκέφαλο"
       },
       "breathingExercises": {
-        "title": "Deep breathing exercises",
-        "description": "5-minute breathing routine for calm"
+        "title": "Ασκήσεις αναπνοής",
+        "description": "5 λεπτη ρουτίνα βαθιάς αναπνοής για ηρεμία"
       },
       "reduceSugar": {
-        "title": "Reduce sugar",
-        "description": "Improve your health"
+        "title": "Μειώστε τη ζάχαρη",
+        "description": "Βελτιώστε την υγεία σας"
       },
       "anxietyJournal": {
-        "title": "Write down worries",
-        "description": "Process anxious thoughts"
+        "title": "Καταγράψτε τις ανησυχίες σας",
+        "description": "Επεξεργαστείτε αγχωτικές σκέψεις"
       },
       "organizeSpace": {
-        "title": "Organize one small area",
-        "description": "Declutter for mental clarity"
+        "title": "Οργανώστε έναν μικρό χώρο",
+        "description": "Τακτοποίηση για νοητική διαύγεια"
       },
       "takeBreaks": {
-        "title": "Take 5-minute breaks every hour",
-        "description": "Prevent overwhelm"
+        "title": "Κάντε διάλειμμα 5 λεπτών κάθε ώρα",
+        "description": "Αποφύγετε την ψυχική κούραση"
       }
     }, "anxietyManagement": {
       "deepBreathing": {
-        "title": "Deep breathing exercise",
-        "description": "5-minute breathing routine to reduce anxiety"
+        "title": "Ασκήσεις αναπνοής",
+        "description": "5 λεπτη ρουτίνα βαθιάς αναπνοής για ηρεμία"
       },
       "limitCaffeine": {
-        "title": "Limit caffeine after 2 PM",
-        "description": "Reduce anxiety triggers by avoiding late caffeine"
+        "title": "Περιορίστε την καφεΐνη μετά τις 2 μ.μ.",
+        "description": "Μειώστε τους παράγοντες άγχους αποφεύγοντας την καφεΐνη αργά"
       }
     },
     "depressionSupport": {
       "sunlightExposure": {
-        "title": "Get 15 minutes of sunlight",
-        "description": "Natural light exposure to boost mood and energy"
+        "title": "Εκθέστε τον εαυτό σας στον ήλιο για 15 λεπτά",
+        "description": "Έκθεση σε φυσικό φως για ενίσχυση διάθεσης και ενέργειας"
       },
       "socialConnection": {
-        "title": "Connect with a friend",
-        "description": "Reach out to someone for social support"
+        "title": "Μιλήστε με έναν φίλο",
+        "description": "Επικοινωνήστε με κάποιον για κοινωνική υποστήριξη"
       }
     },
     "sleepIssues": {
       "bedtimeRoutine": {
-        "title": "Consistent bedtime routine",
-        "description": "Same wind-down activities every night"
+        "title": "Σταθερή ρουτίνα ύπνου",
+        "description": "Ίδιες δραστηριότητες χαλάρωσης κάθε βράδυ"
       },
       "bedroomTemperature": {
-        "title": "Keep bedroom cool (65-68°F)",
-        "description": "Optimal temperature for quality sleep"
+        "title": "Κρατήστε το δωμάτιο δροσερό (18-20°C)",
+        "description": "Βέλτιστη θερμοκρασία για ποιοτικό ύπνο"
       }
     },
     "stressManagement": {
       "meditation": {
-        "title": "10-minute meditation",
-        "description": "Daily mindfulness practice to reduce stress"
+        "title": "Διαλογισμός 10 λεπτών",
+        "description": "Καθημερινή πρακτική mindfulness για μείωση στρες"
       },
       "natureTime": {
-        "title": "Spend time in nature",
-        "description": "Connect with nature to lower stress levels"
+        "title": "Περάστε χρόνο στη φύση",
+        "description": "Συνδεθείτε με τη φύση για μείωση των επιπέδων στρες"
       }
     }
   },"categories": {
-    "health": "Health",
+    "health": "Υγεία",
     "fitness": "Fitness",
-    "mindfulness": "Mindfulness",
-    "learning": "Learning",
-    "reflection": "Reflection",
-    "productivity": "Productivity",
-    "meditation": "Meditation",
-    "movement": "Movement",
-    "relaxation": "Relaxation",
-    "gratitude": "Gratitude",
-    "social": "Social",
-    "growth": "Growth",
-    "rest": "Rest",
-    "lifestyle": "Lifestyle"
+    "mindfulness": "Ενσυνειδητότητα",
+    "learning": "Μάθηση",
+    "reflection": "Διαλογισμός",
+    "productivity": "Παραγωγιkότητα",
+    "meditation": "Διαλογισμός",
+    "movement": "Γυμναστική",
+    "relaxation": "Ξεκούραση",
+    "gratitude": "Ευγνωμοσύνη",
+    "social": "Κοινωνικότητα",
+    "growth": "Ανάπτυξη",
+    "rest": "Χαλάρωση",
+    "lifestyle": "Τρόπος ζωής"
   },
   "difficulties": {
-    "easy": "Easy",
-    "medium": "Medium",
-    "hard": "Hard"
+    "easy": "Εύκολο",
+    "medium": "Μέτριο",
+    "hard": "Δύσκολο"
   },
   "durations": {
-    "5min": "5 min",
-    "10min": "10 min",
-    "15min": "15 min",
-    "20min": "20 min",
-    "30min": "30 min",
-    "1hour": "1 hour",
-    "8hours": "8 hours",
-    "allDay": "All day",
-    "allNight": "All night",
-    "afternoon": "Afternoon",
-    "varies": "Varies"
+    "5min": "5 λεπτά",
+    "10min": "10 λεπτά",
+    "15min": "15 λεπτά",
+    "20min": "20 λεπτά",
+    "30min": "30 λεπτά",
+    "1hour": "1 ώρα",
+    "8hours": "8 ώρες",
+    "allDay": "Όλη μέρα",
+    "allNight": "Ολη νύχτα",
+    "afternoon": "Απόγευμα",
+    "varies": "Κυμαίνεται"
   },
   "profile": {
-    "myBadges": "My badges",
-    "dailyReminder": "Daily Reminder",
-    "preferences": "Preferences",
-    "accountSecurity": "Account and Security",
-    "dataAnalytics": "Data and Analytics",
-    "retakeQuiz": "Retake Quiz",
-    "logout": "Logout",
-    "language": "Language"
+    "myBadges": "Οι κονκάρδες μου",
+    "dailyReminder": "Ημερήσια Υπενθύμιση",
+    "preferences": "Προτιμήσεις",
+    "accountSecurity": "Λογαριασμός και Ασφάλεια",
+    "dataAnalytics": "Δεδομένα και Ανάλυση",
+    "retakeQuiz": "Επανάληψη Quiz",
+    "logout": "Αποσύνδεση",
+    "language": "Γλώσσα"
   },
   "questionnaire": {
-    "welcome": "Welcome to Serenify",
-    "welcomeBack": "Welcome Back!",
-    "quizComplete": "Quiz Complete! 🎉",
-    "startQuiz": "Start Quiz",
-    "continue": "Continue",
+    "welcome": "Καλώς ήρθατε στο Serenify",
+    "welcomeBack": "Καλώς ήρθατε πίσω!",
+    "description": "Ας εξατομικεύσουμε το ταξίδι ευεξίας σας με μερικές ερωτήσεις.",
+    "startQuiz": "Έναρξη Κουίζ",
+    "continue": "Συνέχεια",
+    "completeQuiz": "Ολοκλήρωση Κουίζ",
+    "quizComplete": "Κουίζ Ολοκληρώθηκε! 🎉",
+    "yourFocusArea": "Η Περιοχή Εστίασής σας",
+    "personalizedMessage": "Εξατομικεύσαμε το ταμπλό σας με δραστηριότητες για να σας βοηθήσουμε!",
+    "journeyStartsNow": "Το εξατομικευμένο ταξίδι ευεξίας σας ξεκινά τώρα.",
+    "viewDashboard": "Δείτε το Ταμπλό μου",
     "questions": [
       {
-        "question": "What can we help you to do?",
+        "question": "Σε ποιο τομέα θα μπορούσαμε να σας βοηθήσουμε;",
         "options": [
-          "Reduce stress and anxiety",
-          "Boost focus and manage ADHD",
-          "Discover your personality"
+         "Μείωση του άγχους και του στρες",
+         "Ενίσχυση της συγκέντρωσης και διαχείρισης της ΔΕΠΥ",
+         "Ανακάλυψη της προσωπικότητάς σας"
         ]
       },
       {
-        "question": "Which topics make it harder for you to feel confident in yourself?",
+        "question": "Ποια θέματα σας δυσκολεύουν να εμπιστευτείτε στον εαυτό σας;",
         "options": [
-          "Managing emotions",
-          "Energy levels",
-          "Relationships",
-          "Fitness level",
-          "Overall health"
+          "Διαχείριση συναισθημάτων",
+          "Επίπεδα ενέργειας",
+          "Σχέσεις",
+          "Φυσική κατάσταση",
+          "Υγεία"
         ]
       },
       {
-        "question": "How easy is it for you to get out of bed?",
+        "question": "Πόσο εύκολο είναι για εσάς να σηκωθείτε απο το κρεβάτι;",
         "options": [
-          "Very easy, I get up pretty quickly",
-          "Sometimes easy, some days can be hard",
-          "Hard, I often struggle to get out of bed"
+          "Πολύ εύκολο, σηκώνομαι αρκετά γρήγορα",
+          "Μερικές φορές εύκολο, μερικές φορές όχι",
+          "Δύσκολο, συχνά δυσκολεύομαι να σηκωθώ από το κρεβάτι"
         ]
       },
       {
-        "question": "How often do you feel overwhelmed?",
+        "question": "Πόσες φορές νιώθετε συναισθηματικά επιβαρυμένοι;",
         "options": [
-          "I feel overwhelmed several times a week",
-          "I have a few stressful days each month",
-          "I manage and overcome stress pretty well"
+          "Αρκετές φορές την εβδομάδα",
+          "Μερικές αγχωτικές μέρες κάθε μήνα",
+          "Διαχειρίζομαι το άγχος μου αρκετά καλά"
         ]
       },
       {
-        "question": "Do you struggle with any of these mental health challenges?",
+        "question": "Αντιμετωπίζετε κάποια απο τα ακόλουθες προβλήματα στην ψυχική σας υγεία",
         "options": [
-          "Anxiety",
-          "PTSD",
-          "Bipolar Disorder",
-          "ADHD",
-          "OCD",
-          "None of the above"
+          "Αγχώδης Διαταραχή",
+          "Μετατραυματικό στρές(PTSD)",
+          "Διπολική Διαταραχή(Bipolar)",
+          "ΔΕΠΥ(ADHD)",
+          "ΙΨΔ(OCD)",
+          "Κανένα απο τα παραπάνω"
         ]
       }
     ]
+  },
+  "common": {
+    "of": "από",
+    "next": "Επόμενο"
   }
 
 }

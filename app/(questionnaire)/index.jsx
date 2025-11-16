@@ -7,13 +7,18 @@ import ThemedButton from '../../components/ThemedButton';
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
+import {useTranslation} from "../../constants/translations"
 import { useAuthStore } from '../../store/authStore';
 import { getItem } from '../../store/storage';
 
 const Questionnaire = () => {
-    const {user,isRetakingQuestionnaire} = useAuthStore();
-    const router=useRouter();
+    const { user, hasCompletedQuestionnaire } = useAuthStore();
+    const router = useRouter();
+    const { t } = useTranslation();
     const params = useLocalSearchParams();
+
+    // Fix: Get retake from params properly
+    const isRetake = params.retake === 'true';
 
     const existingQuestionnaire = getItem(`questionnaire_${user?.id}`);
  /*
@@ -29,7 +34,6 @@ const Questionnaire = () => {
         currentPath: router.pathname
     });
 */
-    const isReturningUser = !!existingQuestionnaire || isRetakingQuestionnaire;
     
     const handleStartQuiz = () => {
       router.navigate("questions");
@@ -44,8 +48,11 @@ const Questionnaire = () => {
 
         <ThemedView style={styles.container}>
 
-        <ThemedText title={true} 
-        style={styles.title}> {isReturningUser ? "Welcome Back!" : "Welcome to Serenify" }
+        <ThemedText title style={styles.title}>
+          {hasCompletedQuestionnaire && !isRetake 
+            ? t('questionnaire.welcomeBack') 
+            : t('questionnaire.welcome')
+          }
         </ThemedText>
 
           <LottieView
@@ -55,17 +62,18 @@ const Questionnaire = () => {
                 style={styles.animation}
               />
        
-        <ThemedText style={styles.description}> 
-                    {isReturningUser ?
-                             "It looks like you've used Serenify before. Let's update your preferences!" 
-                        : "We would like to begin by asking you a few questions"}
-                </ThemedText>
+        <ThemedText style={styles.description}>
+          {t('questionnaire.description')}
+        </ThemedText>
 
-       <ThemedButton onPress={handleStartQuiz}>
-          <ThemedText title={true} 
-          style={{color:'#f2f2f2'}}>
-            {isReturningUser ? "Update Preferences" : "Start Quiz"}</ThemedText>
-        </ThemedButton>
+       <ThemedButton onPress={handleStartQuiz} style={styles.button}>
+                    <ThemedText style={styles.buttonText}>
+                        {hasCompletedQuestionnaire && !isRetake 
+                            ? t('questionnaire.continue')
+                            : t('questionnaire.startQuiz')
+                        }
+                    </ThemedText>
+                </ThemedButton>
 
      </ThemedView>
      </View>

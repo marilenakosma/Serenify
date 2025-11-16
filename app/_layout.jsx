@@ -69,12 +69,17 @@ function RootLayoutNav() {
                 console.log('Redirecting to questionnaire');
                 router.replace('/(questionnaire)');
             }
-        } else if(!showingResults){
-            if (inAuthGroup || inQuestionnaireGroup) {
-                console.log('Redirecting to dashboard');
-                router.replace('/(dashboard)');
-            }
+        } else {
+        // User is authenticated AND completed questionnaire
+        // If showing results, only stay on results page
+        if (showingResults && !onResultsPage) {
+            console.log('Redirecting to results');
+            router.replace('/(questionnaire)/results');
+        } else if (!showingResults && (inAuthGroup || inQuestionnaireGroup)) {
+            console.log('Redirecting to dashboard');
+            router.replace('/(dashboard)');
         }
+    }
     }, [isAuthenticated, hasCompletedQuestionnaire, segments, isNavigationReady]);
 
   return <Slot/>;

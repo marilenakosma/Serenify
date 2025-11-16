@@ -1,3 +1,24 @@
+export const getQuizData = (t) => {
+  try {
+    const questionsData = t('questionnaire.questions', { returnObjects: true });
+    
+    // Safety check - if questionsData is not an array, use fallback
+    if (!questionsData || !Array.isArray(questionsData)) {
+      console.log('Questions data not available, using fallback');
+      return quizData; // Use the hardcoded fallback
+    }
+    
+    return questionsData.map(questionData => ({
+      question: questionData.question,
+      options: questionData.options,
+      selectedAnswer: null
+    }));
+  } catch (error) {
+    console.log('Error loading quiz data:', error);
+    return quizData; // Use fallback on error
+  }
+};
+
 export const quizData = [
     {
         question: "What can we help you to do?",

@@ -50,7 +50,7 @@
     "exercise": "Get moving for 20 minutes",
     "connect": "Connect with a friend",
     "learn": "Learn something new",
-    "water": "Stay hydrated (8 glasses)",
+    "water": "Stay hydrated",
     "sleep": "Get 8 hours of sleep",
     "mindful": "Practice gratitude",
     "move": "Take a walk"
@@ -191,9 +191,15 @@
   "questionnaire": {
     "welcome": "Welcome to Serenify",
     "welcomeBack": "Welcome Back!",
-    "quizComplete": "Quiz Complete! 🎉",
+    "description": "Let's personalize your wellness journey with a few questions.",
     "startQuiz": "Start Quiz",
     "continue": "Continue",
+    "completeQuiz": "Complete Quiz",
+    "quizComplete": "Quiz Complete! 🎉",
+    "yourFocusArea": "Your Focus Area",
+    "personalizedMessage": "We've personalized your dashboard with activities tailored to help you!",
+    "journeyStartsNow": "Your personalized wellness journey starts now.",
+    "viewDashboard": "View My Dashboard",
     "questions": [
       {
         "question": "What can we help you to do?",
@@ -241,6 +247,10 @@
         ]
       }
     ]
+  },
+  "common": {
+    "of": "of",
+    "next": "Next"
   }
 
 }

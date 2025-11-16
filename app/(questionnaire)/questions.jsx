@@ -8,10 +8,13 @@ import ThemedButton from '../../components/ThemedButton';
 import ThemedText from '../../components/ThemedText';
 import ThemedView from "../../components/ThemedView";
 import { Colors } from "../../constants/Colors";
-import { quizData } from '../../constants/quizData';
+import { quizData,getQuizData } from '../../constants/quizData';
+import {useTranslation} from "../../constants/translations"
 import { useAuthStore } from '../../store/authStore';
 
 const Questions = () => {
+     const { t } = useTranslation();
+     const quizData = getQuizData(t);
      const [answers, setAnswers] = useState({});
      const [currentQuestion, setCurrentQuestion] = useState(0);
      const [selectedOption, setSelectedOption] = useState(null);
@@ -81,7 +84,7 @@ const Questions = () => {
             <View style={[styles.progressBar, { width: `${progress}%` }]} />
           </View>
           <ThemedText style={styles.progressText}>
-            {currentQuestion + 1} of {quizData.length}
+            {currentQuestion + 1} {t('common.of')} {quizData.length}
           </ThemedText>
         </View>
 
@@ -115,7 +118,7 @@ const Questions = () => {
           ]}
         >
           <ThemedText style={{color:'#f2f2f2'}}>
-            {isLastQuestion ? 'Complete Quiz' : 'Next'} {/* ✅ Dynamic text */}
+            {isLastQuestion ? t('questionnaire.completeQuiz') : t('common.next')}
           </ThemedText>
         </ThemedButton>
 

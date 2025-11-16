@@ -87,7 +87,9 @@ const initializeI18n = () => {
 
       react: {
         useSuspense: false
-      }
+      },
+
+      returnObjects: true
     });
 };
 
