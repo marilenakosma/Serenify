@@ -15,11 +15,19 @@
   "continue":"Η αλλιώς συνεχίστε με",
   "haveAccount":"Έχετε ήδη λογαριασμό?",
   "signin":"Συνδεθείτε",
+  "signingin":"Σύνδεση...",
   "signInBtn":"Σύνδεση",
   "login":"Καλώς ήρθατε",
   "forgotPassword":"Ξεχάσατε τον κωδικό?",
   "dontHaveAccount":"Δεν έχετε λογαριασμό?",
   "signup":"Εγγράφη"
+},
+"tabs":{
+  "home":"Αρχική",
+  "habits":"Συνήθειες",
+  "activities":"Δραστηριότητες",
+  "statistics":"Στατιστικά",
+  "profile":"Προφίλ"
 },
 "moods": {
     "angry": "Θυμός",
@@ -59,7 +67,7 @@
     "learn": "Μάθετε κάτι νέο",
     "water": "Μείνετε ενυδατωμένοι",
     "sleep": "Κοιμηθείτε 8 ώρες",
-    "mindful": "Practice gratitude",
+    "mindful": "Δείξτε ευγνωμοσύνη",
     "move": "Κάντε μια βόλτα"
   },"habits": {
     "addNewHabits": "Προσθέστε Νέες Συνήθειες",
@@ -186,6 +194,17 @@
     "allNight": "Ολη νύχτα",
     "afternoon": "Απόγευμα",
     "varies": "Κυμαίνεται"
+  },
+  "activities": {
+    "title":"Οι Δραστηριότητες μου",
+    "goalIdeas":"Ιδέες για στόχους",
+    "reflections":"Ενδοσκόπηση",
+    "breathe":"Διαλογισμός",
+    "soundscapes":"Μουσική",
+    "movements":"Γυμναστική",
+    "timers":"Χρονόμετρο",
+    "actOfKindness":"Πράξη Καλοσύνης",
+    "firstAidKit":"Κουτί Πρώτων Βοηθειών"
   },
   "profile": {
     "myBadges": "Οι κονκάρδες μου",

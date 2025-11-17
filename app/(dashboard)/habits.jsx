@@ -14,6 +14,7 @@ import {
   getCompletionsThisWeek, 
   getRequiredCompletionsPerWeek 
 } from "../../constants/habitFrequency.js";
+import { useTranslation } from '../../constants/translations';
 
 const habits = () => {
   const { 
@@ -26,6 +27,7 @@ const habits = () => {
 
   const [completedQuests, setCompletedQuests] = useState(new Set());
   const router = useRouter();
+  const { t } = useTranslation();
 
   const focusArea = user?.focusArea || 'General Wellness';
 

@@ -21,6 +21,13 @@
   "dontHaveAccount":"Don't have an account?",
   "signup":"Sign Up"
 },
+"tabs":{
+  "home":"Home",
+  "habits":"Habits",
+  "activities":"Activities",
+  "statistics":"Statistics",
+  "profile":"Profile"
+},
 "moods": {
     "angry": "Angry",
     "sad": "Sad", 
@@ -184,6 +191,17 @@
     "allNight": "All night",
     "afternoon": "Afternoon",
     "varies": "Varies"
+  },
+  "activities": {
+    "title":"My Activities",
+    "goalIdeas":"Goal Ideas",
+    "reflections":"Reflections",
+    "breathe":"Breathe",
+    "soundscapes":"Soundscapes",
+    "movements":"Movements",
+    "timers":"Timers",
+    "actOfKindness":"Act of Kindness",
+    "firstAidKit":"First Aid Kit"
   },
   "profile": {
     "myBadges": "My badges",

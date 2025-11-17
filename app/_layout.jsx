@@ -85,18 +85,21 @@ function RootLayoutNav() {
   return <Slot/>;
 }
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     Montserrat_600SemiBold,
-    Montserrat_400Regular
+    Montserrat_400Regular,
+    'MontserratZ-Regular': require('../assets/fonts/MontserratZ-Regular.otf'),
+    'MontserratZ-SemiBold': require('../assets/fonts/MontserratZ-SemiBold.otf'),
   });
 
   useEffect(() => {
-    if(fontsLoaded) {
+
+    if(fontsLoaded ||  fontError) {
       SplashScreen.hideAsync()
     }
-  },[fontsLoaded]);
+  },[fontsLoaded, fontError]);
 
-  if(!fontsLoaded) {
+  if(!fontsLoaded && !fontError) {
     return null;
   }
 return ( <I18nextProvider i18n={i18n}>

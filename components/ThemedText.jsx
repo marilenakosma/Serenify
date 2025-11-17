@@ -4,7 +4,7 @@ import { Colors } from '../constants/Colors';
 export default function ThemedText ({style,title=false,...props}) {
  
     const textColor = title ? Colors.title : Colors.text
-    const fontFamily = title ? 'Montserrat_600SemiBold' : 'Montserrat_400Regular';
+    const fontFamily = title ? 'MontserratZ-SemiBold' : 'MontserratZ-Regular';
 
   return (
         <Text 

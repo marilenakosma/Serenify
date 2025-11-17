@@ -147,6 +147,7 @@ const Login = () => {
                                     touched.email && (errors.email ? styles.inputError : styles.inputFocused)
                                 ]}
                                 placeholder = {t('auth.email')}
+                                //placeholderTextColor="#999999"
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 autoCorrect={false}
@@ -206,7 +207,7 @@ const Login = () => {
                             disabled={isLoading}
                         >
                             <ThemedText title={true} style={styles.buttonText}>
-                                {isLoading ? 'Signing In...' : t('auth.signInBtn')}
+                                {isLoading ?  t('auth.signingin') : t('auth.signInBtn')}
                             </ThemedText>
                         </ThemedButton>
                         
@@ -301,6 +302,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: RD.wp(3),
         paddingVertical: RD.hp(1),
         fontSize: RD.wp(3.7),
+        fontFamily:'MontserratZ-Regular',
+        letterSpacing:0.3,
         backgroundColor: '#fafafa',
         textAlignVertical: 'center', // Android
         includeFontPadding: false, // Android

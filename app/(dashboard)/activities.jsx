@@ -11,17 +11,19 @@ import Breathe from "../../assets/images/yoga-master.png";
 import ThemedCategory from "../../components/ThemedCategory";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import { useTranslation } from '../../constants/translations';
 
 const activities = () => {
+  const { t } = useTranslation();
   const categoryData = [
-    { id:1, image:Goal,text:"Goal Ideas" },
-    { id:2, image:Diary, text:"Reflections"},
-    { id:3, image:Breathe, text:"Breathe"},
-    { id:4, image:Sounds, text:"Soundscapes"},
-    { id:5, image:Movements, text:"Movements"},
-    { id:6, image:Timers, text:"Timers"},
-    { id:7, image:Gift, text:"Act of Kindness"},
-    { id:8, image:Kit, text:"First Aid Kit"},
+    { id:1, image:Goal,text:t('activities.goalIdeas')},
+    { id:2, image:Diary, text:t('activities.reflections')},
+    { id:3, image:Breathe, text:t('activities.breathe')},
+    { id:4, image:Sounds, text:t('activities.soundscapes')},
+    { id:5, image:Movements, text:t('activities.movements')},
+    { id:6, image:Timers, text:t('activities.timers')},
+    { id:7, image:Gift, text:t('activities.actOfKindness')},
+    { id:8, image:Kit, text:t('activities.firstAidKit')},
   ]
 
   const renderActivity = ({item}) => (
@@ -36,7 +38,7 @@ const activities = () => {
     <ThemedView style={styles.container}>
       <SafeAreaView>
         <ThemedText title={true} style={styles.title}>
-               My Activities
+               {t('activities.title')}
             </ThemedText>
       <FlatList
          data={categoryData}  // Array of data to render

@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
         fontSize: 25,
         marginTop: 20,
         textAlign: 'center',
-        fontFamily: 'Montserrat_600SemiBold'
          },
     subtitle: {
         fontSize: 16,

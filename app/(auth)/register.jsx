@@ -412,6 +412,7 @@ const styles = StyleSheet.create({
         paddingVertical: RD.hp(1),
         fontSize: RD.wp(3.7),
         backgroundColor: '#fafafa',
+        fontFamily:'MontserratZ-Regular',
         textAlignVertical: 'center', // Android
         includeFontPadding: false, // Android
         color: '#000000',
