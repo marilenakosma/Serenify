@@ -9,6 +9,7 @@ import { useAuthStore } from "../../store/authStore";
 import { removeItem } from "../../store/storage";
 import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
+import LanguagePicker from '../../components/LanguagePicker';
 
 const profile = () => {
     const { user, logout,retakeQuestionnaire } = useAuthStore();
@@ -44,13 +45,13 @@ const profile = () => {
        console.log('🚀 handleRetakeQuestionnaire called');
         // Use the authStore function which handles both storage and state
         retakeQuestionnaire();
-        //console.log('✅ retakeQuestionnaire completed');
+        //console.log('retakeQuestionnaire completed');
         //router.push('/(questionnaire)/?retake=true&timestamp=' + Date.now());
          const navigationPath = '/(questionnaire)/?retake=true';
        //  console.log('🎯 About to navigate to:', navigationPath);
     
          router.push(navigationPath);
-        // console.log('✅ Navigation called');
+        // console.log('Navigation called');
     }
 
     const handleSettingPress = (settingId, settingText) => {
@@ -91,6 +92,7 @@ const profile = () => {
 
     return (
         <ThemedView style={styles.container}>
+            <LanguagePicker/>
             <SafeAreaView>
                 <BackButton style={{backgroundColor: '#f1f5eeff'}}/>
 

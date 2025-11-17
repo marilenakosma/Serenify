@@ -10,7 +10,7 @@ import ThemedButton from '../components/ThemedButton';
 import ThemedText from "../components/ThemedText";
 import ThemedView from "../components/ThemedView";
 import { useTranslation } from '../constants/translations';
-import LanguageDebug from '../components/LanguageDebug';
+import LanguagePicker from '../components/LanguagePicker';
 
 export default function Index() {
    
@@ -24,7 +24,7 @@ export default function Index() {
 //<Image source={LogoGreen} style={styles.image}/>
   return (
     <ThemedView style={styles.container}>
-      <LanguageDebug />
+      <LanguagePicker />
        <LottieView
               source={require('../assets/animations/MapleLeaves.json')} 
               autoPlay

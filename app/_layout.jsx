@@ -3,9 +3,8 @@ import { useFonts } from 'expo-font';
 import { Stack,Slot,useSegments,useRouter } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { use, useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { useAuthStore } from "../store/authStore";
-import { useState } from "react";
 import { Platform } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
 import { I18nextProvider } from 'react-i18next';
@@ -28,14 +27,22 @@ function RootLayoutNav() {
         initAuth();
     }, []);
 
+
   useEffect(() => {
-    if (Platform.OS === 'android') {
-      // Hide navigation bar
-      NavigationBar.setVisibilityAsync('hidden');
-      // NavigationBar.setBehaviorAsync('inset-swipe'); //  gesture navigation
-      // NavigationBar.setBehaviorAsync('overlay-swipe'); // Alternative behavior
+  const setupNavigationBar = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        await NavigationBar.setVisibilityAsync('hidden');
+      }
+    } catch (error) {
+      // Safely ignore this error
+      console.log('Navigation bar setup failed:', error.message);
     }
-  }, []);
+  };
+  // NavigationBar.setBehaviorAsync('inset-swipe'); //  gesture navigation
+      // NavigationBar.setBehaviorAsync('overlay-swipe'); // Alternative behavior
+  setupNavigationBar();
+}, []);
 
   
     //Check where the user is
