@@ -32,10 +32,10 @@ const habits = () => {
   const focusArea = user?.focusArea || 'General Wellness';
 
   const defaultGoals = [
-    { id: 'complete-goal', name: 'checkmark-outline', text: 'Complete a daily goal', category: 'Foundation', points: 10, duration: '5 min' },
-    { id: 'reflection', name: 'journal-outline', text: 'Write a reflection', category: 'Foundation', points: 15, duration: '10 min' },
-    { id: 'affirmation', name: 'heart-outline', text: 'Practice positive affirmations', category: 'Foundation', points: 10, duration: '5 min' },
-    { id: 'exercise', name: 'fitness-outline', text: 'Do some form of exercise', category: 'Foundation', points: 20, duration: '20 min' },
+    { id: 'complete-goal', name: 'checkmark-outline', text: t('habits.foundation.dailyGoal'), category: t('categories.foundation'), points: 10, duration: t('durations.5min'), },
+    { id: 'reflection', name: 'journal-outline', text: t('habits.foundation.writeReflection'), category: t('categories.foundation'), points: 15, duration: t('durations.10min'), },
+    { id: 'affirmation', name: 'heart-outline', text: t('habits.foundation.affirmations'), category: t('categories.foundation'), points: 10, duration: t('durations.5min'), },
+    { id: 'exercise', name: 'fitness-outline', text: t('habits.foundation.exercise'), category: t('categories.foundation'), points: 20, duration: t('durations.20min'), },
   ];
 
   // Combine goals properly
@@ -95,7 +95,7 @@ const getHabitStatus = (habit) => {
         <BackButton style={{ backgroundColor: '#f1f5eeff' }} />
         
         <ThemedText title={true} style={styles.title}>
-          Habits
+          {t('habits.title')}
         </ThemedText>
 
         <ScrollView 
@@ -107,10 +107,10 @@ const getHabitStatus = (habit) => {
           <View style={styles.habitsOverview}>
             <View style={styles.overviewHeader}>
               <ThemedText title={true} style={styles.overviewTitle}>
-                My Habits
+                {t('habits.myHabits')}
               </ThemedText>
               <TouchableOpacity style={styles.addButton} onPress={handleAddHabit}>
-                <ThemedText style={styles.addButtonText}>Add New</ThemedText>
+                <ThemedText style={styles.addButtonText}>{t('habits.addNewHabits')}</ThemedText>
                 <Ionicons name="add" size={20} color="#4CAF50" />
               </TouchableOpacity>
             </View>
@@ -184,7 +184,7 @@ const getHabitStatus = (habit) => {
             ) : (
               <View style={styles.emptyHabitsContainer}>
                 <ThemedText style={styles.emptyHabitsText}>
-                  No habits yet! Tap "Add New" to get started 🌱
+                 {t('habits.description')} 🌱
                 </ThemedText>
               </View>
             )}

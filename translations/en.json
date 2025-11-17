@@ -51,7 +51,25 @@
     "hello": "Hello, {{username}}!",
     "yourHabits": "Your Habits",
     "recommendedForYou": "Recommended for You"
-  },"goals": {
+  },
+  "dailySummary": {
+    "todaysProgress": "Today's Progress",
+    "dailyGoals": "Daily Goals",
+    "weeklyGoals": "Weekly Goals",
+    "complete": "{{completed}}/{{total}} complete",
+    "thisWeek": "{{completed}}/{{total}} this week"
+  },
+  "habitCard": {
+    "doneToday": "Done today!",
+    "tapToComplete": "Tap to complete",
+    "weekComplete": "Week complete! 🎉",
+    "weeklyProgress": "{{completed}}/{{required}} this week",
+    "weeklyProgressDoneToday": "{{completed}}/{{required}} this week - Done today!",
+    "weeklyProgressTapToComplete": "{{completed}}/{{required}} this week - Tap to complete",
+    "days": "days",
+    "weeks": "weeks"
+  },
+  "goals": {
     "breathing": "Practice deep breathing exercises",
     "meditation": "Guided meditation session",
     "journal": "Write down your worries",
@@ -69,6 +87,22 @@
     "mindful": "Practice gratitude",
     "move": "Take a walk"
   },"habits": {
+    "title":"Habits",
+    "habit":"habit",
+    "habits":"habits",
+    "selected":"selected",
+    "habitsSelected":"selected",
+    "add":"Add",
+    "myHabits":"My Habits",
+    "description":"No habits yet! Tap 'Add New' to get started",
+    "addNewHabits": "Add New",
+    "chooseHabits": "Choose habits for {{focusArea}}",
+    "foundation": {
+     "dailyGoal":"Complete a daily goal",
+     "writeReflection":"Write a reflection",
+     "affirmations":"Practice positive affirmations",
+     "exercise":"Do some form of exercise"
+    },
     "common": {
       "waterIntake": {
         "title": "Drink more water",
@@ -172,7 +206,8 @@
     "social": "Social",
     "growth": "Growth",
     "rest": "Rest",
-    "lifestyle": "Lifestyle"
+    "lifestyle": "Lifestyle",
+    "foundation":"Foundation"
   },
   "difficulties": {
     "easy": "Easy",
@@ -185,12 +220,68 @@
     "15min": "15 min",
     "20min": "20 min",
     "30min": "30 min",
+    "45min": "45 min",
     "1hour": "1 hour",
+    "1.5hours": "1,5 hour",
+    "2hours": "2 hours",
     "8hours": "8 hours",
     "allDay": "All day",
     "allNight": "All night",
     "afternoon": "Afternoon",
     "varies": "Varies"
+  },
+  "frequency": {
+    "setFrequency": "Set Habit Frequency",
+    "howOften": "How often do you want to track {{type}}?",
+    "habit": "this habit",
+    "habits": "these habits",
+    "daily": "Every day",
+    "weekdays": "Weekdays only", 
+    "weekends": "Weekends only",
+    "threeWeekly": "3 times per week",
+    "weekly": "Once a week",
+    "custom": "Custom schedule",
+    "twoWeekly": "2 times per week",
+    "fourWeekly": "4 times per week", 
+    "fiveWeekly": "5 times per week",
+    "biweekly": "Every 2 weeks",
+    "monthly": "Once a month",
+    "customSchedule": "Custom Schedule",
+    "saveHabits": "Save Habits"
+  },
+  "habitStats": {
+    "habitDetails": "Habit Details",
+    "habitNotFound": "Habit not found",
+    "habitDataNotAvailable": "Habit data not available",
+    "habitNameRequired": "Habit name cannot be empty",
+    "deleteHabit": "Delete Habit",
+    "deleteConfirmation": "Are you sure you want to delete \"{{habitName}}\"? This action cannot be undone.",
+    "pointsPerCompletion": "{{points}} points per completion",
+    "removeFromHabits": "Remove from habits",
+    "currentStreak": "Current Streak",
+    "bestStreak": "Best Streak",
+    "thirtyDayRate": "30-Day Rate",
+    "totalDone": "Total Done",
+    "calendarHint": "Tap any day in {{month}} to toggle completion",
+    "editHabit": "Edit Habit",
+    "habitName": "Habit Name",
+    "enterHabitName": "Enter habit name",
+    "frequency": "Frequency",
+    "duration": "Duration",
+    "categoryAndPoints": "Category & Points",
+    "category": "Category",
+    "points": "Points",
+    "perCompletion": "per completion",
+    "categoryPointsCannotChange": "Category and points cannot be changed"
+  },
+  "calendar": {
+    "monday": "Mon",
+    "tuesday": "Tue",
+    "wednesday": "Wed",
+    "thursday": "Thu",
+    "friday": "Fri",
+    "saturday": "Sat",
+    "sunday": "Sun"
   },
   "activities": {
     "title":"My Activities",
@@ -202,6 +293,19 @@
     "timers":"Timers",
     "actOfKindness":"Act of Kindness",
     "firstAidKit":"First Aid Kit"
+  },
+  "statistics":{
+    "growthArea":"Growth Area",
+    "mentalHealth":"Mental Health",
+    "stressManagement":"Stress Management",
+    "selfAwareness":"Self-awareness",
+    "personalDevelopment":"Personal Development",
+    "relationships":"Relationships",
+    "growthMindset":"Growth Mindset",
+    "moodTracker":"Mood Tracker",
+    "weekly":"Weekly",
+    "monthly":"Monthly",
+    "yearly":"Yearly"
   },
   "profile": {
     "myBadges": "My badges",
@@ -275,7 +379,11 @@
   },
   "common": {
     "of": "of",
-    "next": "Next"
+    "next": "Next",
+    "error": "Error",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save"
   }
 
 }

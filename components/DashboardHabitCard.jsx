@@ -1,136 +1,140 @@
-import { useState,useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet,Animated} from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import HabitProgressRing from './HabitProgressRing';
 import { useAuthStore } from '../store/authStore';
+import { useTranslation } from '../constants/translations'; // ✅ Add this import
 import { 
   isHabitCompleteForPeriod, 
   getCompletionsThisWeek, 
   getRequiredCompletionsPerWeek 
 } from '../constants/habitFrequency';
 
-const DashboardHabitCard = ({ habit, onPress,onToggleCompletion }) => {
+const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
   const { habitCompletions } = useAuthStore();
+  const { t } = useTranslation(); // ✅ Add this
   const thisHabitCompletions = habitCompletions[habit.id] || {};
   
   const today = new Date().toISOString().split('T')[0];
   const todayCompletion = thisHabitCompletions[today];
-  //const isComplete = Boolean(habitCompletions[today]); 
-  let isComplete,progress,progressText;
+  let isComplete, progress, progressText;
 
   const weeklyCompletions = getCompletionsThisWeek(thisHabitCompletions);
   const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
 
-  if(habit.type === "incremental") {
+  if (habit.type === "incremental") {
     const todayAmount = thisHabitCompletions[today] || 0;
     const target = habit.target || 2000;
 
-    progress = Math.min(todayAmount / target,1);
+    progress = Math.min(todayAmount / target, 1);
     isComplete = todayAmount >= target;
     progressText = `${todayAmount}/${target} ${habit.unit}`;
 
-    if(isComplete) {
+    if (isComplete) {
       progressText += ' ✅';
     }
   } else if (habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' || habit.frequency === 'Weekends only') {
     isComplete = Boolean(thisHabitCompletions[today]);
     progress = isComplete ? 1 : 0;
-    progressText = isComplete ? 'Done today!' : 'Tap to complete';
+    progressText = isComplete ? t('habitCard.doneToday') : t('habitCard.tapToComplete');
   } else {
-  // Weekly habits logic (3x/week, etc.)
-  const todayCompleted = Boolean(thisHabitCompletions[today]);
-  const canCompleteMore = weeklyCompletions < requiredPerWeek;
-  
-  // For animation purposes, use today's completion
-  isComplete = todayCompleted;
-
-  //console.log(`${habit.id}: todayCompletion=${todayCompletion}, isComplete=${isComplete}`);
-
-  
-  // For progress calculation, use weekly progress
-  progress = requiredPerWeek > 0 ? Math.min(weeklyCompletions / requiredPerWeek, 1) : 0;
-  
-  if (weeklyCompletions >= requiredPerWeek) {
-    progressText = 'Week complete! 🎉';
-  } else if (todayCompleted) {
-    progressText = `${weeklyCompletions}/${requiredPerWeek} this week - Done today!`;
-  } else if (canCompleteMore) {
-    progressText = `${weeklyCompletions}/${requiredPerWeek} this week - Tap to complete`;
-  } else {
-    progressText = `${weeklyCompletions}/${requiredPerWeek} this week`;
+    // Weekly habits logic (3x/week, etc.)
+    const todayCompleted = Boolean(thisHabitCompletions[today]);
+    const canCompleteMore = weeklyCompletions < requiredPerWeek;
+    
+    // For animation purposes, use today's completion
+    isComplete = todayCompleted;
+    
+    // For progress calculation, use weekly progress
+    progress = requiredPerWeek > 0 ? Math.min(weeklyCompletions / requiredPerWeek, 1) : 0;
+    
+    if (weeklyCompletions >= requiredPerWeek) {
+      progressText = t('habitCard.weekComplete');
+    } else if (todayCompleted) {
+      progressText = t('habitCard.weeklyProgressDoneToday', {
+        completed: weeklyCompletions,
+        required: requiredPerWeek
+      });
+    } else if (canCompleteMore) {
+      progressText = t('habitCard.weeklyProgressTapToComplete', {
+        completed: weeklyCompletions,
+        required: requiredPerWeek
+      });
+    } else {
+      progressText = t('habitCard.weeklyProgress', {
+        completed: weeklyCompletions,
+        required: requiredPerWeek
+      });
+    }
   }
-}
-  
   
   const [scaleAnim] = useState(new Animated.Value(1));
   const [checkmarkAnim] = useState(() => new Animated.Value(0));
   const [cardColorAnim] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
-  
-  const targetValue = isComplete ? 1 : 0;
-  
-  // Force the animated values to the target value
-  const cardAnimation = Animated.timing(cardColorAnim, {
-    toValue: targetValue,
-    duration: 300,
-    useNativeDriver: false,
-  });
+    const targetValue = isComplete ? 1 : 0;
+    
+    // Force the animated values to the target value
+    const cardAnimation = Animated.timing(cardColorAnim, {
+      toValue: targetValue,
+      duration: 300,
+      useNativeDriver: false,
+    });
 
-  const checkmarkAnimation = isComplete 
-    ? Animated.spring(checkmarkAnim, {
-        toValue: 1,
-        tension: 100,
-        friction: 8,
-        useNativeDriver: true,
-      })
-    : Animated.timing(checkmarkAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      });
+    const checkmarkAnimation = isComplete 
+      ? Animated.spring(checkmarkAnim, {
+          toValue: 1,
+          tension: 100,
+          friction: 8,
+          useNativeDriver: true,
+        })
+      : Animated.timing(checkmarkAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        });
 
-  cardAnimation.start();
-  checkmarkAnimation.start();
+    cardAnimation.start();
+    checkmarkAnimation.start();
 
-  // Cleanup function
-  return () => {
-    cardAnimation.stop();
-    checkmarkAnimation.stop();
-  };
-}, [isComplete,todayCompletion]);
+    // Cleanup function
+    return () => {
+      cardAnimation.stop();
+      checkmarkAnimation.stop();
+    };
+  }, [isComplete, todayCompletion]);
 
-   const handleQuickComplete = (e) => {
-  e.stopPropagation();
+  const handleQuickComplete = (e) => {
+    e.stopPropagation();
 
-  if (habit.type === 'incremental') {
+    if (habit.type === 'incremental') {
       onPress(); // Navigate to habit detail screen for water input
       return;
     }
 
-   const todayCompleted = Boolean(thisHabitCompletions[today]);
-  
-  if (!isComplete) {
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 1.3,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      })
-    ]).start();
-  }
-  
-  onToggleCompletion(habit.id);
-  
-};
+    const todayCompleted = Boolean(thisHabitCompletions[today]);
+    
+    if (!isComplete) {
+      Animated.sequence([
+        Animated.timing(scaleAnim, {
+          toValue: 1.3,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        })
+      ]).start();
+    }
+    
+    onToggleCompletion(habit.id);
+  };
 
- const cardBackgroundColor = cardColorAnim.interpolate({
+  const cardBackgroundColor = cardColorAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['#FFFFFF', '#E8F5E8'] // White to light green
   });
@@ -140,44 +144,47 @@ const DashboardHabitCard = ({ habit, onPress,onToggleCompletion }) => {
     outputRange: ['transparent', '#4CAF50'] // Transparent to green border
   });
 
-  //console.log(`Habit ${habit.id}: 
-   // isComplete = ${isComplete}, 
-  //  cardColorAnim = ${cardColorAnim._value}`);
+  // ✅ UPDATE: Get streak label based on frequency
+  const getStreakLabel = (frequency) => {
+    if (frequency === 'Everyday' || frequency === 'Weekdays only' || frequency === 'Weekends only') {
+      return t('habitCard.days');
+    } else {
+      return t('habitCard.weeks');
+    }
+  };
 
   return (
     <Animated.View style={[
-    styles.habitCard,
-    { 
-      backgroundColor: cardBackgroundColor,
-      borderColor: cardBorderColor,
-      borderWidth: 2,
-    }
-  ]}>
-    <TouchableOpacity 
-      onPress={onPress}
-      activeOpacity={0.7}
-      style={{ flex: 1 }}
-    >
-      <View style={styles.habitHeader}>
-        <Ionicons 
-          name={habit.name} 
-          size={24} 
-          color={isComplete ? "#4CAF50" : "#666"} 
-        />
-        <TouchableOpacity onPress={handleQuickComplete} activeOpacity={0.8}>
-          <View style={{ position: 'relative' }}>
-            <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-              <HabitProgressRing 
-                progress={progress}
-                size={45}
-                strokeWidth={4}
-                //color={isComplete ? "#4CAF50" : "#FF9800"}
-                color={isComplete ? "#4CAF50" : "#2196F3"}
-              />
-            </Animated.View>
-            
-
-             {habit.type === 'incremental' ? (
+      styles.habitCard,
+      { 
+        backgroundColor: cardBackgroundColor,
+        borderColor: cardBorderColor,
+        borderWidth: 2,
+      }
+    ]}>
+      <TouchableOpacity 
+        onPress={onPress}
+        activeOpacity={0.7}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.habitHeader}>
+          <Ionicons 
+            name={habit.name} 
+            size={24} 
+            color={isComplete ? "#4CAF50" : "#666"} 
+          />
+          <TouchableOpacity onPress={handleQuickComplete} activeOpacity={0.8}>
+            <View style={{ position: 'relative' }}>
+              <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                <HabitProgressRing 
+                  progress={progress}
+                  size={45}
+                  strokeWidth={4}
+                  color={isComplete ? "#4CAF50" : "#2196F3"}
+                />
+              </Animated.View>
+              
+              {habit.type === 'incremental' ? (
                 <View style={[styles.incrementIcon]}>
                   <Ionicons name="add" size={16} color="#2196F3" />
                 </View>
@@ -202,27 +209,26 @@ const DashboardHabitCard = ({ habit, onPress,onToggleCompletion }) => {
           </TouchableOpacity>
         </View>
       
-      <ThemedText style={styles.habitTitle} numberOfLines={2}>
-        {habit.text}
-      </ThemedText>
-    
-
-       <ThemedText style={[
+        <ThemedText style={styles.habitTitle} numberOfLines={2}>
+          {habit.text}
+        </ThemedText>
+      
+        <ThemedText style={[
           styles.habitProgress,
           { color: habit.type === 'incremental' ? '#2196F3' : '#4CAF50' }
         ]}>
           {progressText}
         </ThemedText>
       
-      <View style={styles.streakContainer}>
-        <ThemedText style={styles.streakNumber}>
-          {habit.streak || 0}
-        </ThemedText>
-        <ThemedText style={styles.streakLabel}>
-          {habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' || habit.frequency === 'Weekends only' ? 'days' : 'weeks'}
-        </ThemedText>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.streakContainer}>
+          <ThemedText style={styles.streakNumber}>
+            {habit.streak || 0}
+          </ThemedText>
+          <ThemedText style={styles.streakLabel}>
+            {getStreakLabel(habit.frequency)}
+          </ThemedText>
+        </View>
+      </TouchableOpacity>
     </Animated.View>
   );
 };

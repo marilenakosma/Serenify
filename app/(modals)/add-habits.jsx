@@ -172,7 +172,7 @@ const AddHabits = () => {
           {selectedHabits.size > 0 && (
             <ThemedView style={styles.selectionSummary}>
               <ThemedText style={styles.summaryText}>
-                {selectedHabits.size} habit{selectedHabits.size > 1 ? 's' : ''} selected
+                {selectedHabits.size} {selectedHabits.size > 1 ? t('habits.habits') : t('habits.habit')} {selectedHabits.size > 1 ? t('habits.habitsSelected') : t('habits.selected')} 
               </ThemedText>
             </ThemedView>
           )}
@@ -209,7 +209,7 @@ const AddHabits = () => {
               style={styles.saveButton}
             >
               <ThemedText style={styles.saveButtonText}>
-                Add {selectedHabits.size} Habit{selectedHabits.size > 1 ? 's' : ''}
+                {t('habits.add')} {selectedHabits.size} {selectedHabits.size > 1 ? t('habits.habits') : t('habits.habit')}
               </ThemedText>
             </ThemedButton>
           </View>

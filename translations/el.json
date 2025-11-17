@@ -52,7 +52,25 @@
     "hello": "Γεια, {{username}}!",
     "yourHabits": "Οι συνήθειές σας",
     "recommendedForYou": "Συνίσταται για εσένα"
-  },"goals": {
+  },
+  "dailySummary": {
+    "todaysProgress": "Σημερινή Πρόοδος",
+    "dailyGoals": "Ημερήσιοι Στόχοι",
+    "weeklyGoals": "Εβδομαδιαίοι Στόχοι",
+    "complete": "{{completed}}/{{total}} ολοκληρώθηκαν",
+    "thisWeek": "{{completed}}/{{total}} αυτή την εβδομάδα"
+  },
+  "habitCard": {
+    "doneToday": "Ολοκληρώθηκε σήμερα!",
+    "tapToComplete": "Πατήστε για ολοκλήρωση",
+    "weekComplete": "Εβδομάδα ολοκληρώθηκε! 🎉",
+    "weeklyProgress": "{{completed}}/{{required}} αυτή την εβδομάδα",
+    "weeklyProgressDoneToday": "{{completed}}/{{required}} αυτή την εβδομάδα - Ολοκληρώθηκε σήμερα!",
+    "weeklyProgressTapToComplete": "{{completed}}/{{required}} αυτή την εβδομάδα - Πατήστε για ολοκλήρωση",
+    "days": "ημέρες",
+    "weeks": "εβδομάδες"
+  },
+  "goals": {
     "breathing": "Κάντε ασκήσεις αναπνοής",
     "meditation": "Κάντε διαλογισμό",
     "journal": "Καταγράψτε τις ανησυχίες σας",
@@ -70,11 +88,25 @@
     "mindful": "Δείξτε ευγνωμοσύνη",
     "move": "Κάντε μια βόλτα"
   },"habits": {
-    "addNewHabits": "Προσθέστε Νέες Συνήθειες",
+    "title":"Συνήθειες",
+    "habit":"συνήθεια",
+    "habits":"συνήθειες",
+    "selected":"επιλέχθηκε",
+    "habitsSelected":"επιλέχθηκαν",
+    "add":"Προσθέστε",
+    "myHabits":"Οι Συνήθειες μου",
+    "description":"Δεν έχετε προσθέσει κάποια συνήθεια! Πατήστε 'Προσθήκη' για να ξεκινήσετε",
+    "addNewHabits": "Προσθήκη",
     "chooseHabits": "Επιλέξτε συνήθειες για {{focusArea}}",
+    "foundation": {
+     "dailyGoal":"Πραγματοποιήστε έναν καθημερινό στόχο",
+     "writeReflection":"Γράψτε έναν προβληματισμό",
+     "affirmations":"Σκεφτείτε κατι θετικό",
+     "exercise":"Κάντε γυμναστική"
+    },
     "common": {
       "waterIntake": {
-        "title": "Πίετε περισσότερο",
+        "title": "Πιείτε περισσότερο νερό",
         "description": "Μείνετε ενυδατωμένοι όλη τη μέρα"
       },
       "noScreenBeforeBed": {
@@ -161,7 +193,27 @@
         "description": "Συνδεθείτε με τη φύση για μείωση των επιπέδων στρες"
       }
     }
-  },"categories": {
+  },
+  "frequency": {
+    "setFrequency": "Ορισμός Συχνότητας Συνήθειας",
+    "howOften": "Πόσο συχνά θέλετε να παρακολουθείτε {{type}};",
+    "habit": "αυτή τη συνήθεια",
+    "habits": "αυτές τις συνήθειες",
+    "daily": "Κάθε μέρα",
+    "weekdays": "Μόνο εργάσιμες",
+    "weekends": "Μόνο Σαββατοκύριακα", 
+    "threeWeekly": "3 φορές την εβδομάδα",
+    "weekly": "Μία φορά την εβδομάδα",
+    "custom": "Προσαρμοσμένο πρόγραμμα",
+    "twoWeekly": "2 φορές την εβδομάδα",
+    "fourWeekly": "4 φορές την εβδομάδα",
+    "fiveWeekly": "5 φορές την εβδομάδα", 
+    "biweekly": "Κάθε 2 εβδομάδες",
+    "monthly": "Μία φορά το μήνα",
+    "customSchedule": "Προσαρμοσμένο Πρόγραμμα",
+    "saveHabits": "Αποθήκευση Συνηθειών"
+  },
+  "categories": {
     "health": "Υγεία",
     "fitness": "Fitness",
     "mindfulness": "Ενσυνειδητότητα",
@@ -175,7 +227,8 @@
     "social": "Κοινωνικότητα",
     "growth": "Ανάπτυξη",
     "rest": "Χαλάρωση",
-    "lifestyle": "Τρόπος ζωής"
+    "lifestyle": "Τρόπος ζωής",
+    "foundation":"Θεμελιώδεις"
   },
   "difficulties": {
     "easy": "Εύκολο",
@@ -188,12 +241,48 @@
     "15min": "15 λεπτά",
     "20min": "20 λεπτά",
     "30min": "30 λεπτά",
+    "45min": "45 λεπτά",
     "1hour": "1 ώρα",
+    "2hours": "2 ώρες",
+    "1.5hours": "1,5 ώρες",
     "8hours": "8 ώρες",
     "allDay": "Όλη μέρα",
     "allNight": "Ολη νύχτα",
     "afternoon": "Απόγευμα",
     "varies": "Κυμαίνεται"
+  },"habitStats": {
+    "habitDetails": "Λεπτομέρειες Συνήθειας",
+    "habitNotFound": "Η συνήθεια δεν βρέθηκε",
+    "habitDataNotAvailable": "Τα δεδομένα της συνήθειας δεν είναι διαθέσιμα",
+    "habitNameRequired": "Το όνομα της συνήθειας δεν μπορεί να είναι κενό",
+    "deleteHabit": "Διαγραφή Συνήθειας",
+    "deleteConfirmation": "Είστε σίγουροι ότι θέλετε να διαγράψετε την \"{{habitName}}\"; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+    "pointsPerCompletion": "{{points}} πόντοι ανά ολοκλήρωση",
+    "removeFromHabits": "Αφαίρεση από τις συνήθειες",
+    "currentStreak": "Τρέχουσα Σειρά",
+    "bestStreak": "Καλύτερη Σειρά",
+    "thirtyDayRate": "Ποσοστό 30 Ημερών",
+    "totalDone": "Συνολικές Ολοκληρώσεις",
+    "calendarHint": "Πατήστε οποιαδήποτε μέρα στον {{month}} για εναλλαγή ολοκλήρωσης",
+    "editHabit": "Επεξεργασία Συνήθειας",
+    "habitName": "Όνομα Συνήθειας",
+    "enterHabitName": "Εισάγετε όνομα συνήθειας",
+    "frequency": "Συχνότητα",
+    "duration": "Διάρκεια",
+    "categoryAndPoints": "Κατηγορία και Πόντοι",
+    "category": "Κατηγορία",
+    "points": "Πόντοι",
+    "perCompletion": "ανά ολοκλήρωση",
+    "categoryPointsCannotChange": "Η κατηγορία και οι πόντοι δεν μπορούν να αλλάξουν"
+  },
+  "calendar": {
+    "monday": "Δευ",
+    "tuesday": "Τρι",
+    "wednesday": "Τετ",
+    "thursday": "Πεμ",
+    "friday": "Παρ",
+    "saturday": "Σαβ",
+    "sunday": "Κυρ"
   },
   "activities": {
     "title":"Οι Δραστηριότητες μου",
@@ -205,6 +294,19 @@
     "timers":"Χρονόμετρο",
     "actOfKindness":"Πράξη Καλοσύνης",
     "firstAidKit":"Κουτί Πρώτων Βοηθειών"
+  },
+  "statistics":{
+    "growthArea":"Τομείς Ανάπτυξης",
+    "mentalHealth":"Ψυχική υγεία",
+    "stressManagement":"Διαχείριση Άγχους",
+    "selfAwareness":"Αυτογνωσία",
+    "personalDevelopment":"Προσωπική Ανάπτυξη",
+    "relationships":"Σχέσεις",
+    "growthMindset":"Αναπτυξιακή Νοοτροπία",
+    "moodTracker":"Παρακολούθηση Διάθεσης",
+    "weekly":"Εβδομαδιαία",
+    "monthly":"Μηνιαία",
+    "yearly":"Ετήσια"
   },
   "profile": {
     "myBadges": "Οι κονκάρδες μου",
@@ -276,9 +378,16 @@
       }
     ]
   },
-  "common": {
+ "common": {
+    "error": "Σφάλμα",
+    "cancel": "Ακύρωση",
+    "delete": "Διαγραφή",
+    "save": "Αποθήκευση",
     "of": "από",
-    "next": "Επόμενο"
+    "next": "Επόμενο",
+    "loading": "Φορτώνει...",
+    "success": "Επιτυχία",
+    "done": "Ολοκληρώθηκε"
   }
 
 }

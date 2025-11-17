@@ -1,18 +1,20 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
 import { Colors } from '../constants/Colors';
+import { useTranslation } from '../constants/translations';
 
 const screenWidth = Dimensions.get('window').width;
 
 const RadarChart = () => {
+  const { t } = useTranslation();
   const data = [0.8, 0.6, 0.9, 0.7, 0.5, 0.8]; // Values 0-1
   const labels = [
-    'Mental Health',
-    'Growth Mindset', 
-    'Relationships',
-    'Personal Development',
-    'Self-awareness',
-    'Stress Management'
+    t('statistics.mentalHealth'),
+    t('statistics.growthMindset'),
+    t('statistics.relationships'),
+    t('statistics.personalDevelopment'),
+    t('statistics.selfAwareness'),
+    t('statistics.stressManagement'),
   ];
 
   const size = 340;

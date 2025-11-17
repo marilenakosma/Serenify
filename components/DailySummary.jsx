@@ -1,6 +1,8 @@
 import { View, StyleSheet } from 'react-native';
 import ThemedText from './ThemedText';
 import HabitProgressRing from './HabitProgressRing';
+import { useTranslation } from '../constants/translations';
+
 import { 
   isHabitCompleteForPeriod,
   getCompletionsThisWeek,
@@ -8,6 +10,8 @@ import {
 } from '../constants/habitFrequency';
 
 const DailySummary = ({ habits, habitCompletions }) => {
+  const { t } = useTranslation(); 
+
   // Calculate today's completion stats
   const todayStats = habits.reduce((acc, habit) => {
     const completions = habitCompletions[habit.id] || {};
@@ -38,7 +42,9 @@ const DailySummary = ({ habits, habitCompletions }) => {
 
   return (
     <View style={styles.container}>
-      <ThemedText title={true} style={styles.title}>Today's Progress</ThemedText>
+      <ThemedText title={true} style={styles.title}>
+        {t('dailySummary.todaysProgress')}
+      </ThemedText>
       
       <View style={styles.progressContainer}>
         <View style={styles.progressItem}>
@@ -48,9 +54,14 @@ const DailySummary = ({ habits, habitCompletions }) => {
             strokeWidth={8}
             color="#4CAF50"
           />
-          <ThemedText title={true} style={styles.progressLabel}>Daily Goals</ThemedText>
+          <ThemedText title={true} style={styles.progressLabel}>
+            {t('dailySummary.dailyGoals')}
+          </ThemedText>
           <ThemedText style={styles.progressSubtext}>
-            {todayStats.completed}/{todayStats.total} complete
+            {t('dailySummary.complete', { 
+              completed: todayStats.completed, 
+              total: todayStats.total 
+            })}
           </ThemedText>
         </View>
         
@@ -62,9 +73,14 @@ const DailySummary = ({ habits, habitCompletions }) => {
               strokeWidth={8}
               color="#FF9800"
             />
-            <ThemedText title={true} style={styles.progressLabel}>Weekly Goals</ThemedText>
+            <ThemedText title={true} style={styles.progressLabel}>
+              {t('dailySummary.weeklyGoals')}
+            </ThemedText>
             <ThemedText style={styles.progressSubtext}>
-              {weeklyStats.completed}/{weeklyStats.total} this week
+              {t('dailySummary.thisWeek', { 
+                completed: weeklyStats.completed, 
+                total: weeklyStats.total 
+              })}
             </ThemedText>
           </View>
         )}

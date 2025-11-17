@@ -4,8 +4,10 @@ import MoodTracker from "../../components/MoodTracker";
 import GrowthChart from "../../components/RadarChart";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
+import { useTranslation } from '../../constants/translations';
 
 const statistics = () => {
+  const { t } = useTranslation();
   return (
         <ThemedView style={styles.container}>
           <SafeAreaView style={styles.safeArea}>
@@ -13,7 +15,7 @@ const statistics = () => {
 
             <View style={styles.header}>
             <ThemedText title={true} style={styles.sectionTitle}>
-               Growth Area
+               {t('statistics.growthArea')}
             </ThemedText>
             <GrowthChart/>
             </View>
@@ -21,7 +23,7 @@ const statistics = () => {
 
             <View style={styles.section}>
             <ThemedText title={true} style={styles.sectionTitle}>
-               Mood Tracker
+               {t('statistics.moodTracker')}
             </ThemedText>
             <MoodTracker/>
             </View>

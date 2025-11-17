@@ -6,11 +6,13 @@ import Sad from "../assets/images/sad.png";
 import Happy from "../assets/images/shy.png";
 import VeryHappy from "../assets/images/smile.png";
 import { Colors } from '../constants/Colors';
+import { useTranslation } from '../constants/translations';
 import ThemedText from './ThemedText';
 
 const screenWidth = Dimensions.get('window').width;
 
 const MoodTracker = () => {
+  const { t } = useTranslation();
   // Sample mood data (1=very sad, 5=very happy)
   const moodData = {
     labels: ['16', '17', '18', '19', '20', '21', '22'],
@@ -38,13 +40,13 @@ const MoodTracker = () => {
       {/* Time period buttons */}
       <View style={styles.periodButtons}>
         <TouchableOpacity style={styles.periodButton}>
-          <ThemedText style={styles.buttonText}>Weekly</ThemedText>
+          <ThemedText style={styles.buttonText}> {t('statistics.weekly')}</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.periodButton}>
-          <ThemedText style={styles.buttonText}>Monthly</ThemedText>
+          <ThemedText style={styles.buttonText}>{t('statistics.monthly')}</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.periodButton}>
-          <ThemedText style={styles.buttonText}>Yearly</ThemedText>
+          <ThemedText style={styles.buttonText}>{t('statistics.yearly')}</ThemedText>
         </TouchableOpacity>
       </View>
 

@@ -9,13 +9,15 @@ import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import Spacer from "../../components/Spacer";
 import { useAuthStore } from "../../store/authStore";
-import { availableHabits } from "../../constants/availableHabits";
+import { getAvailableHabits } from "../../constants/availableHabits";
 import { FREQUENCY_TYPES } from '../../constants/habitFrequency';
 import BackButton from "../../components/BackButton";
+import { useTranslation } from '../../constants/translations';
 
 const HabitFrequency = () => {
   const { addHabits } = useAuthStore();
   const params = useLocalSearchParams();
+  const { t } = useTranslation();
   
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [currentHabitForCustom, setCurrentHabitForCustom] = useState(null);
@@ -32,15 +34,16 @@ const HabitFrequency = () => {
 
   // Get full habit objects
   const selectedHabits = useMemo(() => {
+    const availableHabitsData = getAvailableHabits(t);
     const allHabits = [
-      ...availableHabits.common,
-      ...Object.values(availableHabits).flat()
+      ...availableHabitsData.common,
+      ...Object.values(availableHabitsData).flat()
     ];
     
     return selectedHabitIds.map(id => 
       allHabits.find(habit => habit.id === id)
     ).filter(Boolean);
-  }, [selectedHabitIds]);
+  }, [selectedHabitIds,t]);
 
   // State: habitId -> frequency
   const [habitFrequencies, setHabitFrequencies] = useState(() => {
@@ -52,20 +55,21 @@ const HabitFrequency = () => {
   });
 
   const frequencyOptions = [
-    { value: FREQUENCY_TYPES.DAILY, label: 'Every day', icon: 'calendar-outline' },
-    { value: FREQUENCY_TYPES.WEEKDAYS, label: 'Weekdays only', icon: 'business-outline' },
-    { value: FREQUENCY_TYPES.WEEKENDS, label: 'Weekends only', icon: 'home-outline' },
-    { value: FREQUENCY_TYPES.THREE_WEEKLY, label: '3 times per week', icon: 'fitness-outline' },
-    { value: FREQUENCY_TYPES.WEEKLY, label: 'Once a week', icon: 'calendar-outline' },
-    { value: 'Custom', label: 'Custom schedule', icon: 'settings-outline' }
+    { value: FREQUENCY_TYPES.DAILY, label: t('frequency.daily'), icon: 'calendar-outline' },
+    { value: FREQUENCY_TYPES.WEEKDAYS, label: t('frequency.weekdays'), icon: 'business-outline' },
+    { value: FREQUENCY_TYPES.WEEKENDS, label: t('frequency.weekends'), icon: 'home-outline' },
+    { value: FREQUENCY_TYPES.THREE_WEEKLY, label: t('frequency.threeWeekly'), icon: 'fitness-outline' },
+    { value: FREQUENCY_TYPES.WEEKLY, label: t('frequency.weekly'), icon: 'calendar-outline' },
+    { value: 'Custom', label: t('frequency.custom'), icon: 'settings-outline' }
   ];
 
+
   const customOptions = [
-    { value: FREQUENCY_TYPES.TWO_WEEKLY, label: '2 times per week' },
-    { value: FREQUENCY_TYPES.FOUR_WEEKLY, label: '4 times per week' },
-    { value: FREQUENCY_TYPES.FIVE_WEEKLY, label: '5 times per week' },
-    { value: FREQUENCY_TYPES.BIWEEKLY, label: 'Every 2 weeks' },
-    { value: FREQUENCY_TYPES.MONTHLY, label: 'Once a month' },
+    { value: FREQUENCY_TYPES.TWO_WEEKLY, label: t('frequency.twoWeekly') },
+    { value: FREQUENCY_TYPES.FOUR_WEEKLY, label: t('frequency.fourWeekly') },
+    { value: FREQUENCY_TYPES.FIVE_WEEKLY, label: t('frequency.fiveWeekly') },
+    { value: FREQUENCY_TYPES.BIWEEKLY, label: t('frequency.biweekly') },
+    { value: FREQUENCY_TYPES.MONTHLY, label: t('frequency.monthly') },
   ];
 
   const updateFrequency = (habitId, frequency) => {
@@ -122,7 +126,7 @@ const HabitFrequency = () => {
           <BackButton style={styles.backButton}/>
           
           <ThemedText title style={styles.title}>
-            Set Habit Frequency
+            {t('frequency.setFrequency')}
           </ThemedText>
           
           <View style={styles.placeholder} />
@@ -131,7 +135,10 @@ const HabitFrequency = () => {
         {/* Content container */}
         <View style={styles.contentContainer}>
           <ThemedText style={styles.subtitle}>
-            How often do you want to track {selectedHabits.length === 1 ? 'this habit' : 'these habits'}?
+            {t('frequency.howOften', { 
+              count: selectedHabits.length,
+              type: selectedHabits.length === 1 ? t('frequency.habit') : t('frequency.habits')
+            })}
           </ThemedText>
 
           <ScrollView 
@@ -208,7 +215,7 @@ const HabitFrequency = () => {
         <View style={styles.bottomButtonContainer}>
           <ThemedButton onPress={handleSave} style={styles.saveButton}>
             <ThemedText style={styles.saveButtonText}>
-             Save Habit 
+             {t('frequency.saveHabits')}
             </ThemedText>
           </ThemedButton>
         </View>
@@ -224,7 +231,7 @@ const HabitFrequency = () => {
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
                 <ThemedText title style={styles.modalTitle}>
-                  Custom Schedule
+                  {t('frequency.customSchedule')}
                 </ThemedText>
                 <TouchableOpacity 
                   onPress={() => setShowCustomModal(false)}

@@ -10,11 +10,13 @@ import ThemedView from '../../components/ThemedView';
 import Spacer from '../../components/Spacer';
 import WaterIntakeInput from '../../components/WaterIntakeInput';
 import { useAuthStore } from '../../store/authStore';
+import { useTranslation } from '../../constants/translations';
 
 const HabitStats = () => {
   const { userHabits, habitCompletions, removeHabit, toggleHabitCompletion,updateHabit } = useAuthStore();
   const params = useLocalSearchParams();
   const habitId = params.habitId;
+  const { t } = useTranslation();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -36,7 +38,7 @@ const HabitStats = () => {
 
     setEditedName(habit.text || '');
     setEditedFrequency(habit.frequency || 'Everyday');
-    setEditedDuration(habit.duration || '5 min'); // ✅ Add fallback
+    setEditedDuration(habit.duration || '5 min'); // Add fallback
     setShowEditModal(true);
   };
 
@@ -64,29 +66,29 @@ const HabitStats = () => {
   };
 
   const frequencyOptions = [
-    'Everyday',
-    'Weekdays only',
-    'Weekends only',
-    '3 times per week',
-    'Once a week',
-    '2 times per week',
-    '4 times per week',
-    '5 times per week',
-    'Every 2 weeks',
-    'Once a month'
+    t('frequency.daily'),
+    t('frequency.weekdays'),
+    t('frequency.weekends'),
+    t('frequency.threeWeekly'),
+    t('frequency.weekly'),
+    t('frequency.twoWeekly'),
+    t('frequency.fourWeekly'),
+    t('frequency.fiveWeekly'),
+    t('frequency.biweekly'),
+    t('frequency.monthly')
   ];
 
   const durationOptions = [
-    '5 min',
-    '10 min',
-    '15 min',
-    '20 min',
-    '30 min',
-    '45 min',
-    '1 hour',
-    '1.5 hours',
-    '2 hours',
-    'All day'
+    t('durations.5min'),
+    t('durations.10min'),
+    t('durations.15min'),
+    t('durations.20min'),
+    t('durations.30min'),
+    '45 min', //
+    t('durations.1hour'),
+    '1.5 hours', // 
+    '2 hours', // Add to translations if needed
+    t('durations.allDay')
   ];
 
   // Calculate stats
@@ -261,25 +263,20 @@ const getToday = () => {
     
 
   const handleDelete = () => {
-  console.log('Attempting to delete habit:', habit);
-  console.log('Habit ID:', habitId);
-  console.log('All user habits:', userHabits);
-
-  if (!habit) {
-    Alert.alert('Error', 'Habit not found');
-    return;
-  }
+    if (!habit) {
+      Alert.alert(t('common.error'), t('habitStats.habitNotFound'));
+      return;
+    }
 
     Alert.alert(
-      'Delete Habit',
-      `Are you sure you want to delete "${habit?.text}"? This action cannot be undone.`,
+      t('habitStats.deleteHabit'),
+      t('habitStats.deleteConfirmation', { habitName: habit?.text }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Delete',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: () => {
-            console.log('Calling removeHabit with ID:', habitId);
             removeHabit(habitId);
             router.back();
           }
@@ -310,7 +307,7 @@ const getToday = () => {
            <BackButton style={{ backgroundColor: '#f1f5eeff' }} />
           
           <ThemedText title style={styles.title}>
-            Habit Details
+            {t('habitStats.habitDetails')}
           </ThemedText>
           
           <TouchableOpacity onPress={() => setShowEditModal(true)} style={styles.editButton}>
@@ -332,14 +329,16 @@ const getToday = () => {
                 {habit.category} • {habit.frequency} • {habit.duration}
               </ThemedText>
               <ThemedText style={styles.habitPoints}>
-                {habit.points} points per completion
+                {t('habitStats.pointsPerCompletion', { points: habit.points })}
               </ThemedText>
               <TouchableOpacity
               onPress={handleDelete}
               style={styles.removeButton}
               activeOpacity={0.7}
             >
-              <ThemedText style={styles.removeButtonText}>Remove from habits</ThemedText>
+              <ThemedText style={styles.removeButtonText}>
+                {t('habitStats.removeFromHabits')}
+              </ThemedText>
             </TouchableOpacity>
             </View>
           </View>
@@ -350,7 +349,9 @@ const getToday = () => {
               <ThemedText title style={styles.statNumber}>
                 {stats.currentStreak}
               </ThemedText>
-              <ThemedText style={styles.statLabel}>Current Streak</ThemedText>
+              <ThemedText style={styles.statLabel}>
+                {t('habitStats.currentStreak')}
+                </ThemedText>
               <Ionicons name="flame" size={20} color="#FF6B35" />
             </View>
             
@@ -358,7 +359,9 @@ const getToday = () => {
               <ThemedText title style={styles.statNumber}>
                 {stats.bestStreak}
               </ThemedText>
-              <ThemedText style={styles.statLabel}>Best Streak</ThemedText>
+              <ThemedText style={styles.statLabel}>
+                 {t('habitStats.currentStreak')}
+                </ThemedText>
               <Ionicons name="trophy" size={20} color="#FFD700" />
             </View>
             
@@ -366,7 +369,9 @@ const getToday = () => {
               <ThemedText title style={styles.statNumber}>
                 {stats.completionRate}%
               </ThemedText>
-              <ThemedText style={styles.statLabel}>30-Day Rate</ThemedText>
+              <ThemedText style={styles.statLabel}>
+                {t('habitStats.thirtyDayRate')}
+                </ThemedText>
               <Ionicons name="trending-up" size={20} color="#4CAF50" />
             </View>
             
@@ -374,7 +379,9 @@ const getToday = () => {
               <ThemedText title style={styles.statNumber}>
                 {stats.totalCompletions}
               </ThemedText>
-              <ThemedText style={styles.statLabel}>Total Done</ThemedText>
+              <ThemedText style={styles.statLabel}>
+                {t('habitStats.totalDone')}
+                </ThemedText>
               <Ionicons name="checkmark-circle" size={20} color="#2196F3" />
             </View>
           </View>
@@ -398,12 +405,20 @@ const getToday = () => {
           
           {/* Calendar Header (Days of Week) */}
           <View style={styles.calendarHeader}>
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun'].map(day => (
-              <View key={day} style={styles.dayHeader}>
-                <ThemedText style={styles.dayHeaderText}>{day}</ThemedText>
-              </View>
-            ))}
-          </View>
+              {[
+                t('calendar.monday'),
+                t('calendar.tuesday'),
+                t('calendar.wednesday'),
+                t('calendar.thursday'),
+                t('calendar.friday'),
+                t('calendar.saturday'),
+                t('calendar.sunday')
+              ].map(day => (
+                <View key={day} style={styles.dayHeader}>
+                  <ThemedText style={styles.dayHeaderText}>{day}</ThemedText>
+                </View>
+              ))}
+            </View>
 
           {/* Calendar Grid */}
           <View style={styles.calendarWrapper}>
@@ -457,7 +472,7 @@ const getToday = () => {
           </View>
           
           <ThemedText style={styles.calendarHint}>
-            Tap any day in {calendarData.monthName.split(' ')[0]} to toggle completion
+            {t('habitStats.calendarHint', { month: calendarData.monthName.split(' ')[0] })}
           </ThemedText>
         </View>
   
@@ -470,7 +485,9 @@ const getToday = () => {
             >
               <View style={styles.editButtonRow}>
               <Ionicons name="create-outline" size={20} color="#fff" />
-              <ThemedText style={styles.actionButtonText}>Edit Habit</ThemedText>
+              <ThemedText style={styles.actionButtonText}>
+                {t('habitStats.editHabit')}
+              </ThemedText>
               </View>
             </ThemedButton>
           </View>
@@ -496,20 +513,24 @@ const getToday = () => {
                   <Ionicons name="arrow-back" size={24} color="#666" />
                 </TouchableOpacity>
                 <ThemedText title style={styles.modalTitle}>
-                  Edit Habit
+                  {t('habitStats.editHabit')}
                 </ThemedText>
                 <TouchableOpacity 
                   onPress={handleSaveEdit}
                   style={styles.modalSaveButton}
                 >
-                  <ThemedText style={styles.saveText}>Save</ThemedText>
+                  <ThemedText style={styles.saveText}>
+                    {t('common.save')}
+                  </ThemedText>
                 </TouchableOpacity>
               </View>
 
               <ScrollView style={styles.editModalScroll}>
                 {/* Habit Name */}
                 <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>Habit Name</ThemedText>
+                  <ThemedText style={styles.editLabel}>
+                    {t('habitStats.habitName')}
+                  </ThemedText>
                   <TextInput
                     style={styles.textInput}
                     value={editedName}
@@ -522,7 +543,9 @@ const getToday = () => {
 
                 {/* Frequency */}
                 <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>Frequency</ThemedText>
+                  <ThemedText style={styles.editLabel}>
+                    {t('habitStats.frequency')}
+                  </ThemedText>
                   <View style={styles.optionsGrid}>
                     {frequencyOptions.map(option => (
                       <TouchableOpacity
@@ -547,7 +570,9 @@ const getToday = () => {
 
                 {/* Duration */}
                 <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>Duration</ThemedText>
+                  <ThemedText style={styles.editLabel}>
+                    {t('habitStats.duration')}
+                  </ThemedText>
                   <View style={styles.optionsGrid}>
                     {durationOptions.map(option => (
                       <TouchableOpacity
@@ -572,17 +597,19 @@ const getToday = () => {
 
                 {/* Habit Info */}
                 <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>Category & Points</ThemedText>
+                  <ThemedText style={styles.editLabel}>
+                    {t('habitStats.categoryAndPoints')}
+                  </ThemedText>
                   <View style={styles.infoRow}>
                     <ThemedText style={styles.infoText}>
-                      Category: {habit.category}
+                      {t('habitStats.category')}: {habit.category}
                     </ThemedText>
                     <ThemedText style={styles.infoText}>
-                      Points: {habit.points} per completion
+                      {t('habitStats.points')}: {habit.points} per completion
                     </ThemedText>
                   </View>
                   <ThemedText style={styles.infoHint}>
-                    Category and points cannot be changed
+                    {t('habitStats.categoryPointsCannotChange')}
                   </ThemedText>
                 </View>
 
