@@ -11,6 +11,7 @@ import Spacer from '../../components/Spacer';
 import WaterIntakeInput from '../../components/WaterIntakeInput';
 import { useAuthStore } from '../../store/authStore';
 import { useTranslation } from '../../constants/translations';
+import { getFrequencyDisplay } from '../../constants/habitFrequency';
 
 const HabitStats = () => {
   const { userHabits, habitCompletions, removeHabit, toggleHabitCompletion,updateHabit } = useAuthStore();
@@ -326,7 +327,7 @@ const getToday = () => {
                 {habit.text}
               </ThemedText>
               <ThemedText style={styles.habitMeta}>
-                {habit.category} • {habit.frequency} • {habit.duration}
+                {habit.category} • {getFrequencyDisplay(habit.frequency, t)} • {habit.duration}
               </ThemedText>
               <ThemedText style={styles.habitPoints}>
                 {t('habitStats.pointsPerCompletion', { points: habit.points })}
@@ -350,7 +351,7 @@ const getToday = () => {
                 {stats.currentStreak}
               </ThemedText>
               <ThemedText style={styles.statLabel}>
-                {t('habitStats.currentStreak')}
+                {t('habitStats.bestStreak')}
                 </ThemedText>
               <Ionicons name="flame" size={20} color="#FF6B35" />
             </View>

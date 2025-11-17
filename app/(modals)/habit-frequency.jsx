@@ -49,7 +49,7 @@ const HabitFrequency = () => {
   const [habitFrequencies, setHabitFrequencies] = useState(() => {
     const initial = {};
     selectedHabits.forEach(habit => {
-      initial[habit.id] = 'Everyday'; // Default
+      initial[habit.id] = FREQUENCY_TYPES.DAILY; // Default
     });
     return initial;
   });
@@ -62,7 +62,6 @@ const HabitFrequency = () => {
     { value: FREQUENCY_TYPES.WEEKLY, label: t('frequency.weekly'), icon: 'calendar-outline' },
     { value: 'Custom', label: t('frequency.custom'), icon: 'settings-outline' }
   ];
-
 
   const customOptions = [
     { value: FREQUENCY_TYPES.TWO_WEEKLY, label: t('frequency.twoWeekly') },
@@ -87,7 +86,7 @@ const HabitFrequency = () => {
   const handleCustomSelect = (customValue, customLabel) => {
     setHabitFrequencies(prev => ({
       ...prev,
-      [currentHabitForCustom]: customLabel
+      [currentHabitForCustom]: customValue
     }));
     setShowCustomModal(false);
     setCurrentHabitForCustom(null);

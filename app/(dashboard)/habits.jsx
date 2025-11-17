@@ -12,7 +12,8 @@ import { useRouter } from "expo-router";
 import { 
   isHabitCompleteForPeriod, 
   getCompletionsThisWeek, 
-  getRequiredCompletionsPerWeek 
+  getRequiredCompletionsPerWeek,
+  getFrequencyDisplay 
 } from "../../constants/habitFrequency.js";
 import { useTranslation } from '../../constants/translations';
 
@@ -159,22 +160,24 @@ const getHabitStatus = (habit) => {
                         </ThemedText>
                        <ThemedText style={styles.habitStreakLabel}>
                          {/* Show correct unit based on frequency type */}
-                         {habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' ||  habit.frequency === 'Weekends only' 
-                         ? 'Days' 
-                         : 'Weeks'}
+                        {habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' || habit.frequency === 'Weekends only' 
+                         ? t('habitCard.days')  : t('habitCard.weeks')}
                        </ThemedText>
                       </View>
                       
                       <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>
                       
                       <ThemedText style={styles.habitFrequency}>
-                        {habit.frequency}
+                        {getFrequencyDisplay(habit.frequency, t)}
                       </ThemedText>
 
                       {/*  Frequency-aware progress text */}
                       {status.requiredPerWeek > 1 && (
                         <ThemedText style={styles.weeklyProgress}>
-                          {status.weeklyCompletions}/{status.requiredPerWeek} this week
+                          {t('habitCard.weeklyProgress', {
+                            completed: status.weeklyCompletions,
+                            required: status.requiredPerWeek
+                          })} 
                         </ThemedText>
                       )}
                     </TouchableOpacity>

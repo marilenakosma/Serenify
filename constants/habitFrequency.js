@@ -1,119 +1,214 @@
 
 
-export const FREQUENCY_TYPES={
-  DAILY: 'Everyday',
-  WEEKDAYS: 'Weekdays only',
-  WEEKENDS: 'Weekends only',
-  THREE_WEEKLY: '3 times per week',
-  WEEKLY: 'Once a week',
-  TWO_WEEKLY: '2 times per week',
-  FOUR_WEEKLY: '4 times per week',
-  FIVE_WEEKLY: '5 times per week',
-  BIWEEKLY: 'Every 2 weeks',
-  MONTHLY: 'Once a month'
+export const FREQUENCY_TYPES = {
+  DAILY: 'daily',           
+  WEEKDAYS: 'weekdays',     
+  WEEKENDS: 'weekends',     
+  THREE_WEEKLY: 'threeWeekly', 
+  WEEKLY: 'weekly',         
+  TWO_WEEKLY: 'twoWeekly',  
+  FOUR_WEEKLY: 'fourWeekly', 
+  FIVE_WEEKLY: 'fiveWeekly', 
+  BIWEEKLY: 'biweekly',     
+  MONTHLY: 'monthly'        
 };
 
-export const shouldTrackHabitOnDate = (frequency,date) => {
- const dayOfWeek = date.getDay();
+export const migrateFrequencyToKey = (frequency) => {
+  // If it's already a key, return it
+  if (Object.values(FREQUENCY_TYPES).includes(frequency)) {
+    return frequency;
+  }
+  
+  // Map English display values to keys
+  const mapping = {
+    'Everyday': 'daily',
+    'Weekdays only': 'weekdays',
+    'Weekends only': 'weekends',
+    '3 times per week': 'threeWeekly',
+    'Once a week': 'weekly',
+    '2 times per week': 'twoWeekly',
+    '4 times per week': 'fourWeekly',
+    '5 times per week': 'fiveWeekly',
+    'Every 2 weeks': 'biweekly',
+    'Once a month': 'monthly'
+  };
+  
+  return mapping[frequency] || frequency;
+};
 
- switch(frequency) {
+export const getFrequencyDisplay = (frequency, t) => {
+  // First migrate if needed
+  const key = migrateFrequencyToKey(frequency);
+  const translationKey = `frequency.${key}`;
+  return t(translationKey) || frequency;
+};
+
+export const shouldTrackHabitOnDate = (frequency, date) => {
+  const dayOfWeek = date.getDay();
+
+  switch(frequency) {
     case FREQUENCY_TYPES.DAILY:
-        return true;
+    case 'daily': //  Add backward compatibility
+      return true;
 
     case FREQUENCY_TYPES.WEEKDAYS:
-        return dayOfWeek >= 1 && dayOfWeek <=5;
+    case 'weekdays':
+      return dayOfWeek >= 1 && dayOfWeek <= 5;
 
     case FREQUENCY_TYPES.WEEKENDS:
-        return dayOfWeek === 0 || dayOfWeek === 6;
+    case 'weekends':
+      return dayOfWeek === 0 || dayOfWeek === 6;
     
     case FREQUENCY_TYPES.TWO_WEEKLY:
+    case 'twoWeekly':
     case FREQUENCY_TYPES.THREE_WEEKLY:
-    case '3x/week':
+    case 'threeWeekly':
+    case '3x/week': // Keep for backward compatibility
     case FREQUENCY_TYPES.FOUR_WEEKLY:
-    case FREQUENCY_TYPES.FIVE_WEEKLY:  
-     return true;
+    case 'fourWeekly':
+    case FREQUENCY_TYPES.FIVE_WEEKLY:
+    case 'fiveWeekly':
+      return true;
 
     case FREQUENCY_TYPES.WEEKLY:
-        return true;
+    case 'weekly':
+      return true;
 
     case FREQUENCY_TYPES.BIWEEKLY:
-        return true;
+    case 'biweekly':
+      return true;
 
     case FREQUENCY_TYPES.MONTHLY:
-        return true;
+    case 'monthly':
+      return true;
+
+    //  Add backward compatibility for old English values
+    case 'Everyday':
+      return true;
+    case 'Weekdays only':
+      return dayOfWeek >= 1 && dayOfWeek <= 5;
+    case 'Weekends only':
+      return dayOfWeek === 0 || dayOfWeek === 6;
+    case '3 times per week':
+    case '2 times per week':
+    case '4 times per week':
+    case '5 times per week':
+      return true;
+    case 'Once a week':
+    case 'Every 2 weeks':
+    case 'Once a month':
+      return true;
 
     default:
-        return true;
- }
+      return true;
+  }
 };
 
 export const getRequiredCompletionsPerWeek = (frequency) => {
- switch(frequency) {
+  switch(frequency) {
     case FREQUENCY_TYPES.DAILY:
+    case 'daily':
+    case 'Everyday': //  Backward compatibility
       return 7;
     case FREQUENCY_TYPES.WEEKDAYS:
+    case 'weekdays':
+    case 'Weekdays only':
       return 5;
     case FREQUENCY_TYPES.WEEKENDS:
+    case 'weekends':
+    case 'Weekends only':
       return 2;
     case FREQUENCY_TYPES.FIVE_WEEKLY:
+    case 'fiveWeekly':
+    case '5 times per week':
       return 5;
     case FREQUENCY_TYPES.FOUR_WEEKLY:
+    case 'fourWeekly':
+    case '4 times per week':
       return 4;
     case FREQUENCY_TYPES.THREE_WEEKLY:
-      case '3x/week': 
+    case 'threeWeekly':
+    case '3x/week':
+    case '3 times per week':
       return 3;
     case FREQUENCY_TYPES.TWO_WEEKLY:
+    case 'twoWeekly':
+    case '2 times per week':
       return 2;
     case FREQUENCY_TYPES.WEEKLY:
-    case 'Once a week': 
+    case 'weekly':
+    case 'Once a week':
       return 1;
     case FREQUENCY_TYPES.BIWEEKLY:
+    case 'biweekly':
+    case 'Every 2 weeks':
       return 0.5;
     case FREQUENCY_TYPES.MONTHLY:
+    case 'monthly':
+    case 'Once a month':
       return 0.25;
     default:
       console.log('No match found for frequency:', frequency);
       return 1;
- }
+  }
 };
 
 export const isHabitCompleteForPeriod = (frequency, completions, date = new Date()) => {
-    const today = new Date(date);
+  const today = new Date(date);
 
-    switch(frequency) {
-       case FREQUENCY_TYPES.DAILY:
-       case FREQUENCY_TYPES.WEEKDAYS:
-       case FREQUENCY_TYPES.WEEKENDS:
+  switch(frequency) {
+    case FREQUENCY_TYPES.DAILY:
+    case 'daily':
+    case 'Everyday':
+    case FREQUENCY_TYPES.WEEKDAYS:
+    case 'weekdays':
+    case 'Weekdays only':
+    case FREQUENCY_TYPES.WEEKENDS:
+    case 'weekends':
+    case 'Weekends only':
+      const dateStr = today.toISOString().split('T')[0];
+      return completions[dateStr] || false;
 
-       const dateStr = today.toISOString().split('T')[0];
-       return completions[dateStr] || false;
+    case FREQUENCY_TYPES.WEEKLY:
+    case 'weekly':
+    case 'Once a week':
+      return getCompletionsThisWeek(completions, today) >= 1;
 
-       case FREQUENCY_TYPES.WEEKLY:
-         return getCompletionsThisWeek(completions,today) >= 1;
+    case FREQUENCY_TYPES.TWO_WEEKLY:
+    case 'twoWeekly':
+    case '2 times per week':
+      return getCompletionsThisWeek(completions, today) >= 2;
 
-       case FREQUENCY_TYPES.TWO_WEEKLY:
-        return getCompletionsThisWeek(completions,today) >= 2;
-
-       case FREQUENCY_TYPES.THREE_WEEKLY:
-        case '3x/week':
-        return getCompletionsThisWeek(completions,today) >= 3;
-       
-       case FREQUENCY_TYPES.FOUR_WEEKLY:
-        return getCompletionsThisWeek(completions,today) >= 4;
-
-       case FREQUENCY_TYPES.FIVE_WEEKLY:
-        return getCompletionsThisWeek(completions,today) >= 5;
+    case FREQUENCY_TYPES.THREE_WEEKLY:
+    case 'threeWeekly':
+    case '3x/week':
+    case '3 times per week':
+      return getCompletionsThisWeek(completions, today) >= 3;
     
-       case FREQUENCY_TYPES.BIWEEKLY:
-         return getCompletionsLastNDays(completions,today,14) >= 1;
+    case FREQUENCY_TYPES.FOUR_WEEKLY:
+    case 'fourWeekly':
+    case '4 times per week':
+      return getCompletionsThisWeek(completions, today) >= 4;
 
-       case FREQUENCY_TYPES.MONTHLY:
-        return getCompletionsThisMonth(completions,today) >= 1;
+    case FREQUENCY_TYPES.FIVE_WEEKLY:
+    case 'fiveWeekly':
+    case '5 times per week':
+      return getCompletionsThisWeek(completions, today) >= 5;
 
-       default:
-        return false;
-    }
-}
+    case FREQUENCY_TYPES.BIWEEKLY:
+    case 'biweekly':
+    case 'Every 2 weeks':
+      return getCompletionsLastNDays(completions, today, 14) >= 1;
+
+    case FREQUENCY_TYPES.MONTHLY:
+    case 'monthly':
+    case 'Once a month':
+      return getCompletionsThisMonth(completions, today) >= 1;
+
+    default:
+      return false;
+  }
+};
 
 export const getCompletionsLastNDays = (completions, date = new Date(), days = 7) => {
     const today = new Date(date);
@@ -158,9 +253,9 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
 
   console.log('Calculating streak for:', frequency, 'Required per week:', requiredPerWeek);
    
-  if (frequency === FREQUENCY_TYPES.DAILY || 
-      frequency === FREQUENCY_TYPES.WEEKDAYS || 
-      frequency === FREQUENCY_TYPES.WEEKENDS) {
+  if (frequency === FREQUENCY_TYPES.DAILY || frequency === 'daily' || frequency === 'Everyday' ||
+      frequency === FREQUENCY_TYPES.WEEKDAYS || frequency === 'weekdays' || frequency === 'Weekdays only' ||
+      frequency === FREQUENCY_TYPES.WEEKENDS || frequency === 'weekends' || frequency === 'Weekends only') {
     
     let currentDate = new Date(today);
     while (true) {
@@ -183,7 +278,7 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
     return streak;
   }
   
-  //  Fixed weekly streak calculation
+  // Rest of the function stays the same...
   let currentWeekStart = getStartOfWeek(today);
   
   while (true) {
@@ -192,31 +287,24 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
 
     console.log(`Week starting ${currentWeekStart.toDateString()}: ${weekCompletions}/${requiredPerWeek} completions, isCurrentWeek: ${isCurrentWeek}`);
     
-    //  Only count completed weeks (meeting the requirement)
     if (weekCompletions >= requiredPerWeek) {
       streak++;
       console.log(`Week completed! Streak now: ${streak}`);
     } else {
-      // For current week, don't break streak if there's partial progress
       if (isCurrentWeek && weekCompletions > 0) {
         console.log('Current week with partial progress - not breaking streak yet');
-        // Don't increment streak, but don't break it either
-        break; // Stop counting but preserve existing streak
+        break;
       } else {
-        // Past week that wasn't completed - streak broken
         console.log(`Week not completed, breaking streak at: ${streak}`);
         break;
       }
     }
     
-    // Move to previous week
     currentWeekStart.setDate(currentWeekStart.getDate() - 7);
     
-    //  Prevent infinite loop
     if (streak > 104) break;
   }
   
-  //  Move console.log and return OUTSIDE the while loop
   console.log('Weekly streak final result:', streak);
   return streak;
 };
