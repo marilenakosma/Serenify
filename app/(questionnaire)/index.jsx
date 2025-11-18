@@ -67,7 +67,7 @@ const Questionnaire = () => {
         </ThemedText>
 
        <ThemedButton onPress={handleStartQuiz} style={styles.button}>
-                    <ThemedText style={styles.buttonText}>
+                    <ThemedText title={true} style={styles.buttonText}>
                         {hasCompletedQuestionnaire && !isRetake 
                             ? t('questionnaire.continue')
                             : t('questionnaire.startQuiz')
@@ -101,6 +101,13 @@ const styles = StyleSheet.create({
     animation: {
     width: 400,
     height: 400,
+  },
+  button: {
+    width: '100%',
+    paddingVertical: 16,
+  },
+  buttonText: {
+    color: '#f2f2f2',
   },
   description: {
         textAlign: 'center',

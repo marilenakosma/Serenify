@@ -132,10 +132,10 @@ const results = () => {
 
                 {analysis && (
                     <ThemedView style={styles.analysisCard}>
-                        <ThemedText style={styles.analysisTitle}>
+                        <ThemedText title={true} style={styles.analysisTitle}>
                             {t('questionnaire.yourFocusArea')}: {analysis.focusEmoji}
                         </ThemedText>
-                        <ThemedText style={styles.analysisText}>
+                        <ThemedText title={true} style={styles.analysisText}>
                             {analysis.focusArea}
                         </ThemedText>
                         <ThemedText style={styles.analysisSubtext}>
@@ -191,7 +191,6 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#f2f2f2',
         fontSize: 16,
-        fontWeight: '600',
     },
     animation: {
     width: 400,
@@ -209,13 +208,11 @@ const styles = StyleSheet.create({
     },
     analysisTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
         color: '#2c3e50',
         marginBottom: 8,
     },
     analysisText: {
         fontSize: 20,
-        fontWeight: 'bold',
         color: '#4CAF50',
         marginBottom: 8,
     },

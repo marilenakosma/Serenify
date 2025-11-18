@@ -31,10 +31,10 @@ const Register = () => {
     // Custom Password Strength Component 
     const PasswordStrengthMeter = ({ strength, password }) => {
         const getStrengthText = () => {
-            if (strength < 0.3) return 'Very Weak';
-            if (strength < 0.6) return 'Weak';
-            if (strength < 0.9) return 'Good';
-            return 'Strong';
+         if (strength < 0.3) return t('validation.veryWeak');
+         if (strength < 0.6) return t('validation.weak');
+         if (strength < 0.9) return t('validation.good');
+         return t('validation.strong');
         };
 
         const getStrengthColor = () => {
@@ -71,9 +71,9 @@ const Register = () => {
         setName(input);
         if (touched.name) {
             if (!input.trim()) {
-                setErrors(prev => ({ ...prev, name: 'Name is required' }));
+                setErrors(prev => ({ ...prev, name: t('validation.nameRequired') }));
             } else if (input.trim().length < 2) {
-                setErrors(prev => ({ ...prev, name: 'Name must be at least 2 characters' }));
+                setErrors(prev => ({ ...prev, name: t('validation.nameTooShort') }));
             } else {
                 setErrors(prev => ({ ...prev, name: '' }));
             }
@@ -81,37 +81,40 @@ const Register = () => {
     };
 
     const validateEmail = (input) => {
-        setEmail(input);
-        if (touched.email) {
-            if (!input) {
-                setErrors(prev => ({ ...prev, email: 'Email is required' }));
-            } else if (!validator.isEmail(input)) {
-                setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
-            } else {
-                setErrors(prev => ({ ...prev, email: '' }));
-            }
-        }
-    };
+  setEmail(input);
+  if (touched.email) {
+    if (!input) {
+      setErrors(prev => ({ ...prev, email: t('validation.emailRequired') })); 
+    } else if (!validator.isEmail(input)) {
+      setErrors(prev => ({ ...prev, email: t('validation.emailInvalid') })); 
+    } else {
+      setErrors(prev => ({ ...prev, email: '' }));
+    }
+  }
+};
 
     const validatePassword = (input) => {
-        setPassword(input);
-        if (touched.password) {
-            const validationErrors = [];
-            
-            if (input.length < 8) validationErrors.push('At least 8 characters');
-            if (!/[A-Z]/.test(input)) validationErrors.push('One uppercase letter');
-            if (!/[a-z]/.test(input)) validationErrors.push('One lowercase letter');
-            if (!/\d/.test(input)) validationErrors.push('One number');
-            if (!/[!@#$%^&*(),.?":{}|<>]/.test(input)) validationErrors.push('One special character');
-            
-            if (validationErrors.length > 0) {
-                setErrors(prev => ({ ...prev, password: `Missing: ${validationErrors.join(', ')}` }));
-                setPasswordStrength(Math.max(0, (5 - validationErrors.length) / 5));
-            } else {
-                setErrors(prev => ({ ...prev, password: '' }));
-                setPasswordStrength(1);
-            }
-        }
+  setPassword(input);
+  if (touched.password) {
+    const validationErrors = [];
+    
+    if (input.length < 8) validationErrors.push(t('validation.atLeast8Chars'));
+    if (!/[A-Z]/.test(input)) validationErrors.push(t('validation.oneUppercase'));
+    if (!/[a-z]/.test(input)) validationErrors.push(t('validation.oneLowercase'));
+    if (!/\d/.test(input)) validationErrors.push(t('validation.oneNumber'));
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(input)) validationErrors.push(t('validation.oneSpecialChar'));
+    
+    if (validationErrors.length > 0) {
+      setErrors(prev => ({ 
+        ...prev, 
+        password: `${t('validation.missing')}: ${validationErrors.join(', ')}` 
+      }));
+      setPasswordStrength(Math.max(0, (5 - validationErrors.length) / 5));
+    } else {
+      setErrors(prev => ({ ...prev, password: '' }));
+      setPasswordStrength(1);
+    }
+  }
         
         // Also re-validate confirm password if it exists
         if (confirmPassword && touched.confirmPassword) {
@@ -120,16 +123,16 @@ const Register = () => {
     };
 
     const validateConfirmPassword = (input) => {
-        setConfirmPassword(input);
-        if (touched.confirmPassword) {
-            if (!input) {
-                setErrors(prev => ({ ...prev, confirmPassword: 'Please confirm your password' }));
-            } else if (input !== password) {
-                setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
-            } else {
-                setErrors(prev => ({ ...prev, confirmPassword: '' }));
-            }
+      setConfirmPassword(input);
+      if (touched.confirmPassword) {
+        if (!input) {
+          setErrors(prev => ({ ...prev, confirmPassword: t('validation.confirmPasswordRequired') })); 
+        } else if (input !== password) {
+          setErrors(prev => ({ ...prev, confirmPassword: t('validation.passwordsNotMatch') })); 
+        } else {
+          setErrors(prev => ({ ...prev, confirmPassword: '' }));
         }
+      }   
     };
 
     // Focus handlers
@@ -153,10 +156,10 @@ const Register = () => {
 
     // Form validation
     const validateForm = () => {
-        const nameError = !name.trim() ? 'Name is required' : name.trim().length < 2 ? 'Name too short' : '';
-        const emailError = !email ? 'Email is required' : !validator.isEmail(email) ? 'Invalid email' : '';
-        const passwordError = passwordStrength < 1 ? 'Password requirements not met' : '';
-        const confirmPasswordError = confirmPassword !== password ? 'Passwords do not match' : '';
+        const nameError = !name.trim() ? t('validation.nameRequired') : name.trim().length < 2 ? t('validation.nameTooShort') : '';
+        const emailError = !email ? t('validation.emailRequired') : !validator.isEmail(email) ? t('validation.emailInvalid') : '';
+        const passwordError = passwordStrength < 1 ? t('validation.passwordRequirementsNotMet') : '';
+        const confirmPasswordError = confirmPassword !== password ? t('validation.passwordsNotMatch') : '';
 
         setErrors({
             name: nameError,
@@ -180,10 +183,10 @@ const Register = () => {
 
         const result = await register(name,email,password);
         if (result.success) {
-            Alert.alert('Success', 'Account created successfully!');
-        } else {
-            Alert.alert('Error', result.error);
-        }
+         console.log('Registration successful - navigating...');
+       } else {
+         Alert.alert(t('common.error'), result.error);
+       }
     };
 
     return (
@@ -246,7 +249,7 @@ const Register = () => {
                                         <Text style={styles.errorMessage}>{errors.email}</Text>
                                     </>
                                 ) : email && validator.isEmail(email) ? (
-                                    <Text style={styles.validMark}>✓ Valid email address</Text>
+                                    <Text style={styles.validMark}>{t('validation.validEmail')}</Text> 
                                 ) : null}
                             </View>
                         )}
@@ -299,7 +302,7 @@ const Register = () => {
                                         <Text style={styles.errorMessage}>{errors.confirmPassword}</Text>
                                     </>
                                 ) : confirmPassword && confirmPassword === password ? (
-                                    <Text style={styles.validMark}>✓ Passwords match</Text>
+                                    <Text style={styles.validMark}>{t('validation.passwordsMatch')}</Text>
                                 ) : null}
                             </View>
                         )}

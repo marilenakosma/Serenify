@@ -18,6 +18,9 @@
   "typescript.inlayHints.functionLikeReturnTypes.enabled": false,
   "extensions.autoUpdate": false,
   "workbench.settings.enableNaturalLanguageSearch": false,
+  "typescript.suggest.enabled": false,
+  "typescript.validate.enable": false,
+  "javascript.validate.enable": false,
   // Disable heavy features for performance
   "editor.hover.enabled": false,
   "editor.parameterHints.enabled": false,
@@ -29,11 +32,15 @@
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.workspaceCacheLimit": 20,
   "files.watcherExclude": {
+    "**/*": true,
     "**/node_modules/**": true,
     "**/.expo/**": true,
     "**/.gradle/**": true,
     "**/android/build/**": true,
     "**/android/.gradle/**": true,
+    "**/android/**": true,
+    "**/ios/**": true,
+    "**/translations/**": true,
     "**/ios/build/**": true,
     "**/build/**": true,
     "**/dist/**": true,
@@ -71,7 +78,11 @@
     "*": false,
     "plaintext": false,
     "markdown": false,
-    "scminput": false
+    "scminput": false,
+    "javascript": false,
+    "javascriptreact": false,
+    "typescript": false,
+    "typescriptreact": false
   },
   "github.copilot.advanced": {
     "listCount": 0,

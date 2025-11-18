@@ -20,8 +20,37 @@
   "login":"Καλώς ήρθατε",
   "forgotPassword":"Ξεχάσατε τον κωδικό?",
   "dontHaveAccount":"Δεν έχετε λογαριασμό?",
-  "signup":"Εγγράφη"
+  "signup":"Εγγράφη",
+  "accountCreatedSuccess": "Ο λογαριασμός δημιουργήθηκε επιτυχώς!",
+    "loginSuccessful": "Επιτυχής σύνδεση",
+    "invalidCredentials": "Μη έγκυρο email ή κωδικός. Παρακαλώ δοκιμάστε ξανά.",
+    "loginFailed": "Αποτυχία σύνδεσης. Παρακαλώ δοκιμάστε ξανά"
 },
+"validation": {
+    "nameRequired": "Το όνομα είναι υποχρεωτικό",
+    "nameTooShort": "Το όνομα πρέπει να έχει τουλάχιστον 2 χαρακτήρες",
+    "emailRequired": "Το email είναι υποχρεωτικό",
+    "emailInvalid": "Παρακαλώ εισάγετε έγκυρη διεύθυνση email",
+    "passwordRequired": "Ο κωδικός είναι υποχρεωτικός",
+    "passwordTooShort": "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες",
+    "confirmPasswordRequired": "Παρακαλώ επιβεβαιώστε τον κωδικό σας",
+    "passwordsNotMatch": "Οι κωδικοί δεν ταιριάζουν",
+    "passwordRequirementsNotMet": "Οι απαιτήσεις κωδικού δεν πληρούνται",
+    "atLeast8Chars": "Τουλάχιστον 8 χαρακτήρες",
+    "oneUppercase": "Ένα κεφαλαίο γράμμα",
+    "oneLowercase": "Ένα μικρό γράμμα",
+    "oneNumber": "Ένας αριθμός",
+    "oneSpecialChar": "Ένας ειδικός χαρακτήρας",
+    "missing": "Λείπουν",
+    "veryWeak": "Πολύ Αδύναμος",
+    "weak": "Αδύναμος",
+    "good": "Καλός",
+    "strong": "Ισχυρός",
+    "validEmail": "✓ Έγκυρη διεύθυνση email",
+    "passwordsMatch": "✓ Οι κωδικοί ταιριάζουν",
+    "validationError": "Σφάλμα Επικύρωσης",
+    "fixErrorsBeforeSubmitting": "Παρακαλώ διορθώστε τα σφάλματα πριν την υποβολή"
+  },
 "tabs":{
   "home":"Αρχική",
   "habits":"Συνήθειες",
@@ -213,6 +242,16 @@
     "customSchedule": "Προσαρμοσμένο Πρόγραμμα",
     "saveHabits": "Αποθήκευση Συνηθειών"
   },
+  "water": {
+    "intakeToday": "Κατανάλωση Νερού Σήμερα",
+    "ml": "ml",
+    "percentOfGoal": "% του ημερήσιου στόχου",
+    "quickAdd": "Γρήγορη Προσθήκη",
+    "customAmount": "Προσαρμοσμένη Ποσότητα",
+    "enterMl": "Εισάγετε ml",
+    "add": "Προσθήκη",
+    "resetToday": "Επαναφορά Σήμερα"
+  },
   "categories": {
     "health": "Υγεία",
     "fitness": "Fitness",
@@ -316,6 +355,8 @@
     "dataAnalytics": "Δεδομένα και Ανάλυση",
     "retakeQuiz": "Επανάληψη Quiz",
     "logout": "Αποσύνδεση",
+    "logoutConfirmation": "Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;",
+    "logoutError": "Αποτυχία αποσύνδεσης",
     "language": "Γλώσσα"
   },
   "questionnaire": {
@@ -385,7 +426,7 @@
     "save": "Αποθήκευση",
     "of": "από",
     "next": "Επόμενο",
-    "loading": "Φορτώνει...",
+    "loading": "Φόρτωση...",
     "success": "Επιτυχία",
     "done": "Ολοκληρώθηκε"
   }

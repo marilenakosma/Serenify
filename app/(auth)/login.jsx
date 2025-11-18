@@ -39,9 +39,9 @@ const Login = () => {
         debounce((input) => {
             if (touched.email) {
                 if (!input) {
-                    setErrors(prev => ({ ...prev, email: 'Email is required' }));
+                    setErrors(prev => ({ ...prev, email: t('validation.emailRequired') }));
                 } else if (!validator.isEmail(input)) {
-                    setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                    setErrors(prev => ({ ...prev, email: t('validation.emailInvalid') }));
                 } else {
                     setErrors(prev => ({ ...prev, email: '' }));
                 }
@@ -54,9 +54,9 @@ const Login = () => {
         debounce((input) => {
             if (touched.password) {
                 if (!input) {
-                    setErrors(prev => ({ ...prev, password: 'Password is required' }));
+                    setErrors(prev => ({ ...prev, password: t('validation.passwordRequired') }));
                 } else if (input.length < 6) {
-                    setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));
+                    setErrors(prev => ({ ...prev, password: t('validation.passwordTooShort') }));
                 } else {
                     setErrors(prev => ({ ...prev, password: '' }));
                 }
@@ -87,8 +87,8 @@ const Login = () => {
 
     // Form validation
     const validateForm = () => {
-        const emailError = !email ? 'Email is required' : !validator.isEmail(email) ? 'Invalid email' : '';
-        const passwordError = !password ? 'Password is required' : password.length < 6 ? 'Password too short' : '';
+        const emailError = !email ? t('validation.emailRequired') : !validator.isEmail(email) ? t('validation.emailInvalid') : '';
+        const passwordError = !password ? t('validation.passwordRequired') : password.length < 6 ? t('validation.passwordTooShort') : '';
 
         setErrors({
             email: emailError,
@@ -102,19 +102,19 @@ const Login = () => {
 
     const handleLogin = async () => {
         if (!validateForm()) {
-            Alert.alert('Validation Error', 'Please fix the errors before submitting');
+            Alert.alert(t('validation.validationError'), t('validation.fixErrorsBeforeSubmitting'));
             return;
         }
         
         try {
             const result = await login(email,password);
             if(result.success) {
-              Alert.alert('Success','Login successful')
+              //Alert.alert(t('common.success'), t('auth.loginSuccessful'));
             } else {
-                Alert.alert('Error', 'Invalid email or password. Please try again.');
+              Alert.alert(t('common.error'), t('auth.invalidCredentials'));
             }
         } catch(error) {
-            Alert.alert('Error','Failed to login.Please try again')
+            Alert.alert(t('common.error'), t('auth.loginFailed'));
         }
     };
     return (
@@ -163,7 +163,7 @@ const Login = () => {
                                             <Text style={styles.errorMessage}>{errors.email}</Text>
                                         </>
                                     ) : email && validator.isEmail(email) ? (
-                                        <Text style={styles.validMark}>✓ Valid email address</Text>
+                                        <Text style={styles.validMark}>{t('validation.validEmail')}</Text>
                                     ) : null}
                                 </View>
                             )}

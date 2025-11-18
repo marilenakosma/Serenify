@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import { Stack,Slot,useSegments,useRouter } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect,useState } from 'react';
+import { useEffect,useState,useRef } from 'react';
 import { useAuthStore } from "../store/authStore";
 import { Platform } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -18,16 +18,18 @@ function RootLayoutNav() {
   const router = useRouter();
   const [isNavigationReady, setIsNavigationReady] = useState(false);
 
- useEffect(() => {
-        const initAuth = async () => {
-            await checkAuth();
-            // Small delay to ensure navigation is ready
-            setTimeout(() => setIsNavigationReady(true), 100);
-        };
-        initAuth();
-    }, []);
+  const lastNavigationRef = useRef(''); // last navigation
+  const navigationInProgressRef = useRef(false); //  Prevent rapid navigation
 
+  useEffect(() => {
+    const initAuth = async () => {
+      await checkAuth();
+      setTimeout(() => setIsNavigationReady(true), 300); // Longer delay
+    };
+    initAuth();
+  }, []);
 
+/*
   useEffect(() => {
   const setupNavigationBar = async () => {
     try {
@@ -43,51 +45,76 @@ function RootLayoutNav() {
       // NavigationBar.setBehaviorAsync('overlay-swipe'); // Alternative behavior
   setupNavigationBar();
 }, []);
-
+*/
   
     //Check where the user is
     /* // Route: /(auth)/login
     segments = ['(auth)', 'login'] */
   useEffect(() => {
-        if (!isNavigationReady) return;
+    if (!isNavigationReady || navigationInProgressRef.current) return; // Prevent navigation during transitions
 
-        const {showingResults} = useAuthStore.getState();
+    const navigationTimeout = setTimeout(() => {
+      const {showingResults} = useAuthStore.getState();
+      const currentRoute = segments.join('/');
 
-        console.log('Navigation check:', { 
-            isAuthenticated, 
-            hasCompletedQuestionnaire, 
-            showingResults,
-            currentRoute: segments,
-            navigationReady: isNavigationReady,
-            segmentDetails: segments.map((seg, index) => `[${index}]: ${seg}`) 
-        });
+      // Prevent navigation loops
+      if (currentRoute === lastNavigationRef.current) {
+        return;
+      }
 
-        const inAuthGroup = segments[0] === '(auth)';
-        const inQuestionnaireGroup = segments[0] === '(questionnaire)';
-        const onResultsPage = segments[1] === 'results'; //  Check for results page
-  
-        if (!isAuthenticated) {
-            if (!inAuthGroup && segments.length > 0) {
-                console.log('Redirecting to login');
-                router.replace('/(auth)/login');
-            }
-        } else if (!hasCompletedQuestionnaire) {
-            if (!inQuestionnaireGroup) {
-                console.log('Redirecting to questionnaire');
-                router.replace('/(questionnaire)');
-            }
-        } else {
-        // User is authenticated AND completed questionnaire
-        // If showing results, only stay on results page
-        if (showingResults && !onResultsPage) {
-            console.log('Redirecting to results');
-            router.replace('/(questionnaire)/results');
-        } else if (!showingResults && (inAuthGroup || inQuestionnaireGroup)) {
-            console.log('Redirecting to dashboard');
-            router.replace('/(dashboard)');
+      console.log('Navigation check:', { 
+        isAuthenticated, 
+        hasCompletedQuestionnaire, 
+        showingResults,
+        currentRoute: segments,
+        lastRoute: lastNavigationRef.current
+      });
+
+      const inAuthGroup = segments[0] === '(auth)';
+      const inQuestionnaireGroup = segments[0] === '(questionnaire)';
+      const inDashboardGroup = segments[0] === '(dashboard)'; 
+      const onResultsPage = segments[1] === 'results';
+
+      let shouldNavigate = false;
+      let targetRoute = '';
+
+      if (!isAuthenticated) {
+        if (!inAuthGroup && segments.length > 0) {
+          shouldNavigate = true;
+          targetRoute = '/(auth)/login';
         }
-    }
-    }, [isAuthenticated, hasCompletedQuestionnaire, segments, isNavigationReady]);
+      } else if (!hasCompletedQuestionnaire) {
+        if (!inQuestionnaireGroup) {
+          shouldNavigate = true;
+          targetRoute = '/(questionnaire)';
+        }
+      } else {
+        if (showingResults && !onResultsPage) {
+          shouldNavigate = true;
+          targetRoute = '/(questionnaire)/results';
+        } else if (!showingResults && (inAuthGroup || inQuestionnaireGroup)) {
+          shouldNavigate = true;
+          targetRoute = '/(dashboard)';
+        }
+      }
+
+      //  Only navigate if needed and not already there
+      if (shouldNavigate && targetRoute !== currentRoute) {
+        console.log(`Redirecting from ${currentRoute} to ${targetRoute}`);
+        navigationInProgressRef.current = true; // Mark navigation in progress
+        lastNavigationRef.current = targetRoute;
+        
+        router.replace(targetRoute);
+        
+        // ✅ Reset navigation flag after delay
+        setTimeout(() => {
+          navigationInProgressRef.current = false;
+        }, 500);
+      }
+    }, 200); //  Longer debounce
+
+    return () => clearTimeout(navigationTimeout);
+  }, [isAuthenticated, hasCompletedQuestionnaire, segments, isNavigationReady]);
 
   return <Slot/>;
 }

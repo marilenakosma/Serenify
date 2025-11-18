@@ -20,8 +20,37 @@
   "login":"Welcome Back",
   "forgotPassword":"Forgot Password?",
   "dontHaveAccount":"Don't have an account?",
-  "signup":"Sign Up"
+  "signup":"Sign Up",
+  "accountCreatedSuccess": "Account created successfully!",
+  "loginSuccessful": "Login successful",
+  "invalidCredentials": "Invalid email or password. Please try again.",
+  "loginFailed": "Failed to login. Please try again"
 },
+"validation": {
+    "nameRequired": "Name is required",
+    "nameTooShort": "Name must be at least 2 characters",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
+    "passwordRequired": "Password is required",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordsNotMatch": "Passwords do not match",
+    "passwordRequirementsNotMet": "Password requirements not met",
+    "atLeast8Chars": "At least 8 characters",
+    "oneUppercase": "One uppercase letter",
+    "oneLowercase": "One lowercase letter", 
+    "oneNumber": "One number",
+    "oneSpecialChar": "One special character",
+    "missing": "Missing",
+    "veryWeak": "Very Weak",
+    "weak": "Weak",
+    "good": "Good",
+    "strong": "Strong",
+    "validEmail": "✓ Valid email address",
+    "passwordsMatch": "✓ Passwords match",
+    "validationError": "Validation Error",
+    "fixErrorsBeforeSubmitting": "Please fix the errors before submitting"
+  },
 "tabs":{
   "home":"Home",
   "habits":"Habits",
@@ -193,7 +222,18 @@
         "description": "Connect with nature to lower stress levels"
       }
     }
-  },"categories": {
+  },
+  "water": {
+    "intakeToday": "Water Intake Today",
+    "ml": "ml",
+    "percentOfGoal": "% of daily goal",
+    "quickAdd": "Quick Add",
+    "customAmount": "Custom Amount",
+    "enterMl": "Enter ml",
+    "add": "Add",
+    "resetToday": "Reset Today"
+  },
+  "categories": {
     "health": "Health",
     "fitness": "Fitness",
     "mindfulness": "Mindfulness",
@@ -316,6 +356,8 @@
     "dataAnalytics": "Data and Analytics",
     "retakeQuiz": "Retake Quiz",
     "logout": "Logout",
+    "logoutConfirmation": "Are you sure you want to logout?",
+    "logoutError": "Failed to logout",
     "language": "Language"
   },
   "questionnaire": {

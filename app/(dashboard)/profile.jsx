@@ -17,28 +17,41 @@ const profile = () => {
     const { t } = useTranslation();
 
     const handleLogout = () => {
-        Alert.alert(
-            'Logout',
-            'Are you sure you want to logout?',
-            [
-                {
-                    text: 'Cancel',
-                    style: 'cancel',
-                },
-                {
-                    text: 'Logout',
-                    style: 'destructive',
-                    onPress: async () => {
-                        const result = await logout();
-                        if (!result.success) {
-                            Alert.alert('Error', 'Failed to logout');
-                        }
-                        // Navigation happens automatically via _layout.jsx
+    setTimeout(() => {
+        try {
+            Alert.alert(
+                t('profile.logout'),
+                t('profile.logoutConfirmation'),
+                [
+                    {
+                        text: t('common.cancel'),
+                        style: 'cancel',
                     },
-                },
-            ]
-        );
-    };
+                    {
+                        text: t('profile.logout'),
+                        style: 'destructive',
+                        onPress: async () => {
+                            try {
+                                const result = await logout();
+                                if (!result.success) {
+                                    setTimeout(() => {
+                                        Alert.alert(t('common.error'), t('profile.logoutError'));
+                                    }, 100);
+                                }
+                            } catch (error) {
+                                console.log('Logout error:', error);
+                            }
+                        },
+                    },
+                ]
+            );
+        } catch (error) {
+            console.log('Alert error (safe to ignore):', error);
+            //  Logout without confirmation
+            logout();
+        }
+    }, 100); // Delay prevents the "not attached" error
+};
     
     
     const handleRetakeQuestionnaire = () => {
@@ -64,7 +77,6 @@ const profile = () => {
                 break;
             default:
                 // For now, just show which setting was pressed
-                Alert.alert('Coming Soon', `${settingText} feature coming soon!`);
                 break;
         }
     };

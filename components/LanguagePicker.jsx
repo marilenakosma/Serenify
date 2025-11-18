@@ -9,11 +9,14 @@ import { getItem, setItem } from '../store/storage';
 const LanguagePicker = ({ style }) => {
   const { currentLanguage, changeLanguage } = useTranslation();
 
-  const toggleLanguage = () => {
-    const newLanguage = currentLanguage === 'en' ? 'el' : 'en';
-    setItem('selectedLanguage', newLanguage);
+  const toggleLanguage = async () => {
+  const newLanguage = currentLanguage === 'en' ? 'el' : 'en';
+  
+  setTimeout(async () => {
+    await setItem('selectedLanguage', newLanguage);
     changeLanguage(newLanguage);
-  };
+  }, 100);
+};
 
   const currentFlag = currentLanguage === 'en' 
     ? require('../assets/flags/american.png')

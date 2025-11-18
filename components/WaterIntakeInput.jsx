@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
+import { useTranslation } from '../constants/translations';
 
 const WaterIntakeInput = ({ currentAmount = 0, target = 2000, onUpdate }) => {
   const [customAmount, setCustomAmount] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
+  const { t } = useTranslation();
 
   // Quick increment options
   const quickIncrements = [250, 500, 750]; // ml
@@ -30,9 +32,9 @@ const WaterIntakeInput = ({ currentAmount = 0, target = 2000, onUpdate }) => {
     <View style={styles.container}>
       {/* Progress Display */}
       <View style={styles.progressSection}>
-        <ThemedText style={styles.progressTitle}>Water Intake Today</ThemedText>
+        <ThemedText style={styles.progressTitle}>{t('water.intakeToday')}</ThemedText>
         <ThemedText style={styles.progressAmount}>
-          {currentAmount} / {target} ml
+           {currentAmount} / {target} {t('water.ml')}
         </ThemedText>
         
         {/* Progress Bar */}
@@ -41,13 +43,13 @@ const WaterIntakeInput = ({ currentAmount = 0, target = 2000, onUpdate }) => {
         </View>
         
         <ThemedText style={styles.progressPercentage}>
-          {Math.round(progress * 100)}% of daily goal
+          {Math.round(progress * 100)}{t('water.percentOfGoal')}
         </ThemedText>
       </View>
 
       {/* Quick Add Buttons */}
       <View style={styles.quickAddSection}>
-        <ThemedText style={styles.sectionTitle}>Quick Add</ThemedText>
+        <ThemedText style={styles.sectionTitle}>{t('water.quickAdd')}</ThemedText>
         <View style={styles.quickAddButtons}>
           {quickIncrements.map((amount) => (
             <TouchableOpacity
@@ -56,7 +58,7 @@ const WaterIntakeInput = ({ currentAmount = 0, target = 2000, onUpdate }) => {
               onPress={() => handleQuickAdd(amount)}
             >
               <Ionicons name="water" size={24} color="#2196F3" />
-              <Text style={styles.quickAddText}>+{amount}ml</Text>
+               <Text style={styles.quickAddText}>+{amount}{t('water.ml')}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -69,7 +71,7 @@ const WaterIntakeInput = ({ currentAmount = 0, target = 2000, onUpdate }) => {
           onPress={() => setShowCustomInput(!showCustomInput)}
         >
           <ThemedText style={styles.customToggleText}>
-            Custom Amount {showCustomInput ? '−' : '+'}
+             {t('water.customAmount')} {showCustomInput ? '−' : '+'}
           </ThemedText>
         </TouchableOpacity>
 
@@ -79,14 +81,14 @@ const WaterIntakeInput = ({ currentAmount = 0, target = 2000, onUpdate }) => {
               style={styles.input}
               value={customAmount}
               onChangeText={setCustomAmount}
-              placeholder="Enter ml"
+              placeholder={t('water.enterMl')}
               keyboardType="numeric"
             />
             <TouchableOpacity
               style={styles.addButton}
               onPress={handleCustomAdd}
             >
-              <Text style={styles.addButtonText}>Add</Text>
+              <Text style={styles.addButtonText}>{t('water.add')}</Text> 
             </TouchableOpacity>
           </View>
         )}
@@ -98,7 +100,7 @@ const WaterIntakeInput = ({ currentAmount = 0, target = 2000, onUpdate }) => {
         onPress={() => onUpdate(0)}
       >
         <Ionicons name="refresh" size={20} color="#FF6B6B" />
-        <Text style={styles.resetText}>Reset Today</Text>
+        <Text style={styles.resetText}>{t('water.resetToday')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,13 +119,13 @@ const styles = StyleSheet.create({
   },
   progressTitle: {
     fontSize: 18,
-    fontWeight: '600',
     marginBottom: 10,
   },
   progressAmount: {
     fontSize: 24,
     color: '#2196F3',
     marginBottom: 15,
+    fontFamily: 'MontserratZ-SemiBold',
   },
   progressBar: {
     width: '100%',
@@ -163,6 +165,7 @@ const styles = StyleSheet.create({
   quickAddText: {
     color: '#2196F3',
     marginTop: 5,
+    fontFamily: 'MontserratZ-SemiBold',
   },
   customSection: {
     marginBottom: 25,

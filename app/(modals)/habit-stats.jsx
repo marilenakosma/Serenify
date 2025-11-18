@@ -17,7 +17,7 @@ const HabitStats = () => {
   const { userHabits, habitCompletions, removeHabit, toggleHabitCompletion,updateHabit } = useAuthStore();
   const params = useLocalSearchParams();
   const habitId = params.habitId;
-  const { t } = useTranslation();
+  const { t,currentLanguage } = useTranslation();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -33,7 +33,7 @@ const HabitStats = () => {
 
   const openEditModal = () => {
     if (!habit) {
-    Alert.alert('Error', 'Habit data not available');
+    Alert.alert(t('common.error'), t('habitStats.habitDataNotAvailable')); // ✅ Fixed
     return;
   }
 
@@ -45,9 +45,9 @@ const HabitStats = () => {
 
   const handleSaveEdit = () => {
     if (!editedName.trim()) {
-      Alert.alert('Error', 'Habit name cannot be empty');
-      return;
-    }
+    Alert.alert(t('common.error'), t('habitStats.habitNameRequired')); 
+    return;
+  }
 
     console.log('Before update - streak:', habit.streak, 'lastCompleted:', habit.lastCompleted);
 
@@ -256,10 +256,10 @@ const getToday = () => {
     }
     
     return {
-      monthName: currentMonth.toLocaleDateString('en', { month: 'long', year: 'numeric' }),
-      days: calendar
-    };
-  }, [habitCompletions, habitId]);
+    monthName: currentMonth.toLocaleDateString(currentLanguage, { month: 'long', year: 'numeric' }), // ✅ Use current language
+    days: calendar
+  };
+}, [habitCompletions, habitId, currentLanguage]);
     
     
 
@@ -476,22 +476,7 @@ const getToday = () => {
             {t('habitStats.calendarHint', { month: calendarData.monthName.split(' ')[0] })}
           </ThemedText>
         </View>
-  
 
-          {/* Action Buttons */}
-          <View style={styles.actionButtons}>
-            <ThemedButton
-              onPress={openEditModal}
-              style={[styles.actionButton, styles.editButtonStyle]}
-            >
-              <View style={styles.editButtonRow}>
-              <Ionicons name="create-outline" size={20} color="#fff" />
-              <ThemedText style={styles.actionButtonText}>
-                {t('habitStats.editHabit')}
-              </ThemedText>
-              </View>
-            </ThemedButton>
-          </View>
 
           <Spacer height={50} />
         </ScrollView>
@@ -536,7 +521,7 @@ const getToday = () => {
                     style={styles.textInput}
                     value={editedName}
                     onChangeText={setEditedName}
-                    placeholder="Enter habit name"
+                    placeholder={t('habitStats.enterHabitName')} 
                     maxLength={60}
                     multiline={false}
                   />
@@ -606,7 +591,7 @@ const getToday = () => {
                       {t('habitStats.category')}: {habit.category}
                     </ThemedText>
                     <ThemedText style={styles.infoText}>
-                      {t('habitStats.points')}: {habit.points} per completion
+                      {t('habitStats.points')}: {habit.points} {t('habitStats.perCompletion')}
                     </ThemedText>
                   </View>
                   <ThemedText style={styles.infoHint}>
@@ -694,7 +679,6 @@ const styles = StyleSheet.create({
   habitPoints: {
     fontSize: 12,
     color: '#4CAF50',
-    fontWeight: '600',
   },
 
   // Stats Grid
@@ -736,7 +720,6 @@ const styles = StyleSheet.create({
     color: '#2c3e50',
     marginBottom: 16,
     textAlign: 'center',
-    fontWeight: '600',
   },
   
   // Calendar Header
@@ -752,7 +735,6 @@ const styles = StyleSheet.create({
   dayHeaderText: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '600',
   },
   
   // Calendar Grid
@@ -808,7 +790,6 @@ calendar: {
   dayText: {
     fontSize: 16,
     color: '#2c3e50',
-    fontWeight: '500',
     textAlign:'center'
   },
   otherMonthText: {
@@ -819,11 +800,9 @@ calendar: {
   },
   completedDayText: {
     color: 'white',
-    fontWeight: '600',
   },
   todayText: {
     color: '#2196F3',
-    fontWeight: '700',
   },
   
   // Completion Indicator
@@ -873,12 +852,10 @@ calendar: {
   actionButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
   },
   removeButtonText: {
     color: '#FF5252',
     fontSize: 16,
-    fontWeight: '600',
   },
 
   // Modal
@@ -934,7 +911,6 @@ calendar: {
   saveText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
   },
   editModalScroll: {
     flex: 1,
@@ -947,12 +923,12 @@ calendar: {
   },
   editLabel: {
     fontSize: 16,
-    fontWeight: '600',
     color: '#2c3e50',
     marginBottom: 12,
   },
   textInput: {
     backgroundColor: '#f8f9fa',
+    fontFamily: 'MontserratZ-SemiBold',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -985,7 +961,6 @@ calendar: {
   optionText: {
     fontSize: 14,
     color: '#2c3e50',
-    fontWeight: '500',
   },
   selectedOptionText: {
     color: 'white',
