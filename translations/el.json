@@ -80,7 +80,8 @@
     },
     "hello": "Γεια, {{username}}!",
     "yourHabits": "Οι συνήθειές σας",
-    "recommendedForYou": "Συνίσταται για εσένα"
+    "recommendedForYou": "Συνίσταται για εσένα",
+    "moodLoggedToday": "Ευχαριστούμε που μοιραστήκατε πως αισθάνεστε!"
   },
   "dailySummary": {
     "todaysProgress": "Σημερινή Πρόοδος",
@@ -327,7 +328,7 @@
     "title":"Οι Δραστηριότητες μου",
     "goalIdeas":"Ιδέες για στόχους",
     "reflections":"Ενδοσκόπηση",
-    "breathe":"Διαλογισμός",
+    "breathe":"Ασκήσεις Αναπνοήςrr",
     "soundscapes":"Μουσική",
     "movements":"Γυμναστική",
     "timers":"Χρονόμετρο",

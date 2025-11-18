@@ -5,6 +5,13 @@ const ThemedCategory = ({image,text,style}) => {
       console.log("pressed!")
     }
 
+    const handleStatsPress = (habitId) => {
+        router.push({
+        pathname: '/(modals)/habit-stats',
+        params: { habitId }
+      });
+      };
+
   return (
     <View style={[styles.container,style]}>
       <Pressable style={styles.button} 

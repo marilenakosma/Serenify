@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { FlatList, ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Angry from "../../assets/images/storm.png";
@@ -19,14 +19,44 @@ import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
 
 const Dashboard = () => {
-  const {user,isAuthenticated,userHabits,habitCompletions,toggleHabitCompletion } = useAuthStore();
+  const {user,isAuthenticated,userHabits,
+         habitCompletions,toggleHabitCompletion,
+         todayMood,setTodayMood,loadTodayMood} = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
+  const [selectedMood,setSelectedMood] = useState(null);
   const router = useRouter();
   const { t } = useTranslation();
-
+  
   const focusArea = user?.focusArea || 'General Wellness';
   const dashboardContent = getDashboardContent(t);
   const content = dashboardContent[focusArea];
+
+  useEffect(() => {
+    const initMood = async () => {
+      const mood = await loadTodayMood();
+      if (mood) {
+        setSelectedMood(mood.moodId);
+      }
+    };
+    initMood();
+  }, []);
+
+  const handleMoodSelect = async (moodId, moodText) => {
+    setSelectedMood(moodId);
+    
+    const moodData = {
+      moodId,
+      moodText,
+    };
+    
+    const result = await setTodayMood(moodData);
+    if (result.success) {
+      console.log('Mood logged:', moodText);
+    } else {
+      console.error('Failed to log mood:', result.error);
+    }
+  };
+
 
   if (!isAuthenticated) {
     return (
@@ -66,8 +96,13 @@ const Dashboard = () => {
    <ThemedMood
      image={item.image}
      text={item.text}
+     moodId={item.id}
+     onMoodSelect={handleMoodSelect}
+     isSelected={selectedMood === item.id}
    />
   )
+
+  const todayMoodLogged = todayMood !== null;
 
   const renderHabitCard = ({item}) => (
     <DashboardHabitCard 
@@ -77,7 +112,6 @@ const Dashboard = () => {
       onToggleCompletion={toggleHabitCompletion}
     />
   );
-
 
   return (
     <ThemedView style={{flex:1}}> 
@@ -96,7 +130,10 @@ const Dashboard = () => {
                   {t('dashboard.hello', { username: user?.username || 'User' })} 
                 </ThemedText>
                 <ThemedText title={true} style={styles.moodTitle}>
-                  {content.greeting}
+                 {todayMoodLogged 
+                   ? t('dashboard.moodLoggedToday') 
+                   : content.greeting
+                 }
                 </ThemedText>
                 <FlatList
                   data={moodData}

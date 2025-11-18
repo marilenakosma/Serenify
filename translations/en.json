@@ -80,7 +80,8 @@
     },
     "hello": "Hello, {{username}}!",
     "yourHabits": "Your Habits",
-    "recommendedForYou": "Recommended for You"
+    "recommendedForYou": "Recommended for You",
+    "moodLoggedToday": "Thanks for sharing how you feel!"
   },
   "dailySummary": {
     "todaysProgress": "Today's Progress",

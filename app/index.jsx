@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 //import LogoGreen from "../assets/images/leaf-green.png";
 //import LogoBeige from "../assets/images/leaf-beige.png";
-import { useRouter } from 'expo-router';
+import { useRouter,useEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import Spacer from '../components/Spacer';
 import SplashScreen from '../components/SplashScreen';

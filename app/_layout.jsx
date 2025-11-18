@@ -62,6 +62,7 @@ function RootLayoutNav() {
         return;
       }
 
+      /*
       console.log('Navigation check:', { 
         isAuthenticated, 
         hasCompletedQuestionnaire, 
@@ -69,7 +70,7 @@ function RootLayoutNav() {
         currentRoute: segments,
         lastRoute: lastNavigationRef.current
       });
-
+*/
       const inAuthGroup = segments[0] === '(auth)';
       const inQuestionnaireGroup = segments[0] === '(questionnaire)';
       const inDashboardGroup = segments[0] === '(dashboard)'; 

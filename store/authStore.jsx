@@ -22,6 +22,9 @@ export const useAuthStore = create((set,get) => ({
   userHabits: [],
   habitCompletions: {}, // { habitId: { '2024-11-02': true } }
 
+  todayMood:null,
+  moodHistory:{},
+
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
 
   login: async(email,password) => {
@@ -204,6 +207,83 @@ export const useAuthStore = create((set,get) => ({
             set(updatedData);
         }
     },
+
+    setTodayMood: async(moodData) => {
+        try {
+         const today = new Date().toDateString();
+         const moodEntry = {
+            ...moodData,
+            date:today,
+            timestamp: new Date().toISOString()
+         };
+
+         // Save to storage
+         await setItem(`mood_${today}`, moodEntry);
+      
+        // Update history
+        const currentHistory = get().moodHistory;
+        const updatedHistory = {
+        ...currentHistory,
+        [today]: moodEntry
+        };
+
+        await setItem('mood_history', updatedHistory);
+      
+        set({ 
+          todayMood: moodEntry,
+          moodHistory: updatedHistory
+        });
+
+        console.log('Mood saved successfully');
+        return { success: true };
+        } catch(error) {
+          console.error('Error saving mood:', error);
+          return { success: false, error: error.message };
+        }
+    },
+
+    loadTodayMood: async () => {
+     try {
+        const today = new Date().toDateString();
+        const todayMood = await getItem(`mood_${today}`);
+        const moodHistory = await getItem('mood_history') || {};
+      
+        set({ 
+          todayMood,
+          moodHistory 
+        });
+      
+        return todayMood;
+
+     } catch(error) {
+        console.error('Error loading mood:', error);
+        return null;
+     }
+    },
+
+    getMoodHistory: () => {
+        return get().moodHistory;
+    },
+
+    clearMoodData: async () => {
+    try {
+      await removeItem('mood_history');
+      // Remove today's mood
+      const today = new Date().toDateString();
+      await removeItem(`mood_${today}`);
+      
+      set({ 
+        todayMood: null,
+        moodHistory: {} 
+      });
+      
+      console.log('🧹 Mood data cleared');
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Error clearing mood data:', error);
+      return { success: false, error: error.message };
+    }
+  },
 
     addHabits: (newHabits) => {
      const currentState = get();
