@@ -277,29 +277,54 @@ export const useAuthStore = create((set,get) => ({
         moodHistory: {} 
       });
       
-      console.log('🧹 Mood data cleared');
+      console.log('Mood data cleared');
       return { success: true };
     } catch (error) {
-      console.error('❌ Error clearing mood data:', error);
+      console.error(' Error clearing mood data:', error);
       return { success: false, error: error.message };
     }
   },
 
-    addHabits: (newHabits) => {
-     const currentState = get();
-     const updatedHabits = [...currentState.userHabits,...newHabits];
+    addHabits: async (newHabits) => {
+      try {
+        const currentState = get();
+      
+     //Single habit / array of habits
+        const habitsToAdd = Array.isArray(newHabits) ? newHabits : [newHabits];
      
-     // Update Zustand (in-memory)
-     set({userHabits:updatedHabits})
+        const existingIds = currentState.userHabits.map(h => h.id);
+        const uniqueHabits = habitsToAdd.filter(habit => !existingIds.includes(habit.id));
+
+        if(uniqueHabits.length === 0) {
+          console.log('All habits already exist');
+          return { success: false, error: 'Habits already exist'};
+        }
+
+        const updatedHabits = [...currentState.userHabits,...uniqueHabits];
+     
+        // Update Zustand (in-memory)
+        set({userHabits:updatedHabits})
 
      // Update MMKV (persistent storage)
-     const currentAuthData = getItem("authData");
-        if (currentAuthData) {
-            setItem("authData", { ...currentAuthData, userHabits: updatedHabits });
+        try {
+            const currentAuthData = await getItem("authData");
+            if (currentAuthData) {
+                await setItem("authData", { ...currentAuthData, userHabits: updatedHabits });
+            }
+        } catch (storageError) {
+            console.warn('Storage update failed:', storageError);
+            // Don't fail the whole operation for storage errors
         }
+
+        console.log('Habits added successfully:', uniqueHabits.length);
+        return { success:true, added: uniqueHabits.length };
+      } catch (error) {
+        console.error(' Error in addHabits:', error);
+        return { success: false, error: error.message };
+      }
     },
 
-    removeHabit: (habitId) => {
+  removeHabit: (habitId) => {
   console.log('removeHabit called with ID:', habitId);
   
   const currentState = get();

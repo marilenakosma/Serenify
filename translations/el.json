@@ -66,6 +66,7 @@
     "happy": "Χαρά"
   },
 "dashboard": {
+  "howAreYouFeeling": "Πώς αισθάνεσαι σήμερα;",
     "greetings": {
       "anxietyManagement": "Πάρτε μια βαθιά ανάσα, το έχετε! 🌸",
       "stressRelief": "Ας ανακουφίσουμε το άγχος μαζί 😌",
@@ -225,19 +226,19 @@
     }
   },
   "frequency": {
+    "undefined": "Σήμερα",
     "setFrequency": "Ορισμός Συχνότητας Συνήθειας",
     "howOften": "Πόσο συχνά θέλετε να παρακολουθείτε {{type}};",
     "habit": "αυτή τη συνήθεια",
     "habits": "αυτές τις συνήθειες",
     "daily": "Κάθε μέρα",
-    "weekdays": "Μόνο εργάσιμες",
-    "weekends": "Μόνο Σαββατοκύριακα", 
-    "threeWeekly": "3 φορές την εβδομάδα",
+    "weekdays": "Εργάσιμες",
+    "weekends": "Σαββατοκύριακα", 
+    "threeWeekly": "3x την εβδομάδα",
     "weekly": "Μία φορά την εβδομάδα",
-    "custom": "Προσαρμοσμένο πρόγραμμα",
-    "twoWeekly": "2 φορές την εβδομάδα",
-    "fourWeekly": "4 φορές την εβδομάδα",
-    "fiveWeekly": "5 φορές την εβδομάδα", 
+    "twoWeekly": "2x την εβδομάδα",
+    "fourWeekly": "4x την εβδομάδα",
+    "fiveWeekly": "5x την εβδομάδα", 
     "biweekly": "Κάθε 2 εβδομάδες",
     "monthly": "Μία φορά το μήνα",
     "customSchedule": "Προσαρμοσμένο Πρόγραμμα",
@@ -372,6 +373,12 @@
     "personalizedMessage": "Εξατομικεύσαμε το ταμπλό σας με δραστηριότητες για να σας βοηθήσουμε!",
     "journeyStartsNow": "Το εξατομικευμένο ταξίδι ευεξίας σας ξεκινά τώρα.",
     "viewDashboard": "Δείτε το Ταμπλό μου",
+    "focusAreas": {
+      "anxietyManagement": "Διαχείριση Άγχους",
+      "stressRelief": "Ανακούφιση από το Στρες",
+      "maintainingBalance": "Διατήρηση Ισορροπίας",
+      "generalWellness": "Γενική Ευεξία"
+    },
     "questions": [
       {
         "question": "Σε ποιο τομέα θα μπορούσαμε να σας βοηθήσουμε;",

@@ -14,6 +14,16 @@ const results = () => {
     const { finishShowingResults, questionnaireResults,updateUser } = useAuthStore();
     const [analysis, setAnalysis] = useState(null);
     const { t } = useTranslation();
+    
+    const getTranslatedFocusArea = (englishFocusArea) => {
+        const focusAreaMap = {
+            'Anxiety Management': t('questionnaire.focusAreas.anxietyManagement'),
+            'Stress Relief': t('questionnaire.focusAreas.stressRelief'),
+            'Maintaining Balance': t('questionnaire.focusAreas.maintainingBalance'),
+            'General Wellness': t('questionnaire.focusAreas.generalWellness')
+        };
+        return focusAreaMap[englishFocusArea] || englishFocusArea;
+    };
 
     // Simple analysis of quiz answers
     useEffect(() => {
@@ -33,8 +43,8 @@ const results = () => {
   }, */
  
             const answers = Object.values(questionnaireResults.answers);
-            console.log(answers)
-            console.log(questionnaireResults.answers)
+            //console.log(answers)
+            //console.log(questionnaireResults.answers)
             //// Converts: { 0: {selectedAnswer: "Anxious"}, 1: {selectedAnswer: "Good"} }
             // To: [{selectedAnswer: "Anxious"}, {selectedAnswer: "Good"}]
             
@@ -104,7 +114,14 @@ const results = () => {
                 focusEmoji = "⚖️";
             }
             
-            const analysisResult = {focusArea,focusEmoji,anxietyCount,stressCount,positiveCount};
+            const analysisResult = {
+                focusArea, 
+                focusAreaTranslated: getTranslatedFocusArea(focusArea), 
+                focusEmoji,
+                anxietyCount,
+                stressCount,
+                positiveCount
+            };
             setAnalysis(analysisResult);
 
             updateUser({ focusArea,focusEmoji })
@@ -136,7 +153,7 @@ const results = () => {
                             {t('questionnaire.yourFocusArea')}: {analysis.focusEmoji}
                         </ThemedText>
                         <ThemedText title={true} style={styles.analysisText}>
-                            {analysis.focusArea}
+                            {analysis.focusAreaTranslated}
                         </ThemedText>
                         <ThemedText style={styles.analysisSubtext}>
                            {t('questionnaire.personalizedMessage')}

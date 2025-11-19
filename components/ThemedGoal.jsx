@@ -3,13 +3,17 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Colors';
 import ThemedText from './ThemedText';
 
-export default function ThemedGoal({ name, text, points, completed = false, onToggle, category, duration, style, ...props }) {
+export default function ThemedGoal({ icon,name, text, points, 
+  completed = false, onToggle, category, duration, style,isRecommendation=false, ...props }) {
+    
+    const iconName = icon || name || 'checkmark-outline';
+    
   return (
     <TouchableOpacity style={[styles.container, style]} 
     onPress={onToggle} {...props}>
 
       <View style={styles.iconContainer}>
-        <Ionicons name={name} size={24} color={Colors.primary} />
+        <Ionicons name={iconName} size={24} color={Colors.primary} />
       </View>
       
       <View style={styles.content}>
@@ -19,19 +23,27 @@ export default function ThemedGoal({ name, text, points, completed = false, onTo
         <View style={styles.metadata}>
           <ThemedText style={styles.category}>{category || 'Wellness'}</ThemedText>
           {points && (
-            <ThemedText style={styles.points}>{points} pts</ThemedText>
+            <ThemedText style={styles.points}>+{points} pts</ThemedText>
           )}
           <ThemedText style={styles.time}>{duration || '5 min'}</ThemedText>
         </View>
       </View>
       
+      {/* Only one indicator based on type */}
       <View style={styles.circleContainer}>
-        <View style={[styles.circle, completed && styles.completedCircle]}>
-          {completed && (
-            <Ionicons name="checkmark" size={16} color="white" />
-          )}
-        </View>
+        {isRecommendation ? (
+          <View style={styles.addButton}>
+            <Ionicons name="add-circle-outline" size={24} color="#2196F3" />
+          </View>
+        ) : (
+          <View style={[styles.circle, completed && styles.completedCircle]}>
+            {completed && (
+              <Ionicons name="checkmark" size={16} color="white" />
+            )}
+          </View>
+        )}
       </View>
+
     </TouchableOpacity>
   );
 }
@@ -49,6 +61,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+  },
+  addButton: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   circleContainer: {
     marginRight: 1,

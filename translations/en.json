@@ -66,6 +66,7 @@
     "happy": "Happy"
   },
 "dashboard": {
+  "howAreYouFeeling": "How are you feeling today?",
     "greetings": {
       "anxietyManagement": "Take a deep breath, you've got this! 🌸",
       "stressRelief": "Let's ease that stress together 😌",
@@ -273,16 +274,16 @@
     "varies": "Varies"
   },
   "frequency": {
+    "undefined": "Today",
     "setFrequency": "Set Habit Frequency",
     "howOften": "How often do you want to track {{type}}?",
     "habit": "this habit",
     "habits": "these habits",
     "daily": "Every day",
-    "weekdays": "Weekdays only", 
-    "weekends": "Weekends only",
+    "weekdays": "Weekdays", 
+    "weekends": "Weekends",
     "threeWeekly": "3 times per week",
     "weekly": "Once a week",
-    "custom": "Custom schedule",
     "twoWeekly": "2 times per week",
     "fourWeekly": "4 times per week", 
     "fiveWeekly": "5 times per week",
@@ -373,6 +374,12 @@
     "personalizedMessage": "We've personalized your dashboard with activities tailored to help you!",
     "journeyStartsNow": "Your personalized wellness journey starts now.",
     "viewDashboard": "View My Dashboard",
+    "focusAreas": {
+      "anxietyManagement": "Anxiety Management",
+      "stressRelief": "Stress Relief", 
+      "maintainingBalance": "Maintaining Balance",
+      "generalWellness": "General Wellness"
+    },
     "questions": [
       {
         "question": "What can we help you to do?",

@@ -14,22 +14,33 @@ import ThemedView from "../../components/ThemedView";
 import DailySummary from "../../components/DailySummary";
 import DashboardHabitCard from "../../components/DashboardHabitCard";
 import { useAuthStore } from "../../store/authStore";
-import { dashboardContent,getDashboardContent } from "../../constants/dashboardContent";
+import { getRecommendedHabits } from '../../constants/availableHabits';
 import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
 
 const Dashboard = () => {
-  const {user,isAuthenticated,userHabits,
-         habitCompletions,toggleHabitCompletion,
-         todayMood,setTodayMood,loadTodayMood} = useAuthStore();
+  const {user,
+         isAuthenticated,
+         userHabits,
+         habitCompletions,
+         toggleHabitCompletion,
+         todayMood,
+         setTodayMood,
+         loadTodayMood,
+         questionnaireResults,
+         addHabits} = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
   const [selectedMood,setSelectedMood] = useState(null);
+  
   const router = useRouter();
   const { t } = useTranslation();
   
-  const focusArea = user?.focusArea || 'General Wellness';
-  const dashboardContent = getDashboardContent(t);
-  const content = dashboardContent[focusArea];
+  const userProfile = {
+    focusArea: user?.focusArea || questionnaireResults?.focusArea || "General Wellness"
+  };
+
+  const recommendedHabits = getRecommendedHabits(userProfile, userHabits, t);
+  //const content = dashboardContent[focusArea];
 
   useEffect(() => {
     const initMood = async () => {
@@ -57,6 +68,38 @@ const Dashboard = () => {
     }
   };
 
+  const handleAddHabit = async(habitData) => {
+   try {
+    console.log('Adding habit:', habitData.title);
+
+    const newHabit = {
+     ...habitData,
+     text:habitData.title,
+     name: habitData.icon, 
+     createdAt: new Date().toISOString(),
+     isActive:true,
+     streak:0,
+     lastCompleted:null
+    };
+
+    const result = await addHabits(newHabit);
+
+    if(result.success) {
+      console.log('Habit added')
+    } else {
+      console.error('Failed to add habit:', result?.error || 'Unknown error');
+    }
+   } catch(error) {
+     console.error('Error adding habit:', error.message || error);
+   }
+  };
+
+  const getMoodGreeting = () => {
+    if (todayMood) {
+      return t('dashboard.moodLoggedToday');
+    }
+    return t('dashboard.howAreYouFeeling');
+  };
 
   if (!isAuthenticated) {
     return (
@@ -130,10 +173,7 @@ const Dashboard = () => {
                   {t('dashboard.hello', { username: user?.username || 'User' })} 
                 </ThemedText>
                 <ThemedText title={true} style={styles.moodTitle}>
-                 {todayMoodLogged 
-                   ? t('dashboard.moodLoggedToday') 
-                   : content.greeting
-                 }
+                 {getMoodGreeting()} 
                 </ThemedText>
                 <FlatList
                   data={moodData}
@@ -171,37 +211,39 @@ const Dashboard = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.habitsContainer}
                 ItemSeparatorComponent={() => <View style={{width: 8}} />}
-                removeClippedSubviews={true}
-                maxToRenderPerBatch={3}
-                initialNumToRender={4}
-                windowSize={5}
               />
             </ThemedView>
           )}
           
 
           {/* Goals Section */}
-          <ThemedView style={[styles.section,
-          styles.other]}>
-            <ThemedText title={true} style={styles.sectionTitle}>
-              {t('dashboard.recommendedForYou')}
-            </ThemedText>
+          {recommendedHabits.length > 0 && (
+            <ThemedView style={[styles.section, styles.other]}>
+              <ThemedText title={true} style={styles.sectionTitle}>
+                {t('dashboard.recommendedForYou')}
+              </ThemedText>
 
-            {content.recommendedGoals.map((goal, index) => (
-              <View key={goal.id}>
+              {recommendedHabits.map((habit, index) => {
+
+               return (
+                <View key={habit.id}>
                 <ThemedGoal
-                  name={goal.name}
-                  text={goal.text}
-                  points={goal.points}
-                  category={goal.category}  
-                  duration={goal.duration}  
-                  completed={completedGoals.has(goal.id)}
-                  onToggle={() => handleToggleGoal(goal.id)}
+                  name={habit.icon}
+                  text={habit.title}
+                  points={habit.points}
+                  category={habit.category}  
+                  duration={habit.duration}  
+                  completed={false} 
+                  onToggle={() => handleAddHabit(habit)} 
+                  isRecommendation={true}
                />
-               {index < content.recommendedGoals.length - 1 && <Spacer height={15} />}
-             </View>
-             ))}
-          </ThemedView>
+               {index < recommendedHabits.length - 1 && <Spacer height={15} />}
+              </View>
+             );
+           })}
+       </ThemedView>
+)}
+
           <View style={{height: 1, backgroundColor: '#E0E0E0', marginHorizontal: 32, marginBottom: 10}} />
 
           {userHabits.length > 0 && (

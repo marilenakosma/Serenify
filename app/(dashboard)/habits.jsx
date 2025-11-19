@@ -23,7 +23,8 @@ const habits = () => {
     userHabits,
     toggleHabitCompletion,
     habitCompletions,
-    getHabitCompletion 
+    getHabitCompletion,
+    addHabits
   } = useAuthStore();
 
   const [completedQuests, setCompletedQuests] = useState(new Set());
@@ -33,25 +34,97 @@ const habits = () => {
   const focusArea = user?.focusArea || 'General Wellness';
 
   const defaultGoals = [
-    { id: 'complete-goal', name: 'checkmark-outline', text: t('habits.foundation.dailyGoal'), category: t('categories.foundation'), points: 10, duration: t('durations.5min'), },
-    { id: 'reflection', name: 'journal-outline', text: t('habits.foundation.writeReflection'), category: t('categories.foundation'), points: 15, duration: t('durations.10min'), },
-    { id: 'affirmation', name: 'heart-outline', text: t('habits.foundation.affirmations'), category: t('categories.foundation'), points: 10, duration: t('durations.5min'), },
-    { id: 'exercise', name: 'fitness-outline', text: t('habits.foundation.exercise'), category: t('categories.foundation'), points: 20, duration: t('durations.20min'), },
+    { 
+      id: 'complete-goal', 
+      icon: 'checkmark-outline', 
+      title: t('habits.foundation.dailyGoal'), 
+      category: t('categories.foundation'), 
+      points: 10, 
+      duration: t('durations.5min'),
+      frequency: 'daily', 
+      type: 'simple'
+    },
+    { 
+      id: 'reflection', 
+      icon: 'journal-outline', 
+      title: t('habits.foundation.writeReflection'), 
+      category: t('categories.foundation'), 
+      points: 15, 
+      duration: t('durations.10min'),
+      frequency: 'daily',
+      type: 'simple'
+    },
+    { 
+      id: 'affirmation', 
+      icon: 'heart-outline', 
+      title: t('habits.foundation.affirmations'), 
+      category: t('categories.foundation'), 
+      points: 10, 
+      duration: t('durations.5min'),
+      frequency: 'daily',
+      type: 'simple'
+    },
+    { 
+      id: 'exercise', 
+      icon: 'fitness-outline', 
+      title: t('habits.foundation.exercise'), 
+      category: t('categories.foundation'), 
+      points: 20, 
+      duration: t('durations.20min'),
+      frequency: 'daily',
+      type: 'simple'
+    },
   ];
 
-  // Combine goals properly
-  const allGoals = [...defaultGoals, ...userHabits];
+  const availableFoundationalGoals = defaultGoals.filter(goal => 
+    !userHabits.some(habit => habit.id === goal.id)
+  );
+  const allGoals = [...availableFoundationalGoals, ...userHabits];
   const goalsByCategory = groupGoalsByCategory(allGoals);
 
-   const handleToggleQuest = (questId) => {
-    // Check if it's a user habit or default goal
+  // Handle adding foundational goal as trackable habit
+  const handleAddFoundationalGoal = async (goal) => {
+    try {
+      console.log('Adding foundational goal as habit:', goal.title);
+      
+      const newHabit = {
+        ...goal,
+        text: goal.title, 
+        createdAt: new Date().toISOString(),
+        isActive: true,
+        streak: 0,
+        lastCompleted: null
+      };
+
+      const result = await addHabits(newHabit);
+      
+      if (result.success) {
+        console.log('Foundational goal added as habit');
+        // Remove from local completed state since it's now a real habit
+        setCompletedQuests(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(goal.id);
+          return newSet;
+        });
+      }
+    } catch (error) {
+      console.error('Error adding foundational goal:', error);
+    }
+  };
+
+  const handleToggleQuest = (questId) => {
+    // Check if it's a user habit or foundational goal
     const isUserHabit = userHabits.some(habit => habit.id === questId);
+    const foundationalGoal = availableFoundationalGoals.find(goal => goal.id === questId);
     
     if (isUserHabit) {
-      //  Use store method for habits
+      // Use store method for habits
       toggleHabitCompletion(questId);
+    } else if (foundationalGoal) {
+      // For foundational goals, offer to add as trackable habit
+      handleAddFoundationalGoal(foundationalGoal);
     } else {
-      // Handle default goals locally for now
+      // Handle other goals locally
       setCompletedQuests(prev => {
         const newSet = new Set(prev);
         if (newSet.has(questId)) {
@@ -89,6 +162,29 @@ const getHabitStatus = (habit) => {
       isExceeding: weeklyCompletions > requiredPerWeek
     };
   };
+
+    const getHabitIcon = (habit) => {
+      if (habit.icon && typeof habit.icon === 'string' && habit.icon.includes('-')) {
+        return habit.icon;  
+      }
+      if (habit.icon && typeof habit.icon === 'string' && habit.icon.includes('-')) {
+        return habit.icon;  
+      }
+
+      const fallbackIcons = {
+      'complete-goal': 'checkmark-outline',
+      'reflection': 'journal-outline',
+      'affirmation': 'heart-outline',
+      'exercise': 'fitness-outline',
+      'water-intake': 'water-outline',
+      'meditation': 'leaf-outline'
+      };
+      return fallbackIcons[habit.id] || 'checkmark-outline';  // Fallback
+    };
+
+    const getHabitText = (habit) => {
+        return habit.text || habit.title || habit.icon || 'Habit';
+      };
 
   return (
     <ThemedView style={styles.container}>
@@ -149,7 +245,7 @@ const getHabitStatus = (habit) => {
                       </View>
 
                       <Ionicons 
-                        name={habit.name} 
+                        name={getHabitIcon(habit)} 
                         size={32} 
                         color={status.isComplete ? "#4CAF50" : "#666"} 
                       />
@@ -165,7 +261,7 @@ const getHabitStatus = (habit) => {
                        </ThemedText>
                       </View>
                       
-                      <ThemedText style={styles.habitTitle}>{habit.text}</ThemedText>
+                      <ThemedText style={styles.habitTitle}>{getHabitText(habit)}</ThemedText>
                       
                       <ThemedText style={styles.habitFrequency}>
                         {getFrequencyDisplay(habit.frequency, t)}
@@ -194,32 +290,38 @@ const getHabitStatus = (habit) => {
           </View>
 
           {/* Categories with Goals */}
-          {Object.entries(goalsByCategory).map(([categoryName, categoryGoals]) => {
+          {Object.entries(goalsByCategory).map(([categoryicon, categoryGoals]) => {
             if (categoryGoals.length === 0) return null;
 
             return (
-              <View key={categoryName} style={styles.categorySection}>
+              <View key={categoryicon} style={styles.categorySection}>
                 <ThemedText title={true} style={styles.categoryTitle}>
-                  {categoryName}
+                  {categoryicon}
                 </ThemedText>
 
                 {categoryGoals.map((goal, index) => {
                   //  Check completion correctly
                   const isUserHabit = userHabits.some(habit => habit.id === goal.id);
+
+                  const isFoundationalGoal = availableFoundationalGoals.some(g => g.id === goal.id);
+
                   const isCompleted = isUserHabit 
                     ? getHabitCompletion(goal.id) 
                     : completedQuests.has(goal.id);
-
+                
                   return (
+
+                    
                     <View key={goal.id}>
                       <ThemedGoal
-                        name={goal.name || goal.icon}
-                        text={goal.text || goal.title}
+                        icon={goal.icon}
+                        text={goal.title}
                         points={goal.points}
                         category={goal.category}
                         duration={goal.duration || goal.defaultDuration}
                         completed={isCompleted}
                         onToggle={() => handleToggleQuest(goal.id)}
+                        isRecommendation={isFoundationalGoal}
                       />
                       {index < categoryGoals.length - 1 && <Spacer height={12} />}
                     </View>

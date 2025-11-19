@@ -22,6 +22,34 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
 
   const weeklyCompletions = getCompletionsThisWeek(thisHabitCompletions);
   const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
+  
+  const getHabitIcon = () => {
+
+  if (habit.icon && typeof habit.icon === 'string' && habit.icon.includes('-')) {
+    return habit.icon;
+  }
+
+  if (habit.name && typeof habit.name === 'string' && habit.name.includes('-')) {
+    return habit.name;
+  }
+  const fallbackIcons = {
+    'water-intake': 'water-outline',
+    'meditation': 'leaf-outline',
+    'exercise': 'fitness-outline',
+    'gratitude': 'heart-outline'
+  };
+  
+  return fallbackIcons[habit.id] || 'checkmark-outline';
+};
+
+  const getHabitText = () => {
+  // Get display text, avoiding icon names
+  const text = habit.text || habit.title;
+  if (text && !text.includes('-') && text.length > 2) {
+    return text;
+  }
+  return habit.id || 'Habit';
+};
 
   if (habit.type === "incremental") {
     const todayAmount = thisHabitCompletions[today] || 0;
@@ -169,7 +197,7 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
       >
         <View style={styles.habitHeader}>
           <Ionicons 
-            name={habit.name} 
+            name={getHabitIcon()} 
             size={24} 
             color={isComplete ? "#4CAF50" : "#666"} 
           />
@@ -210,7 +238,7 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
         </View>
       
         <ThemedText style={styles.habitTitle} numberOfLines={2}>
-          {habit.text}
+          {getHabitText()}
         </ThemedText>
       
         <ThemedText style={[

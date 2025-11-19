@@ -1,3 +1,4 @@
+import { FREQUENCY_TYPES } from './habitFrequency';
 export const getAvailableHabits = (t) => ({
   common: [
     {
@@ -12,7 +13,9 @@ export const getAvailableHabits = (t) => ({
       type: 'incremental',
       target: 2000,
       unit: 'ml',
-      increment: 250
+      increment: 250,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'no-screen-before-bed',
@@ -22,7 +25,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.health'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.1hour'),
-      points: 20
+      points: 20,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'morning-exercise',
@@ -32,7 +37,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.fitness'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.20min'),
-      points: 25
+      points: 25,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'eat-fruit',
@@ -42,7 +49,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.health'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.5min'),
-      points: 10
+      points: 10,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'practice-gratitude',
@@ -52,7 +61,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.mindfulness'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.5min'),
-      points: 10
+      points: 10,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'pray',
@@ -62,7 +73,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.mindfulness'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.5min'),
-      points: 10
+      points: 10,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'read-book',
@@ -72,7 +85,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.learning'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.30min'),
-      points: 15
+      points: 15,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'breathing-exercises',
@@ -82,7 +97,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.mindfulness'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.5min'),
-      points: 15
+      points: 15,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'reduce-sugar',
@@ -92,7 +109,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.health'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.allDay'),
-      points: 15
+      points: 15,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'anxiety-journal',
@@ -102,7 +121,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.reflection'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.5min'),
-      points: 10
+      points: 10,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'organize-space',
@@ -112,7 +133,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.productivity'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.5min'),
-      points: 10
+      points: 10,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'take-breaks',
@@ -122,7 +145,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.productivity'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.5min'),
-      points: 10
+      points: 10,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     }
   ],
 
@@ -135,7 +160,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.mindfulness'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.5min'),
-      points: 15
+      points: 15,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'limit-caffeine',
@@ -145,7 +172,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.health'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.afternoon'),
-      points: 20
+      points: 20,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     }
   ],
 
@@ -158,7 +187,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.health'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.15min'),
-      points: 15
+      points: 15,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'social-connection',
@@ -168,7 +199,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.social'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.10min'),
-      points: 25
+      points: 25,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     }
   ],
 
@@ -181,7 +214,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.health'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.30min'),
-      points: 20
+      points: 20,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'bedroom-temperature',
@@ -191,7 +226,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.health'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.allNight'),
-      points: 10
+      points: 10,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     }
   ],
 
@@ -204,7 +241,9 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.mindfulness'),
       difficulty: t('difficulties.medium'),
       duration: t('durations.10min'),
-      points: 20
+      points: 20,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     },
     {
       id: 'nature-time',
@@ -214,7 +253,69 @@ export const getAvailableHabits = (t) => ({
       category: t('categories.lifestyle'),
       difficulty: t('difficulties.easy'),
       duration: t('durations.20min'),
-      points: 15
+      points: 15,
+      type: 'simple',
+      frequency: FREQUENCY_TYPES.DAILY
     }
   ]
 });
+
+
+export const getRecommendedHabits = (userProfile,userHabits,t) => {
+  const allHabits = getAvailableHabits(t);
+  let recommendedHabits=[];
+
+  const focusArea = userProfile?.focusArea || "General Wellness";
+
+  switch(focusArea) {
+    case "Anxiety Management":
+      recommendedHabits = [
+        ...allHabits["Anxiety Management"],
+        ...allHabits.common.filter(habit => 
+          habit.category === t('categories.mindfulness') || 
+          habit.id === 'breathing-exercises' ||
+          habit.id === 'anxiety-journal'
+        )
+      ];
+      break;
+
+    case "Stress Relief":
+      recommendedHabits = [
+        ...allHabits["Stress Management"], 
+        ...allHabits.common.filter(habit => 
+          habit.id === 'meditation' ||
+          habit.id === 'organize-space' ||
+          habit.id === 'take-breaks' ||
+          habit.id === 'practice-gratitude'
+        )
+      ];
+      break;
+
+     case "Maintaining Balance":
+      recommendedHabits = [
+        ...allHabits.common.filter(habit => 
+          habit.id === 'morning-exercise' ||
+          habit.id === 'read-book' ||
+          habit.id === 'practice-gratitude' ||
+          habit.id === 'no-screen-before-bed'
+        )
+      ];
+      break;
+
+    case "General Wellness":
+    default:
+      recommendedHabits = [
+        ...allHabits.common.filter(habit => 
+          habit.id === 'water-intake' ||
+          habit.id === 'morning-exercise' ||
+          habit.id === 'eat-fruit' ||
+          habit.id === 'practice-gratitude'
+        )
+      ];
+      break;
+  }
+  const userHabitIds = userHabits.map(h => h.id);
+  return recommendedHabits
+    .filter(habit => !userHabitIds.includes(habit.id))
+    .slice(0, 4); 
+}

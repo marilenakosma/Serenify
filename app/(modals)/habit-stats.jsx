@@ -300,6 +300,29 @@ const getToday = () => {
     );
   }
 
+  const getHabitIcon = () => {
+        if (habit.icon && typeof habit.icon === 'string' && habit.icon.includes('-')) {
+          return habit.icon;  
+        }
+        if (habit.icon && typeof habit.icon === 'string' && habit.icon.includes('-')) {
+          return habit.icon;  
+        }
+  
+        const fallbackIcons = {
+        'complete-goal': 'checkmark-outline',
+        'reflection': 'journal-outline',
+        'affirmation': 'heart-outline',
+        'exercise': 'fitness-outline',
+        'water-intake': 'water-outline',
+        'meditation': 'leaf-outline'
+        };
+        return fallbackIcons[habit.id] || 'checkmark-outline';  // Fallback
+      };
+
+    const getHabitText = () => {
+        return habit.text || habit.title || habit.name || 'Habit';
+      };
+
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
@@ -320,11 +343,11 @@ const getToday = () => {
           {/* Habit Info Card */}
           <View style={styles.habitCard}>
             <View style={styles.habitIconContainer}>
-              <Ionicons name={habit.name} size={40} color="#4CAF50" />
+              <Ionicons name={getHabitIcon()} size={40} color="#4CAF50" />
             </View>
             <View style={styles.habitInfo}>
               <ThemedText title style={styles.habitTitle}>
-                {habit.text}
+                {getHabitText()}
               </ThemedText>
               <ThemedText style={styles.habitMeta}>
                 {habit.category} • {getFrequencyDisplay(habit.frequency, t)} • {habit.duration}
