@@ -16,20 +16,21 @@ import { useTranslation } from '../../constants/translations';
 const activities = () => {
   const { t } = useTranslation();
   const categoryData = [
-    { id:1, image:Goal,text:t('activities.goalIdeas')},
-    { id:2, image:Diary, text:t('activities.reflections')},
-    { id:3, image:Breathe, text:t('activities.breathe')},
-    { id:4, image:Sounds, text:t('activities.soundscapes')},
-    { id:5, image:Movements, text:t('activities.movements')},
-    { id:6, image:Timers, text:t('activities.timers')},
-    { id:7, image:Gift, text:t('activities.actOfKindness')},
-    { id:8, image:Kit, text:t('activities.firstAidKit')},
+    { id:1, image:Goal,text:t('activities.goalIdeas'),route: '/(activities)/goalIdeas'},
+    { id:2, image:Diary, text:t('activities.reflections'),route: '/(activities)/reflections'},
+    { id:3, image:Breathe, text:t('activities.breathe'),route: '/(activities)/breathe'},
+    { id:4, image:Sounds, text:t('activities.soundscapes'),route: '/(activities)/soundscapes'},
+    { id:5, image:Movements, text:t('activities.movements'),route: '/(activities)/movements'},
+    { id:6, image:Timers, text:t('activities.timers'),route: '/(activities)/timers'},
+    { id:7, image:Gift, text:t('activities.actOfKindness'),route: '/(activities)/actOfKindness'},
+    { id:8, image:Kit, text:t('activities.firstAidKit'),route: '/(activities)/firstAidKit'},
   ]
 
   const renderActivity = ({item}) => (
    <ThemedCategory
      image={item.image}
      text={item.text}
+     route={item.route}
      style={styles.activityItem}
    />
   )

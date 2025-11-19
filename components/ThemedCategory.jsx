@@ -1,16 +1,21 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native'
-import ThemedText from './ThemedText'
-const ThemedCategory = ({image,text,style}) => {
-  function handlePress() {
-      console.log("pressed!")
-    }
+import { useRouter } from "expo-router";
 
-    const handleStatsPress = (habitId) => {
-        router.push({
-        pathname: '/(modals)/habit-stats',
-        params: { habitId }
-      });
-      };
+import ThemedText from './ThemedText'
+const ThemedCategory = ({image,text,style,onPress,route}) => {
+
+    const router = useRouter();
+
+    const handlePress = () => {
+    if (onPress) {
+      onPress()
+    } else if (route) {
+      console.log(`Navigating to: ${route}`)
+      router.push(route) 
+    } else {
+      console.log("No action defined for:", text)
+    }
+  }
 
   return (
     <View style={[styles.container,style]}>

@@ -4,12 +4,21 @@ import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { Colors } from "../constants/Colors";
 import ThemedView from './ThemedView';
 
-const BackButton = ({style}) => {
+const BackButton = ({style,route = false}) => {
     const router = useRouter();
+    const handleBackButton = () => {
+      if(route) {
+        console.log(' Navigating to:', route);
+        router.navigate(route)
+      } else {
+        console.log(' Going back');
+        router.back()
+      }
+    }
   return (
      <ThemedView style={[{flexDirection:'row',justifyContent:'start'},style]}>
        <TouchableOpacity 
-       onPress={router.back} style={styles.button}>
+       onPress={handleBackButton} style={styles.button}>
         <ArrowLeftIcon size="20" color="black"/>
        </TouchableOpacity>
      </ThemedView>
