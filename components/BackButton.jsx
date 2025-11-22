@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { Colors } from "../constants/Colors";
 import ThemedView from './ThemedView';
+import { usePathname } from 'expo-router';
 
 const BackButton = ({style,route = false}) => {
     const router = useRouter();

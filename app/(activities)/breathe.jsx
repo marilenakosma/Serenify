@@ -22,6 +22,14 @@ export default function Breathe() {
       <SafeAreaView style={styles.safeArea}>
        <BackButton style={{backgroundColor:'#f1f5eeff'}}/>
        <ThemedView style={styles.container}>
+
+        <LottieView
+            source={require('../../assets/animations/Tree.json')} 
+            autoPlay
+            loop={false}
+            style={styles.animation}
+        />
+
       <ThemedText title={true} style={styles.title}>
         {t('welcome.title')}
       </ThemedText>

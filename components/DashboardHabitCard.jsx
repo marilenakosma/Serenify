@@ -172,7 +172,7 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
     outputRange: ['transparent', '#4CAF50'] // Transparent to green border
   });
 
-  // ✅ UPDATE: Get streak label based on frequency
+  // Get streak label based on frequency
   const getStreakLabel = (frequency) => {
     if (frequency === 'Everyday' || frequency === 'Weekdays only' || frequency === 'Weekends only') {
       return t('habitCard.days');
