@@ -258,6 +258,8 @@
     "hard": "Hard"
   },
   "durations": {
+    "1min": "1 min",
+    "3min": "3 min",
     "5min": "5 min",
     "10min": "10 min",
     "15min": "15 min",
@@ -336,6 +338,16 @@
     "timers":"Timers",
     "actOfKindness":"Act of Kindness",
     "firstAidKit":"First Aid Kit"
+  },
+  "breathe": {
+    "inhale": "Inhale",
+    "exhale": "Exhale", 
+    "hold": "Hold",
+    "pause": "Pause",
+    "resume": "Resume",
+    "completed": "Well Done! 🌟",
+    "finish": "Finish",
+    "again": "Again"
   },
   "statistics":{
     "growthArea":"Growth Area",

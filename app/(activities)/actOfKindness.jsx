@@ -19,8 +19,8 @@ export default function actOfKindness() {
   const pathname = usePathname();
   const { t } = useTranslation();
   
-  console.log('🔍 Current pathname:', pathname);
-  console.log('🔍 Attempting to go back to: /(dashboard)/activities');
+  console.log('Current pathname:', pathname);
+  console.log('Attempting to go back to: /(dashboard)/activities');
 //<Image source={LogoGreen} style={styles.image}/>
   return (
       <SafeAreaView style={styles.safeArea}>
