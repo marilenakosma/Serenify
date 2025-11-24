@@ -347,7 +347,8 @@
     "resume": "Resume",
     "completed": "Well Done! 🌟",
     "finish": "Finish",
-    "again": "Again"
+    "again": "Again",
+    "start":"Start"
   },
   "statistics":{
     "growthArea":"Growth Area",

@@ -346,7 +346,8 @@
     "resume": "Συνέχεια",
     "completed": "Μπράβο! 🌟",
     "finish": "Τέλος",
-    "again": "Ξανά"
+    "again": "Ξανά",
+    "start":"Ας ξεκινήσουμε"
   },
   "statistics":{
     "growthArea":"Τομείς Ανάπτυξης",

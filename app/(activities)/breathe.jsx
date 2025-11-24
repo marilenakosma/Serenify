@@ -38,6 +38,7 @@ export default function Breathe() {
   if(!selectedDuration) return;
   
   setIsBreathing(true);
+  setIsCompleted(false);
   setTimeRemaining(selectedDuration.duration * 60);
   setProgress(0);
   setBreathPhase('inhale');
@@ -50,7 +51,7 @@ export default function Breathe() {
   intervalRef.current = setInterval(() => {
     setTimeRemaining(prev => {
       if(prev <= 1) {
-        pauseBreathing(); // Pause instead of stop when time ends
+        completeBreathing(); // Pause instead of stop when time ends
         return 0;
       }
 
@@ -66,17 +67,22 @@ export default function Breathe() {
   const breathingCycle = () => {
     setBreathPhase('inhale');
     
-    setTimeout(() => setBreathPhase('hold'), 5000);     // 5s: switch to hold after inhale
-    setTimeout(() => setBreathPhase('exhale'), 6000);   // 6s: switch to exhale after hold
-    setTimeout(() => setBreathPhase('hold'), 11000);    // 11s: switch to hold after exhale
+     const timeouts = [
+      setTimeout(() => setBreathPhase('hold'), 5000),
+      setTimeout(() => setBreathPhase('exhale'), 6000),
+      setTimeout(() => setBreathPhase('hold'), 11000)
+    ];
+
+    intervalRef.phaseTimeouts = (intervalRef.phaseTimeouts || []).concat(timeouts);
   };
 
   // Start first cycle immediately
   breathingCycle();
   
   // Repeat cycle every 14 seconds to match animation
-  const phaseInterval = setInterval(breathingCycle, 14000);
-  intervalRef.phaseInterval = phaseInterval;
+  intervalRef.phaseInterval = setInterval(() => {
+    breathingCycle();
+  }, 14000);
 };
 
   const pauseBreathing = () => {
@@ -149,14 +155,19 @@ const resumeBreathing = () => {
   const resumeBreathingCycle = () => {
     const breathingCycle = () => {
       setBreathPhase('inhale');
-      setTimeout(() => setBreathPhase('hold'), 5000);
-      setTimeout(() => setBreathPhase('exhale'), 6000);
-      setTimeout(() => setBreathPhase('hold'), 11000);
+      
+      const timeouts = [
+        setTimeout(() => setBreathPhase('hold'), 5000),
+        setTimeout(() => setBreathPhase('exhale'), 6000),
+        setTimeout(() => setBreathPhase('hold'), 11000)
+      ];
+      intervalRef.phaseTimeouts = (intervalRef.phaseTimeouts || []).concat(timeouts);
     };
 
     breathingCycle();
-    const phaseInterval = setInterval(breathingCycle, 14000);
-    intervalRef.phaseInterval = phaseInterval;
+    intervalRef.phaseInterval = setInterval(() => {
+      breathingCycle();
+    }, 14000);
   };
 
   resumeBreathingCycle();
@@ -181,6 +192,12 @@ const stopBreathing = () => {
   if (intervalRef.phaseInterval) {
     clearInterval(intervalRef.phaseInterval);
   }
+
+  if (intervalRef.phaseTimeouts) {
+    intervalRef.phaseTimeouts.forEach(timeout => clearTimeout(timeout));
+    intervalRef.phaseTimeouts = [];
+  }
+
 };
 
   const onAnimationLoop = () => {
@@ -215,9 +232,9 @@ const stopBreathing = () => {
          style={{ backgroundColor: '#f1f5eeff' }} 
          onPress={() => {
            if (isBreathing) {
-            stopBreathing(); // Reset everything
+            stopBreathing(); 
            }
-            router.back(); // Then navigate back
+            router.push('/(dashboard)/activities');
          }}
       />
       <ThemedView style={styles.container}>
@@ -249,7 +266,7 @@ const stopBreathing = () => {
             {selectedDuration && (
               <ThemedButton onPress={startBreathing}>
                 <ThemedText title={true} style={{ color: '#f2f2f2' }}>
-                  Start ({selectedDuration.text})
+                   {t('breathe.start')} ({selectedDuration.text})
                 </ThemedText>
               </ThemedButton>
             )}
@@ -293,7 +310,7 @@ const stopBreathing = () => {
                <ThemedButton onPress={() => {
                 stopBreathing();
                 router.push('/(dashboard)/activities');
-               }} style={styles.finishButton}>
+               }} style={styles.againButton}>
                 <ThemedText title={true} style={{ color: '#f2f2f2' }}>
                   {t('breathe.finish')}
                 </ThemedText>
@@ -385,7 +402,6 @@ const styles = StyleSheet.create({
     fontSize: 32,
     marginBottom: 40,
     textAlign: 'center',
-    fontWeight: 'bold',
   },
   progressContainer: {
     width: '80%',
