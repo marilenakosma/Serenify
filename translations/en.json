@@ -340,6 +340,11 @@
     "firstAidKit":"First Aid Kit"
   },
   "breathe": {
+    "selectDuration": "Select Duration",
+    "ready": "Ready to Begin",
+    "duration": "Duration",
+    "start": "Start Breathing",
+    "changeDuration": "Change Duration",
     "inhale": "Inhale",
     "exhale": "Exhale", 
     "hold": "Hold",
@@ -347,8 +352,7 @@
     "resume": "Resume",
     "completed": "Well Done! 🌟",
     "finish": "Finish",
-    "again": "Again",
-    "start":"Start"
+    "again": "Again"
   },
   "statistics":{
     "growthArea":"Growth Area",
