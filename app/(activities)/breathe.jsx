@@ -19,7 +19,7 @@ export default function Breathe() {
   const router=useRouter()
   const { t } = useTranslation();
   const [selectedDuration, setSelectedDuration] = useState(null);
-  const [ showSession,setShowSession ] = useState(false);
+  const [showSession,setShowSession ] = useState(false);
   const [breathPhase,setBreathPhase] = useState('inhale');
 
   const durationData = [
@@ -28,26 +28,24 @@ export default function Breathe() {
     { id: 3, text: t('durations.5min'), duration: 5 },
     { id: 4, text: t('durations.10min'), duration: 10 },
   ]
-  
-  const handleBreathingPhases = (setPhaseTimeouts, setPhaseInterval) => {
-    const breathingCycle = () => {
-      setBreathPhase('inhale');
-      
-      const timeouts = [
-        setTimeout(() => setBreathPhase('hold'), 5000),
-        setTimeout(() => setBreathPhase('exhale'), 6000),
-        setTimeout(() => setBreathPhase('hold'), 11000)
-      ];
 
-      setPhaseTimeouts(timeouts);
-    };
+const handleAnimationFrame = (event) => {
+ const progress = event.progress;
 
-    breathingCycle();
-    const interval = setInterval(breathingCycle, 14000);
-    setPhaseInterval(interval);
-  };
+ console.log('Animation progress:', progress);
 
-  const getPhaseText = () => {
+ if(progress < 0.37) {
+    setBreathPhase('inhale');
+ } else if(progress < 0.43) {
+    setBreathPhase('hold');
+ } else if(progress < 0.77) {
+    setBreathPhase('exhale');
+ } else {
+    setBreathPhase('hold');
+ }
+};
+
+const getPhaseText = () => {
     switch(breathPhase) {
       case 'inhale': return t('breathe.inhale');
       case 'exhale': return t('breathe.exhale');
@@ -92,12 +90,11 @@ export default function Breathe() {
 
        
     {!showSession ? (
-          // Duration Selection Screen
 
           <View style={styles.selectionContent}>
           <LottieView
             source={require('../../assets/animations/Breathe.json')} 
-            autoPlay={false}
+            autoPlay={true}
             loop={true}
             style={styles.animation}
           />
@@ -129,12 +126,14 @@ export default function Breathe() {
         ) : (
           <ActivitySession
             animationSource={require('../../assets/animations/Breathe.json')}
-            onPhaseChange={handleBreathingPhases}
+            //onPhaseChange={handleBreathingPhases}
+            onAnimationFrame={handleAnimationFrame}
             phaseText={getPhaseText()}
             backRoute="/(dashboard)/activities"
             selectedDuration={selectedDuration}
             onStop={handleStop}
             autoStart={true}
+            cycleDuration={16000}
             startButtonText={t('breathe.start')}
             showProgress={true}
             completedText={t('breathe.completed')}

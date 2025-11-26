@@ -1,5 +1,5 @@
 import React, { useRef, useState,useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet,Animated,Easing } from 'react-native';
 import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import ThemedText from './ThemedText';
@@ -7,30 +7,30 @@ import ThemedButton from './ThemedButton';
 import { useActivityTimer } from '../hooks/useActivityTimer';
 import { useTranslation } from '../constants/translations';
 
+const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
+
 const ActivitySession = ({ 
     animationSource,
-    onPhaseChange,
+    onAnimationFrame,
     phaseText,
     backRoute,
     animationStyle,
-      
-    showProgress=true,
-    autoStart=false,
-    startButtonText ="Start",
+    cycleDuration = 16000,
+    showProgress = true,
+    autoStart = false,
+    startButtonText = "Start",
     completedText = "Well Done! 🌟",
     finishButtonText = "Finish",
     againButtonText = "Again",
     pauseButtonText = "Pause",
     resumeButtonText = "Resume",
-
     selectedDuration,
     onStop,
     onComplete,
 }) => {
-  const router=useRouter()
-  const { t } = useTranslation();
-
-  const animationRef = useRef(null);
+  const router = useRouter();
+  const animationProgress = useRef(new Animated.Value(0)).current;
+  const [animationActive, setAnimationActive] = useState(false);
 
   const {
     isActive,
@@ -42,45 +42,86 @@ const ActivitySession = ({
     pauseTimer,
     resumeTimer,
     stopTimer,
-    setPhaseTimeouts,
-    setPhaseInterval,
   } = useActivityTimer();
 
-  const handleStart = () => {
-    animationRef.current?.reset();
-    animationRef.current?.play();
+  // ✅ SINGLE useEffect to handle animation loop
+  useEffect(() => {
+    if (!animationActive) return;
 
-    const phaseHandler = () => onPhaseChange(setPhaseTimeouts,setPhaseInterval);
-    startTimer(selectedDuration.duration,handleComplete,phaseHandler);
+    let isCancelled = false;
+    
+    const runLoop = async () => {
+      while (!isCancelled && animationActive) {
+        // Reset to start
+        animationProgress.setValue(0);
+        
+        // Run animation for one cycle
+        await new Promise((resolve) => {
+          Animated.timing(animationProgress, {
+            toValue: 1,
+            duration: cycleDuration,
+            easing: Easing.linear,
+            useNativeDriver: false,
+          }).start(({ finished }) => {
+            resolve(finished);
+          });
+        });
+      }
+    };
+
+    runLoop();
+
+    return () => {
+      isCancelled = true;
+      animationProgress.stopAnimation();
+    };
+  }, [animationActive, cycleDuration]);
+
+  // ✅ Animation frame listener
+  useEffect(() => {
+    const listenerId = animationProgress.addListener(({ value }) => {
+      if (onAnimationFrame && animationActive) {
+        onAnimationFrame({ progress: value });
+      }
+    });
+
+    return () => {
+      animationProgress.removeListener(listenerId);
+    };
+  }, [onAnimationFrame, animationActive]);
+
+  const handleStart = () => {
+    setAnimationActive(true);
+    startTimer(selectedDuration.duration, handleComplete);
   };
 
   const handlePause = () => {
-    animationRef.current?.pause();
+    setAnimationActive(false);
     pauseTimer();
-  }
+  };
 
-  const handleResume = () => {  
-    animationRef.current?.resume();
-
-    const phaseHandler = () => onPhaseChange(setPhaseTimeouts,setPhaseInterval);
-    resumeTimer(selectedDuration.duration,handleComplete,phaseHandler);
-  }
+  const handleResume = () => {
+    setAnimationActive(true);
+    resumeTimer(selectedDuration.duration, handleComplete);
+  };
 
   const handleComplete = () => {
-    animationRef.current?.pause();
+    setAnimationActive(false);
+    animationProgress.setValue(0);
     onComplete?.();
-  }
+  };
 
   const handleStop = () => {
-    animationRef.current?.reset();
+    setAnimationActive(false);
+    animationProgress.setValue(0);
     stopTimer();
     onStop?.();
-  }
+  };
 
   const handleFinish = () => {
     handleStop();
     router.push(backRoute);
-  }
+  };
 
   const handleAgain = () => {
     handleStop();
@@ -91,21 +132,19 @@ const ActivitySession = ({
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
-   
+
   useEffect(() => {
-    if(selectedDuration && !isActive && autoStart) {
-        handleStart();
+    if (selectedDuration && !isActive && autoStart) {
+      handleStart();
     }
-  },[selectedDuration, autoStart])
+  }, [selectedDuration, autoStart]);
 
-
- return (
+  return (
     <View style={styles.container}>
-      <LottieView
-        ref={animationRef}
+      {/* ✅ Use AnimatedLottieView with progress control */}
+      <AnimatedLottieView
         source={animationSource}
-        autoPlay={false}
-        loop={true}
+        progress={animationProgress}
         style={[styles.animation, animationStyle]}
       />
 
@@ -113,10 +152,10 @@ const ActivitySession = ({
         {isCompleted ? completedText : phaseText}
       </ThemedText>
       
-      {showProgress &&  (
+      {showProgress && (
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
-             <View style={[styles.progressFill, { width: `${progress}%` }]} />
+            <View style={[styles.progressFill, { width: `${progress}%` }]} />
           </View>
           <ThemedText style={styles.timeText}>
             {formatTime(timeRemaining)}
@@ -126,11 +165,11 @@ const ActivitySession = ({
 
       <View style={styles.buttonContainer}>
         {!isActive && !isCompleted ? (
-            <ThemedButton onPress={handleStart} style={styles.startButton}>
-              <ThemedText title={true} style={{ color: '#f2f2f2' }}>
-                {startButtonText} ({selectedDuration?.text})
-              </ThemedText>
-            </ThemedButton>
+          <ThemedButton onPress={handleStart} style={styles.startButton}>
+            <ThemedText title={true} style={{ color: '#f2f2f2' }}>
+              {startButtonText} ({selectedDuration?.text})
+            </ThemedText>
+          </ThemedButton>
         ) : isCompleted ? (
           <>
             <ThemedButton onPress={handleFinish} style={styles.finishButton}>
@@ -138,7 +177,6 @@ const ActivitySession = ({
                 {finishButtonText}
               </ThemedText>
             </ThemedButton>
-
             <ThemedButton onPress={handleAgain} style={styles.againButton}>
               <ThemedText title={true} style={{ color: '#f2f2f2' }}>
                 {againButtonText}

@@ -9,10 +9,10 @@ export const useActivityTimer = () => {
   const [isCompleted,setIsCompleted] = useState(false);
 
   const intervalRef = useRef(null);
-  const phaseIntervalRef = useRef(null);
-  const phaseTimeoutsRef = useRef([]);
+  //const phaseIntervalRef = useRef(null);
+  //const phaseTimeoutsRef = useRef([]);
 
-    const startTimer = (durationInMinutes, onComplete, onPhaseChange) => {
+    const startTimer = (durationInMinutes, onComplete) => {
     setIsActive(true);
     setIsCompleted(false);
     setIsPaused(false);
@@ -37,9 +37,9 @@ export const useActivityTimer = () => {
     }, 1000);
 
 
-    if (onPhaseChange) {
-      onPhaseChange();
-    }
+   // if (onPhaseChange) {
+   //   onPhaseChange();
+   // }
   };
 
   const pauseTimer = () => {
@@ -48,16 +48,9 @@ export const useActivityTimer = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    if (phaseIntervalRef.current) {
-      clearInterval(phaseIntervalRef.current);
-    }
-    if (phaseTimeoutsRef.current.length > 0) {
-      phaseTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-      phaseTimeoutsRef.current = [];
-    }
   };
 
-  const resumeTimer = (durationInMinutes, onComplete, onPhaseChange) => {
+  const resumeTimer = (durationInMinutes, onComplete) => {
     setIsPaused(false);
     
     intervalRef.current = setInterval(() => {
@@ -78,9 +71,9 @@ export const useActivityTimer = () => {
     }, 1000);
 
 
-    if (onPhaseChange) {
-      onPhaseChange();
-    }
+    //if (onPhaseChange) {
+   //   onPhaseChange();
+   // }
   };
 
   const completeTimer = () => {
@@ -89,13 +82,6 @@ export const useActivityTimer = () => {
     
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
-    }
-    if (phaseIntervalRef.current) {
-      clearInterval(phaseIntervalRef.current);
-    }
-    if (phaseTimeoutsRef.current.length > 0) {
-      phaseTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-      phaseTimeoutsRef.current = [];
     }
   };
 
@@ -109,21 +95,6 @@ export const useActivityTimer = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    if (phaseIntervalRef.current) {
-      clearInterval(phaseIntervalRef.current);
-    }
-    if (phaseTimeoutsRef.current.length > 0) {
-      phaseTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-      phaseTimeoutsRef.current = [];
-    }
-  };
-
-  const setPhaseTimeouts = (timeouts) => {
-    phaseTimeoutsRef.current = [...phaseTimeoutsRef.current, ...timeouts];
-  };
-
-  const setPhaseInterval = (interval) => {
-    phaseIntervalRef.current = interval;
   };
 
   return {
@@ -133,15 +104,13 @@ export const useActivityTimer = () => {
     isCompleted,
     timeRemaining,
     progress,
-    
-
     startTimer,
     pauseTimer,
     resumeTimer,
     completeTimer,
     stopTimer,
-    setPhaseTimeouts,
-    setPhaseInterval,
+   // setPhaseTimeouts,
+  //  setPhaseInterval,
   };
 };
 
