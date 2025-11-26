@@ -91,7 +91,7 @@ export default function Breathe() {
       <ThemedView style={styles.container}>
 
        
-    {!selectedDuration ? (
+    {!showSession ? (
           // Duration Selection Screen
 
           <View style={styles.selectionContent}>
@@ -112,42 +112,20 @@ export default function Breathe() {
                 columnWrapperStyle={styles.row}
               />
             </View>
-            </View>
-        ) : !showSession ? (
 
-          <View style={styles.selectionContent}>
-            <LottieView
-              source={require('../../assets/animations/Breathe.json')} 
-              autoPlay={true}
-              loop={true}
-              style={styles.animation}
-            />
-
-            <ThemedText title={true} style={styles.title}>
-              {t('breathe.ready')}
-            </ThemedText>
-
-            <ThemedText style={styles.durationText}>
-              {t('breathe.duration')}: {selectedDuration.text}
-            </ThemedText>
-
-            <View style={styles.buttonContainer}>
-              <ThemedButton onPress={handleStartSession} style={styles.startButton}>
+            {selectedDuration && (
+              <View style={styles.buttonContainer}>
+              <ThemedButton onPress={handleStartSession}>
                 <ThemedText title={true} style={{ color: '#f2f2f2' }}>
-                  {t('breathe.start')}
+                   {t('breathe.start')} ({selectedDuration.text})
                 </ThemedText>
               </ThemedButton>
+              </View>
+            )}
 
-              <ThemedButton 
-                onPress={() => setSelectedDuration(null)} 
-                style={styles.changeButton}
-              >
-                <ThemedText title={true} style={{ color: '#4CAF50' }}>
-                  {t('breathe.changeDuration')}
-                </ThemedText>
-              </ThemedButton>
             </View>
-          </View>
+            
+
         ) : (
           <ActivitySession
             animationSource={require('../../assets/animations/Breathe.json')}
@@ -197,6 +175,7 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
     durationContainer: {
+      alignItems:'center',
       width: '80%',
       marginBottom: 30,
     },
@@ -218,8 +197,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     gap: 10,
+    paddingHorizontal:10,
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent:'center',
   },
   startButton: {
     backgroundColor: '#4CAF50',
