@@ -20,37 +20,38 @@ export default function Movements() {
   const { t } = useTranslation();
   const [selectedDuration, setSelectedDuration] = useState(null);
   const [showSession,setShowSession ] = useState(false);
-  const [breathPhase,setBreathPhase] = useState('inhale');
+  const [movementPhase, setMovementPhase] = useState('prepare');
 
   const durationData = [
-    { id: 1, text: t('durations.1min'), duration: 1 },
-    { id: 2, text: t('durations.3min'), duration: 3 },
-    { id: 3, text: t('durations.5min'), duration: 5 },
-    { id: 4, text: t('durations.10min'), duration: 10 },
+    { id: 1, text: t('durations.5min'), duration: 5 },
+    { id: 2, text: t('durations.10min'), duration: 10 },
+    { id: 3, text: t('durations.15min'), duration: 15 },
+    { id: 4, text: t('durations.20min'), duration: 20 },
   ]
 
 const handleAnimationFrame = (event) => {
  const progress = event.progress;
 
- console.log('Animation progress:', progress);
+ console.log('Meditation progress:', progress);
 
- if(progress < 0.37) {
-    setBreathPhase('inhale');
- } else if(progress < 0.43) {
-    setBreathPhase('hold');
- } else if(progress < 0.77) {
-    setBreathPhase('exhale');
- } else {
-    setBreathPhase('hold');
- }
-};
+ if (progress < 0.25) {
+      setMovementPhase('prepare');     
+    } else if (progress < 0.50) {
+      setMovementPhase('down');   
+    } else if (progress < 0.75) {
+      setMovementPhase('hold');   
+    } else {
+      setMovementPhase('up');    
+    }
+  };
 
 const getPhaseText = () => {
-    switch(breathPhase) {
-      case 'inhale': return t('breathe.inhale');
-      case 'exhale': return t('breathe.exhale');
-      case 'hold': return t('breathe.hold');
-      default: return t('breathe.inhale');
+    switch(movementPhase) {
+      case 'prepare': return t('movements.prepare');
+      case 'down': return t('movements.down');
+      case 'hold': return t('movements.hold');
+      case 'up': return t('movements.up');
+      default: return t('movements.prepare');
     }
   };
 
@@ -65,7 +66,7 @@ const getPhaseText = () => {
   const handleStop = () => {
     setSelectedDuration(null);
     setShowSession(false);
-    setBreathPhase('inhale');
+    setMovementPhase('prepare');
   };
 
   const handleStartSession = () => {
@@ -93,7 +94,7 @@ const getPhaseText = () => {
 
           <View style={styles.selectionContent}>
           <LottieView
-            source={require('../../assets/animations/Breathe.json')} 
+            source={require('../../assets/animations/PushUps.json')} 
             autoPlay={true}
             loop={true}
             style={styles.animation}
@@ -125,7 +126,7 @@ const getPhaseText = () => {
 
         ) : (
           <ActivitySession
-            animationSource={require('../../assets/animations/Breathe.json')}
+            animationSource={require('../../assets/animations/PushUps.json')}
             //onPhaseChange={handleBreathingPhases}
             onAnimationFrame={handleAnimationFrame}
             phaseText={getPhaseText()}
@@ -133,10 +134,10 @@ const getPhaseText = () => {
             selectedDuration={selectedDuration}
             onStop={handleStop}
             autoStart={true}
-            cycleDuration={16000}
+            cycleDuration={8000}
             startButtonText={t('breathe.start')}
             showProgress={true}
-            completedText={t('breathe.completed')}
+            completedText={t('movements.completed')}
             finishButtonText={t('breathe.finish')}
             againButtonText={t('breathe.again')}
             pauseButtonText={t('breathe.pause')}
@@ -212,6 +213,12 @@ const styles = StyleSheet.create({
     borderColor: '#4CAF50',
     paddingHorizontal: 40,
     paddingVertical: 15,
+    borderRadius: 25,
+  },
+  startButton: {
+    backgroundColor: '#6B73FF', 
+    paddingHorizontal: 50,
+    paddingVertical: 18,
     borderRadius: 25,
   },
 })

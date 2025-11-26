@@ -354,6 +354,31 @@
     "finish": "Finish",
     "again": "Again"
   },
+  "meditation": {
+    "start": "Begin Meditation",
+    "focus": "Focus on your breath",
+    "observe": "Observe your thoughts", 
+    "release": "Release and let go",
+    "return": "Return to awareness",
+    "pause": "Pause",
+    "resume": "Resume", 
+    "completed": "Meditation Complete 🧘‍♀️",
+    "finish": "Finish",
+    "again": "Meditate Again"
+  },
+  "movements": {
+    "selectDuration": "Select Workout Duration",
+    "start": "Start Workout",
+    "prepare": "Get Ready",
+    "down": "Push Down", 
+    "hold": "Hold Position",
+    "up": "Push Up",
+    "pause": "Pause",
+    "resume": "Resume",
+    "completed": "Workout Complete! 💪",
+    "finish": "Finish",
+    "again": "Workout Again"
+  },
   "statistics":{
     "growthArea":"Growth Area",
     "mentalHealth":"Mental Health",
