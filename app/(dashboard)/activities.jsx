@@ -17,7 +17,7 @@ const activities = () => {
   const { t } = useTranslation();
   const categoryData = [
     { id:1, image:Goal,text:t('activities.goalIdeas'),route: '/(activities)/goalIdeas'},
-    { id:2, image:Diary, text:t('activities.reflections'),route: '/(activities)/reflections'},
+    { id:2, image:Diary, text:t('activities.reflections'),route: '/(activities)/reflectionPrompts'},
     { id:3, image:Breathe, text:t('activities.breathe'),route: '/(activities)/breathe'},
     { id:4, image:Sounds, text:t('activities.soundscapes'),route: '/(activities)/soundscapes'},
     { id:5, image:Movements, text:t('activities.movements'),route: '/(activities)/movements'},

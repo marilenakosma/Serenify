@@ -27,6 +27,8 @@ export const useAuthStore = create((set,get) => ({
 
   kindnessCompletions:{},
 
+  reflections:{},
+
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
 
   login: async(email,password) => {
@@ -541,7 +543,7 @@ export const useAuthStore = create((set,get) => ({
       }
 
       set({ kindnessCompletions: completions });
-      
+
       const currentAuthData = getItem("authData");
       if (currentAuthData) {
         setItem("authData", { 
@@ -572,6 +574,30 @@ export const useAuthStore = create((set,get) => ({
       .flat()
       .length;
   },
+
+  saveReflection: (text) => {
+    const state = get();
+    const today = new Date().toDateString();
+    const newEntry = { text, date: today };
+    const updated = [newEntry, ...(state.reflections || [])];
+
+    set({ reflections: updated });
+  
+    const currentAuthData = getItem("authData");
+       if (currentAuthData) {
+         setItem("authData", { 
+         ...currentAuthData, 
+         reflections: updated
+       });
+
+      }
+  },
+
+  getReflections: () => {
+    const state = get();
+    return state.reflections || [];
+  },
+
 
   // Helper getters - using username instead of fullName
     getDisplayName: () => {

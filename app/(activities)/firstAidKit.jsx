@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { useRouter,useEffect } from 'expo-router';
+import { useRouter} from 'expo-router';
 import LottieView from 'lottie-react-native';
 import Spacer from '../../components/Spacer';
 import SplashScreen from '../../components/SplashScreen';
