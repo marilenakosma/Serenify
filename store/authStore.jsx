@@ -27,7 +27,7 @@ export const useAuthStore = create((set,get) => ({
 
   kindnessCompletions:{},
 
-  reflections:{},
+  reflections:[],
 
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
 

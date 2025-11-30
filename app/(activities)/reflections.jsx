@@ -1,5 +1,5 @@
 import { useState,useEffect } from 'react';
-import { StyleSheet,Text,TextInput,FlatList } from 'react-native';
+import { StyleSheet,Text,TextInput,FlatList,View } from 'react-native';
 import { useRouter,useLocalSearchParams } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import Spacer from '../../components/Spacer';
@@ -107,9 +107,11 @@ const styles = StyleSheet.create({
      marginBottom: 16 
     },
   list: { 
-    paddingBottom: 20 
+    paddingBottom: 20,
+    marginTop:16,
   },
   reflectionItem: { 
+    paddingTop: 20,
     backgroundColor: '#E8F5E8', 
     borderRadius: 8,
     padding: 12, 
