@@ -115,7 +115,7 @@ const getPhaseText = () => {
               <View style={styles.buttonContainer}>
               <ThemedButton onPress={handleStartSession}>
                 <ThemedText title={true} style={{ color: '#f2f2f2' }}>
-                   {t('breathe.start')} ({selectedDuration.text})
+                   {t('activities.start')} ({selectedDuration.text})
                 </ThemedText>
               </ThemedButton>
               </View>
@@ -135,13 +135,13 @@ const getPhaseText = () => {
             onStop={handleStop}
             autoStart={true}
             cycleDuration={30000}
-            startButtonText={t('breathe.start')}
+            startButtonText={t('activities.start')}
             showProgress={true}
             completedText={t('meditation.completed')}
-            finishButtonText={t('breathe.finish')}
-            againButtonText={t('breathe.again')}
-            pauseButtonText={t('breathe.pause')}
-            resumeButtonText={t('breathe.resume')}
+            finishButtonText={t('activities.finish')}
+            againButtonText={t('activities.again')}
+            pauseButtonText={t('activities.pause')}
+            resumeButtonText={t('activities.resume')}
           />
         )}
 

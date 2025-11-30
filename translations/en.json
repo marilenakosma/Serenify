@@ -337,7 +337,12 @@
     "movements":"Movements",
     "timers":"Timers",
     "actOfKindness":"Act of Kindness",
-    "firstAidKit":"First Aid Kit"
+    "firstAidKit":"First Aid Kit",
+    "start": "Begin",
+    "pause": "Pause",
+    "resume": "Resume",
+    "finish": "Finish",
+    "again": "Again"
   },
   "breathe": {
     "selectDuration": "Select Duration",
@@ -348,36 +353,72 @@
     "inhale": "Inhale",
     "exhale": "Exhale", 
     "hold": "Hold",
-    "pause": "Pause",
-    "resume": "Resume",
-    "completed": "Well Done! 🌟",
-    "finish": "Finish",
-    "again": "Again"
+    "completed": "Well Done! 🌟"
   },
   "meditation": {
-    "start": "Begin Meditation",
+    "selectDuration": "Select Meditation Duration",
     "focus": "Focus on your breath",
     "observe": "Observe your thoughts", 
     "release": "Release and let go",
     "return": "Return to awareness",
-    "pause": "Pause",
-    "resume": "Resume", 
-    "completed": "Meditation Complete 🧘‍♀️",
-    "finish": "Finish",
-    "again": "Meditate Again"
+    "completed": "Meditation Complete 🧘‍♀️"
   },
   "movements": {
     "selectDuration": "Select Workout Duration",
-    "start": "Start Workout",
     "prepare": "Get Ready",
     "down": "Push Down", 
     "hold": "Hold Position",
     "up": "Push Up",
-    "pause": "Pause",
-    "resume": "Resume",
-    "completed": "Workout Complete! 💪",
-    "finish": "Finish",
-    "again": "Workout Again"
+    "completed": "Workout Complete! 💪"
+  },
+  "soundscapes": {
+   "title": "Nature Soundscapes",
+    "subtitle": "Relax with calming nature sounds",
+    "nowPlaying": "Now Playing",
+    "rain": "Gentle Rain",
+    "rainDesc": "Soft rainfall for deep relaxation",
+    "ocean": "Ocean Waves",
+    "oceanDesc": "Rhythmic waves washing ashore", 
+    "forest": "Forest Ambience",
+    "forestDesc": "Peaceful woodland sounds",
+    "fire": "Crackling Fire",
+    "fireDesc": "Warm fireplace ambience",
+    "birds": "Singing Birds",
+    "birdsDesc": "Cheerful morning birdsong",
+    "morning": "Morning Routine",
+    "morningDesc": "Energizing morning sounds",
+    "evening": "Evening Calm", 
+    "eveningDesc": "Peaceful evening atmosphere",
+    "sunset": "Sunset Vibes",
+    "sunsetDesc": "Relaxing sunset ambience",
+    "whiteNoise": "White Noise",
+    "whiteNoiseDesc": "Pure white noise for focus"
+  },
+  "kindness": {
+    "title": "Acts of Kindness",
+    "actsToday": "kind acts today",
+    "categories": {
+      "personal": "Personal Connections",
+      "community": "Community Help", 
+      "gestures": "Small Gestures",
+      "support": "Financial Support",
+      "online": "Online Kindness"
+    },
+    "callFriend": "Call a friend or family member",
+    "sendThankYou": "Send a thank you message",
+    "compliment": "Give someone a genuine compliment",
+    "helpNeighbor": "Help an elderly neighbor",
+    "volunteer": "Volunteer for 1 hour",
+    "pickupLitter": "Pick up litter in your area",
+    "holdDoor": "Hold the door for someone",
+    "smile": "Smile at 5 strangers", 
+    "letMerge": "Let someone merge in traffic",
+    "donate": "Donate $5 to charity",
+    "tipExtra": "Tip your server extra",
+    "buyMeal": "Buy a meal for someone in need",
+    "positiveReview": "Write a positive review",
+    "shareGood": "Share good news about someone",
+    "encourageOnline": "Encourage someone online"
   },
   "statistics":{
     "growthArea":"Growth Area",
