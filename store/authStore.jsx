@@ -25,6 +25,8 @@ export const useAuthStore = create((set,get) => ({
   todayMood:null,
   moodHistory:{},
 
+  kindnessCompletions:{},
+
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
 
   login: async(email,password) => {
@@ -516,6 +518,60 @@ export const useAuthStore = create((set,get) => ({
             return false;
         }
     },
+
+    toggleKindnessAct:(actId,date=null) => {
+      const currentState = get();
+
+      const targetDate = date ? 
+      new Date(date).toDateString() :  
+      new Date().toDateString();
+
+      const completions = {...currentState.kindnessCompletions };
+
+      if(!completions[targetDate]) {
+        completions[targetDate] = [];
+      }
+
+      const actIndex = completions[targetDate].indexOf(actId);
+
+      if(actIndex > -1) {
+        completions[targetDate] = completions[targetDate].filter(id => id !== actId);
+      } else {
+        completions[targetDate] = [...completions[targetDate],actId]
+      }
+
+      set({ kindnessCompletions: completions });
+      
+      const currentAuthData = getItem("authData");
+      if (currentAuthData) {
+        setItem("authData", { 
+        ...currentAuthData, 
+        kindnessCompletions: completions 
+      });
+    }
+     
+     console.log('Kindness act completed!');
+    },
+  
+    getTodayKindnessCount: () => {
+     const state = get();
+     const today = new Date().toDateString();
+     const todayActs = state.kindnessCompletions[today] || [];
+     return todayActs.length;
+   },
+
+   getKindnessCompletions: (date = null) => {
+    const targetDate = date ? new Date(date).toDateString() : new Date().toDateString();
+    const state = get();
+    return state.kindnessCompletions[targetDate] || [];
+  },
+  
+  getTotalKindnessActs: () => {
+    const state = get();
+    return Object.values(state.kindnessCompletions)
+      .flat()
+      .length;
+  },
 
   // Helper getters - using username instead of fullName
     getDisplayName: () => {
