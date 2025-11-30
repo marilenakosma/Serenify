@@ -421,11 +421,16 @@
     "encourageOnline": "Encourage someone online"
   },
   "reflections": {
-  "title": "Daily Reflections",
-  "choosePrompt": "Choose a reflection prompt",
-  "defaultPrompt": "Write your thoughts...",
-  "placeholder": "Type here...",
-  "save": "Save"
+    "title": "Daily Reflections",
+    "choosePrompt": "Choose a reflection prompt",
+    "defaultPrompt": "Write your thoughts...",
+    "placeholder": "Type here...",
+    "save": "Save",
+    "energy": "What gave you energy today?",
+    "drain": "What drained your energy today?",
+    "gratitude": "What do you feel grateful for?",
+    "mind": "What's on your mind?",
+    "free": "Write anything you want."
   },
   "statistics":{
     "growthArea":"Growth Area",

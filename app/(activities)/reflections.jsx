@@ -21,7 +21,7 @@ export default function Reflections() {
   const [reflection, setReflection] = useState('');
   const [reflectionList, setReflectionList] = useState([]);
   const params = useLocalSearchParams();
-  const prompt = params.prompt || t('reflections.defaultPrompt');
+  const prompt = t(params.prompt) || t('reflections.defaultPrompt');
   
    useEffect(() => {
     setReflectionList(getReflections());
