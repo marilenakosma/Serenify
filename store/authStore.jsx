@@ -29,6 +29,8 @@ export const useAuthStore = create((set,get) => ({
 
   reflections:[],
 
+  worryEntries: [],
+
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
 
   login: async(email,password) => {
@@ -596,6 +598,63 @@ export const useAuthStore = create((set,get) => ({
   getReflections: () => {
     const state = get();
     return state.reflections || [];
+  },
+  
+  getWorryEntries: () => {
+    return get().worryEntries || [];
+  },
+
+  addWorryEntry: (entry) => {
+    try {
+      const currentEntries = get().worryEntries || [];
+      const updatedEntries = [entry, ...currentEntries];
+      
+      set({ worryEntries: updatedEntries });
+      
+      // Persist to storage
+      AsyncStorage.setItem(
+        `worryEntries_${get().user?.uid}`,
+        JSON.stringify(updatedEntries)
+      );
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error adding worry entry:', error);
+      return { success: false, error };
+    }
+  },
+
+  loadWorryEntries: async () => {
+    try {
+      const userId = get().user?.uid;
+      if (!userId) return;
+
+      const stored = await AsyncStorage.getItem(`worryEntries_${userId}`);
+      if (stored) {
+        set({ worryEntries: JSON.parse(stored) });
+      }
+    } catch (error) {
+      console.error('Error loading worry entries:', error);
+    }
+  },
+
+  deleteWorryEntry: (entryId) => {
+    try {
+      const currentEntries = get().worryEntries || [];
+      const updatedEntries = currentEntries.filter(entry => entry.id !== entryId);
+      
+      set({ worryEntries: updatedEntries });
+      
+      AsyncStorage.setItem(
+        `worryEntries_${get().user?.uid}`,
+        JSON.stringify(updatedEntries)
+      );
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting worry entry:', error);
+      return { success: false, error };
+    }
   },
 
 

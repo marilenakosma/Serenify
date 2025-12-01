@@ -1,78 +1,193 @@
-import { useState,useEffect } from 'react';
-import { StyleSheet } from 'react-native';
-import { useRouter} from 'expo-router';
-import LottieView from 'lottie-react-native';
-import Spacer from '../../components/Spacer';
-import SplashScreen from '../../components/SplashScreen';
-import ThemedButton from '../../components/ThemedButton';
-import ThemedText from "../../components/ThemedText";
-import ThemedView from "../../components/ThemedView";
-import BackButton from "../../components/BackButton";
+import React from 'react';
+import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import ThemedText from '../../components/ThemedText';
+import ThemedView from '../../components/ThemedView';
+import BackButton from '../../components/BackButton';
 import { useTranslation } from '../../constants/translations';
-import LanguagePicker from '../../components/LanguagePicker';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function FirstAidKit() {
-   
-  const router=useRouter()
+  const router = useRouter();
   const { t } = useTranslation();
 
-//<Image source={LogoGreen} style={styles.image}/>
-  return (
-      <SafeAreaView style={styles.safeArea}>
-       <BackButton style={{backgroundColor:'#f1f5eeff'}}/>
-       <ThemedView style={styles.container}>
-      <ThemedText title={true} style={styles.title}>
-        {t('welcome.title')}
-      </ThemedText>
+  const exercises = [
+    {
+      id: 'grounding',
+      icon: 'hand-left-outline',
+      title: t('firstAid.grounding.title'),
+      description: t('firstAid.grounding.description'),
+      color: '#66BB6A',
+      route: '/(activities)/firstaid/grounding'
+    },
+    {
+      id: 'muscle-relaxation',
+      icon: 'body-outline',
+      title: t('firstAid.muscleRelaxation.title'),
+      description: t('firstAid.muscleRelaxation.description'),
+      color: '#42A5F5',
+      route: '/(activities)/firstaid/muscle-relaxation'
+    },
+    {
+      id: 'affirmations',
+      icon: 'heart-outline',
+      title: t('firstAid.affirmations.title'),
+      description: t('firstAid.affirmations.description'),
+      color: '#FF6B9D',
+      route: '/(activities)/firstaid/affirmations'
+    },
+    {
+      id: 'box-breathing',
+      icon: 'leaf-outline',
+      title: t('firstAid.boxBreathing.title'),
+      description: t('firstAid.boxBreathing.description'),
+      color: '#9575CD',
+      route: '/(activities)/breathe' 
+    },
+    {
+      id: 'worry-journal',
+      icon: 'journal-outline',
+      title: t('firstAid.worryJournal.title'),
+      description: t('firstAid.worryJournal.description'),
+      color: '#FFA726',
+      route: '/(activities)/firstaid/worry-journal'
+    },
+    {
+      id: 'distraction',
+      icon: 'game-controller-outline',
+      title: t('firstAid.distraction.title'),
+      description: t('firstAid.distraction.description'),
+      color: '#26A69A',
+      route: '/(activities)/firstaid/distraction'
+    },
+    {
+      id: 'emergency-contacts',
+      icon: 'call-outline',
+      title: t('firstAid.emergency.title'),
+      description: t('firstAid.emergency.description'),
+      color: '#EF5350',
+      route: '/(activities)/firstaid/emergency-contacts'
+    }
+  ];
 
-      <ThemedText style={styles.subtitle}>
-        {t('welcome.subtitle')}
-      </ThemedText>
+  const renderExercise = (exercise) => (
+    <TouchableOpacity
+      key={exercise.id}
+      style={styles.exerciseCard}
+      onPress={() => router.push(exercise.route)}
+      activeOpacity={0.7}
+    >
+      <View style={[styles.iconContainer, { backgroundColor: `${exercise.color}15` }]}>
+        <Ionicons name={exercise.icon} size={28} color={exercise.color} />
+      </View>
       
-      <Spacer height={20}/>
+      <View style={styles.exerciseContent}>
+        <ThemedText style={styles.exerciseTitle}>
+          {exercise.title}
+        </ThemedText>
+        <ThemedText style={styles.exerciseDescription}>
+          {exercise.description}
+        </ThemedText>
+      </View>
       
-      <ThemedButton onPress={() => router.navigate("/(auth)/register")}>
-        <ThemedText title={true} style={{color:'#f2f2f2'}}>
-         {t('welcome.getStarted')}
+      <Ionicons name="chevron-forward" size={24} color="#999" />
+    </TouchableOpacity>
+  );
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <BackButton
+        style={{ backgroundColor: '#f1f5eeff' }}
+        onPress={() => router.push('/(dashboard)/activities')}
+      />
+      
+      <ThemedView style={styles.container}>
+        <View style={styles.header}>
+          <Ionicons name="medical" size={40} color="#EF5350" />
+          <ThemedText title={true} style={styles.title}>
+            {t('firstAid.title')}
           </ThemedText>
-      </ThemedButton>
+          <ThemedText style={styles.subtitle}>
+            {t('firstAid.subtitle')}
+          </ThemedText>
+        </View>
+
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {exercises.map(renderExercise)}
+        </ScrollView>
       </ThemedView>
-      </SafeAreaView>
+    </SafeAreaView>
   );
 }
-//<ThemedButton onPress={() => router.navigate("/(dashboard)")}>
-//<ThemedButton onPress={() => router.navigate("/(auth)/register")}>
+
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        alignItems:'center',
-        justifyContent:'center',
-        backgroundColor:'#f1f5eeff'
-    },
-    safeArea:{
-        flex:1,
-        backgroundColor:'#f1f5eeff'
-    },
-    image: {
-        marginVertical: 20,
-        width:220,
-        height:220
-    },
-    animation: {
-    width: 200,
-    height: 200,
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f1f5eeff'
   },
-    title: {
-        fontSize: 25,
-        marginTop: 20,
-        textAlign: 'center',
-         },
-    subtitle: {
-        fontSize: 16,
-    },
-    link: {
-        marginVertical: 10,
-        borderBottomWidth:1
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#f1f5eeff',
+    paddingHorizontal: 20,
+  },
+  header: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  title: {
+    fontSize: 28,
+    marginTop: 12,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#666',
+    paddingHorizontal: 20,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 20,
+  },
+  exerciseCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  iconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  exerciseContent: {
+    flex: 1,
+  },
+  exerciseTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  exerciseDescription: {
+    fontSize: 14,
+    color: '#666',
+  },
+});
