@@ -1,78 +1,415 @@
-import { useState,useEffect } from 'react';
-import { StyleSheet } from 'react-native';
-import { useRouter} from 'expo-router';
-import LottieView from 'lottie-react-native';
-import Spacer from '../../components/Spacer';
-import SplashScreen from '../../components/SplashScreen';
-import ThemedButton from '../../components/ThemedButton';
+import React, { useState } from 'react';
+import { StyleSheet, FlatList, View, TouchableOpacity, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
 import BackButton from "../../components/BackButton";
 import { useTranslation } from '../../constants/translations';
-import LanguagePicker from '../../components/LanguagePicker';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuthStore } from '../../store/authStore';
 
-export default function goalIdeas() {
-   
-  const router=useRouter()
+export default function GoalIdeas() {
+  const router = useRouter();
   const { t } = useTranslation();
+  const { userHabits, addHabits } = useAuthStore();
+  const [addedGoals, setAddedGoals] = useState(new Set());
 
-//<Image source={LogoGreen} style={styles.image}/>
-  return (
-      <SafeAreaView style={styles.safeArea}>
-       <BackButton style={{backgroundColor:'#f1f5eeff'}}/>
-       <ThemedView style={styles.container}>
-      <ThemedText title={true} style={styles.title}>
-        {t('welcome.title')}
-      </ThemedText>
 
-      <ThemedText style={styles.subtitle}>
-        {t('welcome.subtitle')}
-      </ThemedText>
-      
-      <Spacer height={20}/>
-      
-      <ThemedButton onPress={() => router.navigate("/(auth)/register")}>
-        <ThemedText title={true} style={{color:'#f2f2f2'}}>
-         {t('welcome.getStarted')}
+  const extraGoals = [
+    // Tidying & Organization
+    {
+      id: 'tidy-bedroom',
+      icon: 'bed-outline',
+      title: t('goals.tidyBedroom'),
+      description: t('goals.tidyBedroomDesc'),
+      category: t('categories.home'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.15min'),
+      points: 15,
+      color: '#FFA726'
+    },
+    {
+      id: 'tidy-kitchen',
+      icon: 'restaurant-outline',
+      title: t('goals.tidyKitchen'),
+      description: t('goals.tidyKitchenDesc'),
+      category: t('categories.home'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.15min'),
+      points: 15,
+      color: '#FFA726'
+    },
+    {
+      id: 'tidy-bathroom',
+      icon: 'water-outline',
+      title: t('goals.tidyBathroom'),
+      description: t('goals.tidyBathroomDesc'),
+      category: t('categories.home'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.10min'),
+      points: 10,
+      color: '#FFA726'
+    },
+    {
+      id: 'tidy-livingroom',
+      icon: 'tv-outline',
+      title: t('goals.tidyLivingRoom'),
+      description: t('goals.tidyLivingRoomDesc'),
+      category: t('categories.home'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.15min'),
+      points: 15,
+      color: '#FFA726'
+    },
+    
+    // Self Care
+    {
+      id: 'skincare-routine',
+      icon: 'sparkles-outline',
+      title: t('goals.skincareRoutine'),
+      description: t('goals.skincareRoutineDesc'),
+      category: t('categories.selfcare'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.10min'),
+      points: 15,
+      color: '#FF6B9D'
+    },
+    {
+      id: 'take-bath',
+      icon: 'water-outline',
+      title: t('goals.takeBath'),
+      description: t('goals.takeBathDesc'),
+      category: t('categories.selfcare'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.30min'),
+      points: 20,
+      color: '#FF6B9D'
+    },
+    {
+      id: 'pamper-day',
+      icon: 'heart-circle-outline',
+      title: t('goals.pamperDay'),
+      description: t('goals.pamperDayDesc'),
+      category: t('categories.selfcare'),
+      difficulty: t('difficulties.medium'),
+      duration: t('durations.1hour'),
+      points: 25,
+      color: '#FF6B9D'
+    },
+    
+    // Exercise specific
+    {
+      id: 'yoga-session',
+      icon: 'body-outline',
+      title: t('goals.yogaSession'),
+      description: t('goals.yogaSessionDesc'),
+      category: t('categories.fitness'),
+      difficulty: t('difficulties.medium'),
+      duration: t('durations.30min'),
+      points: 25,
+      color: '#66BB6A'
+    },
+    {
+      id: 'walk-10k-steps',
+      icon: 'walk-outline',
+      title: t('goals.walk10kSteps'),
+      description: t('goals.walk10kStepsDesc'),
+      category: t('categories.fitness'),
+      difficulty: t('difficulties.medium'),
+      duration: t('durations.allDay'),
+      points: 30,
+      color: '#66BB6A'
+    },
+    {
+      id: 'stretch-routine',
+      icon: 'fitness-outline',
+      title: t('goals.stretchRoutine'),
+      description: t('goals.stretchRoutineDesc'),
+      category: t('categories.fitness'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.10min'),
+      points: 15,
+      color: '#66BB6A'
+    },
+    
+    // Sleep specific
+    {
+      id: 'sleep-8-hours',
+      icon: 'moon-outline',
+      title: t('goals.sleep8Hours'),
+      description: t('goals.sleep8HoursDesc'),
+      category: t('categories.health'),
+      difficulty: t('difficulties.medium'),
+      duration: t('durations.allNight'),
+      points: 25,
+      color: '#9575CD'
+    },
+    {
+      id: 'power-nap',
+      icon: 'time-outline',
+      title: t('goals.powerNap'),
+      description: t('goals.powerNapDesc'),
+      category: t('categories.health'),
+      difficulty: t('difficulties.easy'),
+      duration: t('durations.20min'),
+      points: 10,
+      color: '#9575CD'
+    },
+    {
+      id: 'sleep-before-11',
+      icon: 'alarm-outline',
+      title: t('goals.sleepBefore11'),
+      description: t('goals.sleepBefore11Desc'),
+      category: t('categories.health'),
+      difficulty: t('difficulties.medium'),
+      duration: t('durations.evening'),
+      points: 20,
+      color: '#9575CD'
+    }
+  ];
+
+  const existingHabitIds = userHabits.map(h => h.id);
+  const availableGoals = extraGoals.filter(goal => 
+    !existingHabitIds.includes(goal.id)
+  );
+
+  const groupedGoals = availableGoals.reduce((groups, goal) => {
+    const category = goal.category;
+    if (!groups[category]) {
+      groups[category] = [];
+    }
+    groups[category].push(goal);
+    return groups;
+  }, {});
+
+  const handleAddGoal = async (goal) => {
+    try {
+      console.log('Adding goal as habit:', goal.title);
+
+      const newHabit = {
+        ...goal,
+        text: goal.title,
+        name: goal.icon,
+        createdAt: new Date().toISOString(),
+        isActive: true,
+        streak: 0,
+        lastCompleted: null,
+        frequency: 'daily' // Default to daily
+      };
+
+      const result = await addHabits(newHabit);
+
+      if (result.success) {
+        setAddedGoals(prev => new Set([...prev, goal.id]));
+        Alert.alert(
+          t('goals.added'),
+          t('goals.addedMessage', { habit: goal.title })
+        );
+      } else {
+        console.error('Failed to add goal:', result?.error);
+        Alert.alert(t('goals.error'), t('goals.errorMessage'));
+      }
+    } catch (error) {
+      console.error('Error adding goal:', error);
+      Alert.alert(t('goals.error'), t('goals.errorMessage'));
+    }
+  };
+
+  const renderGoalItem = (goal) => {
+    const isAdded = addedGoals.has(goal.id);
+    
+    return (
+      <TouchableOpacity
+        key={goal.id}
+        style={[
+          styles.goalCard,
+          isAdded && styles.goalCardAdded
+        ]}
+        onPress={() => !isAdded && handleAddGoal(goal)}
+        activeOpacity={isAdded ? 1 : 0.7}
+        disabled={isAdded}
+      >
+        <View style={[styles.iconContainer, { backgroundColor: `${goal.color}15` }]}>
+          <Ionicons 
+            name={goal.icon} 
+            size={24} 
+            color={isAdded ? '#4CAF50' : goal.color}
+          />
+        </View>
+        
+        <View style={styles.goalTextContainer}>
+          <ThemedText style={[
+            styles.goalTitle,
+            isAdded && styles.goalTitleAdded
+          ]}>
+            {goal.title}
           </ThemedText>
-      </ThemedButton>
+          <ThemedText style={styles.goalDescription}>
+            {goal.description}
+          </ThemedText>
+          <ThemedText style={styles.goalMeta}>
+            {goal.duration} • {goal.difficulty}
+          </ThemedText>
+        </View>
+        
+        <Ionicons 
+          name={isAdded ? "checkmark-circle" : "add-circle"} 
+          size={28} 
+          color={isAdded ? '#4CAF50' : goal.color} 
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderCategory = (categoryName, goals) => (
+    <View key={categoryName} style={styles.categorySection}>
+      <ThemedText style={styles.categoryTitle}>
+        {categoryName}
+      </ThemedText>
+      {goals.map(renderGoalItem)}
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <BackButton
+        style={{ backgroundColor: '#f1f5eeff' }}
+        onPress={() => router.push('/(dashboard)/activities')}
+      />
+      
+      <ThemedView style={styles.container}>
+        <View style={styles.header}>
+          <ThemedText title={true} style={styles.title}>
+            {t('goals.title')}
+          </ThemedText>
+          <ThemedText style={styles.subtitle}>
+            {t('goals.tapToAdd')}
+          </ThemedText>
+        </View>
+
+        {availableGoals.length > 0 ? (
+          <FlatList
+            data={Object.entries(groupedGoals)}
+            renderItem={({ item: [categoryName, goals] }) => 
+              renderCategory(categoryName, goals)
+            }
+            keyExtractor={([categoryName]) => categoryName}
+            contentContainerStyle={styles.list}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <View style={styles.emptyState}>
+            <Ionicons name="checkmark-done-circle" size={64} color="#4CAF50" />
+            <ThemedText style={styles.emptyTitle}>
+              {t('goals.allAdded')}
+            </ThemedText>
+            <ThemedText style={styles.emptySubtitle}>
+              {t('goals.allAddedDesc')}
+            </ThemedText>
+          </View>
+        )}
       </ThemedView>
-      </SafeAreaView>
+    </SafeAreaView>
   );
 }
-//<ThemedButton onPress={() => router.navigate("/(dashboard)")}>
-//<ThemedButton onPress={() => router.navigate("/(auth)/register")}>
+
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        alignItems:'center',
-        justifyContent:'center',
-        backgroundColor:'#f1f5eeff'
-    },
-    safeArea:{
-        flex:1,
-        backgroundColor:'#f1f5eeff'
-    },
-    image: {
-        marginVertical: 20,
-        width:220,
-        height:220
-    },
-    animation: {
-    width: 200,
-    height: 200,
+  container: {
+    flex: 1,
+    backgroundColor: '#f1f5eeff',
+    paddingHorizontal: 20,
   },
-    title: {
-        fontSize: 25,
-        marginTop: 20,
-        textAlign: 'center',
-         },
-    subtitle: {
-        fontSize: 16,
-    },
-    link: {
-        marginVertical: 10,
-        borderBottomWidth:1
-    }
-})
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f1f5eeff'
+  },
+  header: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  title: {
+    fontSize: 28,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#666',
+  },
+  list: {
+    paddingBottom: 20,
+  },
+  categorySection: {
+    marginBottom: 24,
+  },
+  categoryTitle: {
+    fontSize: 20,
+    marginBottom: 12,
+    color: '#333',
+  },
+  goalCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 16,
+    marginBottom: 8,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  goalCardAdded: {
+    backgroundColor: '#F1F8F4',
+    borderWidth: 1,
+    borderColor: '#4CAF50',
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  goalTextContainer: {
+    flex: 1,
+  },
+  goalTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 2,
+  },
+  goalTitleAdded: {
+    color: '#4CAF50',
+  },
+  goalDescription: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 2,
+  },
+  goalMeta: {
+    fontSize: 12,
+    color: '#999',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
+});

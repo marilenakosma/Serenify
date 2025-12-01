@@ -175,7 +175,7 @@ export default function Soundscapes() {
   );
 }
 
-// ✅ Add styles for now playing indicator
+
 const styles = StyleSheet.create({
   container: { 
     flex: 1,

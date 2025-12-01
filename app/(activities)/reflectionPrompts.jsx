@@ -9,11 +9,66 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from '../../constants/translations';
 
 const prompts = [
-  { key: 'energy', tKey: 'reflections.energy', icon: 'flash-outline', color: '#4FC3F7' },
-  { key: 'drain', tKey: 'reflections.drain', icon: 'rainy-outline', color: '#FF7043' },
-  { key: 'gratitude', tKey: 'reflections.gratitude', icon: 'heart-outline', color: '#FF6B9D' },
-  { key: 'mind', tKey: 'reflections.mind', icon: 'chatbubble-outline', color: '#9575CD' },
-  { key: 'free', tKey: 'reflections.free', icon: 'create-outline', color: '#45B7D1' }
+  { 
+    key: 'energy',
+    tKey: 'reflections.energy', 
+    icon: 'flash-outline', 
+    color: '#4FC3F7' 
+  },
+  { 
+    key: 
+    'drain', 
+    tKey: 'reflections.drain', 
+    icon: 'rainy-outline', 
+    color: '#FF7043' 
+  },
+  { 
+    key: 'gratitude', 
+    tKey: 'reflections.gratitude', 
+    icon: 'heart-outline', 
+    color: '#FF6B9D' 
+  },
+  { 
+    key: 'mind',
+    tKey: 'reflections.mind', 
+    icon: 'chatbubble-outline', 
+    color: '#9575CD' 
+    },
+  { 
+    key: 'positive', 
+    tKey: 'reflections.positive', 
+    icon: 'sunny-outline', 
+    color: '#FFB300' 
+  },
+  { 
+    key: 'confidence', 
+    tKey: 'reflections.confidence', 
+    icon: 'sad-outline', 
+    color: '#E91E63' 
+  },
+  { 
+    key: 'unhappiness', 
+    tKey: 'reflections.unhappiness', 
+    icon: 'thunderstorm-outline', 
+    color: '#607D8B' 
+  },
+  { 
+    key: 'worries', 
+    tKey: 'reflections.worries', 
+    icon: 'time-outline', 
+    color: '#00ACC1' 
+  },
+  { 
+    key: 'newExperience', 
+    tKey: 'reflections.newExperience', 
+    icon: 'rocket-outline', 
+    color: '#7E57C2' 
+  },
+  { key: 'free', 
+    tKey: 'reflections.free', 
+    icon: 'create-outline', 
+    color: '#45B7D1' 
+  }
 ];
 
 export default function ReflectionPrompts() {
