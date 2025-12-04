@@ -13,8 +13,6 @@
     "memory-check": "node --inspect --expose-gc node_modules/expo/bin/cli.js start"
   },
   "dependencies": {
-    "@expo-google-fonts/montserrat": "^0.4.2",
-    "@expo-google-fonts/roboto": "^0.4.1",
     "@expo/vector-icons": "^15.0.2",
     "@lottiefiles/dotlottie-react": "^0.13.5",
     "@react-navigation/bottom-tabs": "^7.4.0",

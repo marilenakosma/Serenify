@@ -5,7 +5,7 @@ import { Colors } from '../constants/Colors';
 import ThemedText from './ThemedText';
 import ThemedView from './ThemedView';
 
-const SplashScreen = ({ onFinish }) => {
+const SplashScreen = ({ onFinish = (isCancelled) => {} }) => {
   
   useEffect(() => {
     // Auto-hide splash screen after 3 seconds
