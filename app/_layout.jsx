@@ -1,7 +1,7 @@
-import { Montserrat_400Regular, Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
+//import { Montserrat_400Regular, Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
 import { useFonts } from 'expo-font';
 import { Stack,Slot,useSegments,useRouter } from "expo-router";
-import * as SplashScreen from 'expo-splash-screen';
+import * as ExpoSplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect,useState,useRef } from 'react';
 import { useAuthStore } from "../store/authStore";
@@ -9,8 +9,9 @@ import { Platform } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../constants/translations';
+import SplashScreen from '../components/SplashScreen';
 
-SplashScreen.preventAutoHideAsync();
+ExpoSplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
   const {isAuthenticated,hasCompletedQuestionnaire,checkAuth} = useAuthStore();
@@ -120,23 +121,30 @@ function RootLayoutNav() {
   return <Slot/>;
 }
 export default function RootLayout() {
+  const [appReady,setAppReady] = useState(false);
+
   const [fontsLoaded, fontError] = useFonts({
-    Montserrat_600SemiBold,
-    Montserrat_400Regular,
     'MontserratZ-Regular': require('../assets/fonts/MontserratZ-Regular.otf'),
     'MontserratZ-SemiBold': require('../assets/fonts/MontserratZ-SemiBold.otf'),
   });
 
+  const [showSplash, setShowSplash] = useState(true);
+
   useEffect(() => {
 
     if(fontsLoaded ||  fontError) {
-      SplashScreen.hideAsync()
+      ExpoSplashScreen.hideAsync()
     }
   },[fontsLoaded, fontError]);
 
-  if(!fontsLoaded && !fontError) {
-    return null;
-  }
+ // if(!appReady) {
+ //   return <SplashScreen onFinish={() => setShowSplash(false)} />
+ // }
+
+ if(!fontsLoaded && !fontError) {
+  return null;
+ }
+ 
 return ( <I18nextProvider i18n={i18n}>
         <StatusBar style="auto" translucent={true} />
         <RootLayoutNav/>
