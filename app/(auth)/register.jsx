@@ -1,7 +1,7 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Image, Keyboard, StyleSheet, Text, TouchableOpacity, 
-TouchableWithoutFeedback, View,KeyboardAvoidingView, Platform } from "react-native";
+import { Alert, Image, Keyboard, StyleSheet, Text, TouchableOpacity,
+     TouchableWithoutFeedback, View,ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import validator from 'validator';
 import BackButton from "../../components/BackButton";
@@ -14,6 +14,7 @@ import { ResponsiveDimensions as RD } from "../../constants/responsiveDimensions
 import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from '../../constants/translations';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Register = () => {
     const { register, isLoading } = useAuthStore();
@@ -201,16 +202,17 @@ const Register = () => {
                     </ThemedView>
                 </SafeAreaView>
 
-                <ThemedView style={styles.container}>
+                  <KeyboardAwareScrollView
+                    contentContainerStyle={styles.container}
+                    enableOnAndroid={true}
+                    extraScrollHeight={10}
+                    keyboardShouldPersistTaps="handled"
+                 >
                     <ThemedText title={true} style={styles.title}>
                         {t('auth.register')}
                     </ThemedText>
                     
                     {/* Name Input */}
-                    <KeyboardAvoidingView
-                       //behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                       //style={styles.container}
-                     >
                     <View style={styles.inputContainer}>
                         <ThemedInput 
                             style={[
@@ -313,7 +315,6 @@ const Register = () => {
                         )}
                     </View>
 
-                    </KeyboardAvoidingView>
 
                     <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
@@ -370,9 +371,9 @@ const Register = () => {
                                 {t('auth.signin')}
                             </ThemedText>
                         </Link>
-                    </View>        
-                </ThemedView>
-            </ThemedView>
+                    </View>
+                </KeyboardAwareScrollView>
+            </ThemedView>      
         </TouchableWithoutFeedback>    
     );
 };
@@ -381,8 +382,8 @@ export default Register;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
+        flexGrow: 1,
+        //alignItems: 'center',
         backgroundColor: "white",
         paddingHorizontal: 32,
         paddingTop: 20,
