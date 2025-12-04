@@ -1,6 +1,7 @@
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Image, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Image, Keyboard, StyleSheet, Text, TouchableOpacity, 
+TouchableWithoutFeedback, View,KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import validator from 'validator';
 import BackButton from "../../components/BackButton";
@@ -206,6 +207,10 @@ const Register = () => {
                     </ThemedText>
                     
                     {/* Name Input */}
+                    <KeyboardAvoidingView
+                       //behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                       //style={styles.container}
+                     >
                     <View style={styles.inputContainer}>
                         <ThemedInput 
                             style={[
@@ -307,6 +312,8 @@ const Register = () => {
                             </View>
                         )}
                     </View>
+
+                    </KeyboardAvoidingView>
 
                     <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
@@ -456,7 +463,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     submitButton: {
-        width: '100%',
         opacity: 1,
     },
     buttonDisabled: {

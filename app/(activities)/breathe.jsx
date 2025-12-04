@@ -92,12 +92,21 @@ const getPhaseText = () => {
     {!showSession ? (
 
           <View style={styles.selectionContent}>
+
+          <ThemedText title={true} style={styles.title}>
+                {t('breathe.title')}
+            </ThemedText>
+
           <LottieView
             source={require('../../assets/animations/Breathe.json')} 
             autoPlay={true}
             loop={true}
             style={styles.animation}
           />
+
+            <ThemedText title={true} style={styles.durationText}>
+                {t('activities.selectDuration')}
+            </ThemedText>
 
             <View style={styles.durationContainer}>
               <FlatList
@@ -159,6 +168,11 @@ const styles = StyleSheet.create({
         backgroundColor:'#f1f5eeff',
         paddingHorizontal: 20,
     },
+    title: {
+      fontSize: 28,
+      textAlign: 'center',
+      marginBottom: 30,
+    },
     safeArea:{
         flex:1,
         backgroundColor:'#f1f5eeff'
@@ -192,7 +206,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 30,
-    color: '#666',
   },
   buttonContainer: {
     gap: 10,

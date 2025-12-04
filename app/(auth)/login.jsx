@@ -356,7 +356,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     loginButton: {
-        width: '100%',
         opacity: 1,
     },
     buttonDisabled: {

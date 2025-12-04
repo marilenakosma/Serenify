@@ -275,29 +275,29 @@ const styles = StyleSheet.create({
     //marginTop: 20,
   },
   startButton: {
-    backgroundColor: '#4CAF50',
+    //backgroundColor: '#4CAF50',
     paddingHorizontal: 40,
     paddingVertical: 15,
   },
   pauseButton: {
-    backgroundColor: '#FF9800',
+    //backgroundColor: '#FF9800',
     paddingHorizontal: 30,
   },
   resumeButton: {
-    backgroundColor: '#4CAF50',
+   // backgroundColor: '#4CAF50',
     paddingHorizontal: 30,
   },
   stopButton: {
-    backgroundColor: '#F44336',
+   // backgroundColor: '#F44336',
     paddingHorizontal: 30,
   },
   finishButton: {
-    backgroundColor: '#4CAF50',
+   // backgroundColor: '#4CAF50',
     paddingHorizontal: 30,
     marginHorizontal: 5,
   },
   againButton: {
-    backgroundColor: '#2196F3',
+  //  backgroundColor: '#2196F3',
     paddingHorizontal: 30,
     marginHorizontal: 5,
   },

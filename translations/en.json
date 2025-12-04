@@ -379,10 +379,12 @@
     "pause": "Pause",
     "resume": "Resume",
     "finish": "Finish",
-    "again": "Again"
+    "again": "Again",
+    "selectDuration": "Select Duration"
   },
   "breathe": {
-    "selectDuration": "Select Duration",
+    "title":"Breathing",
+    "selectDuration": "Select Breathing Duration",
     "ready": "Ready to Begin",
     "duration": "Duration",
     "start": "Start Breathing",
@@ -393,6 +395,7 @@
     "completed": "Well Done! 🌟"
   },
   "meditation": {
+    "title":"Meditation",
     "selectDuration": "Select Meditation Duration",
     "focus": "Focus on your breath",
     "observe": "Observe your thoughts", 
@@ -401,6 +404,7 @@
     "completed": "Meditation Complete 🧘‍♀️"
   },
   "movements": {
+    "title":"movements",
     "selectDuration": "Select Workout Duration",
     "prepare": "Get Ready",
     "down": "Push Down", 
