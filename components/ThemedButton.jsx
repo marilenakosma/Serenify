@@ -1,13 +1,20 @@
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet,View } from 'react-native'
 import { Colors } from "../constants/Colors"
 
-const ThemedButton = ({style,...props}) => {
+const ThemedButton = ({ style, children, ...props }) => {
   return (
-     <Pressable 
-            style={({pressed}) =>
-            [styles.btn,pressed && styles.pressed]}
-            {...props}
-            />
+    <Pressable
+      style={({ pressed }) => [
+        styles.btn,
+        style,
+        pressed && styles.pressed
+      ]}
+      {...props}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        {children}
+      </View>
+    </Pressable>
   )
 }
 

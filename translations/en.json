@@ -627,7 +627,8 @@
     "domesticViolence": "Domestic Violence Hotline",
     "domesticViolenceDesc": "Support for domestic violence situations",
     "samhsa": "SAMHSA National Helpline",
-    "samhsaDesc": "Mental health and substance abuse support"
+    "samhsaDesc": "Mental health and substance abuse support",
+    "EmergencyNumber":"911"
   }
 },
   "statistics":{

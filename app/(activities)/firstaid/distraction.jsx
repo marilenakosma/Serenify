@@ -20,7 +20,10 @@ export default function Distraction() {
       title: t('firstAid.distraction.countBackwards'),
       description: t('firstAid.distraction.countBackwardsDesc'),
       color: '#42A5F5',
-      action: () => showActivity(t('firstAid.distraction.countBackwards'), t('firstAid.distraction.countBackwardsInstruction'))
+       action: () => router.push({
+         pathname: '/firstaid/CountBackwardsActivity',
+         params: { onDone: () => markCompleted('count-backwards') }
+       })
     },
     {
       id: 'name-5-things',

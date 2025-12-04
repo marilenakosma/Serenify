@@ -16,11 +16,13 @@ export default function EmergencyContacts() {
     {
       id: 'suicide-prevention',
       name: t('firstAid.emergency.suicidePrevention'),
-      phone: '988',
+      phone: 'befrienders.org',
       description: t('firstAid.emergency.suicidePreventionDesc'),
       icon: 'heart-outline',
       color: '#EF5350',
-      available: t('firstAid.emergency.24_7')
+      available: t('firstAid.emergency.24_7'),
+      isLink: true,
+      url: 'https://www.befrienders.org'
     },
     {
       id: 'crisis-text',
@@ -35,7 +37,7 @@ export default function EmergencyContacts() {
     {
       id: 'emergency',
       name: t('firstAid.emergency.emergency'),
-      phone: '911',
+      phone: t('firstAid.emergency.localEmergencyNumber'),
       description: t('firstAid.emergency.emergencyDesc'),
       icon: 'medical-outline',
       color: '#FF5252',
@@ -58,18 +60,21 @@ export default function EmergencyContacts() {
       icon: 'people-outline',
       color: '#66BB6A',
       available: t('firstAid.emergency.24_7')
-    }
+    },
   ];
 
   const handleCall = (contact) => {
-    if (contact.isText) {
-      Alert.alert(
-        contact.name,
-        t('firstAid.emergency.textInstructions'),
-        [{ text: t('common.ok') }]
-      );
-    } else {
-      Alert.alert(
+  if (contact.isLink) {
+    Linking.openURL(contact.url);
+  } else if (contact.isLocal) {
+    Alert.alert(
+      t('firstAid.emergency.dialLocal'),
+      t('firstAid.emergency.dialLocalMessage'),
+      [{ text: t('common.ok') }]
+    );
+  } 
+    else {
+    Alert.alert(
         t('firstAid.emergency.callConfirm'),
         `${contact.name}\n${contact.phone}`,
         [
@@ -80,8 +85,8 @@ export default function EmergencyContacts() {
           }
         ]
       );
-    }
-  };
+  }
+};
 
   const renderContact = (contact) => (
     <TouchableOpacity

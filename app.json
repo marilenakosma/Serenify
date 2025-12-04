@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/leaf-green.png",
     "scheme": "serenify",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true

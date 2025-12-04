@@ -107,7 +107,7 @@ function RootLayoutNav() {
         
         router.replace(targetRoute);
         
-        // ✅ Reset navigation flag after delay
+        // Reset navigation flag after delay
         setTimeout(() => {
           navigationInProgressRef.current = false;
         }, 500);
