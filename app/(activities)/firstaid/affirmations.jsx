@@ -182,15 +182,17 @@ export default function Affirmations() {
             </View>
           </View>
 
-          <View style={styles.navigationContainer}>
+          <View 
+          style={styles.navigationContainer}>
             <TouchableOpacity 
               style={styles.navButton}
               onPress={handlePrevious}
             >
               <Ionicons name="chevron-back" size={32} color="#666" />
             </TouchableOpacity>
-
-            <ThemedButton
+            
+            
+              <ThemedButton
               style={styles.randomButton}
               onPress={handleRandom}
             >
@@ -199,6 +201,7 @@ export default function Affirmations() {
                 {t('firstAid.affirmations.random')}
               </ThemedText>
             </ThemedButton>
+            
 
             <TouchableOpacity 
               style={styles.navButton}
@@ -307,7 +310,6 @@ const styles = StyleSheet.create({
   categoryText: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '600',
     textTransform: 'uppercase',
   },
   affirmationTextContainer: {
@@ -356,25 +358,26 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   randomButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection:'row',
+    alignContent: 'baseline',
+    justifyContent:'center',
     backgroundColor: '#FF6B9D',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    //paddingHorizontal: 20,
+    //paddingVertical: 12,
     borderRadius: 25,
-    gap: 8,
+   // gap: 8,
   },
   randomButtonText: {
+    alignItems: 'baseline',
+    justifyContent:'center',
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
   },
   favoritesContainer: {
     marginBottom: 20,
   },
   favoritesTitle: {
     fontSize: 14,
-    fontWeight: '600',
     marginBottom: 12,
     color: '#666',
   },
@@ -394,6 +397,5 @@ const styles = StyleSheet.create({
   favoriteChipText: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: '600',
   },
 });
