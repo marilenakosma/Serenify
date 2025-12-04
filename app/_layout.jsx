@@ -122,37 +122,28 @@ function RootLayoutNav() {
 }
 export default function RootLayout() {
   const [appReady,setAppReady] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
 
   const [fontsLoaded, fontError] = useFonts({
     'MontserratZ-Regular': require('../assets/fonts/MontserratZ-Regular.otf'),
     'MontserratZ-SemiBold': require('../assets/fonts/MontserratZ-SemiBold.otf'),
   });
 
+  const [showSplash, setShowSplash] = useState(true);
+
   useEffect(() => {
 
     if(fontsLoaded ||  fontError) {
-     // ExpoSplashScreen.hideAsync()
+      ExpoSplashScreen.hideAsync()
     }
   },[fontsLoaded, fontError]);
 
- if(!appReady) {
-   return <SplashScreen 
-   onFinish={(isCancelled) => {
-    console.log('Finished',isCancelled);
-    if(!isCancelled) {
-      setShowSplash(false)
-    }
-  } 
-}
-/>
- }
-  
+ // if(!appReady) {
+ //   return <SplashScreen onFinish={() => setShowSplash(false)} />
+ // }
 
  if(!fontsLoaded && !fontError) {
   return null;
  }
-
 return ( <I18nextProvider i18n={i18n}>
         <StatusBar style="auto" translucent={true} />
         <RootLayoutNav/>

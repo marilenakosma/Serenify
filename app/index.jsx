@@ -18,9 +18,9 @@ export default function Index() {
   const router=useRouter()
   const { t } = useTranslation();
   
-  //if (showSplash) {
-  //  return <SplashScreen onFinish={() => setShowSplash(false)} />;
- // } 
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  } 
 //<Image source={LogoGreen} style={styles.image}/>
   return (
     <ThemedView style={styles.container}>
