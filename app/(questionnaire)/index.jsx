@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     height: 400,
   },
   button: {
-    width: '100%',
+    //width: '100%',
     paddingVertical: 16,
   },
   buttonText: {

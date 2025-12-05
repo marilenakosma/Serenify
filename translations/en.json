@@ -310,6 +310,7 @@
     "allDay": "All day",
     "allNight": "All night",
     "afternoon": "Afternoon",
+    "evening":"Evening",
     "varies": "Varies"
   },
   "frequency": {

@@ -47,13 +47,15 @@ export default function Reflections() {
         <ThemedText style={{ fontSize: 16, marginBottom: 8, textAlign: 'center' }}>
           {prompt}
         </ThemedText>
-
+        
+        
         <TextInput
           style={styles.input}
-          placeholder={t('reflections.placeholder')}
+          multiline
+          numberOfLines={6}
           value={reflection}
           onChangeText={setReflection}
-          multiline
+          placeholder={t('reflections.placeholder')}
         />
 
         <ThemedButton onPress={handleSave} style={styles.saveButton}>
@@ -87,19 +89,24 @@ const styles = StyleSheet.create({
     padding: 20,
      backgroundColor: '#f1f5eeff' 
   },
-  title: { 
-    fontSize: 24, 
-    marginBottom: 16, 
-    textAlign: 'center' 
-  },
-  input: { 
-    backgroundColor: '#fff', 
-    borderRadius: 8, 
-    padding: 12, 
-    marginBottom: 12, 
-    minHeight: 100,
-    fontFamily:'MontserratZ-Regular',
-  },
+  title: {
+      fontSize: 24,
+      marginTop: 12,
+      marginBottom: 8,
+      textAlign: 'center',
+    },
+  input: {
+      backgroundColor: '#fff',
+      borderRadius: 12,
+      padding: 16,
+      fontSize: 14,
+      minHeight: 150,
+      borderWidth: 2,
+      borderColor: '#E0E0E0',
+      marginBottom: 16,
+      color: '#333',
+      fontFamily:'MontserratZ-Regular'
+    },
   saveButton: { 
     backgroundColor: '#6B73FF',
      padding: 12, 

@@ -117,7 +117,7 @@ const Questions = () => {
             selectedOption === null && styles.disabledButton
           ]}
         >
-          <ThemedText style={{color:'#f2f2f2'}}>
+          <ThemedText title={true} style={{color:'#f2f2f2'}}>
             {isLastQuestion ? t('questionnaire.completeQuiz') : t('common.next')}
           </ThemedText>
         </ThemedButton>

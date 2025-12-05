@@ -606,18 +606,21 @@ export const useAuthStore = create((set,get) => ({
 
   addWorryEntry: (entry) => {
     try {
-      const currentEntries = get().worryEntries || [];
-      const updatedEntries = [entry, ...currentEntries];
-      
-      set({ worryEntries: updatedEntries });
-      
-      // Persist to storage
-      AsyncStorage.setItem(
-        `worryEntries_${get().user?.uid}`,
-        JSON.stringify(updatedEntries)
-      );
-      
-      return { success: true };
+    const state = get();
+    //const today = new Date().toDateString();
+    //const newEntry = { text, date: today };
+    const updated = [entry, ...(state.worryEntries || [])];
+
+    set({ worryEntries: updated });
+  
+    const currentAuthData = getItem("authData");
+       if (currentAuthData) {
+         setItem("authData", { 
+         ...currentAuthData, 
+         worryEntries: updated
+       });
+
+      }
     } catch (error) {
       console.error('Error adding worry entry:', error);
       return { success: false, error };
@@ -626,10 +629,10 @@ export const useAuthStore = create((set,get) => ({
 
   loadWorryEntries: async () => {
     try {
-      const userId = get().user?.uid;
+      const userId = get().user?.id;
       if (!userId) return;
 
-      const stored = await AsyncStorage.getItem(`worryEntries_${userId}`);
+      const stored = await getItem(`worryEntries_${userId}`);
       if (stored) {
         set({ worryEntries: JSON.parse(stored) });
       }
@@ -644,12 +647,15 @@ export const useAuthStore = create((set,get) => ({
       const updatedEntries = currentEntries.filter(entry => entry.id !== entryId);
       
       set({ worryEntries: updatedEntries });
-      
-      AsyncStorage.setItem(
-        `worryEntries_${get().user?.uid}`,
-        JSON.stringify(updatedEntries)
-      );
-      
+
+      const currentAuthData = getItem("authData");
+       if (currentAuthData) {
+         setItem("authData", { 
+         ...currentAuthData, 
+         worryEntries: updatedEntries
+       });
+       }
+
       return { success: true };
     } catch (error) {
       console.error('Error deleting worry entry:', error);
@@ -694,6 +700,11 @@ export const useAuthStore = create((set,get) => ({
             isRetakingQuestionnaire: false, 
             userHabits:[],
             habitCompletions: {},
+            todayMood:null,
+            moodHistory:{},
+            kindnessCompletions:{},
+            reflections:[],
+            worryEntries: [],
         });
     },
 }))

@@ -328,6 +328,9 @@
     "allDay": "Όλη μέρα",
     "allNight": "Ολη νύχτα",
     "afternoon": "Απόγευμα",
+    "evening":"Βράδυ",
+    "today":"Σήμερα",
+    "yesterday":"Χθές",
     "varies": "Κυμαίνεται"
   },"habitStats": {
     "habitDetails": "Λεπτομέρειες Συνήθειας",

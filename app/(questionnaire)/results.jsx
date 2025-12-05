@@ -167,7 +167,7 @@ const results = () => {
 
                 <ThemedButton 
                     onPress={handleContinue}
-                    style={styles.button}
+                    //style={styles.button}
                 >
                     <ThemedText title={true} style={styles.buttonText}>
                         {t('questionnaire.viewDashboard')}
@@ -201,9 +201,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 30,
         lineHeight: 26,
-    },
-    button: {
-        width: '100%',
     },
     buttonText: {
         color: '#f2f2f2',
