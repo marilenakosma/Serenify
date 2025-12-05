@@ -29,14 +29,15 @@
       "expo-localization",
       "expo-audio",
       "expo-asset",
-      [
-       "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#dbe7d3"
-        }
-      ]
+     // [
+        //"expo-splash-screen",
+       // {
+       //   "image": "./assets/images/splash-icon.png",
+       //   "resizeMode": "contain",
+       //   "backgroundColor": "#dbe7d3"
+      //  }
+     // ],
+      "react-native-bootsplash"
     ],
     "experiments": {
       "typedRoutes": true,

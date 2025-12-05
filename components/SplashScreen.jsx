@@ -1,20 +1,30 @@
 import LottieView from 'lottie-react-native';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Colors } from '../constants/Colors';
 import ThemedText from './ThemedText';
 import ThemedView from './ThemedView';
 
+const MINIMUM_SPLASH_TIME = 3000; // 3 seconds
+
 const SplashScreen = ({ onFinish }) => {
-  
+  const [animationDone, setAnimationDone] = useState(false);
+  const [timerDone, setTimerDone] = useState(false);
+
   useEffect(() => {
-    // Auto-hide splash screen after 3 seconds
     const timer = setTimeout(() => {
-      onFinish();
-    }, 3000);
+      setTimerDone(true);
+    }, MINIMUM_SPLASH_TIME);
 
     return () => clearTimeout(timer);
-  }, [onFinish]);
+  }, []);
+
+  useEffect(() => {
+    // Only call onFinish when BOTH animation and timer are done
+    if (animationDone && timerDone) {
+      onFinish();
+    }
+  }, [animationDone, timerDone, onFinish]);
 
   return (
     <ThemedView style={styles.container}>
@@ -23,13 +33,12 @@ const SplashScreen = ({ onFinish }) => {
         autoPlay
         loop={false}
         style={styles.animation}
-        onAnimationFinish={onFinish} // Hide when animation completes
+        onAnimationFinish={() => setAnimationDone(true)}
       />
       
       <ThemedText title={true} style={styles.title}>
         Serenify
       </ThemedText>
-    
     </ThemedView>
   );
 };
@@ -51,11 +60,5 @@ const styles = StyleSheet.create({
     fontSize: 32,
     marginTop: 20,
     textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    marginTop: 10,
-    textAlign: 'center',
-    opacity: 0.7,
   },
 });

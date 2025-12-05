@@ -100,8 +100,8 @@ const getPhaseText = () => {
 
           <LottieView
             source={require('../../assets/animations/PushUps.json')} 
-            autoPlay={true}
-            loop={true}
+            autoPlay={false}
+           // loop={true}
             style={styles.animation}
           />
 

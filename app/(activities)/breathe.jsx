@@ -99,8 +99,8 @@ const getPhaseText = () => {
 
           <LottieView
             source={require('../../assets/animations/Breathe.json')} 
-            autoPlay={true}
-            loop={true}
+            autoPlay={false}
+            //loop={true}
             style={styles.animation}
           />
 

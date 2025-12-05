@@ -32,7 +32,7 @@ export default function Timers() {
 const handleAnimationFrame = (event) => {
  const progress = event.progress;
 
- console.log('Meditation progress:', progress);
+ //console.log('Meditation progress:', progress);
 
  if (progress < 0.25) {
       setMeditationPhase('focus');     
@@ -100,8 +100,8 @@ const getPhaseText = () => {
 
           <LottieView
             source={require('../../assets/animations/Meditation.json')} 
-            autoPlay={true}
-            loop={true}
+            autoPlay={false}
+            //loop={true}
             style={styles.animation}
           />
 

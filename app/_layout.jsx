@@ -1,80 +1,42 @@
-//import { Montserrat_400Regular, Montserrat_600SemiBold } from "@expo-google-fonts/montserrat";
 import { useFonts } from 'expo-font';
-import { Stack,Slot,useSegments,useRouter } from "expo-router";
-import * as ExpoSplashScreen from 'expo-splash-screen';
+import { Slot, useSegments, useRouter } from "expo-router";
+import BootSplash from 'react-native-bootsplash';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect,useState,useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from "../store/authStore";
-import { Platform } from 'react-native';
-import * as NavigationBar from 'expo-navigation-bar';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../constants/translations';
-import SplashScreen from '../components/SplashScreen';
-
-ExpoSplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
-  const {isAuthenticated,hasCompletedQuestionnaire,checkAuth} = useAuthStore();
+  const { isAuthenticated, hasCompletedQuestionnaire, checkAuth } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
   const [isNavigationReady, setIsNavigationReady] = useState(false);
 
-  const lastNavigationRef = useRef(''); // last navigation
-  const navigationInProgressRef = useRef(false); //  Prevent rapid navigation
+  const lastNavigationRef = useRef('');
+  const navigationInProgressRef = useRef(false);
 
   useEffect(() => {
     const initAuth = async () => {
       await checkAuth();
-      setTimeout(() => setIsNavigationReady(true), 300); // Longer delay
+      setTimeout(() => setIsNavigationReady(true), 300);
     };
     initAuth();
   }, []);
 
-/*
   useEffect(() => {
-  const setupNavigationBar = async () => {
-    try {
-      if (Platform.OS === 'android') {
-        await NavigationBar.setVisibilityAsync('hidden');
-      }
-    } catch (error) {
-      // Safely ignore this error
-      console.log('Navigation bar setup failed:', error.message);
-    }
-  };
-  // NavigationBar.setBehaviorAsync('inset-swipe'); //  gesture navigation
-      // NavigationBar.setBehaviorAsync('overlay-swipe'); // Alternative behavior
-  setupNavigationBar();
-}, []);
-*/
-  
-    //Check where the user is
-    /* // Route: /(auth)/login
-    segments = ['(auth)', 'login'] */
-  useEffect(() => {
-    if (!isNavigationReady || navigationInProgressRef.current) return; // Prevent navigation during transitions
+    if (!isNavigationReady || navigationInProgressRef.current) return;
 
     const navigationTimeout = setTimeout(() => {
-      const {showingResults} = useAuthStore.getState();
+      const { showingResults } = useAuthStore.getState();
       const currentRoute = segments.join('/');
 
-      // Prevent navigation loops
       if (currentRoute === lastNavigationRef.current) {
         return;
       }
 
-      /*
-      console.log('Navigation check:', { 
-        isAuthenticated, 
-        hasCompletedQuestionnaire, 
-        showingResults,
-        currentRoute: segments,
-        lastRoute: lastNavigationRef.current
-      });
-*/
       const inAuthGroup = segments[0] === '(auth)';
       const inQuestionnaireGroup = segments[0] === '(questionnaire)';
-      const inDashboardGroup = segments[0] === '(dashboard)'; 
       const onResultsPage = segments[1] === 'results';
 
       let shouldNavigate = false;
@@ -100,52 +62,59 @@ function RootLayoutNav() {
         }
       }
 
-      //  Only navigate if needed and not already there
       if (shouldNavigate && targetRoute !== currentRoute) {
         console.log(`Redirecting from ${currentRoute} to ${targetRoute}`);
-        navigationInProgressRef.current = true; // Mark navigation in progress
+        navigationInProgressRef.current = true;
         lastNavigationRef.current = targetRoute;
-        
+
         router.replace(targetRoute);
-        
-        // Reset navigation flag after delay
+
         setTimeout(() => {
           navigationInProgressRef.current = false;
         }, 500);
       }
-    }, 200); //  Longer debounce
+    }, 200);
 
     return () => clearTimeout(navigationTimeout);
   }, [isAuthenticated, hasCompletedQuestionnaire, segments, isNavigationReady]);
 
-  return <Slot/>;
+  return <Slot />;
 }
+
 export default function RootLayout() {
-  const [appReady,setAppReady] = useState(false);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   const [fontsLoaded, fontError] = useFonts({
     'MontserratZ-Regular': require('../assets/fonts/MontserratZ-Regular.otf'),
     'MontserratZ-SemiBold': require('../assets/fonts/MontserratZ-SemiBold.otf'),
   });
 
-  const [showSplash, setShowSplash] = useState(true);
+  const { checkAuth } = useAuthStore();
 
   useEffect(() => {
-
-    if(fontsLoaded ||  fontError) {
-      ExpoSplashScreen.hideAsync()
+    async function prepare() {
+      try {
+        await checkAuth();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
     }
-  },[fontsLoaded, fontError]);
 
- // if(!appReady) {
- //   return <SplashScreen onFinish={() => setShowSplash(false)} />
- // }
+    if (fontsLoaded || fontError) {
+      prepare();
+    }
+  }, [fontsLoaded, fontError]);
 
- if(!fontsLoaded && !fontError) {
-  return null;
- }
-return ( <I18nextProvider i18n={i18n}>
-        <StatusBar style="auto" translucent={true} />
-        <RootLayoutNav/>
-</I18nextProvider>)
+  if (!appIsReady) {
+    return null; // BootSplash stays visible (don't manually hide it here)
+  }
+
+  return (
+    <I18nextProvider i18n={i18n}>
+      <StatusBar style="auto" translucent={true} />
+      <RootLayoutNav />
+    </I18nextProvider>
+  );
 }

@@ -208,12 +208,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFA726',
     paddingVertical: 16,
     borderRadius: 12,
-    gap: 8,
   },
   saveButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    marginLeft:8
   },
   historySection: {
     marginBottom: 24,

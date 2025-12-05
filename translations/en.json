@@ -311,6 +311,8 @@
     "allNight": "All night",
     "afternoon": "Afternoon",
     "evening":"Evening",
+    "today":"Today",
+    "yesterday":"Yesterday",
     "varies": "Varies"
   },
   "frequency": {
