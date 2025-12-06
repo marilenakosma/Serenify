@@ -183,6 +183,10 @@ const getHabitStatus = (habit) => {
     };
 
     const getHabitText = (habit) => {
+         if (habit.title) {
+           return t(habit.title);
+         }
+
         return habit.text || habit.title || habit.icon || 'Habit';
       };
 

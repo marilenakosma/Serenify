@@ -73,13 +73,14 @@ const Dashboard = () => {
     console.log('Adding habit:', habitData.title);
 
     const newHabit = {
-     ...habitData,
-     text:habitData.title,
-     name: habitData.icon, 
-     createdAt: new Date().toISOString(),
-     isActive:true,
-     streak:0,
-     lastCompleted:null
+      ...habitData,
+      title: habitData.title, 
+      text: habitData.title, // Store translated text for backward compatibility
+      name: habitData.icon, 
+      createdAt: new Date().toISOString(),
+      isActive: true,
+      streak: 0,
+      lastCompleted: null
     };
 
     const result = await addHabits(newHabit);

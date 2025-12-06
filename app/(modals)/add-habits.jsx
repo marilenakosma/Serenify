@@ -80,6 +80,7 @@ const AddHabits = () => {
   const HabitItem = useCallback(({ habit, categoryIndex, habitIndex }) => {
     const isSelected = selectedHabits.has(habit.id);
     
+    
     return (
       <TouchableOpacity
         style={[

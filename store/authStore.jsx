@@ -306,7 +306,13 @@ export const useAuthStore = create((set,get) => ({
           return { success: false, error: 'Habits already exist'};
         }
 
-        const updatedHabits = [...currentState.userHabits,...uniqueHabits];
+        const habitsWithKeys = uniqueHabits.map(habit => ({
+         ...habit,
+         title: habit.title, 
+         text: habit.text || habit.title,
+       }));
+
+        const updatedHabits = [...currentState.userHabits,...habitsWithKeys];
      
         // Update Zustand (in-memory)
         set({userHabits:updatedHabits})
@@ -499,11 +505,11 @@ export const useAuthStore = create((set,get) => ({
     },
 
   checkAuth: async () => {
-        try {
-            const authData = getItem("authData");
-            if (authData) {
-                // Check if token is still valid
-                if (authData.accessTokenExpiration && Date.now() < authData.accessTokenExpiration) {
+  try {
+    const authData = getItem("authData");
+    if (authData && authData.userHabits) {
+      // Migrate old habits to include title
+      if (authData.accessTokenExpiration && Date.now() < authData.accessTokenExpiration) {
                     set({
                         ...authData,
                         userHabits: authData.userHabits || [],
@@ -516,12 +522,27 @@ export const useAuthStore = create((set,get) => ({
                     return false;
                 }
             }
-            return false;
-        } catch (error) {
-            console.error('Auth check error:', error);
-            return false;
+
+      const migratedHabits = authData.userHabits.map(habit => {
+        if (!habit.titleKey && habit.id) {
+          // Try to match with available habits and add titleKey
+          const availableHabit = getAvailableHabits(t).common.find(h => h.id === habit.id);
+          if (availableHabit) {
+            return { ...habit, title: availableHabit.title };
+          }
         }
-    },
+        return habit;
+      });
+      
+      authData.userHabits = migratedHabits;
+    
+    
+    set(authData);
+    return true;
+  } catch (error) {
+    return false;
+  }
+},
 
     toggleKindnessAct:(actId,date=null) => {
       const currentState = get();

@@ -13,7 +13,7 @@ import {
 
 const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
   const { habitCompletions } = useAuthStore();
-  const { t } = useTranslation(); // ✅ Add this
+  const { t } = useTranslation(); 
   const thisHabitCompletions = habitCompletions[habit.id] || {};
   
   const today = new Date().toISOString().split('T')[0];
@@ -44,6 +44,11 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
 
   const getHabitText = () => {
   // Get display text, avoiding icon names
+
+  if (habit.title) {
+    return t(habit.title);
+  }
+
   const text = habit.text || habit.title;
   if (text && !text.includes('-') && text.length > 2) {
     return text;

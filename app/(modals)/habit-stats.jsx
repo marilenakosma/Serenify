@@ -320,8 +320,17 @@ const getToday = () => {
       };
 
     const getHabitText = () => {
-        return habit.text || habit.title || habit.name || 'Habit';
-      };
+      // First check for titleKey and translate it
+      if (habit.title) {
+        return t(habit.title);
+      }
+
+      const text = habit.text || habit.title;
+      if (text && !text.includes('.') && text.length > 2) { // Changed check to avoid translation keys
+       return text;
+      }    
+      return habit.id || 'Habit';
+    };
 
   return (
     <ThemedView style={styles.container}>
