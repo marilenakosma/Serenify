@@ -198,6 +198,7 @@ const renderActItem = (act) => {
             styles.checkButton,
             { backgroundColor: isCompleted ? '#4CAF50' : '#E0E0E0' }
           ]}
+          //contentStyle={{ padding: 0 }}
         >
           <Ionicons
             name={isCompleted ? 'checkmark' : 'add'}
@@ -327,9 +328,10 @@ const styles = StyleSheet.create({
   },
   checkButton: {
     width: 40,
-    height: 20,
+    height: 40,
     borderRadius: 20,
-    //alignItems: 'center',
-    //justifyContent: 'center',
+    padding: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

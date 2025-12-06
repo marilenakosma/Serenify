@@ -54,14 +54,6 @@ export default function FirstAidKit() {
       route: '/(activities)/firstaid/worry-journal'
     },
     {
-      id: 'distraction',
-      icon: 'game-controller-outline',
-      title: t('firstAid.distraction.title'),
-      description: t('firstAid.distraction.description'),
-      color: '#26A69A',
-      route: '/(activities)/firstaid/distraction'
-    },
-    {
       id: 'emergency-contacts',
       icon: 'call-outline',
       title: t('firstAid.emergency.title'),
@@ -70,6 +62,15 @@ export default function FirstAidKit() {
       route: '/(activities)/firstaid/emergency-contacts'
     }
   ];
+
+  /*  prin to emergency contacts   {
+      id: 'distraction',
+      icon: 'game-controller-outline',
+      title: t('firstAid.distraction.title'),
+      description: t('firstAid.distraction.description'),
+      color: '#26A69A',
+      route: '/(activities)/firstaid/distraction'
+    },*/
 
   const renderExercise = (exercise) => (
     <TouchableOpacity

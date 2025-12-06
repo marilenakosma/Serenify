@@ -57,18 +57,6 @@ const _layout = () => {
       }}
       />
 
-      <Tabs.Screen name="statistics"
-      options={{ title:t('tabs.statistics'),
-        tabBarIcon: ({focused}) => (
-            <Ionicons
-            size={24}
-            name={focused ? "stats-chart" : "stats-chart-outline"}
-            //color={focused ? }
-            />
-        )
-      }}
-      />
-
       <Tabs.Screen name="profile"
       options={{ title:t('tabs.profile'),
         tabBarIcon: ({focused}) => (
@@ -87,3 +75,15 @@ const _layout = () => {
 }
 
 export default _layout
+
+/*       <Tabs.Screen name="statistics"
+      options={{ title:t('tabs.statistics'),
+        tabBarIcon: ({focused}) => (
+            <Ionicons
+            size={24}
+            name={focused ? "stats-chart" : "stats-chart-outline"}
+            //color={focused ? }
+            />
+        )
+      }}
+      />*/

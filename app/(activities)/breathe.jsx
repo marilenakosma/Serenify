@@ -83,7 +83,7 @@ const getPhaseText = () => {
          style={{ backgroundColor: '#f1f5eeff' }} 
          onPress={() => {
           handleStop();
-          router.push('activities');
+          router.replace('/(dashboard)/activities');
         }}
       />
       <ThemedView style={styles.container}>

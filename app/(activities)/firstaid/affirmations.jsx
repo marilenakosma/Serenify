@@ -370,6 +370,7 @@ const styles = StyleSheet.create({
   randomButtonText: {
     color: '#fff',
     fontSize: 16,
+    marginLeft:8
   },
   favoritesContainer: {
     marginBottom: 20,
