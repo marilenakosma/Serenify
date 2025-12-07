@@ -29,8 +29,11 @@
 "points": {
     "points": "Πόντοι",
     "level": "Επίπεδο",
-    "toNextLevel": "για το επόμενο επίπεδο",
-    "earned": "Κερδίσατε {amount} πόντους!"
+    "yourProgress": "Η Πρόοδός Σας",
+    "totalPoints": "Συνολικοί Πόντοι",
+    "progressToLevel": "Πρόοδος στο Επίπεδο",
+    "pointsToGo": "πόντοι ακόμα",
+    "earnedFromHabit": "Πόντοι από αυτή τη συνήθεια"
   },
 "validation": {
     "nameRequired": "Το όνομα είναι υποχρεωτικό",
