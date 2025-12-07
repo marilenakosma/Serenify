@@ -4,6 +4,7 @@ import BootSplash from 'react-native-bootsplash';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from "../store/authStore";
+import { Platform,NavigationBar } from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../constants/translations';
 
@@ -23,6 +24,7 @@ function RootLayoutNav() {
     };
     initAuth();
   }, []);
+
 
   useEffect(() => {
     if (!isNavigationReady || navigationInProgressRef.current) return;

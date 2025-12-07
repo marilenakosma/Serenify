@@ -43,11 +43,6 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
 };
 
   const getHabitText = () => {
-  // Get display text, avoiding icon names
-
-  if (habit.title) {
-    return t(habit.title);
-  }
 
   const text = habit.text || habit.title;
   if (text && !text.includes('-') && text.length > 2) {

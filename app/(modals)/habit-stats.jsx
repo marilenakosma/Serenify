@@ -321,9 +321,6 @@ const getToday = () => {
 
     const getHabitText = () => {
       // First check for titleKey and translate it
-      if (habit.title) {
-        return t(habit.title);
-      }
 
       const text = habit.text || habit.title;
       if (text && !text.includes('.') && text.length > 2) { // Changed check to avoid translation keys

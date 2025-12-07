@@ -29,6 +29,12 @@
       "expo-localization",
       "expo-audio",
       "expo-asset",
+      [
+      "expo-navigation-bar",
+      {
+        "visibility":"hidden"
+      }
+    ],
      // [
         //"expo-splash-screen",
        // {

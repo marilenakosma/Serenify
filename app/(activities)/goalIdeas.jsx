@@ -9,14 +9,7 @@ import { useTranslation } from '../../constants/translations';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from '../../store/authStore';
 
-export default function GoalIdeas() {
-  const router = useRouter();
-  const { t } = useTranslation();
-  const { userHabits, addHabits } = useAuthStore();
-  const [addedGoals, setAddedGoals] = useState(new Set());
-
-
-  const extraGoals = [
+  export const getExtraGoals = (t) => [
     // Tidying & Organization
     {
       id: 'tidy-bedroom',
@@ -169,6 +162,14 @@ export default function GoalIdeas() {
     }
   ];
 
+export default function GoalIdeas() {
+  const router = useRouter();
+  const { t } = useTranslation();
+  const { userHabits, addHabits } = useAuthStore();
+  const [addedGoals, setAddedGoals] = useState(new Set());
+
+  const extraGoals = getExtraGoals(t);
+  
   const existingHabitIds = userHabits.map(h => h.id);
   const availableGoals = extraGoals.filter(goal => 
     !existingHabitIds.includes(goal.id)

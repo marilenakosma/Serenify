@@ -5,18 +5,25 @@ import ThemedText from './ThemedText';
 import ThemedView from './ThemedView';
 import { useTranslation } from "../constants/translations"
 import { getItem, setItem } from '../store/storage';
+import { useAuthStore } from '../store/authStore';
+import { getExtraGoals } from '../app/(activities)/goalIdeas';
+import i18n from '../constants/translations';
 
 const LanguagePicker = ({ style }) => {
   const { currentLanguage, changeLanguage } = useTranslation();
 
   const toggleLanguage = async () => {
-  const newLanguage = currentLanguage === 'en' ? 'el' : 'en';
-  
-  setTimeout(async () => {
-    await setItem('selectedLanguage', newLanguage);
-    changeLanguage(newLanguage);
-  }, 100);
-};
+    const newLanguage = currentLanguage === 'en' ? 'el' : 'en';
+    
+    setTimeout(async () => {
+      await setItem('selectedLanguage', newLanguage);
+      changeLanguage(newLanguage);
+
+      // ✅ Updated to pass getExtraGoals
+      const { refreshHabitTranslations } = useAuthStore.getState();
+      refreshHabitTranslations(i18n.t, getExtraGoals);
+    }, 100);
+  };
 
   const currentFlag = currentLanguage === 'en' 
     ? require('../assets/flags/american.png')

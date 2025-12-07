@@ -306,13 +306,7 @@ export const useAuthStore = create((set,get) => ({
           return { success: false, error: 'Habits already exist'};
         }
 
-        const habitsWithKeys = uniqueHabits.map(habit => ({
-         ...habit,
-         title: habit.title, 
-         text: habit.text || habit.title,
-       }));
-
-        const updatedHabits = [...currentState.userHabits,...habitsWithKeys];
+        const updatedHabits = [...currentState.userHabits,...uniqueHabits];
      
         // Update Zustand (in-memory)
         set({userHabits:updatedHabits})
@@ -380,6 +374,8 @@ export const useAuthStore = create((set,get) => ({
     console.error('Error persisting habit removal:', error);
   }
 },
+
+
 
     toggleHabitCompletion: (habitId,date = null) => {
      //const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
@@ -504,43 +500,77 @@ export const useAuthStore = create((set,get) => ({
         }
     },
 
-  checkAuth: async () => {
+checkAuth: async () => {
   try {
     const authData = getItem("authData");
-    if (authData && authData.userHabits) {
-      // Migrate old habits to include title
-      if (authData.accessTokenExpiration && Date.now() < authData.accessTokenExpiration) {
-                    set({
-                        ...authData,
-                        userHabits: authData.userHabits || [],
-                        habitCompletions: authData.habitCompletions || {}
-                    });
-                    return true;
-                } else {
-                    // Token expired, clear auth
-                    removeItem("authData");
-                    return false;
-                }
-            }
+    
+    if (!authData) {
+      return false;
+    }
 
-      const migratedHabits = authData.userHabits.map(habit => {
-        if (!habit.titleKey && habit.id) {
-          // Try to match with available habits and add titleKey
-          const availableHabit = getAvailableHabits(t).common.find(h => h.id === habit.id);
-          if (availableHabit) {
-            return { ...habit, title: availableHabit.title };
-          }
-        }
-        return habit;
+    // Check token expiration
+    if (authData.accessTokenExpiration && Date.now() < authData.accessTokenExpiration) {
+      set({
+        ...authData,
+        userHabits: authData.userHabits || [],
+        habitCompletions: authData.habitCompletions || {}
       });
-      
-      authData.userHabits = migratedHabits;
-    
-    
-    set(authData);
-    return true;
+      return true;
+    } else {
+      // Token expired, clear auth
+      removeItem("authData");
+      return false;
+    }
   } catch (error) {
+    console.error('Error in checkAuth:', error);
     return false;
+  }
+},
+refreshHabitTranslations: (t, getExtraGoals) => {
+  const { getAvailableHabits } = require('../constants/availableHabits');
+  const currentState = get();
+  
+  // Get fresh translations from availableHabits
+  const allAvailableHabits = getAvailableHabits(t);
+  const allHabitsMap = {};
+  
+  // Create a map of habit ID to fresh habit data
+  Object.values(allAvailableHabits).flat().forEach(habit => {
+    allHabitsMap[habit.id] = habit;
+  });
+  
+  // Also include goals from goalIdeas 
+  if (getExtraGoals) {
+    getExtraGoals(t).forEach(goal => {
+      allHabitsMap[goal.id] = goal;
+    });
+  }
+  
+  // Update userHabits with fresh translations
+  const updatedHabits = currentState.userHabits.map(userHabit => {
+    const freshHabit = allHabitsMap[userHabit.id];
+    
+    if (freshHabit) {
+      // R translatable fields -> fresh translations
+      return {
+        ...userHabit,
+        title: freshHabit.title,
+        text: freshHabit.title,
+        category: freshHabit.category,
+        duration: freshHabit.duration,
+        description: freshHabit.description,
+        difficulty: freshHabit.difficulty,
+      };
+    }
+    
+    return userHabit; //custom habits 
+  });
+  
+  set({ userHabits: updatedHabits });
+  
+  const currentAuthData = getItem("authData");
+  if (currentAuthData) {
+    setItem("authData", { ...currentAuthData, userHabits: updatedHabits });
   }
 },
 
