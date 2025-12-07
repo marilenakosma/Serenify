@@ -26,6 +26,12 @@
   "invalidCredentials": "Invalid email or password. Please try again.",
   "loginFailed": "Failed to login. Please try again"
 },
+"points": {
+    "points": "Points",
+    "level": "Level",
+    "toNextLevel": "to next level",
+    "earned": "You earned {amount} points!"
+  },
 "validation": {
     "nameRequired": "Name is required",
     "nameTooShort": "Name must be at least 2 characters",

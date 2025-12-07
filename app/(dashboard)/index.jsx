@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react";
-import { FlatList, ImageBackground, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, ImageBackground, ScrollView, 
+  StyleSheet, View,TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Angry from "../../assets/images/storm.png";
 import Neutral from "../../assets/images/hail.png";
@@ -17,6 +18,7 @@ import { useAuthStore } from "../../store/authStore";
 import { getRecommendedHabits } from '../../constants/availableHabits';
 import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
+import { Ionicons } from '@expo/vector-icons';
 
 const Dashboard = () => {
   const {user,
@@ -28,7 +30,12 @@ const Dashboard = () => {
          setTodayMood,
          loadTodayMood,
          questionnaireResults,
-         addHabits} = useAuthStore();
+         addHabits,
+         points,
+         level,
+         getLevelName,
+         getPointsForNextLevel
+        } = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
   const [selectedMood,setSelectedMood] = useState(null);
   
@@ -195,6 +202,16 @@ const Dashboard = () => {
                   })}
                 />
               </ThemedView>
+              <TouchableOpacity 
+                style={styles.pointsBadge}
+                onPress={() => router.push('/(modals)/habit-stats')} // Can link to a points detail page later
+                activeOpacity={0.7}
+              >
+                <Ionicons name="flash" size={20} color="#FFD700" />
+                <ThemedText style={styles.pointsBadgeText}>
+                  {points || 0}
+                </ThemedText>
+              </TouchableOpacity>
             </View>
           </ImageBackground>
         
@@ -323,5 +340,29 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         marginTop: -15, // Negative margin to overlap slightly with image
-    }
+    },
+    pointsBadge: {
+     position: 'absolute',
+     top: 10,
+     right: 20,
+     backgroundColor: '#fff',
+     flexDirection: 'row',
+     alignItems: 'center',
+     gap: 6,
+     paddingHorizontal: 16,
+     paddingVertical: 10,
+     borderRadius: 25,
+     shadowColor: '#000',
+     shadowOffset: { width: 0, height: 2 },
+     shadowOpacity: 0.15,
+     shadowRadius: 4,
+     elevation: 3,
+     zIndex: 10,
+    },
+    pointsBadgeText: {
+     fontSize: 18,
+     //color: '#FFD700',
+    },
+
+
 })

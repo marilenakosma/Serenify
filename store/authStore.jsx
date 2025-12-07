@@ -31,6 +31,10 @@ export const useAuthStore = create((set,get) => ({
 
   worryEntries: [],
 
+  points: 0,
+  level: 1,
+  pointsHistory: [],
+
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
 
   login: async(email,password) => {
@@ -375,7 +379,69 @@ export const useAuthStore = create((set,get) => ({
   }
 },
 
+   addPoints: (amount,source) => {
+     const currentState = get();
+     const newPoints = (currentState.points || 0) + amount;
+     
+     // 100 points = 1 level
+     const newLevel = Math.floor(newPoints / 100) + 1;
 
+     const pointEntry = {
+       amount,
+       source, //'habit-completed', 'activity-finished'
+       timestamp: new Date().toISOString(),
+       totalPoints: newPoints,
+     };
+
+     const updatedHistory = [...(currentState.pointsHistory || []),pointEntry];
+
+     set({
+      points:newPoints,
+      level:newLevel,
+      pointsHistory: updatedHistory
+     });
+
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", { 
+        ...currentAuthData, 
+        points: newPoints,
+        level: newLevel,
+        pointsHistory: updatedHistory
+     });
+    }
+
+    console.log(`+${amount} points from ${source}! Total: ${newPoints} (Level ${newLevel})`);
+    return { newPoints, newLevel };
+    
+    
+   },
+
+   getPoints: () => {
+     return get().points || 0;
+   },
+
+   getLevel: () => {
+    return get().level || 1;
+   },
+
+   getPointsForNextLevel: () => {
+    const currentPoints = get().points || 0;
+    const currentLevel = get().level || 1;
+    const pointsForNextLevel = currentLevel * 100;
+    const pointsNeeded = pointsForNextLevel - currentPoints;
+    return { pointsForNextLevel, pointsNeeded };
+   },
+
+   getLevelName: () => {
+     const level = get().level || 1;
+  
+     if (level >= 10) return 'Master';
+     if (level >= 7) return 'Expert';
+     if (level >= 5) return 'Advanced';
+     if (level >= 3) return 'Intermediate';
+     return 'Beginner';
+    },
 
     toggleHabitCompletion: (habitId,date = null) => {
      //const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
@@ -449,7 +515,13 @@ export const useAuthStore = create((set,get) => ({
             });
         }
 
+      if (!isCurrentlyCompleted) {
+       const pointsToAward = habit.points || 10; // Use habit's points or default to 10
+       get().addPoints(pointsToAward, `habit-${habitId}`);
+      }
+
     },
+
     updateHabit:(habitId,updatedHabit) => {
      const currentState = get();
 
@@ -513,7 +585,10 @@ checkAuth: async () => {
       set({
         ...authData,
         userHabits: authData.userHabits || [],
-        habitCompletions: authData.habitCompletions || {}
+        habitCompletions: authData.habitCompletions || {},
+        points: authData.points || 0,
+        level: authData.level || 1,
+        pointsHistory: authData.pointsHistory || [],
       });
       return true;
     } else {
@@ -756,6 +831,9 @@ refreshHabitTranslations: (t, getExtraGoals) => {
             kindnessCompletions:{},
             reflections:[],
             worryEntries: [],
+            points:0,
+            level:1,
+            pointsHistory:[],
         });
     },
 }))
