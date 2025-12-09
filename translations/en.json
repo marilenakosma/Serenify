@@ -34,7 +34,17 @@
     "progressToLevel": "Progress to Level",
     "pointsToGo": "points to go",
     "earnedFromHabit": "Points earned from this habit",
-    "rewardPoints": "Reward Points"
+    "rewardPoints": "Reward Points",
+    "earned": "Points Earned!",
+    "earnedMessage": "You earned {amount} points!",
+    "history": "Points History",
+    "total": "Total Points",
+    "fromHabit": "Habit Completed",
+    "fromReflection": "Reflection Saved",
+    "fromKindness": "Act of Kindness",
+    "fromBreathing": "Breathing Exercise",
+    "fromActivity": "Activity",
+    "noHistory": "No points history yet. Complete habits and activities to earn points!"
   },
 "validation": {
     "nameRequired": "Name is required",

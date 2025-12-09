@@ -742,6 +742,8 @@ refreshHabitTranslations: (t, getExtraGoals) => {
        });
 
       }
+
+       return true; 
   },
 
   getReflections: () => {

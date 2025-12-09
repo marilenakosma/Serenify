@@ -1,5 +1,5 @@
 import { useState,useEffect,useRef } from 'react';
-import { StyleSheet,FlatList,View } from 'react-native';
+import { StyleSheet,FlatList,View,Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import Spacer from '../../components/Spacer';
@@ -65,16 +65,22 @@ const getPhaseText = () => {
   )
 
   const handleStop = () => {
-
-    if (selectedDuration && showSession) {
-    const pointsToAward = selectedDuration.duration * 5; // 5 points per minute
+  if (selectedDuration && showSession) {
+    const pointsToAward = selectedDuration.duration * 5;
     addPoints(pointsToAward, 'breathe-activity');
+    
+    // ✅ Show points notification
+    Alert.alert(
+      '🎉 ' + t('points.earned'),
+      t('points.earnedMessage', { amount: pointsToAward }),
+      [{ text: 'OK', style: 'default' }]
+    );
   }
   
-    setSelectedDuration(null);
-    setShowSession(false);
-    setBreathPhase('inhale');
-  };
+  setSelectedDuration(null);
+  setShowSession(false);
+  setBreathPhase('inhale');
+};
 
   const handleStartSession = () => {
     setShowSession(true);

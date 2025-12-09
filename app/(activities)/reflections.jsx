@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState,useEffect} from 'react';
 import { StyleSheet,Text,TextInput,FlatList,View } from 'react-native';
 import { useRouter,useLocalSearchParams } from 'expo-router';
 import LottieView from 'lottie-react-native';
@@ -12,12 +12,15 @@ import { useTranslation } from '../../constants/translations';
 import LanguagePicker from '../../components/LanguagePicker';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from '../../store/authStore';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Reflections() {
    
   const router=useRouter()
   const { t } = useTranslation();
-  const { saveReflection, getReflections } = useAuthStore();
+  const { saveReflection, 
+        getReflections,
+        addPoints } = useAuthStore();
   const [reflection, setReflection] = useState('');
   const [reflectionList, setReflectionList] = useState([]);
   const params = useLocalSearchParams();
@@ -29,9 +32,14 @@ export default function Reflections() {
 
    const handleSave = () => {
     if (reflection.trim()) {
-      saveReflection(reflection);
-      setReflection('');
-      setReflectionList(getReflections());
+      const success = saveReflection(reflection);
+
+      if(success) {
+        addPoints(20,'reflection')
+
+        setReflection('');
+        setReflectionList(getReflections());
+      }
     }
   };
 
@@ -74,6 +82,12 @@ export default function Reflections() {
               <ThemedText style={styles.reflectionDate}>
                 {item.date}
               </ThemedText>
+              <View style={styles.reflectionPointsBadge}>
+                 <Ionicons name="flash" size={18} color="#FFD700" />
+                 <ThemedText style={styles.reflectionPointsText}>
+                   20
+                 </ThemedText>
+                 </View>
             </View>
           )}
           keyExtractor={(item, idx) => idx.toString()}
@@ -137,4 +151,11 @@ const styles = StyleSheet.create({
     color: '#666', 
     marginTop: 4 
   },
+  reflectionPointsBadge: {
+    flexDirection:'row',
+    alignItems:'center',
+    paddingHorizontal:10,
+    paddingVertical:4,
+    alignSelf:'flex-end'
+  }
 });

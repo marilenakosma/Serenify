@@ -23,7 +23,8 @@ export default function ActOfKindness() {
   const {
     toggleKindnessAct,
     getKindnessCompletions,
-    getTodayKindnessCount
+    getTodayKindnessCount,
+    addPoints
   } = useAuthStore();
 
   const [completedActs,setCompletedActs] = useState([]);
@@ -158,12 +159,21 @@ const kindnessActs = [
   ];
 
 const completeAct = (actId) => {
+  const wasCompleted = completedActs.includes(actId); 
+  
   toggleKindnessAct(actId);
+  
   const updated = getKindnessCompletions();
   const newCount = getTodayKindnessCount();
   setCompletedActs(updated);
   setTodayCount(newCount);
-}
+
+  if (!wasCompleted) {
+    addPoints(15, 'kindness-act');
+  } else {
+    addPoints(-15, 'kindness-act-undo');
+  }
+};
 
 const groupedActs = kindnessActs.reduce((groups,act) => {
   if (!groups[act.category]) {
