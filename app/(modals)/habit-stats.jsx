@@ -377,90 +377,29 @@ const getToday = () => {
               <ThemedText style={styles.habitMeta}>
                 {habit.category} • {getFrequencyDisplay(habit.frequency, t)} • {habit.duration}
               </ThemedText>
-              <ThemedText style={styles.habitPoints}>
-                {t('habitStats.pointsPerCompletion', { points: habit.points })}
-              </ThemedText>
+              <View style={styles.habitPointsSection}>
+                <ThemedText style={styles.habitPointsLabel}>
+                 {t('points.earnedFromHabit')}
+                 </ThemedText>
+               <View style={styles.habitPointsValue}>
+                 <Ionicons name="flash" size={18} color="#FFD700" />
+                 <ThemedText style={styles.habitPointsText}>
+                   {habitPointsEarned}
+                 </ThemedText>
+                 </View>
+               </View>
               <TouchableOpacity
               onPress={handleDelete}
               style={styles.removeButton}
               activeOpacity={0.7}
             >
               <ThemedText style={styles.removeButtonText}>
+               {/*<Ionicons name="trash" size={20} color="#FF6B35" /> */ }
                 {t('habitStats.removeFromHabits')}
               </ThemedText>
             </TouchableOpacity>
             </View>
           </View>
-
-          <View style={styles.pointsCard}>
-           
-          {/* Points earned from this habit */}
-          <View style={styles.habitPointsSection}>
-            <ThemedText style={styles.habitPointsLabel}>
-              {t('points.earnedFromHabit')}
-            </ThemedText>
-            <View style={styles.habitPointsValue}>
-              <Ionicons name="flash" size={18} color="#FFD700" />
-              <ThemedText style={styles.habitPointsText}>
-                {habitPointsEarned}
-              </ThemedText>
-            </View>
-          </View>
-        </View>
-
-          {/* Stats Grid */}
-          <View style={styles.statsGrid}>
-            <View style={styles.statCard}>
-              <ThemedText title style={styles.statNumber}>
-                {stats.currentStreak}
-              </ThemedText>
-              <ThemedText style={styles.statLabel}>
-                {t('habitStats.bestStreak')}
-                </ThemedText>
-              <Ionicons name="flame" size={20} color="#FF6B35" />
-            </View>
-            
-            <View style={styles.statCard}>
-              <ThemedText title style={styles.statNumber}>
-                {stats.bestStreak}
-              </ThemedText>
-              <ThemedText style={styles.statLabel}>
-                 {t('habitStats.currentStreak')}
-                </ThemedText>
-              <Ionicons name="trophy" size={20} color="#FFD700" />
-            </View>
-            
-            <View style={styles.statCard}>
-              <ThemedText title style={styles.statNumber}>
-                {stats.completionRate}%
-              </ThemedText>
-              <ThemedText style={styles.statLabel}>
-                {t('habitStats.thirtyDayRate')}
-                </ThemedText>
-              <Ionicons name="trending-up" size={20} color="#4CAF50" />
-            </View>
-            
-            <View style={styles.statCard}>
-              <ThemedText title style={styles.statNumber}>
-                {stats.totalCompletions}
-              </ThemedText>
-              <ThemedText style={styles.statLabel}>
-                {t('habitStats.totalDone')}
-                </ThemedText>
-              <Ionicons name="checkmark-circle" size={20} color="#2196F3" />
-            </View>
-          </View>
-
-          {habit.id === 'water-intake' && (
-           <WaterIntakeInput
-             currentAmount={habitCompletions[habit.id]?.[new Date().toISOString().split('T')[0]] || 0}
-             target={habit.target || 2000}
-             onUpdate={(newAmount) => {
-               const today = new Date().toISOString().split('T')[0];
-               toggleHabitCompletion(habit.id, today, newAmount);
-             }}
-          />
-        )}
 
           {/* Calendar */}
           <View style={styles.calendarSection}>
@@ -541,11 +480,65 @@ const getToday = () => {
           </ThemedText>
         </View>
 
+          {/* Stats Grid */}
+          <View style={styles.statsGrid}>
+            <View style={styles.statCard}>
+              <ThemedText title style={styles.statNumber}>
+                {stats.currentStreak}
+              </ThemedText>
+              <ThemedText style={styles.statLabel}>
+                {t('habitStats.bestStreak')}
+                </ThemedText>
+              <Ionicons name="flame" size={20} color="#FF6B35" />
+            </View>
+            
+            <View style={styles.statCard}>
+              <ThemedText title style={styles.statNumber}>
+                {stats.bestStreak}
+              </ThemedText>
+              <ThemedText style={styles.statLabel}>
+                 {t('habitStats.currentStreak')}
+                </ThemedText>
+              <Ionicons name="trophy" size={20} color="#FFD700" />
+            </View>
+            
+            <View style={styles.statCard}>
+              <ThemedText title style={styles.statNumber}>
+                {stats.completionRate}%
+              </ThemedText>
+              <ThemedText style={styles.statLabel}>
+                {t('habitStats.thirtyDayRate')}
+                </ThemedText>
+              <Ionicons name="trending-up" size={20} color="#4CAF50" />
+            </View>
+            
+            <View style={styles.statCard}>
+              <ThemedText title style={styles.statNumber}>
+                {stats.totalCompletions}
+              </ThemedText>
+              <ThemedText style={styles.statLabel}>
+                {t('habitStats.totalDone')}
+                </ThemedText>
+              <Ionicons name="checkmark-circle" size={20} color="#2196F3" />
+            </View>
+          </View>
+
+          {habit.id === 'water-intake' && (
+           <WaterIntakeInput
+             currentAmount={habitCompletions[habit.id]?.[new Date().toISOString().split('T')[0]] || 0}
+             target={habit.target || 2000}
+             onUpdate={(newAmount) => {
+               const today = new Date().toISOString().split('T')[0];
+               toggleHabitCompletion(habit.id, today, newAmount);
+             }}
+          />
+        )}
+
 
           <Spacer height={50} />
         </ScrollView>
 
-        {/* Edit Modal Placeholder */}
+        {/* Edit Modal */}
         <Modal
           visible={showEditModal}
           transparent={true}
@@ -731,17 +724,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   habitTitle: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#2c3e50',
     marginBottom: 6,
   },
   habitMeta: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#666',
     marginBottom: 6,
   },
   habitPoints: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#4CAF50',
   },
 
@@ -919,7 +912,8 @@ calendar: {
   },
   removeButtonText: {
     color: '#FF5252',
-    fontSize: 16,
+    fontSize: 14,
+    gap:4
   },
 
   // Modal
