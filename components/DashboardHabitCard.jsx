@@ -22,6 +22,7 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
 
   const weeklyCompletions = getCompletionsThisWeek(thisHabitCompletions);
   const requiredPerWeek = getRequiredCompletionsPerWeek(habit.frequency);
+
   
   const getHabitIcon = () => {
 
@@ -132,16 +133,15 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
       cardAnimation.stop();
       checkmarkAnimation.stop();
     };
-  }, [isComplete, todayCompletion]);
+  }, [isComplete]);
 
   const handleQuickComplete = (e) => {
     e.stopPropagation();
 
     if (habit.type === 'incremental') {
-      onPress(); // Navigate to habit detail screen for water input
+      onPress();
       return;
     }
-
     const todayCompleted = Boolean(thisHabitCompletions[today]);
     
     if (!isComplete) {

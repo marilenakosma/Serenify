@@ -64,6 +64,11 @@ const getPhaseText = () => {
   )
 
   const handleStop = () => {
+
+    if (selectedDuration && showSession) {
+    const pointsToAward = selectedDuration.duration * 5; // 5 points per minute
+    addPoints(pointsToAward, 'movements-activity');
+  }
     setSelectedDuration(null);
     setShowSession(false);
     setMovementPhase('prepare');

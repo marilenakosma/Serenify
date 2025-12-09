@@ -43,15 +43,18 @@ const HabitStats = () => {
   );
 
   const habitPointsEarned = useMemo(() => 
-    pointsHistory.filter(
-      entry => entry.source === `habit-${habitId}`
-    ).reduce((sum, entry) => sum + entry.amount, 0),
-    [pointsHistory, habitId]
-  );
+  pointsHistory
+    .filter(entry => 
+      entry.source === `habit-${habitId}` || 
+      entry.source === `habit-${habitId}-undo`
+    )
+    .reduce((sum, entry) => sum + entry.amount, 0),
+  [pointsHistory, habitId]
+);
 
   const openEditModal = () => {
     if (!habit) {
-    Alert.alert(t('common.error'), t('habitStats.habitDataNotAvailable')); // ✅ Fixed
+    Alert.alert(t('common.error'), t('habitStats.habitDataNotAvailable')); 
     return;
   }
 

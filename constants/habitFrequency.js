@@ -342,3 +342,36 @@ const isSameWeek = (date1, date2) => {
   const start2 = getStartOfWeek(date2);
   return start1.getTime() === start2.getTime();
 };
+
+//Check if points have already been awarded for a habit on a specific date
+export const hasPointsBeenAwarded = (completions,habitId,dateStr) => {
+  if(!completions[habitId]) 
+    return false;
+  return completions[habitId][`${dateStr}_pointsAwarded` || false]
+};
+
+export const markPointsAwarded = (completions,habitId,dateStr) => {
+ if(!completions[habitId]) {
+  completions[habitId] = {};
+ }
+   completions[habitId][`${dateStr}_pointsAwarded`] = true;
+   return completions;
+}
+
+export const clearPointsAwarded = (completions,habitId,dateStr) => {
+  if (!completions[habitId]) 
+    return completions;
+  completions[habitId][`${dateStr}_pointsAwarded`] = false;
+  return completions;
+}
+
+export const canToggleHabitCompletion = (completions,habitId,dateStr,allowUncomplete = false) => {
+  const isCurrentlyCompleted = completions[habitId]?.[dateStr] || false;
+  
+  // If already completed and uncompleting is not allowed
+  if (isCurrentlyCompleted && !allowUncomplete) {
+    return { canToggle: false, reason: 'already_completed' };
+  }
+  
+  return { canToggle: true };
+}

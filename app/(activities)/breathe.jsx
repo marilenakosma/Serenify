@@ -65,6 +65,12 @@ const getPhaseText = () => {
   )
 
   const handleStop = () => {
+
+    if (selectedDuration && showSession) {
+    const pointsToAward = selectedDuration.duration * 5; // 5 points per minute
+    addPoints(pointsToAward, 'breathe-activity');
+  }
+  
     setSelectedDuration(null);
     setShowSession(false);
     setBreathPhase('inhale');

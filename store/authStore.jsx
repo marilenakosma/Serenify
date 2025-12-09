@@ -2,9 +2,14 @@ import { create } from "zustand";
 import { getItem, removeItem, setItem } from "./storage";
 import { Alert } from "react-native";
 import { shouldTrackHabitOnDate,
-         isHabitCompleteForPeriod,getCompletionsThisWeek,
+         isHabitCompleteForPeriod,
+         getCompletionsThisWeek,
          calculateFrequencyAwareStreak,
-         getRequiredCompletionsPerWeek} from "../constants/habitFrequency";
+         getRequiredCompletionsPerWeek,
+         hasPointsBeenAwarded,
+         markPointsAwarded,
+         clearPointsAwarded,
+         canToggleHabitCompletion } from "../constants/habitFrequency";
 
 
 export const useAuthStore = create((set,get) => ({
@@ -120,7 +125,17 @@ export const useAuthStore = create((set,get) => ({
                 },
                 accessTokenExpiration: Date.now() + (60 * 60 * 1000),
                 isLoading: false,
-                hasCompletedQuestionnaire: false, // New users need questionnaire
+                hasCompletedQuestionnaire: false, 
+                userHabits: [],
+                habitCompletions: {},
+                points: 0,
+                level: 1,
+                pointsHistory: [],
+                todayMood: null,
+                moodHistory: {},
+                kindnessCompletions: {},
+                reflections: [],
+                worryEntries: [],
             };
 
             setItem("authData", authData);
@@ -445,8 +460,9 @@ export const useAuthStore = create((set,get) => ({
 
     toggleHabitCompletion: (habitId,date = null) => {
      //const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
+    
      const currentState = get();
-
+  
      const habit = currentState.userHabits.find(h => h.id === habitId);
 
      if(!habit) return;
@@ -455,14 +471,14 @@ export const useAuthStore = create((set,get) => ({
      const dateStr = targetDate.toISOString().split('T')[0];
 
      if (!shouldTrackHabitOnDate(habit.frequency, targetDate)) {
-    Alert.alert(
-      'Not Trackable',
-      `This habit (${habit.frequency}) cannot be completed on this day.`
-    );
-    return;
-  }
+       Alert.alert(
+       'Not Trackable',
+       `This habit (${habit.frequency}) cannot be completed on this day.`
+     );
+     return;
+     }
 
-     const completions = {...currentState.habitCompletions};
+     let completions = {...currentState.habitCompletions};
      /* completions = {
         "morning-run": {
           "2025-11-01": true,
@@ -482,6 +498,7 @@ export const useAuthStore = create((set,get) => ({
      }
 
      const isCurrentlyCompleted = completions[habitId][dateStr] || false; 
+     const pointsAwarded = hasPointsBeenAwarded(completions, habitId, dateStr);
      // completions["morning-run"]["2025-11-04"]  
 
     completions[habitId][dateStr] = !isCurrentlyCompleted;
@@ -501,6 +518,17 @@ export const useAuthStore = create((set,get) => ({
       return habit;
      })
 
+      const pointsToAward = habit.points || 10;
+
+      if (!isCurrentlyCompleted && !pointsAwarded) {
+        get().addPoints(pointsToAward, `habit-${habitId}`);
+        completions = markPointsAwarded(completions, habitId, dateStr);
+     } 
+     else if (isCurrentlyCompleted && pointsAwarded) {
+       get().addPoints(-pointsToAward, `habit-${habitId}-undo`);
+       completions = clearPointsAwarded(completions, habitId, dateStr);
+     }
+
      set({
         habitCompletions:completions,
         userHabits:updatedHabits
@@ -514,11 +542,6 @@ export const useAuthStore = create((set,get) => ({
                 userHabits: updatedHabits 
             });
         }
-
-      if (!isCurrentlyCompleted) {
-       const pointsToAward = habit.points || 10; // Use habit's points or default to 10
-       get().addPoints(pointsToAward, `habit-${habitId}`);
-      }
 
     },
 
