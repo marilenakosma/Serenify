@@ -346,10 +346,6 @@ const getToday = () => {
       }    
       return habit.id || 'Habit';
     };
-    
-    //const habitPointsEarned = pointsHistory.filter(
-     // entry => entry.source === `habit-${habitId}`
-     // ).reduce((sum, entry) => sum + entry.amount, 0);
 
   return (
     <ThemedView style={styles.container}>
@@ -397,41 +393,6 @@ const getToday = () => {
           </View>
 
           <View style={styles.pointsCard}>
-            <View style={styles.pointsHeader}>
-              <View style={styles.pointsRow}>
-                 <View style={styles.levelBadge}>
-                  <Ionicons name="trophy" size={20} color="#FF6b6b" />
-                   <ThemedText title={true} style={styles.levelText}>
-                      {t('points.level')} {level || 1}
-                   </ThemedText>
-                 </View>
-                  <ThemedText style={styles.levelName}>
-                    {getLevelName()}
-                  </ThemedText>
-              </View>
-  
-         <View style={styles.progressSection}>
-           <View style={styles.progressBar}>
-            <View 
-               style={[
-               styles.progressFill, 
-               { width: `${((points % 100) / 100) * 100}%` }
-              ]} 
-            />
-         </View>
-        <View style={styles.pointsRow}>
-            <View style={styles.pointsInfo}>
-              <Ionicons name="star" size={16} color="#FFD700" />
-                <ThemedText style={styles.pointsSmallText}>
-                    {points || 0}
-                </ThemedText>
-            </View>
-            <ThemedText style={styles.nextLevelText}>
-             {100 - (points % 100)} {t('points.pointsToGo')}
-            </ThemedText>
-          </View>
-         </View>
-       </View>
            
           {/* Points earned from this habit */}
           <View style={styles.habitPointsSection}>
@@ -439,9 +400,9 @@ const getToday = () => {
               {t('points.earnedFromHabit')}
             </ThemedText>
             <View style={styles.habitPointsValue}>
-              <Ionicons name="flash" size={18} color="#4CAF50" />
+              <Ionicons name="flash" size={18} color="#FFD700" />
               <ThemedText style={styles.habitPointsText}>
-                +{habitPointsEarned}
+                {habitPointsEarned}
               </ThemedText>
             </View>
           </View>
@@ -1086,90 +1047,35 @@ calendar: {
     color: '#999',
     fontStyle: 'italic',
   },
-  pointsCard: {
-  backgroundColor: '#fff',
-  marginHorizontal: 6,
-  marginTop: 10,
-  marginBottom: 15,
-  padding: 20,
-  borderRadius: 15,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 4,
-  elevation: 3,
-},
-pointsRow: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 10,
-},
-levelBadge: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 6,
-  backgroundColor: '#FFF9E6',
-  paddingHorizontal: 12,
-  paddingVertical: 6,
-  borderRadius: 20,
-},
-levelText: {
-  fontSize: 16,
-  color: '#333',
-},
-levelName: {
-  fontSize: 14,
-  color: '#666',
-  fontStyle: 'italic',
-},
-progressSection: {
-  width: '100%',
-},
-progressBar: {
-  height: 12,
-  backgroundColor: '#E0E0E0',
-  borderRadius: 10,
-  overflow: 'hidden',
-  marginBottom: 6,
-},
-progressFill: {
-  height: '100%',
-  backgroundColor: '#FFD700',
-  borderRadius: 10,
-},
-pointsInfo: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 4,
-},
-pointsSmallText: {
-  fontSize: 14,
-},
-nextLevelText: {
-  fontSize: 12,
-},
-habitPointsSection: {
-  marginTop: 5,
-  paddingTop: 5,
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-},
-habitPointsLabel: {
-  fontSize: 13,
- // color: '#666',
-},
-habitPointsValue: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#E8F5E9',
-  paddingHorizontal: 12,
-  paddingVertical: 3,
-  borderRadius: 15,
-},
-habitPointsText: {
-  fontSize: 16,
-  color: '#4CAF50',
-},
+     pointsCard: {
+       backgroundColor: '#fff',
+       marginHorizontal: 5,
+       marginBottom: 15,
+       paddingHorizontal: 25,
+       paddingVertical: 15,
+       borderRadius: 15,
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 2 },
+       shadowOpacity: 0.1,
+       shadowRadius: 4,
+       elevation: 3,
+     },
+     habitPointsSection: {
+       flexDirection: 'row',
+       justifyContent: 'space-between',
+       alignItems: 'center',
+     },
+     habitPointsLabel: {
+       fontSize: 13,
+     },
+     habitPointsValue: {
+       flexDirection: 'row',
+       alignItems: 'center',
+       paddingHorizontal: 12,
+       //paddingVertical: 3,
+       borderRadius: 15,
+     },
+     habitPointsText: {
+       fontSize: 16,
+     },
 });

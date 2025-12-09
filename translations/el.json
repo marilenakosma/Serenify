@@ -33,7 +33,8 @@
     "totalPoints": "Συνολικοί Πόντοι",
     "progressToLevel": "Πρόοδος στο Επίπεδο",
     "pointsToGo": "πόντοι ακόμα",
-    "earnedFromHabit": "Πόντοι από αυτή τη συνήθεια"
+    "earnedFromHabit": "Πόντοι από αυτή τη συνήθεια",
+    "rewardPoints": "Πόντοι Ανταμοιβής"
   },
 "validation": {
     "nameRequired": "Το όνομα είναι υποχρεωτικό",

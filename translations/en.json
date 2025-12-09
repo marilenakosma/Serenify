@@ -33,7 +33,8 @@
     "totalPoints": "Total Points",
     "progressToLevel": "Progress to Level",
     "pointsToGo": "points to go",
-    "earnedFromHabit": "Points earned from this habit"
+    "earnedFromHabit": "Points earned from this habit",
+    "rewardPoints": "Reward Points"
   },
 "validation": {
     "nameRequired": "Name is required",

@@ -10,9 +10,17 @@ import { removeItem } from "../../store/storage";
 import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
 import LanguagePicker from '../../components/LanguagePicker';
+import { Ionicons } from '@expo/vector-icons';
 
 const profile = () => {
-    const { user, logout,retakeQuestionnaire } = useAuthStore();
+    const { user, 
+            logout,
+            retakeQuestionnaire,
+            points,
+            level,
+            getLevelName,
+            pointsHistory, 
+          } = useAuthStore();
     const router = useRouter()
     const { t } = useTranslation();
 
@@ -105,10 +113,12 @@ const profile = () => {
     return (
         <ThemedView style={styles.container}>
             <LanguagePicker/>
-            <SafeAreaView>
-                <BackButton style={{backgroundColor: '#f1f5eeff'}}/>
+             <SafeAreaView style={styles.safeArea}> 
+               <View style={styles.header}> 
+                 <BackButton style={{backgroundColor: '#f1f5eeff'}}/>
+               </View>
 
-                {/* User Info Section */}
+                {/* User Info Section 
                 <ThemedView style={styles.userSection}>
                     <View style={styles.userInfo}>
                         <ThemedText style={styles.username}>
@@ -118,7 +128,47 @@ const profile = () => {
                             {user?.email || 'No email'}
                         </ThemedText>
                     </View>
-                </ThemedView>
+                </ThemedView>*/}
+
+                
+                <View style={styles.pointsCard}>
+                  <View style={styles.pointsHeader}>
+                    <View style={styles.titleRow}>
+                       <Ionicons name="flash" size={22} color="#FFD700" />
+                        <View style={styles.titleContent}>
+                          <View title={true} style={styles.pointsDisplay}>
+                           <ThemedText style={styles.currentPoints}>
+                             {points || 0}
+                           </ThemedText>
+                          <ThemedText title={true} style={styles.maxPoints}>
+                               /{level * 100}
+                          </ThemedText>
+                     </View>
+                   </View>
+               </View>
+    
+                <View style={styles.progressBar}>
+                   <View 
+                     style={[
+                      styles.progressFill, 
+                      { width: `${((points % 100) / 100) * 100}%` }
+                     ]} 
+                     />
+                </View>
+    
+                <View style={styles.levelRow}>
+                  <View style={styles.levelBadge}>
+                    <Ionicons name="trophy" size={16} color="#FF6B6B" />
+                      <ThemedText style={styles.levelText}>
+                        {level || 1}
+                     </ThemedText>
+                  </View>
+                  <ThemedText style={styles.levelName}>
+                    {getLevelName()}
+                 </ThemedText>
+                 </View>
+               </View>
+              </View>
 
                 {/* Settings List */}
                 <FlatList
@@ -139,6 +189,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f1f5eeff'
+    },
+    safeArea: {
+        flex:1,
+    },
+    header: { 
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 10,
+      paddingVertical: 10,
+      backgroundColor: '#f1f5eeff',
     },
     userSection: {
         alignItems: 'center',
@@ -178,5 +239,80 @@ const styles = StyleSheet.create({
         padding: 20,
         marginVertical: 10,
         marginHorizontal: 15,
+    },
+    pointsCard: {
+      backgroundColor: '#fff',
+      marginHorizontal: 35,
+      marginTop: 10,
+      marginBottom: 15,
+      paddingHorizontal: 24,
+      paddingVertical: 20,
+      borderRadius: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    pointsHeader: { 
+      width: '100%',
+   },
+   titleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+      marginBottom: 16,
+   },
+   titleContent: {
+     flex: 1,
+   },
+   cardTitle: {
+     fontSize: 16,
+     color: '#999',
+     marginBottom: 4,
+   },
+   pointsDisplay: {
+     flexDirection: 'row',
+     alignItems: 'baseline',
+   },
+   currentPoints: {
+     fontSize: 25,
+     color: '#333',
+   },
+   maxPoints: {
+     fontSize: 25,
+     color: '#CCC',
+   },
+   progressBar: {
+     height: 8,
+     backgroundColor: '#E0E0E0',
+     borderRadius: 10,
+     overflow: 'hidden',
+     marginBottom: 12,
+   },
+   progressFill: {
+     height: '100%',
+     backgroundColor: '#4CAF50',
+     borderRadius: 10,
+   },
+   levelRow: {
+     flexDirection: 'row',
+     justifyContent: 'space-between',
+     alignItems: 'center',
+   },
+   levelBadge: {
+     flexDirection: 'row',
+     alignItems: 'center',
+     gap: 6,
+   },
+   levelText: {
+     fontSize: 14,
+     fontWeight: '600',
+     color: '#333',
+   },
+   levelName: {
+     fontSize: 14,
+     color: '#666',
+     //fontStyle: 'italic',
     },
 });
