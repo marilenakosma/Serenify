@@ -523,7 +523,7 @@ const getToday = () => {
             </View>
           </View>
 
-          {habit.id === 'water-intake' && (
+         { /*{habit.id === 'water-intake' && (
            <WaterIntakeInput
              currentAmount={habitCompletions[habit.id]?.[new Date().toISOString().split('T')[0]] || 0}
              target={habit.target || 2000}
@@ -532,7 +532,7 @@ const getToday = () => {
                toggleHabitCompletion(habit.id, today, newAmount);
              }}
           />
-        )}
+        )} */}
 
 
           <Spacer height={50} />
