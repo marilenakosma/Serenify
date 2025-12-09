@@ -82,7 +82,7 @@ export default function ReflectionPrompts() {
         <ThemedText style={styles.promptText}>{t(item.tKey)}</ThemedText>
       </View>
       <ThemedButton
-        style={[styles.selectButton, { backgroundColor: item.color }]}
+        style={styles.selectButton}
         onPress={() => router.push({ pathname: '/(activities)/reflections', 
           params: { prompt: item.tKey } })}
       >

@@ -59,15 +59,21 @@ export default function Reflections() {
         />
 
         <ThemedButton onPress={handleSave} style={styles.saveButton}>
-          <ThemedText style={{ color: '#fff' }}>{t('reflections.save')}</ThemedText>
+          <ThemedText style={{ color: '#fff' }}>
+            {t('reflections.save')}
+            </ThemedText>
         </ThemedButton>
 
         <FlatList
           data={reflectionList}
           renderItem={({ item }) => (
             <View style={styles.reflectionItem}>
-              <ThemedText style={styles.reflectionText}>{item.text}</ThemedText>
-              <ThemedText style={styles.reflectionDate}>{item.date}</ThemedText>
+              <ThemedText style={styles.reflectionText}>
+                {item.text}
+              </ThemedText>
+              <ThemedText style={styles.reflectionDate}>
+                {item.date}
+              </ThemedText>
             </View>
           )}
           keyExtractor={(item, idx) => idx.toString()}
@@ -77,8 +83,7 @@ export default function Reflections() {
     </SafeAreaView>
   );
 }
-//<ThemedButton onPress={() => router.navigate("/(dashboard)")}>
-//<ThemedButton onPress={() => router.navigate("/(auth)/register")}>
+
 const styles = StyleSheet.create({
   safeArea: { 
     flex: 1, 
