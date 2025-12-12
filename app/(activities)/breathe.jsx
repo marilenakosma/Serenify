@@ -14,6 +14,7 @@ import { useTranslation } from '../../constants/translations';
 import LanguagePicker from '../../components/LanguagePicker';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from '../../store/authStore';
+import { showPointsAlert } from '../utils/customAlert';
 
 export default function Breathe() {
    
@@ -69,12 +70,7 @@ const getPhaseText = () => {
     const pointsToAward = selectedDuration.duration * 5;
     addPoints(pointsToAward, 'breathe-activity');
     
-    // ✅ Show points notification
-    Alert.alert(
-      '🎉 ' + t('points.earned'),
-      t('points.earnedMessage', { amount: pointsToAward }),
-      [{ text: 'OK', style: 'default' }]
-    );
+    showPointsAlert(pointsToAward);
   }
   
   setSelectedDuration(null);

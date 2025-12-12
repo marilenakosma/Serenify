@@ -13,6 +13,7 @@
     "memory-check": "node --inspect --expose-gc node_modules/expo/bin/cli.js start"
   },
   "dependencies": {
+    "@blazejkustra/react-native-alert": "^1.0.0",
     "@expo/vector-icons": "^15.0.2",
     "@lottiefiles/dotlottie-react": "^0.13.5",
     "expo": "~54.0.27",

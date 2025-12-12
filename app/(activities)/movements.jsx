@@ -13,11 +13,13 @@ import ActivitySession from "../../components/ActivitySession";
 import { useTranslation } from '../../constants/translations';
 import LanguagePicker from '../../components/LanguagePicker';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuthStore } from '../../store/authStore';
 
 export default function Movements() {
    
   const router=useRouter()
   const { t } = useTranslation();
+  const { addPoints } = useAuthStore();
   const [selectedDuration, setSelectedDuration] = useState(null);
   const [showSession,setShowSession ] = useState(false);
   const [movementPhase, setMovementPhase] = useState('prepare');

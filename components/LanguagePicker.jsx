@@ -8,6 +8,7 @@ import { getItem, setItem } from '../store/storage';
 import { useAuthStore } from '../store/authStore';
 import { getExtraGoals } from '../app/(activities)/goalIdeas';
 import i18n from '../constants/translations';
+import { getFoundationalHabits } from '../constants/foundationalHabits';
 
 const LanguagePicker = ({ style }) => {
   const { currentLanguage, changeLanguage } = useTranslation();
@@ -21,7 +22,10 @@ const LanguagePicker = ({ style }) => {
 
       // ✅ Updated to pass getExtraGoals
       const { refreshHabitTranslations } = useAuthStore.getState();
-      refreshHabitTranslations(i18n.t, getExtraGoals);
+      refreshHabitTranslations(
+        i18n.t, 
+        getExtraGoals,
+        getFoundationalHabits);
     }, 100);
   };
 

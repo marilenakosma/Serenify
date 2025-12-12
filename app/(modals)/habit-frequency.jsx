@@ -95,7 +95,8 @@ const HabitFrequency = () => {
   const handleSave = () => {
     const newHabits = selectedHabits.map(habit => ({
       id: habit.id,
-      name: habit.icon || 'checkmark-outline',
+      icon: habit.icon || 'checkmark-outline',
+      title: habit.title,
       text: habit.title,
       streak: 0,
       frequency: habitFrequencies[habit.id],

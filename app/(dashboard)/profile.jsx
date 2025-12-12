@@ -1,4 +1,4 @@
-import { Alert, FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/BackButton";
 import Spacer from "../../components/Spacer";
@@ -11,6 +11,7 @@ import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
 import LanguagePicker from '../../components/LanguagePicker';
 import { Ionicons } from '@expo/vector-icons';
+import { showConfirmAlert } from '../utils/customAlert';
 
 const profile = () => {
     const { user, 

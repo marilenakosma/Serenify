@@ -624,7 +624,7 @@ checkAuth: async () => {
     return false;
   }
 },
-refreshHabitTranslations: (t, getExtraGoals) => {
+refreshHabitTranslations: (t, getExtraGoals,getFoundationalHabits) => {
   const { getAvailableHabits } = require('../constants/availableHabits');
   const currentState = get();
   
@@ -636,6 +636,12 @@ refreshHabitTranslations: (t, getExtraGoals) => {
   Object.values(allAvailableHabits).flat().forEach(habit => {
     allHabitsMap[habit.id] = habit;
   });
+
+  if (getFoundationalHabits) {
+    getFoundationalHabits(t).forEach(habit => {
+      allHabitsMap[habit.id] = habit;
+    });
+  }
   
   // Also include goals from goalIdeas 
   if (getExtraGoals) {
@@ -653,7 +659,7 @@ refreshHabitTranslations: (t, getExtraGoals) => {
       return {
         ...userHabit,
         title: freshHabit.title,
-        text: freshHabit.title,
+        text: freshHabit.text || freshHabit.title,
         category: freshHabit.category,
         duration: freshHabit.duration,
         description: freshHabit.description,
@@ -661,7 +667,10 @@ refreshHabitTranslations: (t, getExtraGoals) => {
       };
     }
     
-    return userHabit; //custom habits 
+       return {...userHabit,
+      // Ensure text exists (fallback to title if missing)
+      text: userHabit.text || userHabit.title,
+    };
   });
   
   set({ userHabits: updatedHabits });
