@@ -363,7 +363,6 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 
-  
   habitsScroll: {
     marginBottom: 20,
   },
@@ -372,7 +371,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
 
-  
   habitCard: {
     backgroundColor: 'white',
     borderRadius: 16,

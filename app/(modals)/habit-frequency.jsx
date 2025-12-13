@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   habitText: {
-    marginLeft: 16,
+    marginLeft: 15,
     flex: 1,
   },
   habitTitle: {
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 14,
+    gap: 10,
     maxWidth: 350,
   },
   frequencyOption: {

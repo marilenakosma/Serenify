@@ -236,7 +236,7 @@ const Dashboard = () => {
 
           {/* Goals Section */}
           {recommendedHabits.length > 0 && (
-            <ThemedView style={[styles.section, styles.other]}>
+            <ThemedView style={styles.section}>
               <ThemedText title={true} style={styles.sectionTitle}>
                 {t('dashboard.recommendedForYou')}
               </ThemedText>
@@ -255,7 +255,7 @@ const Dashboard = () => {
                   onToggle={() => handleAddHabit(habit)} 
                   isRecommendation={true}
                />
-               {index < recommendedHabits.length - 1 && <Spacer height={15} />}
+               {index < recommendedHabits.length - 1 && <Spacer height={12} />}
               </View>
              );
            })}
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         //borderTopLeftRadius: 25,
        // borderTopRightRadius: 25,
-       // overflow: 'hidden', // Important: clips the image to the border radius
+       // overflow: 'hidden', 
     },
     overlay: {
         //backgroundColor: 'rgba(0, 0, 0, 0.3)', // Dark overlay for text readability

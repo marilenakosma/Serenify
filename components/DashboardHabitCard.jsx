@@ -282,7 +282,6 @@ const styles = StyleSheet.create({
   },
   habitTitle: {
     fontSize: 14,
-    fontWeight: '600',
     color: '#2c3e50',
     marginBottom: 8,
     lineHeight: 18,
