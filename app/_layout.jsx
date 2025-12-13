@@ -7,6 +7,7 @@ import { useAuthStore } from "../store/authStore";
 import { Platform,NavigationBar } from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../constants/translations';
+import { onAuthStateChange } from './services/firebaseService';
 
 function RootLayoutNav() {
   const { isAuthenticated, hasCompletedQuestionnaire, checkAuth } = useAuthStore();
@@ -18,11 +19,23 @@ function RootLayoutNav() {
   const navigationInProgressRef = useRef(false);
 
   useEffect(() => {
-    const initAuth = async () => {
-      await checkAuth();
-      setTimeout(() => setIsNavigationReady(true), 300);
-    };
-    initAuth();
+    // Listen for Firebase auth state changes
+    const unsubscribe = onAuthStateChange(async (user) => {
+      if (user) {
+        console.log('User authenticated:', user.uid);
+        // User is signed in - sync from Firebase
+        const { syncFromFirebase } = useAuthStore.getState();
+        await syncFromFirebase();
+      } else {
+        console.log('User signed out');
+      }
+    });
+
+    // Check MMKV cache on app start
+    const { checkAuth } = useAuthStore.getState();
+    checkAuth();
+
+    return () => unsubscribe();
   }, []);
 
 

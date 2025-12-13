@@ -1,15 +1,34 @@
 import { create } from "zustand";
 import { getItem, removeItem, setItem } from "./storage";
 import { Alert } from "react-native";
-import { shouldTrackHabitOnDate,
-         isHabitCompleteForPeriod,
-         getCompletionsThisWeek,
-         calculateFrequencyAwareStreak,
-         getRequiredCompletionsPerWeek,
-         hasPointsBeenAwarded,
-         markPointsAwarded,
-         clearPointsAwarded,
-         canToggleHabitCompletion } from "../constants/habitFrequency";
+import { 
+  shouldTrackHabitOnDate,
+  isHabitCompleteForPeriod,
+  getCompletionsThisWeek,
+  calculateFrequencyAwareStreak,
+  getRequiredCompletionsPerWeek,
+  hasPointsBeenAwarded,
+  markPointsAwarded,
+  clearPointsAwarded,
+  canToggleHabitCompletion 
+  } from "../constants/habitFrequency";
+import { 
+  registerUser, 
+  loginUser, 
+  logoutUser, 
+  getUserData,
+  updateUserData,
+  saveHabits,
+  saveHabitCompletions,
+  updatePoints,
+  saveMood,
+  getMoodHistory,
+  saveReflection as saveReflectionToFirebase,
+  getReflections as getReflectionsFromFirebase,
+  saveWorryEntry as saveWorryToFirebase,
+  getWorryEntries as getWorriesFromFirebase,
+  deleteWorryEntry as deleteWorryFromFirebase
+} from '../app/services/firebaseService';
 
 
 export const useAuthStore = create((set,get) => ({
@@ -39,398 +58,417 @@ export const useAuthStore = create((set,get) => ({
   points: 0,
   level: 1,
   pointsHistory: [],
+  
+  //Firebase User ID
+  userId: null,
 
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
-
-  login: async(email,password) => {
-    set({ isLoading: true }); 
-
-     try {
-            // Mock login for development - replace with your API
-            const mockLogin = async () => {
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
-                
-                // Mock successful response
-                return {
-                    id: '1',
-                    email: email,
-                    username: email.split('@')[0], // Extract username from email
-                    accessToken: 'mock-access-token',
-                    refreshToken: 'mock-refresh-token',
-                };
-            };
-
-  const data = await mockLogin();
-   
-  // Check if this user has completed questionnaire before  
-  const existingQuestionnaire = getItem(`questionnaire_${data.id}`);
-
-  const authData = {
-    isAuthenticated: true,
-    accessToken: data.accessToken,
-    refreshToken:data.refreshToken,
-    user: {
-                    id: data.id,
-                    email: data.email,
-                    username: data.username,
-                },
-    accessTokenExpiration:Date.now() + (60*60 * 1000), //1 hour
-    isLoading: false,
-    hasCompletedQuestionnaire: !!existingQuestionnaire, //existingQuestionnaire ? true : false,
-    questionnaireResults: existingQuestionnaire?.results || null,
-    isRetakingQuestionnaire: false, 
-    showingResults: false,
-  };
-   
-  //save in MMKV
-  setItem("authData",authData)
   
-  //save in Zustand
-  set(authData);
-  return {success:true};
+  // ==================== LOGIN ====================
+  login: async (email, password) => {
+    set({ isLoading: true });
 
-} catch(error) {
-    console.error('Login error:', error);
-    set({ isLoading: false });
-    return { success: false, error: error.message || 'Login failed' };
-}
+    try {
+      const result = await loginUser(email, password);
+
+      if (result.success) {
+        const user = result.user;
+
+        // Fetch user data from Firebase
+        const userDataResult = await getUserData(user.uid);
+
+        if (userDataResult.success) {
+          const userData = userDataResult.data;
+
+          // Fetch subcollections
+          const [moodResult, reflectionsResult, worriesResult] = await Promise.all([
+            getMoodHistory(user.uid),
+            getReflectionsFromFirebase(user.uid),
+            getWorriesFromFirebase(user.uid)
+          ]);
+
+          const authData = {
+            isAuthenticated: true,
+            userId: user.uid,
+            user: {
+              id: user.uid,
+              email: user.email,
+              username: userData.username,
+              displayName: userData.displayName || user.displayName,
+              focusArea: userData.focusArea,
+            },
+            isLoading: false,
+            hasCompletedQuestionnaire: userData.hasCompletedQuestionnaire || false,
+            questionnaireResults: userData.questionnaireResults || null,
+            userHabits: userData.userHabits || [],
+            habitCompletions: userData.habitCompletions || {},
+            points: userData.points || 0,
+            level: userData.level || 1,
+            pointsHistory: userData.pointsHistory || [],
+            todayMood: userData.todayMood || null,
+            moodHistory: moodResult.success ? moodResult.data : {},
+            kindnessCompletions: userData.kindnessCompletions || {},
+            reflections: reflectionsResult.success ? reflectionsResult.data : [],
+            worryEntries: worriesResult.success ? worriesResult.data : [],
+          };
+
+          // Cache in MMKV
+          setItem("authData", authData);
+          set(authData);
+
+          return { success: true };
+        }
+      }
+
+      set({ isLoading: false });
+      return result;
+
+    } catch (error) {
+      console.error('Login error:', error);
+      set({ isLoading: false });
+      return { success: false, error: error.message || 'Login failed' };
+    }
   },
+
+  // ==================== REGISTER ====================
   register: async (name, email, password) => {
-        set({ isLoading: true });
-        
-        try {
-            // Mock registration - replace with your API
-            const mockRegister = async () => {
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                return {
-                    id: Date.now().toString(),
-                    email: email,
-                    username: name.toLowerCase().replace(/\s+/g, ''), // Convert "John Doe" to "johndoe"
-                    accessToken: 'mock-access-token',
-                    refreshToken: 'mock-refresh-token',
-                };
-            };
+  set({ isLoading: true });
+  
+  try {
+    const result = await registerUser(name, email, password);
+    
+    if (result.success) {
+      const user = result.user;
+      
+      const authData = {
+        isAuthenticated: true,
+        userId: user.uid,
+        user: {
+          id: user.uid,
+          email: user.email,
+          username: name.toLowerCase().replace(/\s+/g, ''),
+          displayName: name,
+        },
+        isLoading: false,
+        hasCompletedQuestionnaire: false,
+        userHabits: [],
+        habitCompletions: {},
+        points: 0,
+        level: 1,
+        pointsHistory: [],
+        todayMood: null,
+        moodHistory: {},
+        kindnessCompletions: {},
+        reflections: [],
+        worryEntries: [],
+      };
 
-            const data = await mockRegister();
-            
-            const authData = {
-                isAuthenticated: true,
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken,
-                user: {
-                    id: data.id,
-                    email: data.email,
-                    username: data.username,
-                },
-                accessTokenExpiration: Date.now() + (60 * 60 * 1000),
-                isLoading: false,
-                hasCompletedQuestionnaire: false, 
-                userHabits: [],
-                habitCompletions: {},
-                points: 0,
-                level: 1,
-                pointsHistory: [],
-                todayMood: null,
-                moodHistory: {},
-                kindnessCompletions: {},
-                reflections: [],
-                worryEntries: [],
-            };
+      // Save to MMKV cache 
+      setItem("authData", authData);
+      
+      // Update state 
+      set(authData);
+      
+      console.log('Auth state updated:', { 
+        isAuthenticated: true, 
+        hasCompletedQuestionnaire: false 
+      });
+      
+      return { success: true };
+    }
 
-            setItem("authData", authData);
-            set(authData);
-            
-            return { success: true };
+    set({ isLoading: false });
+    return result;
 
-        } catch (error) {
-            console.error('Register error:', error);
-            set({ isLoading: false });
-            return { success: false, error: error.message || 'Registration failed' };
-        }
-    },
+  } catch (error) {
+    console.error('Register error:', error);
+    set({ isLoading: false });
+    return { success: false, error: error.message };
+  }
+},
   logout: async () => {
-        try {
-            // Optional: Call logout API endpoint here
-            
-            // Clear MMKV storage
-            removeItem("authData");
-            
-            // Reset Zustand state
-            set({
-                isAuthenticated: false,
-                accessToken: null,
-                refreshToken: null,
-                user: null,
-                accessTokenExpiration: null,
-                isLoading: false,
-                hasCompletedQuestionnaire: false,
-                questionnaireResults: null,
-                isRetakingQuestionnaire: false,
-                userHabits:[],
-                habitCompletions: {},
-            });
-            
-            return { success: true };
-        } catch (error) {
-            console.error('Logout error:', error);
-            return { success: false, error: error.message };
-        }
-    },
+    set({ isLoading: true });
 
-    completeQuestionnaire: (results) => {
-        const state = get();
-        const userId = state.user?.id;
+    try {
+      await logoutUser();
 
-        if(userId) {
-            setItem(`questionnaire_${userId}`, {
-                completed:true,
-                timestamp:Date.now(),
-                results:results
-            })
-        }
+      // Clear MMKV cache
+      removeItem("authData");
 
-        const updatedData = {
-          hasCompletedQuestionnaire: true,
-          questionnaireResults:results,
-          isRetakingQuestionnaire: false, 
-          showingResults: true,
-        };
+      set({
+        isAuthenticated: false,
+        userId: null,
+        user: null,
+        isLoading: false,
+        hasCompletedQuestionnaire: false,
+        questionnaireResults: null,
+        userHabits: [],
+        habitCompletions: {},
+        points: 0,
+        level: 1,
+        pointsHistory: [],
+        todayMood: null,
+        moodHistory: {},
+        kindnessCompletions: {},
+        reflections: [],
+        worryEntries: [],
+      });
 
-        const currentAuthData = getItem("authData");
-        if(currentAuthData) {
-            setItem("authData",{...currentAuthData,...updatedData});
-        }
+      return { success: true };
 
-        set(updatedData)
-    },
+    } catch (error) {
+      console.error('Logout error:', error);
+      set({ isLoading: false });
+      return { success: false, error: error.message };
+    }
+  },
+
+  // ==================== COMPLETE QUESTIONNAIRE ====================
+    completeQuestionnaire: async (results) => {
+    const currentState = get();
+    
+    set({
+      hasCompletedQuestionnaire: true,
+      questionnaireResults: results,
+      user: { ...currentState.user, focusArea: results.focusArea }
+    });
+
+    // Save to Firebase
+    if (currentState.userId) {
+      await updateUserData(currentState.userId, {
+        hasCompletedQuestionnaire: true,
+        questionnaireResults: results,
+        focusArea: results.focusArea
+      });
+    }
+
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        hasCompletedQuestionnaire: true,
+        questionnaireResults: results,
+        user: { ...currentAuthData.user, focusArea: results.focusArea }
+      });
+    }
+  },
     finishShowingResults: () => {
-        set({ showingResults: false }); 
-    },
+    set({ questionnaireResults: null });
+  },
 
-    retakeQuestionnaire:() => {
-        const state = get();
-        const userId = state.user?.id;
+    retakeQuestionnaire: async () => {
+    const currentState = get();
+    
+    set({ 
+      hasCompletedQuestionnaire: false, 
+      questionnaireResults: null,
+      user: { ...currentState.user, focusArea: null }
+    });
 
-        if (userId) {
-            // Clear user's questionnaire data
-            removeItem(`questionnaire_${userId}`);
-            
-            // Update current session to show questionnaire incomplete
-            const updatedData = {
-                hasCompletedQuestionnaire: false,
-                questionnaireResults: null,
-                isRetakingQuestionnaire: true,
-            };
-            
-            // Update session storage
-            const currentAuthData = getItem("authData");
-            if (currentAuthData) {
-                setItem("authData", { ...currentAuthData, ...updatedData });
-            }
-            
-            set(updatedData);
-        }
-    },
+    // Update Firebase
+    if (currentState.userId) {
+      await updateUserData(currentState.userId, {
+        hasCompletedQuestionnaire: false,
+        questionnaireResults: null,
+        focusArea: null
+      });
+    }
 
-    setTodayMood: async(moodData) => {
-        try {
-         const today = new Date().toDateString();
-         const moodEntry = {
-            ...moodData,
-            date:today,
-            timestamp: new Date().toISOString()
-         };
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        hasCompletedQuestionnaire: false,
+        questionnaireResults: null,
+        user: { ...currentAuthData.user, focusArea: null }
+      });
+    }
+  },
 
-         // Save to storage
-         await setItem(`mood_${today}`, moodEntry);
-      
-        // Update history
-        const currentHistory = get().moodHistory;
-        const updatedHistory = {
-        ...currentHistory,
-        [today]: moodEntry
-        };
+  // ==================== MOOD TRACKING ====================
+    setTodayMood: async (moodData) => {
+    const currentState = get();
+    const today = new Date().toISOString().split('T')[0];
+    
+    const updatedMoodHistory = {
+      ...currentState.moodHistory,
+      [today]: moodData
+    };
 
-        await setItem('mood_history', updatedHistory);
-      
-        set({ 
-          todayMood: moodEntry,
-          moodHistory: updatedHistory
-        });
+    set({ 
+      todayMood: moodData,
+      moodHistory: updatedMoodHistory 
+    });
 
-        console.log('Mood saved successfully');
-        return { success: true };
-        } catch(error) {
-          console.error('Error saving mood:', error);
-          return { success: false, error: error.message };
-        }
-    },
+    // Save to Firebase
+    if (currentState.userId) {
+      await saveMood(currentState.userId, moodData);
+      await updateUserData(currentState.userId, { todayMood: moodData });
+    }
+
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        todayMood: moodData,
+        moodHistory: updatedMoodHistory
+      });
+    }
+  },
 
     loadTodayMood: async () => {
-     try {
-        const today = new Date().toDateString();
-        const todayMood = await getItem(`mood_${today}`);
-        const moodHistory = await getItem('mood_history') || {};
-      
-        set({ 
-          todayMood,
-          moodHistory 
-        });
-      
-        return todayMood;
-
-     } catch(error) {
-        console.error('Error loading mood:', error);
-        return null;
-     }
-    },
+    const currentState = get();
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (currentState.moodHistory[today]) {
+      set({ todayMood: currentState.moodHistory[today] });
+    } else {
+      set({ todayMood: null });
+    }
+  },
 
     getMoodHistory: () => {
         return get().moodHistory;
     },
 
     clearMoodData: async () => {
-    try {
-      await removeItem('mood_history');
-      // Remove today's mood
-      const today = new Date().toDateString();
-      await removeItem(`mood_${today}`);
-      
-      set({ 
+    const currentState = get();
+    
+    set({ 
+      todayMood: null,
+      moodHistory: {} 
+    });
+
+    // Update Firebase
+    if (currentState.userId) {
+      await updateUserData(currentState.userId, {
         todayMood: null,
-        moodHistory: {} 
+        moodHistory: {}
       });
+    }
+
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        todayMood: null,
+        moodHistory: {}
+      });
+    }
+  },
+
+// ==================== HABITS ====================
+    addHabits: async (newHabits) => {
+    try {
+      const currentState = get();
+      const habitsToAdd = Array.isArray(newHabits) ? newHabits : [newHabits];
       
-      console.log('Mood data cleared');
+      const normalizedHabits = habitsToAdd.map(habit => ({
+        ...habit,
+        text: habit.text || habit.title,
+        title: habit.title,
+      }));
+
+      const existingIds = currentState.userHabits.map(h => h.id);
+      const uniqueHabits = normalizedHabits.filter(habit => !existingIds.includes(habit.id));
+
+      if (uniqueHabits.length === 0) {
+        return { success: false, error: 'Habits already exist' };
+      }
+
+      const updatedHabits = [...currentState.userHabits, ...uniqueHabits];
+
+      // Save to Firebase
+      if (currentState.userId) {
+        await saveHabits(currentState.userId, updatedHabits);
+      }
+
+      // Update local state
+      set({ userHabits: updatedHabits });
+
+      // Update MMKV cache
+      const currentAuthData = getItem("authData");
+      if (currentAuthData) {
+        setItem("authData", {
+          ...currentAuthData,
+          userHabits: updatedHabits
+        });
+      }
+
       return { success: true };
+
     } catch (error) {
-      console.error(' Error clearing mood data:', error);
+      console.error('Add habits error:', error);
       return { success: false, error: error.message };
     }
   },
 
-    addHabits: async (newHabits) => {
-      try {
-        const currentState = get();
-      
-     //Single habit / array of habits
-        const habitsToAdd = Array.isArray(newHabits) ? newHabits : [newHabits];
-     
-        const existingIds = currentState.userHabits.map(h => h.id);
-        const uniqueHabits = habitsToAdd.filter(habit => !existingIds.includes(habit.id));
+  removeHabit: async (habitId) => {
+    const currentState = get();
+    const updatedHabits = currentState.userHabits.filter(h => h.id !== habitId);
+    
+    set({ userHabits: updatedHabits });
 
-        if(uniqueHabits.length === 0) {
-          console.log('All habits already exist');
-          return { success: false, error: 'Habits already exist'};
-        }
-
-        const updatedHabits = [...currentState.userHabits,...uniqueHabits];
-     
-        // Update Zustand (in-memory)
-        set({userHabits:updatedHabits})
-
-     // Update MMKV (persistent storage)
-        try {
-            const currentAuthData = await getItem("authData");
-            if (currentAuthData) {
-                await setItem("authData", { ...currentAuthData, userHabits: updatedHabits });
-            }
-        } catch (storageError) {
-            console.warn('Storage update failed:', storageError);
-            // Don't fail the whole operation for storage errors
-        }
-
-        console.log('Habits added successfully:', uniqueHabits.length);
-        return { success:true, added: uniqueHabits.length };
-      } catch (error) {
-        console.error(' Error in addHabits:', error);
-        return { success: false, error: error.message };
-      }
-    },
-
-  removeHabit: (habitId) => {
-  console.log('removeHabit called with ID:', habitId);
-  
-  const currentState = get();
-  console.log('Current habits before removal:', currentState.userHabits);
-  
-  // Check if habit exists
-  const habitToRemove = currentState.userHabits.find(h => h.id === habitId);
-  if (!habitToRemove) {
-    console.log('Habit not found with ID:', habitId);
-    return;
-  }
-  
-  console.log('Found habit to remove:', habitToRemove);
-  
-  const filteredHabits = currentState.userHabits.filter(h => h.id !== habitId);
-  
-  // Remove completion data for this habit
-  const updatedCompletions = { ...currentState.habitCompletions };
-  delete updatedCompletions[habitId];
-
-  console.log('Filtered habits:', filteredHabits);
-
-  // Update store 
-  set({ 
-    userHabits: filteredHabits,
-    habitCompletions: updatedCompletions 
-  });
-
-  // Persist to storage
-  try {
-    const currentAuthData = getItem("authData");
-    if (currentAuthData) {
-      setItem("authData", { 
-        ...currentAuthData, 
-        userHabits: filteredHabits,
-        habitCompletions: updatedCompletions 
-      });
-      console.log('Successfully persisted habit removal');
+    // Save to Firebase
+    if (currentState.userId) {
+      await saveHabits(currentState.userId, updatedHabits);
     }
-  } catch (error) {
-    console.error('Error persisting habit removal:', error);
-  }
-},
 
-   addPoints: (amount,source) => {
-     const currentState = get();
-     const newPoints = (currentState.points || 0) + amount;
-     
-     // 100 points = 1 level
-     const newLevel = Math.floor(newPoints / 100) + 1;
-
-     const pointEntry = {
-       amount,
-       source, //'habit-completed', 'activity-finished'
-       timestamp: new Date().toISOString(),
-       totalPoints: newPoints,
-     };
-
-     const updatedHistory = [...(currentState.pointsHistory || []),pointEntry];
-
-     set({
-      points:newPoints,
-      level:newLevel,
-      pointsHistory: updatedHistory
-     });
-
+    // Update MMKV cache
     const currentAuthData = getItem("authData");
     if (currentAuthData) {
-      setItem("authData", { 
-        ...currentAuthData, 
+      setItem("authData", {
+        ...currentAuthData,
+        userHabits: updatedHabits
+      });
+    }
+  },
+
+  // ==================== POINTS ====================
+
+   addPoints: async (amount, source) => {
+    const currentState = get();
+    const newPoints = (currentState.points || 0) + amount;
+    const newLevel = Math.floor(newPoints / 100) + 1;
+
+    const pointEntry = {
+      amount,
+      source,
+      timestamp: new Date().toISOString(),
+      totalPoints: newPoints,
+    };
+
+    const updatedHistory = [...(currentState.pointsHistory || []), pointEntry];
+
+    console.log(`${amount > 0 ? '+' : ''}${amount} points from ${source}! Total: ${newPoints} (Level ${newLevel})`);
+
+    // Save to Firebase
+    if (currentState.userId) {
+      await updatePoints(currentState.userId, newPoints, newLevel, updatedHistory);
+    }
+
+    // Update local state
+    set({
+      points: newPoints,
+      level: newLevel,
+      pointsHistory: updatedHistory
+    });
+
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
         points: newPoints,
         level: newLevel,
         pointsHistory: updatedHistory
-     });
+      });
     }
-
-    console.log(`+${amount} points from ${source}! Total: ${newPoints} (Level ${newLevel})`);
-    return { newPoints, newLevel };
-    
-    
-   },
+  },
 
    getPoints: () => {
      return get().points || 0;
@@ -441,24 +479,22 @@ export const useAuthStore = create((set,get) => ({
    },
 
    getPointsForNextLevel: () => {
-    const currentPoints = get().points || 0;
     const currentLevel = get().level || 1;
-    const pointsForNextLevel = currentLevel * 100;
-    const pointsNeeded = pointsForNextLevel - currentPoints;
-    return { pointsForNextLevel, pointsNeeded };
-   },
+    return currentLevel * 100;
+  },
 
    getLevelName: () => {
-     const level = get().level || 1;
-  
-     if (level >= 10) return 'Master';
-     if (level >= 7) return 'Expert';
-     if (level >= 5) return 'Advanced';
-     if (level >= 3) return 'Intermediate';
-     return 'Beginner';
-    },
+    const level = get().level || 1;
 
-    toggleHabitCompletion: (habitId,date = null) => {
+    if (level < 5) return 'Beginner';
+    if (level < 10) return 'Intermediate';
+    if (level < 20) return 'Advanced';
+    return 'Master';
+  },
+
+   // ==================== TOGGLE HABIT COMPLETION ====================
+
+    toggleHabitCompletion: async (habitId,date = null) => {
      //const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
     
      const currentState = get();
@@ -529,6 +565,13 @@ export const useAuthStore = create((set,get) => ({
        completions = clearPointsAwarded(completions, habitId, dateStr);
      }
 
+     if (currentState.userId) {
+      await Promise.all([
+        saveHabitCompletions(currentState.userId, completions),
+        saveHabits(currentState.userId, updatedHabits)
+      ]);
+    }
+
      set({
         habitCompletions:completions,
         userHabits:updatedHabits
@@ -545,143 +588,174 @@ export const useAuthStore = create((set,get) => ({
 
     },
 
-    updateHabit:(habitId,updatedHabit) => {
-     const currentState = get();
+    updateHabit: async (habitId, updatedHabit) => {
+    const currentState = get();
+    const updatedHabits = currentState.userHabits.map(h =>
+      h.id === habitId ? { ...h, ...updatedHabit } : h
+    );
 
-     const currentHabit = currentState.userHabits.find(h => h.id === habitId);
-     if(!currentHabit) return;
+    set({ userHabits: updatedHabits });
 
-     const habitToUpdate = {
-        ...updatedHabit,
-        streak:currentHabit.streak,
-        lastCompleted: currentHabit.lastCompleted,
-        dateAdded:currentHabit.dateAdded,
-     }
+    // Save to Firebase
+    if (currentState.userId) {
+      await saveHabits(currentState.userId, updatedHabits);
+    }
 
-     const updatedHabits = currentState.userHabits.map(habit => 
-        habit.id === habitId ? habitToUpdate : habit 
-     );
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        userHabits: updatedHabits
+      });
+    }
+  },
 
-     set({userHabits:updatedHabits});
+   getHabitCompletion: (habitId, date = null) => {
+    const currentState = get();
+    const targetDate = date ? new Date(date) : new Date();
+    const dateStr = targetDate.toISOString().split('T')[0];
+    
+    return currentState.habitCompletions[habitId]?.[dateStr] || false;
+  },
 
-     const currentAuthData = getItem("authData");
-  if (currentAuthData) {
-    setItem("authData", { 
-      ...currentAuthData, 
-      userHabits: updatedHabits 
-    });
-  }
-    },
 
-    getHabitCompletion: (habitId, date = null) => {
-        const today = date || new Date().toISOString().split('T')[0];
-        const state = get();
-        return state.habitCompletions[habitId]?.[today] || false;
-    },
-
-    updateUser: (userData) => {
+    updateUser: async (userData) => {
         //Partially update user data(update data from quiz results)
         const currentState = get(); //το χρειαζόμαστε γιατι χωρίς αυτο το set updated User 
         // θα αντικαταστούσε το αντικείμενο(με μονο την ανάλυση των απαντήσεων) αντι να κάνει overwrite την αντίστοιχη ιδιότητα
-        const updatedUser= {...currentState.user, ...userData};
+       // const updatedUser= {...currentState.user, ...userData};
         
         // Update Zustand (in-memory)
-        set({user:updatedUser})
+        set({
+          user: { ...currentState.user, ...userData }
+        });
+
+        if (currentState.userId) {
+         await updateUserData(currentState.userId, userData);
+        }
         
         // Update MMKV (persistent storage)
         const currentAuthData = getItem("authData");
-        if (currentAuthData) {
-            setItem("authData", { ...currentAuthData, user: updatedUser });
-        }
+          if (currentAuthData) {
+            setItem("authData", {
+            ...currentAuthData,
+            user: { ...currentAuthData.user, ...userData }
+         });
+       }
     },
 
 checkAuth: async () => {
-  try {
     const authData = getItem("authData");
-    
-    if (!authData) {
-      return false;
-    }
-
-    // Check token expiration
-    if (authData.accessTokenExpiration && Date.now() < authData.accessTokenExpiration) {
-      set({
-        ...authData,
-        userHabits: authData.userHabits || [],
-        habitCompletions: authData.habitCompletions || {},
-        points: authData.points || 0,
-        level: authData.level || 1,
-        pointsHistory: authData.pointsHistory || [],
-      });
+    if (authData?.isAuthenticated && authData.userId) {
+      set(authData);
+      
+      // Sync from Firebase in background
+      const { syncFromFirebase } = get();
+      syncFromFirebase();
+      
       return true;
-    } else {
-      // Token expired, clear auth
-      removeItem("authData");
-      return false;
     }
-  } catch (error) {
-    console.error('Error in checkAuth:', error);
     return false;
-  }
-},
-refreshHabitTranslations: (t, getExtraGoals,getFoundationalHabits) => {
-  const { getAvailableHabits } = require('../constants/availableHabits');
-  const currentState = get();
-  
-  // Get fresh translations from availableHabits
-  const allAvailableHabits = getAvailableHabits(t);
-  const allHabitsMap = {};
-  
-  // Create a map of habit ID to fresh habit data
-  Object.values(allAvailableHabits).flat().forEach(habit => {
-    allHabitsMap[habit.id] = habit;
-  });
+  },
+  syncFromFirebase: async () => {
+    const currentState = get();
+    if (!currentState.userId) return;
 
-  if (getFoundationalHabits) {
-    getFoundationalHabits(t).forEach(habit => {
+    try {
+      const [userDataResult, moodResult, reflectionsResult, worriesResult] = await Promise.all([
+        getUserData(currentState.userId),
+        getMoodHistory(currentState.userId),
+        getReflectionsFromFirebase(currentState.userId),
+        getWorriesFromFirebase(currentState.userId)
+      ]);
+
+      if (userDataResult.success) {
+        const userData = userDataResult.data;
+        
+        const syncedData = {
+          userHabits: userData.userHabits || currentState.userHabits,
+          habitCompletions: userData.habitCompletions || currentState.habitCompletions,
+          points: userData.points || currentState.points,
+          level: userData.level || currentState.level,
+          pointsHistory: userData.pointsHistory || currentState.pointsHistory,
+          kindnessCompletions: userData.kindnessCompletions || currentState.kindnessCompletions,
+          moodHistory: moodResult.success ? moodResult.data : currentState.moodHistory,
+          reflections: reflectionsResult.success ? reflectionsResult.data : currentState.reflections,
+          worryEntries: worriesResult.success ? worriesResult.data : currentState.worryEntries,
+        };
+
+        set(syncedData);
+        
+        const currentAuthData = getItem("authData");
+        if (currentAuthData) {
+          setItem("authData", { ...currentAuthData, ...syncedData });
+        }
+      }
+    } catch (error) {
+      console.error('Sync error:', error);
+    }
+  },
+
+  refreshHabitTranslations: (t, getExtraGoals, getFoundationalHabits) => {
+    const { getAvailableHabits } = require('../constants/availableHabits');
+    const currentState = get();
+    
+    const allAvailableHabits = getAvailableHabits(t);
+    const allHabitsMap = {};
+    
+    Object.values(allAvailableHabits).flat().forEach(habit => {
       allHabitsMap[habit.id] = habit;
     });
-  }
-  
-  // Also include goals from goalIdeas 
-  if (getExtraGoals) {
-    getExtraGoals(t).forEach(goal => {
-      allHabitsMap[goal.id] = goal;
-    });
-  }
-  
-  // Update userHabits with fresh translations
-  const updatedHabits = currentState.userHabits.map(userHabit => {
-    const freshHabit = allHabitsMap[userHabit.id];
-    
-    if (freshHabit) {
-      // R translatable fields -> fresh translations
-      return {
-        ...userHabit,
-        title: freshHabit.title,
-        text: freshHabit.text || freshHabit.title,
-        category: freshHabit.category,
-        duration: freshHabit.duration,
-        description: freshHabit.description,
-        difficulty: freshHabit.difficulty,
-      };
+
+    if (getFoundationalHabits) {
+      getFoundationalHabits(t).forEach(habit => {
+        allHabitsMap[habit.id] = habit;
+      });
     }
     
-       return {...userHabit,
-      // Ensure text exists (fallback to title if missing)
-      text: userHabit.text || userHabit.title,
-    };
-  });
-  
-  set({ userHabits: updatedHabits });
-  
-  const currentAuthData = getItem("authData");
-  if (currentAuthData) {
-    setItem("authData", { ...currentAuthData, userHabits: updatedHabits });
-  }
-},
+    if (getExtraGoals) {
+      getExtraGoals(t).forEach(goal => {
+        allHabitsMap[goal.id] = goal;
+      });
+    }
+    
+    const updatedHabits = currentState.userHabits.map(userHabit => {
+      if (userHabit.isCustom) {
+        return userHabit;
+      }
 
-    toggleKindnessAct:(actId,date=null) => {
+      const freshHabit = allHabitsMap[userHabit.id];
+      
+      if (freshHabit) {
+        return {
+          ...userHabit,
+          title: freshHabit.title,
+          text: freshHabit.text || freshHabit.title,
+          category: freshHabit.category,
+          duration: freshHabit.duration,
+          description: freshHabit.description,
+          difficulty: freshHabit.difficulty,
+        };
+      }
+      
+      return {
+        ...userHabit,
+        text: userHabit.text || userHabit.title,
+      };
+    });
+    
+    set({ userHabits: updatedHabits });
+    
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", { ...currentAuthData, userHabits: updatedHabits });
+    }
+  },
+
+// ==================== KINDNESS ACTS ====================
+
+    toggleKindnessAct: async (actId,date=null) => {
       const currentState = get();
 
       const targetDate = date ? 
@@ -704,6 +778,12 @@ refreshHabitTranslations: (t, getExtraGoals,getFoundationalHabits) => {
 
       set({ kindnessCompletions: completions });
 
+      if (currentState.userId) {
+        await updateUserData(currentState.userId, {
+          kindnessCompletions: completions
+       });
+    }
+
       const currentAuthData = getItem("authData");
       if (currentAuthData) {
         setItem("authData", { 
@@ -716,110 +796,137 @@ refreshHabitTranslations: (t, getExtraGoals,getFoundationalHabits) => {
     },
   
     getTodayKindnessCount: () => {
-     const state = get();
-     const today = new Date().toDateString();
-     const todayActs = state.kindnessCompletions[today] || [];
-     return todayActs.length;
-   },
-
-   getKindnessCompletions: (date = null) => {
-    const targetDate = date ? new Date(date).toDateString() : new Date().toDateString();
-    const state = get();
-    return state.kindnessCompletions[targetDate] || [];
+    const today = new Date().toISOString().split('T')[0];
+    const currentState = get();
+    return currentState.kindnessCompletions[today]?.length || 0;
   },
-  
+
+  getKindnessCompletions: (date = null) => {
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    const currentState = get();
+    return currentState.kindnessCompletions[targetDate] || [];
+  },
+
   getTotalKindnessActs: () => {
-    const state = get();
-    return Object.values(state.kindnessCompletions)
-      .flat()
-      .length;
+    const currentState = get();
+    return Object.values(currentState.kindnessCompletions)
+      .reduce((total, acts) => total + acts.length, 0);
   },
 
-  saveReflection: (text) => {
-    const state = get();
-    const today = new Date().toDateString();
-    const newEntry = { text, date: today };
-    const updated = [newEntry, ...(state.reflections || [])];
+  // ==================== REFLECTIONS ====================
 
-    set({ reflections: updated });
-  
-    const currentAuthData = getItem("authData");
-       if (currentAuthData) {
-         setItem("authData", { 
-         ...currentAuthData, 
-         reflections: updated
-       });
+  saveReflection: async (text) => {
+    const currentState = get();
+    
+    const newReflection = {
+      id: Date.now().toString(),
+      text: text,
+      date: new Date().toDateString(),
+      timestamp: new Date().toISOString(),
+    };
 
+    const updatedReflections = [newReflection, ...currentState.reflections];
+
+    // Save to Firebase
+    if (currentState.userId) {
+      const result = await saveReflectionToFirebase(currentState.userId, text);
+      if (!result.success) {
+        console.error('Failed to save reflection to Firebase');
+        return false;
       }
+    }
 
-       return true; 
+    // Update local state
+    set({ reflections: updatedReflections });
+
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        reflections: updatedReflections
+      });
+    }
+
+    return true;
   },
 
   getReflections: () => {
-    const state = get();
-    return state.reflections || [];
+    return get().reflections || [];
   },
+
+  // ==================== WORRY ENTRIES ====================
   
   getWorryEntries: () => {
     return get().worryEntries || [];
   },
 
-  addWorryEntry: (entry) => {
-    try {
-    const state = get();
-    //const today = new Date().toDateString();
-    //const newEntry = { text, date: today };
-    const updated = [entry, ...(state.worryEntries || [])];
+  addWorryEntry: async (entry) => {
+    const currentState = get();
+    const newEntry = {
+      ...entry,
+      id: Date.now().toString(),
+      timestamp: new Date().toISOString()
+    };
 
-    set({ worryEntries: updated });
-  
+    const updatedEntries = [newEntry, ...currentState.worryEntries];
+
+    // Save to Firebase
+    if (currentState.userId) {
+      await saveWorryToFirebase(currentState.userId, newEntry);
+    }
+
+    // Update local state
+    set({ worryEntries: updatedEntries });
+
+    // Update MMKV cache
     const currentAuthData = getItem("authData");
-       if (currentAuthData) {
-         setItem("authData", { 
-         ...currentAuthData, 
-         worryEntries: updated
-       });
-
-      }
-    } catch (error) {
-      console.error('Error adding worry entry:', error);
-      return { success: false, error };
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        worryEntries: updatedEntries
+      });
     }
   },
 
   loadWorryEntries: async () => {
-    try {
-      const userId = get().user?.id;
-      if (!userId) return;
-
-      const stored = await getItem(`worryEntries_${userId}`);
-      if (stored) {
-        set({ worryEntries: JSON.parse(stored) });
+    const currentState = get();
+    
+    if (currentState.userId) {
+      const result = await getWorriesFromFirebase(currentState.userId);
+      if (result.success) {
+        set({ worryEntries: result.data });
+        
+        const currentAuthData = getItem("authData");
+        if (currentAuthData) {
+          setItem("authData", {
+            ...currentAuthData,
+            worryEntries: result.data
+          });
+        }
       }
-    } catch (error) {
-      console.error('Error loading worry entries:', error);
     }
   },
 
-  deleteWorryEntry: (entryId) => {
-    try {
-      const currentEntries = get().worryEntries || [];
-      const updatedEntries = currentEntries.filter(entry => entry.id !== entryId);
-      
-      set({ worryEntries: updatedEntries });
+  deleteWorryEntry: async (entryId) => {
+    const currentState = get();
+    const updatedEntries = currentState.worryEntries.filter(e => e.id !== entryId);
 
-      const currentAuthData = getItem("authData");
-       if (currentAuthData) {
-         setItem("authData", { 
-         ...currentAuthData, 
-         worryEntries: updatedEntries
-       });
-       }
+    // Delete from Firebase
+    if (currentState.userId) {
+      await deleteWorryFromFirebase(currentState.userId, entryId);
+    }
 
-      return { success: true };
-    } catch (error) {
-      console.error('Error deleting worry entry:', error);
-      return { success: false, error };
+    // Update local state
+    set({ worryEntries: updatedEntries });
+
+    // Update MMKV cache
+    const currentAuthData = getItem("authData");
+    if (currentAuthData) {
+      setItem("authData", {
+        ...currentAuthData,
+        worryEntries: updatedEntries
+      });
     }
   },
 
@@ -835,41 +942,34 @@ refreshHabitTranslations: (t, getExtraGoals,getFoundationalHabits) => {
         return state.user?.email || '';
     },
 
-    isTokenValid: () => {
-        const state = get();
-        return state.accessTokenExpiration && Date.now() < state.accessTokenExpiration;
-    },
-
+    isTokenValid: () => true,
     canAccessDashboard: () => {
-        const state = get();
-        return state.isAuthenticated && state.hasCompletedQuestionnaire && state.isTokenValid();
-    },
+      const currentState = get();
+      return currentState.isAuthenticated && currentState.hasCompletedQuestionnaire;
+  },
 
     // Development helper
-    resetAuth: () => {
-        removeItem("authData");
-        set({
-            isAuthenticated: false,
-            accessToken: null,
-            refreshToken: null,
-            user: null,
-            accessTokenExpiration: null,
-            isLoading: false,
-            hasCompletedQuestionnaire: false,
-            questionnaireResults: null,
-            isRetakingQuestionnaire: false, 
-            userHabits:[],
-            habitCompletions: {},
-            todayMood:null,
-            moodHistory:{},
-            kindnessCompletions:{},
-            reflections:[],
-            worryEntries: [],
-            points:0,
-            level:1,
-            pointsHistory:[],
-        });
-    },
+   resetAuth: () => {
+    removeItem("authData");
+    set({
+      isAuthenticated: false,
+      userId: null,
+      user: null,
+      isLoading: false,
+      hasCompletedQuestionnaire: false,
+      questionnaireResults: null,
+      userHabits: [],
+      habitCompletions: {},
+      points: 0,
+      level: 1,
+      pointsHistory: [],
+      todayMood: null,
+      moodHistory: {},
+      kindnessCompletions: {},
+      reflections: [],
+      worryEntries: [],
+    });
+  },
 }))
 
 const calculateStreak = (habitId, completions) => {
