@@ -2,53 +2,75 @@ import { useFonts } from 'expo-font';
 import { Slot, useSegments, useRouter } from "expo-router";
 import BootSplash from 'react-native-bootsplash';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState,useRef } from 'react';
 import { useAuthStore } from "../store/authStore";
-import { Platform,NavigationBar } from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../constants/translations';
 import { onAuthStateChange } from './services/firebaseService';
 
 function RootLayoutNav() {
-  const { isAuthenticated, hasCompletedQuestionnaire, checkAuth } = useAuthStore();
+  const { 
+    isAuthenticated, 
+    hasCompletedQuestionnaire, 
+    questionnaireResults, 
+    checkAuth } = useAuthStore();
   const segments = useSegments();
-  const router = useRouter();
   const [isNavigationReady, setIsNavigationReady] = useState(false);
-
   const lastNavigationRef = useRef('');
   const navigationInProgressRef = useRef(false);
+  const router = useRouter();
+  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    // Listen for Firebase auth state changes
-    const unsubscribe = onAuthStateChange(async (user) => {
+  // Initialize auth on mount (only once)
+ useEffect(() => {
+  let unsubscribe;
+  
+  const init = async () => {
+    // Check MMKV cache first
+    await checkAuth();
+    
+    // Listen for Firebase auth changes
+    unsubscribe = onAuthStateChange(async (user) => {
       if (user) {
         console.log('User authenticated:', user.uid);
-        // User is signed in - sync from Firebase
-        const { syncFromFirebase } = useAuthStore.getState();
-        await syncFromFirebase();
+        
+        const state = useAuthStore.getState();
+        
+        // Only sync if:
+        // 1. User ID exists in store
+        // 2. Has completed questionnaire (means it's an existing user, not new registration)
+        // 3. Auth state was already set before (prevents sync during registration)
+        if (state.userId && state.hasCompletedQuestionnaire && state.isAuthenticated) {
+          console.log('Syncing existing user data...');
+          await state.syncFromFirebase();
+        } else if (!state.userId) {
+          console.log('New registration in progress - skipping sync');
+        } else if (!state.hasCompletedQuestionnaire) {
+          console.log('User needs to complete questionnaire - skipping sync');
+        }
       } else {
         console.log('User signed out');
       }
     });
+    
+    setIsNavigationReady(true);
+  };
 
-    // Check MMKV cache on app start
-    const { checkAuth } = useAuthStore.getState();
-    checkAuth();
+  init();
 
-    return () => unsubscribe();
-  }, []);
+  return () => {
+    if (unsubscribe) unsubscribe();
+  };
+}, []);
 
-
+  // Handle navigation
   useEffect(() => {
-    if (!isNavigationReady || navigationInProgressRef.current) return;
+
+     if (!isNavigationReady || navigationInProgressRef.current) return;
 
     const navigationTimeout = setTimeout(() => {
       const { showingResults } = useAuthStore.getState();
       const currentRoute = segments.join('/');
-
-      if (currentRoute === lastNavigationRef.current) {
-        return;
-      }
 
       const inAuthGroup = segments[0] === '(auth)';
       const inQuestionnaireGroup = segments[0] === '(questionnaire)';
@@ -75,9 +97,10 @@ function RootLayoutNav() {
           shouldNavigate = true;
           targetRoute = '/(dashboard)';
         }
+
       }
 
-      if (shouldNavigate && targetRoute !== currentRoute) {
+         if (shouldNavigate && targetRoute !== currentRoute) {
         console.log(`Redirecting from ${currentRoute} to ${targetRoute}`);
         navigationInProgressRef.current = true;
         lastNavigationRef.current = targetRoute;
@@ -88,9 +111,9 @@ function RootLayoutNav() {
           navigationInProgressRef.current = false;
         }, 500);
       }
-    }, 200);
+      },200);
 
-    return () => clearTimeout(navigationTimeout);
+      return () => clearTimeout(navigationTimeout);
   }, [isAuthenticated, hasCompletedQuestionnaire, segments, isNavigationReady]);
 
   return <Slot />;
@@ -104,26 +127,14 @@ export default function RootLayout() {
     'MontserratZ-SemiBold': require('../assets/fonts/MontserratZ-SemiBold.otf'),
   });
 
-  const { checkAuth } = useAuthStore();
-
   useEffect(() => {
-    async function prepare() {
-      try {
-        await checkAuth();
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setAppIsReady(true);
-      }
-    }
-
     if (fontsLoaded || fontError) {
-      prepare();
+      setAppIsReady(true);
     }
   }, [fontsLoaded, fontError]);
 
   if (!appIsReady) {
-    return null; // BootSplash stays visible (don't manually hide it here)
+    return null;
   }
 
   return (

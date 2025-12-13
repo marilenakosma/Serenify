@@ -30,6 +30,11 @@ import {
   deleteWorryEntry as deleteWorryFromFirebase
 } from '../app/services/firebaseService';
 
+const removeUndefined = (obj) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, v]) => v !== undefined)
+  );
+};
 
 export const useAuthStore = create((set,get) => ({
     //STATE
@@ -74,50 +79,56 @@ export const useAuthStore = create((set,get) => ({
       if (result.success) {
         const user = result.user;
 
-        // Fetch user data from Firebase
+        // Fetch user data with error handling
         const userDataResult = await getUserData(user.uid);
 
-        if (userDataResult.success) {
-          const userData = userDataResult.data;
+        const userData = userDataResult.success ? userDataResult.data : {
+          username: user.email.split('@')[0],
+          displayName: user.displayName || user.email.split('@')[0],
+          hasCompletedQuestionnaire: false,
+          points: 0,
+          level: 1,
+        };
 
-          // Fetch subcollections
-          const [moodResult, reflectionsResult, worriesResult] = await Promise.all([
-            getMoodHistory(user.uid),
-            getReflectionsFromFirebase(user.uid),
-            getWorriesFromFirebase(user.uid)
-          ]);
+        // Fetch subcollections 
+        const [moodResult, reflectionsResult, worriesResult] = await Promise.allSettled([
+          getMoodHistory(user.uid),
+          getReflectionsFromFirebase(user.uid),
+          getWorriesFromFirebase(user.uid)
+        ]);
 
-          const authData = {
-            isAuthenticated: true,
-            userId: user.uid,
-            user: {
-              id: user.uid,
-              email: user.email,
-              username: userData.username,
-              displayName: userData.displayName || user.displayName,
-              focusArea: userData.focusArea,
-            },
-            isLoading: false,
-            hasCompletedQuestionnaire: userData.hasCompletedQuestionnaire || false,
-            questionnaireResults: userData.questionnaireResults || null,
-            userHabits: userData.userHabits || [],
-            habitCompletions: userData.habitCompletions || {},
-            points: userData.points || 0,
-            level: userData.level || 1,
-            pointsHistory: userData.pointsHistory || [],
-            todayMood: userData.todayMood || null,
-            moodHistory: moodResult.success ? moodResult.data : {},
-            kindnessCompletions: userData.kindnessCompletions || {},
-            reflections: reflectionsResult.success ? reflectionsResult.data : [],
-            worryEntries: worriesResult.success ? worriesResult.data : [],
-          };
+        const authData = {
+          isAuthenticated: true,
+          userId: user.uid,
+          user: {
+            id: user.uid,
+            email: user.email,
+            username: userData.username,
+            displayName: userData.displayName,
+            focusArea: userData.focusArea,
+          },
+          isLoading: false,
+          hasCompletedQuestionnaire: userData.hasCompletedQuestionnaire || false,
+          questionnaireResults: userData.questionnaireResults || null,
+          userHabits: userData.userHabits || [],
+          habitCompletions: userData.habitCompletions || {},
+          points: userData.points || 0,
+          level: userData.level || 1,
+          pointsHistory: userData.pointsHistory || [],
+          todayMood: userData.todayMood || null,
+          moodHistory: moodResult.status === 'fulfilled' && moodResult.value?.success 
+            ? moodResult.value.data : {},
+          kindnessCompletions: userData.kindnessCompletions || {},
+          reflections: reflectionsResult.status === 'fulfilled' && reflectionsResult.value?.success 
+            ? reflectionsResult.value.data : [],
+          worryEntries: worriesResult.status === 'fulfilled' && worriesResult.value?.success 
+            ? worriesResult.value.data : [],
+        };
 
-          // Cache in MMKV
-          setItem("authData", authData);
-          set(authData);
+        setItem("authData", authData);
+        set(authData);
 
-          return { success: true };
-        }
+        return { success: true };
       }
 
       set({ isLoading: false });
@@ -140,6 +151,7 @@ export const useAuthStore = create((set,get) => ({
     if (result.success) {
       const user = result.user;
       
+      // Create auth data immediately (don't wait for Firestore reads)
       const authData = {
         isAuthenticated: true,
         userId: user.uid,
@@ -151,6 +163,7 @@ export const useAuthStore = create((set,get) => ({
         },
         isLoading: false,
         hasCompletedQuestionnaire: false,
+        questionnaireResults: null,
         userHabits: [],
         habitCompletions: {},
         points: 0,
@@ -163,10 +176,10 @@ export const useAuthStore = create((set,get) => ({
         worryEntries: [],
       };
 
-      // Save to MMKV cache 
+      // Save to MMKV cache
       setItem("authData", authData);
       
-      // Update state 
+      // Update state (this triggers navigation)
       set(authData);
       
       console.log('Auth state updated:', { 
@@ -186,13 +199,13 @@ export const useAuthStore = create((set,get) => ({
     return { success: false, error: error.message };
   }
 },
-  logout: async () => {
+
+logout: async () => {
     set({ isLoading: true });
 
     try {
       await logoutUser();
 
-      // Clear MMKV cache
       removeItem("authData");
 
       set({
@@ -230,16 +243,17 @@ export const useAuthStore = create((set,get) => ({
     set({
       hasCompletedQuestionnaire: true,
       questionnaireResults: results,
-      user: { ...currentState.user, focusArea: results.focusArea }
+      user: { ...currentState.user, 
+      focusArea: results.focusArea }
     });
 
     // Save to Firebase
     if (currentState.userId) {
-      await updateUserData(currentState.userId, {
+      await updateUserData(currentState.userId,removeUndefined({
         hasCompletedQuestionnaire: true,
         questionnaireResults: results,
         focusArea: results.focusArea
-      });
+      }));
     }
 
     // Update MMKV cache
@@ -249,7 +263,9 @@ export const useAuthStore = create((set,get) => ({
         ...currentAuthData,
         hasCompletedQuestionnaire: true,
         questionnaireResults: results,
-        user: { ...currentAuthData.user, focusArea: results.focusArea }
+        user: { 
+          ...currentAuthData.user, 
+          focusArea: results.focusArea }
       });
     }
   },
@@ -289,35 +305,44 @@ export const useAuthStore = create((set,get) => ({
 
   // ==================== MOOD TRACKING ====================
     setTodayMood: async (moodData) => {
-    const currentState = get();
-    const today = new Date().toISOString().split('T')[0];
-    
-    const updatedMoodHistory = {
-      ...currentState.moodHistory,
-      [today]: moodData
-    };
+  const currentState = get();
+  const today = new Date().toISOString().split('T')[0];
+  
+  const updatedMoodHistory = {
+    ...currentState.moodHistory,
+    [today]: moodData
+  };
 
-    set({ 
+  set({ 
+    todayMood: moodData,
+    moodHistory: updatedMoodHistory 
+  });
+
+  // Update MMKV cache first (instant)
+  const currentAuthData = getItem("authData");
+  if (currentAuthData) {
+    setItem("authData", {
+      ...currentAuthData,
       todayMood: moodData,
-      moodHistory: updatedMoodHistory 
+      moodHistory: updatedMoodHistory
     });
+  }
 
-    // Save to Firebase
-    if (currentState.userId) {
+  // Save to Firebase (background)
+  if (currentState.userId) {
+    try {
       await saveMood(currentState.userId, moodData);
       await updateUserData(currentState.userId, { todayMood: moodData });
+      
+      return { success: true }; //  Return success
+    } catch (error) {
+      console.error('Error saving mood to Firebase:', error);
+      return { success: false, error: error.message }; // Return error
     }
+  }
 
-    // Update MMKV cache
-    const currentAuthData = getItem("authData");
-    if (currentAuthData) {
-      setItem("authData", {
-        ...currentAuthData,
-        todayMood: moodData,
-        moodHistory: updatedMoodHistory
-      });
-    }
-  },
+  return { success: true }; // Return success even if no userId
+},
 
     loadTodayMood: async () => {
     const currentState = get();
@@ -632,7 +657,7 @@ export const useAuthStore = create((set,get) => ({
         });
 
         if (currentState.userId) {
-         await updateUserData(currentState.userId, userData);
+         await updateUserData(currentState.userId, removeUndefined(userData));
         }
         
         // Update MMKV (persistent storage)

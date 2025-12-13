@@ -19,6 +19,13 @@ import {
 } from 'firebase/firestore';
 import { auth, db } from '../config/firebaseConfig';
 
+const removeUndefined = (obj) => {
+  if (!obj) return {};
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, v]) => v !== undefined)
+  );
+};
+
 // ==================== AUTH FUNCTIONS ====================
 
 export const registerUser = async (name, email, password) => {
@@ -45,7 +52,14 @@ export const registerUser = async (name, email, password) => {
       hasCompletedQuestionnaire: false,
       points: 0,
       level: 1,
+      userHabits: [],
+      habitCompletions: {},
+      kindnessCompletions: {},
+      pointsHistory: [],
+      todayMood: null,
     });
+
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     console.log('Registration successful!');
     return { success: true, user };
@@ -115,7 +129,11 @@ export const getUserData = async (userId) => {
 
 export const updateUserData = async (userId, data) => {
   try {
-    await updateDoc(doc(db, 'users', userId), data);
+    // Using setDoc with merge instead of updateDoc,
+    // creates the document if it doesn't exist, or updates if it does
+    await setDoc(doc(db, 'users', userId), removeUndefined(data), { merge: true });
+    
+    console.log('User data updated successfully');
     return { success: true };
   } catch (error) {
     console.error('Update user data error:', error);
