@@ -14,7 +14,7 @@ import { useTranslation } from '../../constants/translations';
 import LanguagePicker from '../../components/LanguagePicker';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from '../../store/authStore';
-import { showPointsAlert } from '../utils/customAlert';
+import { CustomAlert } from "../../components/CustomAlert";
 
 export default function Breathe() {
    
@@ -24,6 +24,7 @@ export default function Breathe() {
   const [selectedDuration, setSelectedDuration] = useState(null);
   const [showSession,setShowSession ] = useState(false);
   const [breathPhase,setBreathPhase] = useState('inhale');
+  const [alertConfig, setAlertConfig] = useState(null);
 
   const durationData = [
     { id: 1, text: t('durations.1min'), duration: 1 },
@@ -66,17 +67,29 @@ const getPhaseText = () => {
   )
 
   const handleStop = () => {
-  if (selectedDuration && showSession) {
-    const pointsToAward = selectedDuration.duration * 5;
-    addPoints(pointsToAward, 'breathe-activity');
-    
-    showPointsAlert(pointsToAward);
-  }
-  
-  setSelectedDuration(null);
-  setShowSession(false);
-  setBreathPhase('inhale');
-};
+    setSelectedDuration(null);
+    setShowSession(false);
+    setBreathPhase('inhale');
+  };
+
+  const handleComplete = () => {
+    if (selectedDuration) {
+      const pointsToAward = selectedDuration.duration * 5;
+      addPoints(pointsToAward, 'breathe-activity');
+      
+      setAlertConfig({
+        type: 'success',
+        title: t('points.earned'),
+        message: t('points.earnedMessage').replace('{amount}', pointsToAward),
+        onClose: () => {
+          setAlertConfig(null);
+          setSelectedDuration(null);
+          setShowSession(false);
+          setBreathPhase('inhale');
+        }
+      });
+    }
+  };
 
   const handleStartSession = () => {
     setShowSession(true);
@@ -151,6 +164,7 @@ const getPhaseText = () => {
             backRoute="/(dashboard)/activities"
             selectedDuration={selectedDuration}
             onStop={handleStop}
+            onComplete={handleComplete}
             autoStart={true}
             cycleDuration={16000}
             startButtonText={t('activities.start')}
@@ -160,6 +174,15 @@ const getPhaseText = () => {
             againButtonText={t('activities.again')}
             pauseButtonText={t('activities.pause')}
             resumeButtonText={t('activities.resume')}
+          />
+        )}
+
+        {alertConfig && (
+          <CustomAlert
+            type={alertConfig.type}
+            title={alertConfig.title}
+            message={alertConfig.message}
+            onClose={alertConfig.onClose}
           />
         )}
 

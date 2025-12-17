@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   exerciseTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     marginBottom: 4,
   },

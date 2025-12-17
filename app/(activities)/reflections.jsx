@@ -52,7 +52,7 @@ export default function Reflections() {
           {t('reflections.title')}
         </ThemedText>
 
-        <ThemedText style={{ fontSize: 16, marginBottom: 8, textAlign: 'center' }}>
+        <ThemedText>
           {prompt}
         </ThemedText>
         

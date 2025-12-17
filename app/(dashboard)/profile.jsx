@@ -11,7 +11,8 @@ import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
 import LanguagePicker from '../../components/LanguagePicker';
 import { Ionicons } from '@expo/vector-icons';
-import { showConfirmAlert } from '../utils/customAlert';
+import { CustomAlert } from "../../components/CustomAlert";
+import { useState } from 'react';
 
 const profile = () => {
     const { user, 
@@ -22,45 +23,37 @@ const profile = () => {
             getLevelName,
             pointsHistory, 
           } = useAuthStore();
-    const router = useRouter()
+    const router = useRouter();
     const { t } = useTranslation();
+    const [alertConfig, setAlertConfig] = useState(null);
 
     const handleLogout = () => {
-    setTimeout(() => {
-        try {
-            Alert.alert(
-                t('profile.logout'),
-                t('profile.logoutConfirmation'),
-                [
-                    {
-                        text: t('common.cancel'),
-                        style: 'cancel',
-                    },
-                    {
-                        text: t('profile.logout'),
-                        style: 'destructive',
-                        onPress: async () => {
-                            try {
-                                const result = await logout();
-                                if (!result.success) {
-                                    setTimeout(() => {
-                                        Alert.alert(t('common.error'), t('profile.logoutError'));
-                                    }, 100);
-                                }
-                            } catch (error) {
-                                console.log('Logout error:', error);
-                            }
-                        },
-                    },
-                ]
-            );
-        } catch (error) {
-            console.log('Alert error (safe to ignore):', error);
-            //  Logout without confirmation
-            logout();
-        }
-    }, 100); // Delay prevents the "not attached" error
-};
+        setAlertConfig({
+            type: 'warning',
+            title: t('profile.logout'),
+            message: t('profile.logoutConfirmation'),
+            showCancel: true,
+            onConfirm: async () => {
+                try {
+                    const result = await logout();
+                    if (!result.success) {
+                        setAlertConfig({
+                            type: 'error',
+                            title: t('common.error'),
+                            message: t('profile.logoutError'),
+                            onClose: () => setAlertConfig(null)
+                        });
+                    } else {
+                        setAlertConfig(null);
+                    }
+                } catch (error) {
+                    console.log('Logout error:', error);
+                    setAlertConfig(null);
+                }
+            },
+            onClose: () => setAlertConfig(null)
+        });
+    };
     
     
     const handleRetakeQuestionnaire = () => {
@@ -171,6 +164,7 @@ const profile = () => {
                </View>
               </View>
 
+
                 {/* Settings List */}
                 <FlatList
                     data={settingData}
@@ -179,6 +173,18 @@ const profile = () => {
                     contentContainerStyle={styles.grid}
                     ItemSeparatorComponent={Separator}
                 />
+
+                {alertConfig && (
+                    <CustomAlert
+                        type={alertConfig.type}
+                        title={alertConfig.title}
+                        message={alertConfig.message}
+                        showCancel={alertConfig.showCancel}
+                        onConfirm={alertConfig.onConfirm}
+                        onClose={alertConfig.onClose}
+                    />
+                )}
+
             </SafeAreaView>
         </ThemedView>
     );

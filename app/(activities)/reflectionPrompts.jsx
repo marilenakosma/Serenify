@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   promptText: {
-    marginLeft: 12,
-    fontSize: 16,
+    marginLeft: 15,
+    fontSize: 15,
     flex: 1,
     color: '#333'
   },

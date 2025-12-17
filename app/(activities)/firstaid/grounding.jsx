@@ -75,7 +75,8 @@ export default function Grounding() {
   if (!isStarted) {
     return (
       <SafeAreaView style={styles.safeArea}>
-        <BackButton style={{backgroundColor: '#f1f5eeff',}} onPress={() => router.back()} />
+        <BackButton style={{backgroundColor: '#f1f5eeff'}}
+         onPress={() => router.back()} />
         
         <ThemedView style={styles.container}>
           <View style={styles.introContainer}>
@@ -117,7 +118,8 @@ export default function Grounding() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <BackButton onPress={() => router.back()} />
+      <BackButton style={{backgroundColor: '#f1f5eeff'}}
+      onPress={() => router.back()} />
       
       <ThemedView style={styles.container}>
         <View style={styles.progressContainer}>
@@ -142,7 +144,7 @@ export default function Grounding() {
             <Ionicons name={step.icon} size={60} color={step.color} />
           </View>
 
-          <ThemedText style={styles.stepNumber}>
+          <ThemedText title={true} style={styles.stepNumber}>
             {step.number}
           </ThemedText>
 
@@ -227,7 +229,6 @@ const styles = StyleSheet.create({
   },
   instructionsTitle: {
     fontSize: 18,
-    fontWeight: '600',
     marginBottom: 12,
     color: '#2E7D32',
   },
@@ -246,13 +247,12 @@ const styles = StyleSheet.create({
   startButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '600',
     textAlign: 'center',
   },
   progressContainer: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 10,
+    //paddingBottom: 7,
   },
   progressText: {
     fontSize: 14,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#66BB6A',
   },
   stepContainer: {
-    flexGrow: 1,
+    //flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 30,
@@ -283,18 +283,16 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 30,
+    //marginBottom: 30,
   },
   stepNumber: {
     fontSize: 72,
-    fontWeight: 'bold',
     color: '#66BB6A',
     marginBottom: 10,
   },
   stepSense: {
     fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 20,
+    marginBottom: 10,
     textAlign: 'center',
   },
   stepPrompt: {
@@ -321,6 +319,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     gap: 12,
+    //flex:1,
   },
   nextButton: {
     backgroundColor: '#66BB6A',
@@ -330,7 +329,6 @@ const styles = StyleSheet.create({
   nextButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '600',
     textAlign: 'center',
   },
   restartButton: {
@@ -341,7 +339,6 @@ const styles = StyleSheet.create({
   restartButtonText: {
     color: '#666',
     fontSize: 16,
-    fontWeight: '600',
     textAlign: 'center',
   },
 });

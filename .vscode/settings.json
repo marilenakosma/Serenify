@@ -22,7 +22,7 @@
   "typescript.validate.enable": false,
   "javascript.validate.enable": false,
   // Disable heavy features for performance
-  "editor.hover.enabled": false,
+  "editor.hover.enabled": "off",
   "editor.parameterHints.enabled": false,
   "editor.quickSuggestions": {
     "other": false,
