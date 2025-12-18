@@ -134,3 +134,11 @@ export const showConfirmAlert = (title, message, onConfirm, onCancel) => {
     ]
   );
 };
+
+export default function customAlert() {
+  return (
+    <>
+     
+    </>
+  );
+}

@@ -46,6 +46,12 @@
     "fromActivity": "Activity",
     "noHistory": "No points history yet. Complete habits and activities to earn points!"
   },
+  "level": {
+    "beginner":"Beginner",
+    "intermediate":"Intermediate",
+    "advanced":"Advanced",
+    "master":"Master"
+  },
 "validation": {
     "nameRequired": "Name is required",
     "nameTooShort": "Name must be at least 2 characters",
@@ -70,6 +76,18 @@
     "passwordsMatch": "✓ Passwords match",
     "validationError": "Validation Error",
     "fixErrorsBeforeSubmitting": "Please fix the errors before submitting"
+  },
+    "errors": {
+    "networkError": "Connection error. Please check your internet and try again.",
+    "emailInUse": "This email is already registered. Please login instead.",
+    "invalidEmail": "Invalid email address.",
+    "weakPassword": "Password should be at least 6 characters.",
+    "wrongPassword": "Invalid email or password. Please try again.",
+    "userNotFound": "No account found with this email.",
+    "tooManyRequests": "Too many attempts. Please try again later.",
+    "unknownError": "Something went wrong. Please try again.",
+    "permissionDenied": "You don't have permission to access this data.",
+    "dataNotFound": "Requested data not found."
   },
 "tabs":{
   "home":"Home",

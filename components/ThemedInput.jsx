@@ -1,8 +1,10 @@
 import { TextInput } from 'react-native'
 import { Colors } from '../constants/Colors'
+import { Ionicons } from '@expo/vector-icons';
 
-const ThemedInput = ({style,...props}) => {
+const ThemedInput = ({style,iconName,...props}) => {
   return (
+    <>
     <TextInput
     style={[
        {
@@ -16,6 +18,7 @@ const ThemedInput = ({style,...props}) => {
     ]}
     {...props}
     />
+    </>
   )
 }
 

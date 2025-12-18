@@ -13,6 +13,7 @@ import { ResponsiveDimensions as RD } from "../../constants/responsiveDimensions
 import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from '../../constants/translations';
+import { CustomAlert } from "../../components/CustomAlert";
 
 const Login = () => {
     const {login,isLoading} = useAuthStore();
@@ -20,6 +21,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
+    const [alertConfig, setAlertConfig] = useState(null);
     const { t } = useTranslation();
     
     
@@ -100,9 +102,38 @@ const Login = () => {
         return !emailError && !passwordError;
     };
 
+    const handleAlert = (title,message) => {
+        setAlertConfig({
+                type: 'error',
+                title: title,
+                message: message,
+                showCancel: true,
+            
+                onConfirm: async () => {
+                try {
+                    const result = await logout();
+                    if (!result.success) {
+                        setAlertConfig({
+                            type: 'error',
+                            title: t('common.error'),
+                            message: t('profile.logoutError'),
+                            onClose: () => setAlertConfig(null)
+                        });
+                    } else {
+                        setAlertConfig(null);
+                    }
+                } catch (error) {
+                    console.log('Logout error:', error);
+                    setAlertConfig(null);
+                }
+            }, 
+            onClose: () => setAlertConfig(null)
+        });
+    }
+
     const handleLogin = async () => {
         if (!validateForm()) {
-            Alert.alert(t('validation.validationError'), t('validation.fixErrorsBeforeSubmitting'));
+            handleAlert(t('validation.validationError'),t('validation.fixErrorsBeforeSubmitting'));
             return;
         }
         
@@ -111,10 +142,13 @@ const Login = () => {
             if(result.success) {
               //Alert.alert(t('common.success'), t('auth.loginSuccessful'));
             } else {
-              Alert.alert(t('common.error'), t('auth.invalidCredentials'));
+              //Alert.alert(t('common.error'), t('auth.invalidCredentials'));
+             const errorMessage = result.errorKey ? t(result.errorKey) : result.error;
+             handleAlert(t('common.error'),errorMessage);
             }
         } catch(error) {
-            Alert.alert(t('common.error'), t('auth.loginFailed'));
+            const errorMessage = result.errorKey ? t(result.errorKey) : result.error;
+            handleAlert(t('common.error'),errorMessage);
         }
     };
     return (
@@ -206,6 +240,16 @@ const Login = () => {
                             ]}
                             disabled={isLoading}
                         >
+
+                        {alertConfig && (
+                           <CustomAlert
+                             type={alertConfig.type}
+                             title={alertConfig.title}
+                             message={alertConfig.message}
+                             onClose={alertConfig.onClose}
+                           />
+                         )}
+
                             <ThemedText title={true} style={styles.buttonText}>
                                 {isLoading ?  t('auth.signingin') : t('auth.signInBtn')}
                             </ThemedText>

@@ -15,6 +15,7 @@ import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from '../../constants/translations';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CustomAlert } from "../../components/CustomAlert";
 
 const Register = () => {
     const { register, isLoading } = useAuthStore();
@@ -26,11 +27,12 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [passwordStrength, setPasswordStrength] = useState(0);
+    const [alertConfig, setAlertConfig] = useState(null);
     const { t } = useTranslation();
     
     const router = useRouter();
 
-    // Custom Password Strength Component 
+    // Password Strength Component 
     const PasswordStrengthMeter = ({ strength, password }) => {
         const getStrengthText = () => {
          if (strength < 0.3) return t('validation.veryWeak');
@@ -69,9 +71,9 @@ const Register = () => {
     };
 
     // Validation functions
-    const validateName = (input) => {
+    const validateName = (input, force = false) => {
         setName(input);
-        if (touched.name) {
+        if (force || touched.name) {
             if (!input.trim()) {
                 setErrors(prev => ({ ...prev, name: t('validation.nameRequired') }));
             } else if (input.trim().length < 2) {
@@ -82,60 +84,60 @@ const Register = () => {
         }
     };
 
-    const validateEmail = (input) => {
-  setEmail(input);
-  if (touched.email) {
-    if (!input) {
-      setErrors(prev => ({ ...prev, email: t('validation.emailRequired') })); 
-    } else if (!validator.isEmail(input)) {
-      setErrors(prev => ({ ...prev, email: t('validation.emailInvalid') })); 
-    } else {
-      setErrors(prev => ({ ...prev, email: '' }));
-    }
-  }
-};
-
-    const validatePassword = (input) => {
-  setPassword(input);
-  if (touched.password) {
-    const validationErrors = [];
-    
-    if (input.length < 8) validationErrors.push(t('validation.atLeast8Chars'));
-    if (!/[A-Z]/.test(input)) validationErrors.push(t('validation.oneUppercase'));
-    if (!/[a-z]/.test(input)) validationErrors.push(t('validation.oneLowercase'));
-    if (!/\d/.test(input)) validationErrors.push(t('validation.oneNumber'));
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(input)) validationErrors.push(t('validation.oneSpecialChar'));
-    
-    if (validationErrors.length > 0) {
-      setErrors(prev => ({ 
-        ...prev, 
-        password: `${t('validation.missing')}: ${validationErrors.join(', ')}` 
-      }));
-      setPasswordStrength(Math.max(0, (5 - validationErrors.length) / 5));
-    } else {
-      setErrors(prev => ({ ...prev, password: '' }));
-      setPasswordStrength(1);
-    }
-  }
-        
-        // Also re-validate confirm password if it exists
-        if (confirmPassword && touched.confirmPassword) {
-            validateConfirmPassword(confirmPassword);
+    const validateEmail = (input, force = false) => {
+        setEmail(input);
+        if (force || touched.email) {
+            if (!input) {
+                setErrors(prev => ({ ...prev, email: t('validation.emailRequired') })); 
+            } else if (!validator.isEmail(input)) {
+                setErrors(prev => ({ ...prev, email: t('validation.emailInvalid') })); 
+            } else {
+                setErrors(prev => ({ ...prev, email: '' }));
+            }
         }
     };
 
-    const validateConfirmPassword = (input) => {
-      setConfirmPassword(input);
-      if (touched.confirmPassword) {
-        if (!input) {
-          setErrors(prev => ({ ...prev, confirmPassword: t('validation.confirmPasswordRequired') })); 
-        } else if (input !== password) {
-          setErrors(prev => ({ ...prev, confirmPassword: t('validation.passwordsNotMatch') })); 
-        } else {
-          setErrors(prev => ({ ...prev, confirmPassword: '' }));
-        }
-      }   
-    };
+        const validatePassword = (input, force = false) => {
+                setPassword(input);
+                if (force || touched.password) {
+                    const validationErrors = [];
+
+                    if (input.length < 8) validationErrors.push(t('validation.atLeast8Chars'));
+                    if (!/[A-Z]/.test(input)) validationErrors.push(t('validation.oneUppercase'));
+                    if (!/[a-z]/.test(input)) validationErrors.push(t('validation.oneLowercase'));
+                    if (!/\d/.test(input)) validationErrors.push(t('validation.oneNumber'));
+                    if (!/[!@#$%^&*(),.?":{}|<>]/.test(input)) validationErrors.push(t('validation.oneSpecialChar'));
+
+                    if (validationErrors.length > 0) {
+                        setErrors(prev => ({ 
+                            ...prev, 
+                            password: `${t('validation.missing')}: ${validationErrors.join(', ')}` 
+                        }));
+                        setPasswordStrength(Math.max(0, (5 - validationErrors.length) / 5));
+                    } else {
+                        setErrors(prev => ({ ...prev, password: '' }));
+                        setPasswordStrength(1);
+                    }
+                }
+
+                // Re-validate confirm password if it exists
+                if (confirmPassword && (force || touched.confirmPassword)) {
+                        validateConfirmPassword(confirmPassword, force);
+                }
+        };
+
+        const validateConfirmPassword = (input, force = false) => {
+            setConfirmPassword(input);
+            if (force || touched.confirmPassword) {
+                if (!input) {
+                    setErrors(prev => ({ ...prev, confirmPassword: t('validation.confirmPasswordRequired') })); 
+                } else if (input !== password) {
+                    setErrors(prev => ({ ...prev, confirmPassword: t('validation.passwordsNotMatch') })); 
+                } else {
+                    setErrors(prev => ({ ...prev, confirmPassword: '' }));
+                }
+            }   
+        };
 
     // Focus handlers
     const handleNameFocus = () => {
@@ -156,38 +158,63 @@ const Register = () => {
         setTouched(prev => ({ ...prev, confirmPassword: true }));
     };
 
-    // Form validation
-    const validateForm = () => {
-        const nameError = !name.trim() ? t('validation.nameRequired') : name.trim().length < 2 ? t('validation.nameTooShort') : '';
-        const emailError = !email ? t('validation.emailRequired') : !validator.isEmail(email) ? t('validation.emailInvalid') : '';
-        const passwordError = passwordStrength < 1 ? t('validation.passwordRequirementsNotMet') : '';
-        const confirmPasswordError = confirmPassword !== password ? t('validation.passwordsNotMatch') : '';
-
-        setErrors({
-            name: nameError,
-            email: emailError,
-            password: passwordError,
-            confirmPassword: confirmPasswordError
-        });
-
-        setTouched({ name: true, email: true, password: true, confirmPassword: true });
-
-        return !nameError && !emailError && !passwordError && !confirmPasswordError;
+    // Blur handlers: validate on leaving the field so valid fields clear their messages
+    const handleNameBlur = () => {
+        setTouched(prev => ({ ...prev, name: true }));
+        validateName(name, true);
     };
 
-    const handleSubmit = async () => {
-        console.log('Register form submitted', { name, email, password });
-        
-        if (!validateForm()) {
-            //Alert.alert('Validation Error', 'Please fix the errors before submitting');
-            return;
-        }
+    const handleEmailBlur = () => {
+        setTouched(prev => ({ ...prev, email: true }));
+        validateEmail(email, true);
+    };
 
+    const handlePasswordBlur = () => {
+        setTouched(prev => ({ ...prev, password: true }));
+        validatePassword(password, true);
+    };
+
+    const handleConfirmPasswordBlur = () => {
+        setTouched(prev => ({ ...prev, confirmPassword: true }));
+        validateConfirmPassword(confirmPassword, true);
+    };
+    const handleSubmit = async () => {
+        //console.log('Register form submitted', { name, email, password });
+
+        //if (!validateForm()) return;
+        
         const result = await register(name,email,password);
         if (result.success) {
          console.log('Registration successful - navigating...');
        } else {
-         Alert.alert(t('common.error'), result.error);
+         const errorMessage = result.errorKey ? t(result.errorKey) : result.error;
+         //Alert.alert(t('common.error'), errorMessage);
+
+         setAlertConfig({
+            type: 'error',
+            title: t('common.error'),
+            message: errorMessage,
+            showCancel: true,
+            onConfirm: async () => {
+                try {
+                    const result = await logout();
+                    if (!result.success) {
+                        setAlertConfig({
+                            type: 'error',
+                            title: t('common.error'),
+                            message: t('profile.logoutError'),
+                            onClose: () => setAlertConfig(null)
+                        });
+                    } else {
+                        setAlertConfig(null);
+                    }
+                } catch (error) {
+                    console.log('Logout error:', error);
+                    setAlertConfig(null);
+                }
+            }, 
+            onClose: () => setAlertConfig(null)
+        });
        }
     };
 
@@ -205,7 +232,7 @@ const Register = () => {
                   <KeyboardAwareScrollView
                     contentContainerStyle={styles.container}
                     enableOnAndroid={true}
-                    extraScrollHeight={10}
+                    extraScrollHeight={30}
                     keyboardShouldPersistTaps="handled"
                  >
                     <ThemedText title={true} style={styles.title}>
@@ -224,6 +251,7 @@ const Register = () => {
                             autoCapitalize="words"
                             onChangeText={validateName}
                             onFocus={handleNameFocus}
+                            onBlur={handleNameBlur}
                             value={name}
                         />
                         {touched.name && errors.name && (
@@ -246,6 +274,7 @@ const Register = () => {
                             autoCapitalize="none"
                             onChangeText={validateEmail}
                             onFocus={handleEmailFocus}
+                            onBlur={handleEmailBlur}
                             value={email}
                         />
                         {touched.email && (
@@ -262,7 +291,7 @@ const Register = () => {
                         )}
                     </View>
 
-                    {/* Password Input - FIXED LOCATION */}
+                    {/* Password Input  */}
                     <View style={styles.inputContainer}>
                         <ThemedInput 
                             style={[
@@ -272,11 +301,12 @@ const Register = () => {
                             placeholder={t('auth.password')}
                             onChangeText={validatePassword}
                             onFocus={handlePasswordFocus}
+                            onBlur={handlePasswordBlur}
                             value={password}
                             secureTextEntry 
                         />
                         
-                        {/* Password Strength Meter - CORRECT LOCATION */}
+                        {/* Password Strength Meter */}
                         <PasswordStrengthMeter strength={passwordStrength} password={password} />
                         
                         {touched.password && errors.password && (
@@ -287,7 +317,7 @@ const Register = () => {
                         )}
                     </View>
 
-                    {/* Confirm Password Input - CLEANED UP */}
+                    {/* Confirm Password Input */}
                     <View style={styles.inputContainer}>
                         <ThemedInput 
                             style={[
@@ -297,6 +327,7 @@ const Register = () => {
                             placeholder={t('auth.confirmPassword')}
                             onChangeText={validateConfirmPassword}
                             onFocus={handleConfirmPasswordFocus}
+                            onBlur={handleConfirmPasswordBlur}
                             value={confirmPassword}
                             secureTextEntry 
                         />
@@ -327,6 +358,15 @@ const Register = () => {
                         ]}
                         disabled={isLoading}
                     >
+                    {alertConfig && (
+                      <CustomAlert
+                         type={alertConfig.type}
+                         title={alertConfig.title}
+                         message={alertConfig.message}
+                         onClose={alertConfig.onClose}
+                      />
+                    )}
+
                         <ThemedText title={true} style={{color:'#f2f2f2'}}>
                             {isLoading ? t('auth.creatingAccount') : t('auth.createAccount') }
                         </ThemedText>

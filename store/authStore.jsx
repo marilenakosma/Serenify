@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { getItem, removeItem, setItem } from "./storage";
 import { Alert } from "react-native";
+import { useTranslation } from '../constants/translations';
 import { 
   shouldTrackHabitOnDate,
   isHabitCompleteForPeriod,
@@ -66,6 +67,7 @@ export const useAuthStore = create((set,get) => ({
   
   //Firebase User ID
   userId: null,
+  
 
   setIsAuthenticated: isAuthenticated => set({ isAuthenticated }),
   
@@ -510,11 +512,12 @@ logout: async () => {
 
    getLevelName: () => {
     const level = get().level || 1;
+    const { t } = useTranslation();
 
-    if (level < 5) return 'Beginner';
-    if (level < 10) return 'Intermediate';
-    if (level < 20) return 'Advanced';
-    return 'Master';
+    if (level < 5) return t('level.beginner');
+    if (level < 10) return t('level.intermediate');
+    if (level < 20) return t('level.advanced');
+    return t('level.master');
   },
 
    // ==================== TOGGLE HABIT COMPLETION ====================

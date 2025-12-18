@@ -26,6 +26,8 @@ const removeUndefined = (obj) => {
   );
 };
 
+
+
 // ==================== AUTH FUNCTIONS ====================
 
 export const registerUser = async (name, email, password) => {
@@ -64,23 +66,20 @@ export const registerUser = async (name, email, password) => {
     console.log('Registration successful!');
     return { success: true, user };
 
-  } catch (error) {
-    console.error('Registration error details:', error);
+      } catch (error) {
+    //console.error('Registration error details:', error);
     
-    // Handle specific Firebase errors
-    let errorMessage = error.message;
+    // Map Firebase errors to translation keys
+    const errorMap = {
+      'auth/network-request-failed': 'errors.networkError',
+      'auth/email-already-in-use': 'errors.emailInUse',
+      'auth/invalid-email': 'errors.invalidEmail',
+      'auth/weak-password': 'errors.weakPassword',
+    };
     
-    if (error.code === 'auth/network-request-failed') {
-      errorMessage = 'Network error. Please check your internet connection and try again.';
-    } else if (error.code === 'auth/email-already-in-use') {
-      errorMessage = 'This email is already registered. Please login instead.';
-    } else if (error.code === 'auth/invalid-email') {
-      errorMessage = 'Invalid email address.';
-    } else if (error.code === 'auth/weak-password') {
-      errorMessage = 'Password should be at least 6 characters.';
-    }
+    const errorKey = errorMap[error.code] || 'errors.unknownError';
     
-    return { success: false, error: errorMessage };
+    return { success: false, error: error.code, errorKey };
   }
 };
 
@@ -88,9 +87,20 @@ export const loginUser = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return { success: true, user: userCredential.user };
-  } catch (error) {
-    console.error('Login error:', error);
-    return { success: false, error: error.message };
+   } catch (error) {
+    //console.error('Login error:', error);
+    
+    const errorMap = {
+      'auth/network-request-failed': 'errors.networkError',
+      'auth/wrong-password': 'errors.wrongPassword',
+      'auth/user-not-found': 'errors.userNotFound',
+      'auth/invalid-email': 'errors.invalidEmail',
+      'auth/too-many-requests': 'errors.tooManyRequests',
+    };
+    
+    const errorKey = errorMap[error.code] || 'errors.unknownError';
+    
+    return { success: false, error: error.code, errorKey };
   }
 };
 
@@ -296,3 +306,11 @@ export const updatePoints = async (userId, points, level, pointsHistory) => {
     return { success: false, error: error.message };
   }
 };
+
+export default function firebaseService() {
+  return (
+    <>
+     
+    </>
+  );
+}
