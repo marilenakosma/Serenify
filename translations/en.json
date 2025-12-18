@@ -413,7 +413,7 @@
     "breathe":"Breathe",
     "soundscapes":"Soundscapes",
     "movements":"Movements",
-    "timers":"Timers",
+    "meditation":"Meditation",
     "actOfKindness":"Act of Kindness",
     "firstAidKit":"First Aid Kit",
     "start": "Begin",
@@ -421,7 +421,8 @@
     "resume": "Resume",
     "finish": "Finish",
     "again": "Again",
-    "selectDuration": "Select Duration"
+    "selectDuration": "Select Duration",
+    "completed": "Well Done! 🎉"
   },
   "breathe": {
     "title":"Breathing",
@@ -433,7 +434,7 @@
     "inhale": "Inhale",
     "exhale": "Exhale", 
     "hold": "Hold",
-    "completed": "Well Done! 🌟"
+    "completed": "Well Done! 🎉"
   },
   "meditation": {
     "title":"Meditation",
@@ -442,7 +443,7 @@
     "observe": "Observe your thoughts", 
     "release": "Release and let go",
     "return": "Return to awareness",
-    "completed": "Meditation Complete 🧘‍♀️"
+    "completed": "Meditation Complete 🎉"
   },
   "movements": {
     "title":"movements",
@@ -451,7 +452,7 @@
     "down": "Push Down", 
     "hold": "Hold Position",
     "up": "Push Up",
-    "completed": "Workout Complete! 💪"
+    "completed": "Workout Complete! 🎉"
   },
   "soundscapes": {
    "title": "Nature Soundscapes",

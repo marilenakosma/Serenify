@@ -15,7 +15,7 @@ import LanguagePicker from '../../components/LanguagePicker';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from '../../store/authStore';
 
-export default function Timers() {
+export default function Meditation() {
    
   const router=useRouter()
   const { t } = useTranslation();
@@ -29,6 +29,7 @@ export default function Timers() {
     { id: 2, text: t('durations.10min'), duration: 10 },
     { id: 3, text: t('durations.15min'), duration: 15 },
     { id: 4, text: t('durations.20min'), duration: 20 },
+    { id: 5, text: 'DEBUG', duration: 0 },
   ]
 
 const handleAnimationFrame = (event) => {
@@ -112,7 +113,7 @@ const getPhaseText = () => {
             style={styles.animation}
           />
 
-          <ThemedText title={true} style={styles.durationText}>
+          <ThemedText  style={styles.durationText}>
             {t('activities.selectDuration')}
           </ThemedText>
 
@@ -153,7 +154,8 @@ const getPhaseText = () => {
             cycleDuration={30000}
             startButtonText={t('activities.start')}
             showProgress={true}
-            completedText={t('meditation.completed')}
+            completedText={t('activities.completed')}
+            pointsEarnedText={`${t('points.earnedMessage').replace('{amount}', selectedDuration?.duration * 5 || 0)}`}
             finishButtonText={t('activities.finish')}
             againButtonText={t('activities.again')}
             pauseButtonText={t('activities.pause')}

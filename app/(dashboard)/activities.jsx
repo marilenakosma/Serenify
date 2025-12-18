@@ -5,9 +5,9 @@ import Goal from "../../assets/images/clipboard.png";
 import Diary from "../../assets/images/diary.png";
 import Kit from "../../assets/images/first-aid-kit.png";
 import Gift from "../../assets/images/gift.png";
-import Timers from "../../assets/images/smartwatch.png";
+import Breathe from "../../assets/images/lungs.png";
 import Movements from "../../assets/images/sneakers.png";
-import Breathe from "../../assets/images/yoga-master.png";
+import Meditation from "../../assets/images/yoga-master.png";
 import ThemedCategory from "../../components/ThemedCategory";
 import ThemedText from "../../components/ThemedText";
 import ThemedView from "../../components/ThemedView";
@@ -21,7 +21,7 @@ const activities = () => {
     { id:3, image:Breathe, text:t('activities.breathe'),route: '/(activities)/breathe'},
     { id:4, image:Sounds, text:t('activities.soundscapes'),route: '/(activities)/soundscapes'},
     { id:5, image:Movements, text:t('activities.movements'),route: '/(activities)/movements'},
-    { id:6, image:Timers, text:t('activities.timers'),route: '/(activities)/timers'},
+    { id:6, image:Meditation, text:t('activities.meditation'),route: '/(activities)/meditation'},
     { id:7, image:Gift, text:t('activities.actOfKindness'),route: '/(activities)/actOfKindness'},
     { id:8, image:Kit, text:t('activities.firstAidKit'),route: '/(activities)/firstAidKit'},
   ]

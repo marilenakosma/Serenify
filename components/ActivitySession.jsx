@@ -6,8 +6,11 @@ import ThemedText from './ThemedText';
 import ThemedButton from './ThemedButton';
 import { useActivityTimer } from '../hooks/useActivityTimer';
 import { useTranslation } from '../constants/translations';
+import { Confetti, ConfettiMethods,ContinuousConfetti } from 'react-native-fast-confetti';
+import { LogBox } from 'react-native';
 
 const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
+LogBox.ignoreLogs(['[Reanimated] Reading from `value`']);
 
 const ActivitySession = ({ 
     animationSource,
@@ -20,6 +23,7 @@ const ActivitySession = ({
     autoStart = false,
     startButtonText = "Start",
     completedText = "Well Done! 🌟",
+    pointsEarnedText,
     finishButtonText = "Finish",
     againButtonText = "Again",
     pauseButtonText = "Pause",
@@ -31,6 +35,8 @@ const ActivitySession = ({
   const router = useRouter();
   const animationProgress = useRef(new Animated.Value(0)).current;
   const [animationActive, setAnimationActive] = useState(false);
+  const confettiRef = useRef(null); 
+  //const [position,setPosition]
 
   const {
     isActive,
@@ -44,7 +50,7 @@ const ActivitySession = ({
     stopTimer,
   } = useActivityTimer();
 
-  // ✅ SINGLE useEffect to handle animation loop
+  // SINGLE useEffect to handle animation loop
   useEffect(() => {
     if (!animationActive) return;
 
@@ -77,7 +83,7 @@ const ActivitySession = ({
     };
   }, [animationActive, cycleDuration]);
 
-  // ✅ Animation frame listener
+  //  Animation frame listener
   useEffect(() => {
     const listenerId = animationProgress.addListener(({ value }) => {
       if (onAnimationFrame && animationActive) {
@@ -108,6 +114,7 @@ const ActivitySession = ({
   const handleComplete = () => {
     setAnimationActive(false);
     animationProgress.setValue(0);
+    confettiRef.current?.start();
     onComplete?.();
   };
 
@@ -141,18 +148,31 @@ const ActivitySession = ({
 
   return (
     <View style={styles.container}>
-      {/* ✅ Use AnimatedLottieView with progress control */}
+      {/* Use AnimatedLottieView with progress control */}
+
+      {isCompleted && (
+          <ContinuousConfetti />
+      )}
+
       <AnimatedLottieView
         source={animationSource}
         progress={animationProgress}
         style={[styles.animation, animationStyle]}
       />
 
+      {/* Completion text at top when done, phase text during activity */}
+      {isCompleted && (
+        <ThemedText title={true} style={styles.completedTitle}>
+          {completedText}
+        </ThemedText>
+      )}
+
+      {/* Points earned text in center when completed, phase text during activity */}
       <ThemedText title={true} style={styles.phaseText}>
-        {isCompleted ? completedText : phaseText}
+        {isCompleted ? (pointsEarnedText || '') : phaseText}
       </ThemedText>
       
-      {showProgress && (
+      {showProgress && !isCompleted && (
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
             <View style={[styles.progressFill, { width: `${progress}%` }]} />
@@ -267,7 +287,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    //fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -300,6 +320,12 @@ const styles = StyleSheet.create({
   //  backgroundColor: '#2196F3',
     paddingHorizontal: 30,
     marginHorizontal: 5,
+  },
+   completedTitle: {
+    fontSize: 25,
+    marginBottom: 10,
+    textAlign: 'center',
+    color: '#4CAF50',
   },
 })
 

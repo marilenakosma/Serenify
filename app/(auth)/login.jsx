@@ -246,6 +246,8 @@ const Login = () => {
                              type={alertConfig.type}
                              title={alertConfig.title}
                              message={alertConfig.message}
+                             showCancel={alertConfig.showCancel}
+                             onConfirm={alertConfig.onConfirm}
                              onClose={alertConfig.onClose}
                            />
                          )}

@@ -31,6 +31,7 @@ export default function Breathe() {
     { id: 2, text: t('durations.3min'), duration: 3 },
     { id: 3, text: t('durations.5min'), duration: 5 },
     { id: 4, text: t('durations.10min'), duration: 10 },
+    { id: 5, text: 'DEBUG', duration: 0 },
   ]
 
 const handleAnimationFrame = (event) => {
@@ -73,21 +74,19 @@ const getPhaseText = () => {
   };
 
   const handleComplete = () => {
-    if (selectedDuration) {
+    if (selectedDuration && showSession) {
       const pointsToAward = selectedDuration.duration * 5;
       addPoints(pointsToAward, 'breathe-activity');
       
+      /*
       setAlertConfig({
         type: 'success',
         title: t('points.earned'),
         message: t('points.earnedMessage').replace('{amount}', pointsToAward),
         onClose: () => {
           setAlertConfig(null);
-          setSelectedDuration(null);
-          setShowSession(false);
-          setBreathPhase('inhale');
         }
-      });
+      }); */
     }
   };
 
@@ -127,7 +126,7 @@ const getPhaseText = () => {
             style={styles.animation}
           />
 
-            <ThemedText title={true} style={styles.durationText}>
+            <ThemedText style={styles.durationText}>
                 {t('activities.selectDuration')}
             </ThemedText>
 
@@ -169,7 +168,8 @@ const getPhaseText = () => {
             cycleDuration={16000}
             startButtonText={t('activities.start')}
             showProgress={true}
-            completedText={t('breathe.completed')}
+            completedText={t('activities.completed')}
+            pointsEarnedText={`${t('points.earnedMessage').replace('{amount}', selectedDuration?.duration * 5 || 0)}`}
             finishButtonText={t('activities.finish')}
             againButtonText={t('activities.again')}
             pauseButtonText={t('activities.pause')}
@@ -177,14 +177,14 @@ const getPhaseText = () => {
           />
         )}
 
-        {alertConfig && (
+        {/*alertConfig && (
           <CustomAlert
             type={alertConfig.type}
             title={alertConfig.title}
             message={alertConfig.message}
             onClose={alertConfig.onClose}
           />
-        )}
+        ) */}
 
       </ThemedView>
     </SafeAreaView>
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   buttonContainer: {
-    gap: 10,
+    gap: 8,
     paddingHorizontal:10,
     alignItems: 'center',
     justifyContent:'center',
