@@ -22,8 +22,10 @@ export default function ThemedGoal({ icon,name, text, points,
         </ThemedText>
         <View style={styles.metadata}>
           <ThemedText style={styles.category}>{category || 'Wellness'}</ThemedText>
-          {points && (
-            <ThemedText style={styles.points}>+{points} pts</ThemedText>
+          {points && ( <>
+            <Ionicons style={{marginLeft:5}} name="flash" size={14} color="#FFD700" />
+            <ThemedText style={styles.points}>+{points}</ThemedText>
+            </>
           )}
           <ThemedText style={styles.time}>{duration || '5 min'}</ThemedText>
         </View>
@@ -115,7 +117,8 @@ const styles = StyleSheet.create({
   points: {
     fontSize: 12,
     //color: '#FF9800',
-    color:'#FFD700',
-    marginRight: 12,
+    //color:'#FFD700',
+    color: '#4CAF50',
+    marginRight: 10,
   },
 });

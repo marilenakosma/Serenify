@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, FlatList, TouchableOpacity,Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +7,9 @@ import ThemedText from '../../components/ThemedText';
 import { useAuthStore } from '../../store/authStore';
 import { useTranslation } from '../../constants/translations';
 import BackButton from "../../components/BackButton";
+import Breathe from "../../assets/images/lungs.png";
+import Movements from "../../assets/images/sneakers.png";
+import Meditation from "../../assets/images/yoga-master.png";
 
 export default function PointsHistory() {
   const router = useRouter();
@@ -17,7 +20,7 @@ export default function PointsHistory() {
     if (source.includes('habit')) return 'checkmark-circle';
     if (source.includes('reflection')) return 'journal';
     if (source.includes('kindness')) return 'heart';
-    if (source.includes('breathe')) return 'flower';
+    if (source.includes('breathe')) return 'accessibility';
     return 'star';
   };
 
@@ -43,8 +46,9 @@ export default function PointsHistory() {
 
     return (
       <View style={styles.historyItem}>
-        <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
-          <Ionicons name={getSourceIcon(item.source)} size={24} color={color} />
+        <View style={[styles.iconContainer]}>
+           {/*<Image source={require('../../assets/images/lungs.png')} style={{width:25,height:25}} />*/}
+          <Ionicons name={getSourceIcon(item.source)} size={24} color={color} /> 
         </View>
         <View style={styles.textContainer}>
           <ThemedText style={styles.sourceText}>{getSourceText(item.source)}</ThemedText>

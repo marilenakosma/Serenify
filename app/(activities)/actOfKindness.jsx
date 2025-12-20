@@ -14,6 +14,8 @@ import LanguagePicker from '../../components/LanguagePicker';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { usePathname } from 'expo-router';
 import { useAuthStore } from '../../store/authStore';
+import { CustomAlert } from "../../components/CustomAlert";
+import { PointsToast } from "../../components/PointsToast";
 
 export default function ActOfKindness() {
    
@@ -29,6 +31,7 @@ export default function ActOfKindness() {
 
   const [completedActs,setCompletedActs] = useState([]);
   const [todayCount, setTodayCount] = useState(0);
+  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
 
   //console.log('Current pathname:', pathname);
   //console.log('Attempting to go back to: /(dashboard)/activities');
@@ -170,6 +173,13 @@ const completeAct = (actId) => {
 
   if (!wasCompleted) {
     addPoints(15, 'kindness-act');
+
+    setToastConfig({
+      visible: true,
+      points: 15,
+      message: t('kindness.completionMessage') || 'Great job giving back!'
+    });
+
   } else {
     addPoints(-15, 'kindness-act-undo');
   }
@@ -259,6 +269,17 @@ const renderActItem = (act) => {
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
         />
+
+        {toastConfig && (
+          <PointsToast
+          visible={toastConfig.visible}
+          points={toastConfig.points}
+          message={toastConfig.message}
+          onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
+          duration={3000}
+        />
+        )}
+
       </ThemedView>
     </SafeAreaView>
   );

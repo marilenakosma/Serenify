@@ -824,16 +824,18 @@ checkAuth: async () => {
     },
   
     getTodayKindnessCount: () => {
-    const today = new Date().toISOString().split('T')[0];
-    const currentState = get();
-    return currentState.kindnessCompletions[today]?.length || 0;
-  },
+     const today = new Date().toDateString(); // Changed from .toISOString().split('T')[0]
+     const currentState = get();
+     return currentState.kindnessCompletions[today]?.length || 0;
+    },
 
   getKindnessCompletions: (date = null) => {
-    const targetDate = date || new Date().toISOString().split('T')[0];
-    const currentState = get();
-    return currentState.kindnessCompletions[targetDate] || [];
-  },
+  const targetDate = date ? 
+    new Date(date).toDateString() :  // Match the format used in toggleKindnessAct
+    new Date().toDateString();
+  const currentState = get();
+  return currentState.kindnessCompletions[targetDate] || [];
+},
 
   getTotalKindnessActs: () => {
     const currentState = get();

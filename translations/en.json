@@ -501,7 +501,8 @@
     "buyMeal": "Buy a meal for someone in need",
     "positiveReview": "Write a positive review",
     "shareGood": "Share good news about someone",
-    "encourageOnline": "Encourage someone online"
+    "encourageOnline": "Encourage someone online",
+    "completionMessage": "Great job giving back to the community!"
   },
   "reflections": {
     "title": "Daily Reflections",

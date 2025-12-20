@@ -204,7 +204,7 @@ const Dashboard = () => {
               </ThemedView>
               <TouchableOpacity 
                 style={styles.pointsBadge}
-                onPress={() => router.push('/(modals)/points-history')} // Can link to a points detail page later
+                onPress={() => router.push('/(modals)/points-history')} 
                 activeOpacity={0.7}
               >
                 <Ionicons name="flash" size={20} color="#FFD700" />

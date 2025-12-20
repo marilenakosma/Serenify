@@ -12,6 +12,7 @@ import WaterIntakeInput from '../../components/WaterIntakeInput';
 import { useAuthStore } from '../../store/authStore';
 import { useTranslation } from '../../constants/translations';
 import { getFrequencyDisplay } from '../../constants/habitFrequency';
+import { CustomAlert } from "../../components/CustomAlert";
 
 const HabitStats = () => {
   const { 
@@ -35,12 +36,42 @@ const HabitStats = () => {
   const [editedName, setEditedName] = useState('');
   const [editedFrequency, setEditedFrequency] = useState('');
   const [editedDuration, setEditedDuration] = useState('');
+  const [alertConfig, setAlertConfig] = useState(null);
 
   // Find the specific habit
   const habit = useMemo(() => 
     userHabits.find(h => h.id === habitId), 
     [userHabits, habitId]
   );
+
+  const handleAlert = (title,message) => {
+        setAlertConfig({
+                type: 'error',
+                title: title,
+                message: message,
+                showCancel: true,
+            
+                onConfirm: async () => {
+                try {
+                    const result = await logout();
+                    if (!result.success) {
+                        setAlertConfig({
+                            type: 'error',
+                            title: t('common.error'),
+                            message: t('profile.logoutError'),
+                            onClose: () => setAlertConfig(null)
+                        });
+                    } else {
+                        setAlertConfig(null);
+                    }
+                } catch (error) {
+                    console.log('Logout error:', error);
+                    setAlertConfig(null);
+                }
+            }, 
+            onClose: () => setAlertConfig(null)
+        });
+    }
 
   const habitPointsEarned = useMemo(() => 
   pointsHistory
@@ -54,7 +85,7 @@ const HabitStats = () => {
 
   const openEditModal = () => {
     if (!habit) {
-    Alert.alert(t('common.error'), t('habitStats.habitDataNotAvailable')); 
+    handleAlert(t('common.error'), t('habitStats.habitDataNotAvailable')); 
     return;
   }
 
@@ -66,7 +97,7 @@ const HabitStats = () => {
 
   const handleSaveEdit = () => {
     if (!editedName.trim()) {
-    Alert.alert(t('common.error'), t('habitStats.habitNameRequired')); 
+    handleAlert(t('common.error'), t('habitStats.habitNameRequired')); 
     return;
   }
 
@@ -109,7 +140,7 @@ const HabitStats = () => {
     '45 min', //
     t('durations.1hour'),
     '1.5 hours', // 
-    '2 hours', // Add to translations if needed
+    '2 hours', // Add to translations!!
     t('durations.allDay')
   ];
 
@@ -286,11 +317,11 @@ const getToday = () => {
 
   const handleDelete = () => {
     if (!habit) {
-      Alert.alert(t('common.error'), t('habitStats.habitNotFound'));
+      handleAlert(t('common.error'), t('habitStats.habitNotFound'));
       return;
     }
 
-    Alert.alert(
+   { /* Alert.alert(
       t('habitStats.deleteHabit'),
       t('habitStats.deleteConfirmation', { habitName: habit?.text }),
       [
@@ -305,7 +336,12 @@ const getToday = () => {
         }
       ]
     );
-  };
+  }; */}
+
+  handleAlert('habitStats.deleteHabit'),t('habitStats.deleteConfirmation', { habitName: habit?.text});
+
+      };
+
 
   const handleToggleDay = (dateStr) => {
     toggleHabitCompletion(habitId, dateStr);
@@ -664,6 +700,18 @@ const getToday = () => {
             </View>
           </View>
         </Modal>
+
+        {alertConfig && (
+                           <CustomAlert
+                             type={alertConfig.type}
+                             title={alertConfig.title}
+                             message={alertConfig.message}
+                             showCancel={alertConfig.showCancel}
+                             onConfirm={alertConfig.onConfirm}
+                             onClose={alertConfig.onClose}
+                           />
+        )}
+
       </SafeAreaView>
     </ThemedView>
   );
