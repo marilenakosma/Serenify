@@ -26,7 +26,7 @@ export default function ThemedGoal({
 
       <View style={[
         styles.iconContainer,
-        color && { backgroundColor : `${color}15`}
+        //color && { backgroundColor : `${color}15`}
         ]}>
         <Ionicons name={iconName} size={24} color={accentColor} />
       </View>
@@ -38,13 +38,15 @@ export default function ThemedGoal({
         <View style={styles.metadata}>
           <ThemedText style={
             [styles.category,
-             color && { color: color}
+             color && { color: '#666'}
             ]}>
           {category || 'Wellness'}
           </ThemedText>
           {points && ( <>
             <Ionicons style={{marginLeft:5}} name="flash" size={14} color="#FFD700" />
-            <ThemedText style={styles.points}>+{points}</ThemedText>
+            <ThemedText style={[styles.points,
+            color && { color: '#666'}]
+            }>+{points}</ThemedText>
             </>
           )}
           <ThemedText style={styles.time}>{duration || '5 min'}</ThemedText>
@@ -55,14 +57,14 @@ export default function ThemedGoal({
       <View style={styles.circleContainer}>
         {isRecommendation ? (
           <View style={styles.addButton}>
-            <Ionicons name="add-circle-outline" size={24} color={accentColor ? accentColor :"#2196F3"} />
+            <Ionicons name="add-circle-outline" size={24} color={accentColor} />
           </View>
         ) : (
          <View style={[
             styles.circle, 
             completed && styles.completedCircle,
-            color && { borderColor: color },
-            color && completed && { backgroundColor: color }
+            color && { borderColor: `${color}80` },
+            color && completed && { backgroundColor: `${color}80` }
           ]}>
             {completed && (
               <Ionicons name="checkmark" size={16} color="white" />
@@ -137,8 +139,13 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   iconContainer: {
-    margin:15,
-  },
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 12,
+    },
   points: {
     fontSize: 12,
     //color: '#FF9800',

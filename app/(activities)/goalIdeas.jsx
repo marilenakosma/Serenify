@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/authStore';
 import { PointsToast } from "../../components/PointsToast";
 import { CustomAlert } from "../../components/CustomAlert";
 import { Colors } from '../../constants/Colors';
+import { getCategoryColor } from '../../constants/availableHabits';
 
   export const getExtraGoals = (t) => [
     // Tidying & Organization
@@ -266,7 +267,9 @@ export default function GoalIdeas() {
         activeOpacity={isAdded ? 1 : 0.7}
         disabled={isAdded}
       >
-        <View style={[styles.iconContainer, { backgroundColor: `${goal.color}15` }]}>
+        <View style={[styles.iconContainer
+          //,{ backgroundColor: `${goal.color}15` }
+          ]}>
           <Ionicons 
             name={goal.icon} 
             size={24} 
@@ -281,11 +284,15 @@ export default function GoalIdeas() {
           ]}>
             {goal.title}
           </ThemedText>
-          <ThemedText style={styles.goalDescription}>
+         {/*<ThemedText style={[styles.goalDescription
+         ]}>
             {goal.description}
-          </ThemedText>
+          </ThemedText> */}
           <View style={styles.goalMeta}>
-            <ThemedText style={styles.category}>{goal.category}</ThemedText>
+            <ThemedText style={[styles.category]}
+            >
+              {goal.category}
+              </ThemedText>
             <Ionicons name="flash" size={14} color="#FFD700" />
             <ThemedText style={styles.points}>+{goal.points}</ThemedText>
             <ThemedText style={styles.duration}>{goal.duration} </ThemedText>
@@ -295,7 +302,7 @@ export default function GoalIdeas() {
         <Ionicons 
           name={isAdded ? "checkmark-circle" : "add-circle"} 
           size={28} 
-          color={isAdded ? '#4CAF50' : goal.color} 
+          color={isAdded ? '#4CAF50' : `${goal.color}80`} 
         />
       </TouchableOpacity>
     );
@@ -303,7 +310,7 @@ export default function GoalIdeas() {
 
   const renderCategory = (categoryName, goals) => (
     <View key={categoryName} style={styles.categorySection}>
-      <ThemedText style={styles.categoryTitle}>
+      <ThemedText title={true} style={[styles.categoryTitle]}>
         {categoryName}
       </ThemedText>
       {goals.map(renderGoalItem)}
@@ -443,12 +450,13 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   goalTitle: {
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: 2,
   },
   category: {
       fontSize: 12,
-      //color: Colors.primary,
+      //color: getCategoryColor(goal.category, t),
+      color: '#666',
       marginRight: 12,
     },
   duration: {
@@ -459,9 +467,9 @@ const styles = StyleSheet.create({
     color: '#4CAF50',
   },
   goalDescription: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 2,
+    fontSize: 13,
+    //color: '#666',
+    marginBottom: 5,
   },
   goalMeta: {
     flexDirection:'row',
@@ -489,7 +497,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     //color: '#FF9800',
     //color:'#FFD700',
-    color: '#4CAF50',
+    //color: '#4CAF50',
+    color: '#666',
     marginRight: 10,
   },
 });
