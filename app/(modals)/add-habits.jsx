@@ -11,6 +11,7 @@ import Spacer from "../../components/Spacer";
 import { useAuthStore } from "../../store/authStore";
 import { availableHabits,getAvailableHabits } from "../../constants/availableHabits";
 import { useTranslation } from '../../constants/translations';
+import { getCategoryColor } from '../../constants/availableHabits';
 
 const AddHabits = () => {
   const { user, userHabits, addHabits } = useAuthStore();
@@ -78,57 +79,67 @@ const AddHabits = () => {
 
   // Render individual habit component
   const HabitItem = useCallback(({ habit, categoryIndex, habitIndex }) => {
-    const isSelected = selectedHabits.has(habit.id);
-    
-    
-    return (
-      <TouchableOpacity
-        style={[
-          styles.habitItem,
-          isSelected && styles.selectedHabitItem
-        ]}
-        onPress={() => toggleHabit(habit.id)}
-        activeOpacity={0.7}
-      >
-        <View style={styles.habitIcon}>
-          <Ionicons 
-            name={habit.icon || 'checkmark-outline'} 
-            size={24} 
-            color={isSelected ? '#fff' : '#4CAF50'} 
-          />
-        </View>
+  const isSelected = selectedHabits.has(habit.id);
+  const habitColor = getCategoryColor(habit.category, t);
+  
+  return (
+    <TouchableOpacity
+      style={[
+        styles.habitItem,
+        isSelected && styles.selectedHabitItem
+      ]}
+      onPress={() => toggleHabit(habit.id)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.habitIcon}>
+        <Ionicons 
+          name={habit.icon || 'checkmark-outline'} 
+          size={28} 
+          color={isSelected ? '#4CAF50' : habitColor} 
+        />
+      </View>
+      
+      <View style={styles.habitContent}>
+        <ThemedText style={[
+          styles.habitTitle,
+          isSelected && styles.selectedText
+        ]}>
+          {habit.title}
+        </ThemedText>
         
-        <View style={styles.habitContent}>
-          <ThemedText title style={[
-            styles.habitTitle,
+        <View style={styles.habitMeta}>
+          <ThemedText style={[
+            styles.habitMetaText,
             isSelected && styles.selectedText
           ]}>
-            {habit.title}
+            {habit.category}
+          </ThemedText>
+          <Ionicons name="flash" size={14} color={'#FFD700'} />
+          <ThemedText style={[
+            styles.habitPoints,
+            isSelected && styles.selectedText
+          ]}>
+            +{habit.points}
           </ThemedText>
           <ThemedText style={[
-            styles.habitDescription,
+            styles.habitMetaText,
             isSelected && styles.selectedText
           ]}>
-            {habit.description}
-          </ThemedText>
-          <ThemedText style={[
-            styles.habitMeta,
-            isSelected && styles.selectedText
-          ]}>
-            {habit.category} • {habit.duration} • {habit.difficulty}
+            {habit.duration}
           </ThemedText>
         </View>
+      </View>
 
-        <View style={styles.selectionIndicator}>
-          {isSelected ? (
-            <Ionicons name="checkmark-circle" size={28} color="#fff" />
-          ) : (
-            <View style={styles.emptyCircle} />
-          )}
-        </View>
-      </TouchableOpacity>
-    );
-  }, [selectedHabits, toggleHabit]);
+      <View style={styles.selectionIndicator}>
+        {isSelected ? (
+          <Ionicons name="checkmark-circle" size={28} color="#4CAF50" />
+        ) : (
+          <Ionicons name="add-circle" size={28} color={`${habitColor}80`} />
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+}, [selectedHabits, toggleHabit, t]);
 
   const handleSave = () => {
     if (selectedHabits.size === 0) return;
@@ -278,59 +289,76 @@ const styles = StyleSheet.create({
   },
   
   // Habit Items
-  habitItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  selectedHabitItem: {
-    backgroundColor: '#4CAF50',
-    borderColor: '#4CAF50',
-  },
-  habitIcon: {
-    marginRight: 16,
-  },
-  habitContent: {
-    flex: 1,
-  },
-  habitTitle: {
-    fontSize: 16,
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  habitDescription: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 18,
-    marginBottom: 4,
-  },
-  habitMeta: {
-    fontSize: 12,
-    color: '#999',
-  },
-  selectedText: {
-    color: '#fff',
-  },
-  selectionIndicator: {
-    marginLeft: 12,
-  },
-  emptyCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    borderWidth: 2,
-    borderColor: '#ddd',
-  },
+  // Habit Items
+habitItem: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: 'white',
+  padding: 16,
+  marginBottom: 8,
+  borderRadius: 12,
+  borderWidth: 1,
+  borderColor: 'transparent',
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 2,
+},
+selectedHabitItem: {
+  backgroundColor: '#F1F8F4',
+  borderColor: '#4CAF50',
+},
+habitIcon: {
+  width: 48,
+  height: 48,
+  borderRadius: 24,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 12,
+},
+habitContent: {
+  flex: 1,
+},
+habitTitle: {
+  fontSize: 15,
+  color: '#2c3e50',
+  marginBottom: 4,
+},
+habitDescription: {
+  fontSize: 13,
+  color: '#666',
+  lineHeight: 18,
+  marginBottom: 4,
+},
+habitMeta: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 5,
+},
+habitMetaText: {
+  fontSize: 12,
+  color: '#666',
+  marginRight: 5,
+},
+habitPoints: {
+  fontSize: 12,
+  color: '#666',
+  marginRight: 10,
+},
+selectedText: {
+  color: '#4CAF50',
+},
+selectionIndicator: {
+  marginLeft: 12,
+},
+emptyCircle: {
+  width: 28,
+  height: 28,
+  borderRadius: 14,
+  borderWidth: 2,
+  borderColor: '#ddd',
+},
   
   // Bottom Button
   bottomButtonContainer: {

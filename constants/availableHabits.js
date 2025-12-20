@@ -2,6 +2,7 @@ import { FREQUENCY_TYPES } from './habitFrequency';
 
 export const getCategoryColor = (category, t) => {
   const colorMap = {
+    [t('categories.foundation')]:'#F5C26B',
     [t('categories.health')]: '#9575CD',      
     [t('categories.fitness')]: '#66BB6A',    
     [t('categories.mindfulness')]: '#42A5F5', 

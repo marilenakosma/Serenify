@@ -16,6 +16,7 @@ import { usePathname } from 'expo-router';
 import { useAuthStore } from '../../store/authStore';
 import { CustomAlert } from "../../components/CustomAlert";
 import { PointsToast } from "../../components/PointsToast";
+import { Colors } from '../../constants/Colors';
 
 export default function ActOfKindness() {
    
@@ -202,8 +203,10 @@ const renderActItem = (act) => {
           <Ionicons 
             name={act.icon} 
             size={24} 
-            color={isCompleted ? '#4CAF50' : act.color} 
+            color={isCompleted ? Colors.primary : act.color} 
           />
+
+          
           <ThemedText style={[
             styles.actText,
             isCompleted && styles.completedText
@@ -211,20 +214,18 @@ const renderActItem = (act) => {
             {act.text}
           </ThemedText>
         </View>
+
         
         <ThemedButton
           onPress={() => completeAct(act.id)}
-          style={[
-            styles.checkButton,
-            { backgroundColor: isCompleted ? '#4CAF50' : '#E0E0E0' }
-          ]}
           //contentStyle={{ padding: 0 }}
+          style={[styles.checkButton,{backgroundColor:"transparent"}]}
         >
-          <Ionicons
-            name={isCompleted ? 'checkmark' : 'add'}
-            size={20}
-            color={isCompleted ? '#fff' : '#666'}
-          />
+          <Ionicons 
+                    name={isCompleted ? "checkmark-circle" : "add-circle"} 
+                    size={30} 
+                    color={isCompleted ? Colors.primary : `${act.color}80`} 
+                  />
         </ThemedButton>
       </View>
     );
@@ -358,8 +359,8 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   checkButton: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 20,
     padding: 0,
     alignItems: 'center',
