@@ -9,7 +9,6 @@ export function PointsToast({ visible, points, message, onDismiss, duration = 30
 
     useEffect(() => {
         if(visible) {
-
             Animated.spring(slideAnim, {
               toValue:0,
               useNativeDriver:true,

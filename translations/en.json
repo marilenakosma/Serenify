@@ -202,6 +202,7 @@
     "description":"No habits yet! Tap 'Add New' to get started",
     "addNewHabits": "Add New",
     "chooseHabits": "Choose habits for {{focusArea}}",
+    "completionMessage":"Good job completing a habit!",
     "foundation": {
      "dailyGoal":"Complete a daily goal",
      "writeReflection":"Write a reflection",

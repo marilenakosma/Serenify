@@ -19,6 +19,7 @@ import { getRecommendedHabits } from '../../constants/availableHabits';
 import { useRouter } from "expo-router";
 import { useTranslation } from '../../constants/translations';
 import { Ionicons } from '@expo/vector-icons';
+import { PointsToast } from "../../components/PointsToast";
 
 const Dashboard = () => {
   const {user,
@@ -26,6 +27,7 @@ const Dashboard = () => {
          userHabits,
          habitCompletions,
          toggleHabitCompletion,
+         getHabitCompletion,
          todayMood,
          setTodayMood,
          loadTodayMood,
@@ -38,6 +40,7 @@ const Dashboard = () => {
         } = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
   const [selectedMood,setSelectedMood] = useState(null);
+  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
   
   const router = useRouter();
   const { t } = useTranslation();
@@ -154,13 +157,32 @@ const Dashboard = () => {
   )
 
   const todayMoodLogged = todayMood !== null;
+  
+  const handleToggleHabitWithToast = async (habitId) => {
+  const habit = userHabits.find(h => h.id === habitId);
+  const today = new Date().toISOString().split('T')[0];
+  const isCurrentlyComplete = getHabitCompletion(habitId, today);
+  
+  // Toggle the habit
+  await toggleHabitCompletion(habitId);
+  
+  // Show toast only if completing (not uncompleting)
+  if (!isCurrentlyComplete && habit) {
+    const pointsEarned = habit.points || 10;
+    setToastConfig({
+      visible: true,
+      points: pointsEarned,
+      message: t('habits.completionMessage') || 'Great job!'
+    });
+  }
+};
 
   const renderHabitCard = ({item}) => (
     <DashboardHabitCard 
       habit={item}
       //completions={habitCompletions}
       onPress={() => handleHabitPress(item.id)}
-      onToggleCompletion={toggleHabitCompletion}
+      onToggleCompletion={handleToggleHabitWithToast}
     />
   );
 
@@ -273,6 +295,17 @@ const Dashboard = () => {
 
           
           </ScrollView>
+
+          {toastConfig && 
+          
+          <PointsToast
+          visible={toastConfig.visible}
+          points={toastConfig.points}
+          message={toastConfig.message}
+          onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
+          duration={3000}
+        />}
+
       </SafeAreaView>
     </ThemedView>
   )
