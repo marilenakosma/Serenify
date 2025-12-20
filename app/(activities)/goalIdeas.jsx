@@ -8,6 +8,8 @@ import BackButton from "../../components/BackButton";
 import { useTranslation } from '../../constants/translations';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from '../../store/authStore';
+import { PointsToast } from "../../components/PointsToast";
+import { CustomAlert } from "../../components/CustomAlert";
 
   export const getExtraGoals = (t) => [
     // Tidying & Organization
@@ -167,6 +169,8 @@ export default function GoalIdeas() {
   const { t } = useTranslation();
   const { userHabits, addHabits } = useAuthStore();
   const [addedGoals, setAddedGoals] = useState(new Set());
+  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
+  const [alertConfig, setAlertConfig] = useState(null);
 
   const extraGoals = getExtraGoals(t);
   
@@ -174,6 +178,35 @@ export default function GoalIdeas() {
   const availableGoals = extraGoals.filter(goal => 
     !existingHabitIds.includes(goal.id)
   );
+
+  const handleAlert = (title,message) => {
+        setAlertConfig({
+                type: 'error',
+                title: title,
+                message: message,
+                showCancel: true,
+            
+                onConfirm: async () => {
+                try {
+                    const result = await logout();
+                    if (!result.success) {
+                        setAlertConfig({
+                            type: 'error',
+                            title: t('common.error'),
+                            message: t('profile.logoutError'),
+                            onClose: () => setAlertConfig(null)
+                        });
+                    } else {
+                        setAlertConfig(null);
+                    }
+                } catch (error) {
+                    console.log('Logout error:', error);
+                    setAlertConfig(null);
+                }
+            }, 
+            onClose: () => setAlertConfig(null)
+        });
+    }
 
   const groupedGoals = availableGoals.reduce((groups, goal) => {
     const category = goal.category;
@@ -203,17 +236,18 @@ export default function GoalIdeas() {
 
       if (result.success) {
         setAddedGoals(prev => new Set([...prev, goal.id]));
-        Alert.alert(
-          t('goals.added'),
-          t('goals.addedMessage', { habit: goal.title })
-        );
+        setToastConfig({
+          visible: true,
+          points: goal.points,
+          message: t('goals.addedMessage', { habit: goal.title })
+        });
       } else {
         console.error('Failed to add goal:', result?.error);
-        Alert.alert(t('goals.error'), t('goals.errorMessage'));
+        handleAlert(t('goals.error'), t('goals.errorMessage'));
       }
     } catch (error) {
       console.error('Error adding goal:', error);
-      Alert.alert(t('goals.error'), t('goals.errorMessage'));
+      handleAlert(t('goals.error'), t('goals.errorMessage'));
     }
   };
 
@@ -310,6 +344,27 @@ export default function GoalIdeas() {
             </ThemedText>
           </View>
         )}
+
+        {alertConfig && (
+         <CustomAlert
+             type={alertConfig.type}
+             title={alertConfig.title}
+             message={alertConfig.message}
+             showCancel={alertConfig.showCancel}
+             onConfirm={alertConfig.onConfirm}
+             onClose={alertConfig.onClose}
+         />
+        )}
+        
+        {toastConfig &&   
+          <PointsToast
+          visible={toastConfig.visible}
+          points={toastConfig.points}
+          message={toastConfig.message}
+          onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
+          duration={3000}
+        />}
+
       </ThemedView>
     </SafeAreaView>
   );
