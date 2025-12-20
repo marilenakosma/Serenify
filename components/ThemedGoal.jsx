@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    fontSize: 14,
+    fontSize: 15,
     marginBottom: 4,
   },
   completedText: {
@@ -101,19 +101,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   category: {
-    fontSize: 11,
+    fontSize: 12,
     color: Colors.primary,
     marginRight: 12,
   },
   time: {
-    fontSize: 11,
+    fontSize: 12,
     color: '#666',
   },
   iconContainer: {
     margin:15,
   },
   points: {
-    fontSize: 11,
+    fontSize: 12,
     //color: '#FF9800',
     color:'#FFD700',
     marginRight: 12,

@@ -236,7 +236,7 @@ const Dashboard = () => {
 
           {/* Goals Section */}
           {recommendedHabits.length > 0 && (
-            <ThemedView style={styles.section}>
+            <ThemedView style={[styles.section, styles.other]}>
               <ThemedText title={true} style={styles.sectionTitle}>
                 {t('dashboard.recommendedForYou')}
               </ThemedText>

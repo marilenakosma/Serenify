@@ -7,10 +7,17 @@ import ThemedButton from './ThemedButton';
 import { useActivityTimer } from '../hooks/useActivityTimer';
 import { useTranslation } from '../constants/translations';
 import { Confetti, ConfettiMethods,ContinuousConfetti } from 'react-native-fast-confetti';
-import { LogBox } from 'react-native';
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
 
 const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
-LogBox.ignoreLogs(['[Reanimated] Reading from `value`']);
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false, // Reanimated runs in strict mode by default
+});
 
 const ActivitySession = ({ 
     animationSource,
@@ -151,7 +158,7 @@ const ActivitySession = ({
       {/* Use AnimatedLottieView with progress control */}
 
       {isCompleted && (
-          <ContinuousConfetti />
+        <ContinuousConfetti/>
       )}
 
       <AnimatedLottieView
