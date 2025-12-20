@@ -3,17 +3,32 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Colors';
 import ThemedText from './ThemedText';
 
-export default function ThemedGoal({ icon,name, text, points, 
-  completed = false, onToggle, category, duration, style,isRecommendation=false, ...props }) {
+export default function ThemedGoal({ 
+  icon,
+  name, 
+  text, 
+  points, 
+  completed = false, 
+  onToggle, 
+  category, 
+  duration, 
+  style,
+  isRecommendation=false, 
+  color,
+  ...props }) {
     
-    const iconName = icon || name || 'checkmark-outline';
-    
+  const iconName = icon || name || 'checkmark-outline';
+  const accentColor = color || Colors.primary; 
+
   return (
     <TouchableOpacity style={[styles.container, style]} 
     onPress={onToggle} {...props}>
 
-      <View style={styles.iconContainer}>
-        <Ionicons name={iconName} size={24} color={Colors.primary} />
+      <View style={[
+        styles.iconContainer,
+        color && { backgroundColor : `${color}15`}
+        ]}>
+        <Ionicons name={iconName} size={24} color={accentColor} />
       </View>
       
       <View style={styles.content}>
@@ -21,7 +36,12 @@ export default function ThemedGoal({ icon,name, text, points,
           {text}
         </ThemedText>
         <View style={styles.metadata}>
-          <ThemedText style={styles.category}>{category || 'Wellness'}</ThemedText>
+          <ThemedText style={
+            [styles.category,
+             color && { color: color}
+            ]}>
+          {category || 'Wellness'}
+          </ThemedText>
           {points && ( <>
             <Ionicons style={{marginLeft:5}} name="flash" size={14} color="#FFD700" />
             <ThemedText style={styles.points}>+{points}</ThemedText>
@@ -35,10 +55,15 @@ export default function ThemedGoal({ icon,name, text, points,
       <View style={styles.circleContainer}>
         {isRecommendation ? (
           <View style={styles.addButton}>
-            <Ionicons name="add-circle-outline" size={24} color="#2196F3" />
+            <Ionicons name="add-circle-outline" size={24} color={accentColor ? accentColor :"#2196F3"} />
           </View>
         ) : (
-          <View style={[styles.circle, completed && styles.completedCircle]}>
+         <View style={[
+            styles.circle, 
+            completed && styles.completedCircle,
+            color && { borderColor: color },
+            color && completed && { backgroundColor: color }
+          ]}>
             {completed && (
               <Ionicons name="checkmark" size={16} color="white" />
             )}

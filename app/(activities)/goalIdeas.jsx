@@ -10,6 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from '../../store/authStore';
 import { PointsToast } from "../../components/PointsToast";
 import { CustomAlert } from "../../components/CustomAlert";
+import { Colors } from '../../constants/Colors';
 
   export const getExtraGoals = (t) => [
     // Tidying & Organization
@@ -283,9 +284,12 @@ export default function GoalIdeas() {
           <ThemedText style={styles.goalDescription}>
             {goal.description}
           </ThemedText>
-          <ThemedText style={styles.goalMeta}>
-            {goal.duration} • {goal.difficulty}
-          </ThemedText>
+          <View style={styles.goalMeta}>
+            <ThemedText style={styles.category}>{goal.category}</ThemedText>
+            <Ionicons name="flash" size={14} color="#FFD700" />
+            <ThemedText style={styles.points}>+{goal.points}</ThemedText>
+            <ThemedText style={styles.duration}>{goal.duration} </ThemedText>
+          </View>
         </View>
         
         <Ionicons 
@@ -355,7 +359,7 @@ export default function GoalIdeas() {
              onClose={alertConfig.onClose}
          />
         )}
-        
+
         {toastConfig &&   
           <PointsToast
           visible={toastConfig.visible}
@@ -434,11 +438,23 @@ const styles = StyleSheet.create({
   goalTextContainer: {
     flex: 1,
   },
+  goalText: {
+    fontSize: 12,
+    color: '#999',
+  },
   goalTitle: {
     fontSize: 16,
-    fontWeight: '500',
     marginBottom: 2,
   },
+  category: {
+      fontSize: 12,
+      //color: Colors.primary,
+      marginRight: 12,
+    },
+  duration: {
+      fontSize: 12,
+      color: '#666',
+    },
   goalTitleAdded: {
     color: '#4CAF50',
   },
@@ -448,8 +464,9 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   goalMeta: {
-    fontSize: 12,
-    color: '#999',
+    flexDirection:'row',
+    gap:5,
+    alignItems:'center'
   },
   emptyState: {
     flex: 1,
@@ -467,5 +484,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
+  },
+  points: {
+    fontSize: 12,
+    //color: '#FF9800',
+    //color:'#FFD700',
+    color: '#4CAF50',
+    marginRight: 10,
   },
 });

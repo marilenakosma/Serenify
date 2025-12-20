@@ -18,6 +18,7 @@ import {
 import { useTranslation } from '../../constants/translations';
 import { getFoundationalHabits } from "../../constants/foundationalHabits"
 import { PointsToast } from "../../components/PointsToast";
+import { getCategoryColor } from '../../constants/availableHabits';
 
 const habits = () => {
   const { 
@@ -297,6 +298,7 @@ const getHabitStatus = (habit) => {
                         completed={isCompleted}
                         onToggle={() => handleToggleQuest(goal.id)}
                         isRecommendation={isFoundationalGoal}
+                        color={getCategoryColor(goal.category, t)} 
                       />
                       {index < categoryGoals.length - 1 && <Spacer height={12} />}
                     </View>

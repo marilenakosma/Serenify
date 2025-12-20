@@ -1,4 +1,23 @@
 import { FREQUENCY_TYPES } from './habitFrequency';
+
+export const getCategoryColor = (category, t) => {
+  const colorMap = {
+    [t('categories.health')]: '#9575CD',      
+    [t('categories.fitness')]: '#66BB6A',    
+    [t('categories.mindfulness')]: '#42A5F5', 
+    [t('categories.learning')]: '#FFA726',    
+    [t('categories.reflection')]: '#EC407A',  
+    [t('categories.productivity')]: '#26A69A',
+    [t('categories.meditation')]: '#7E57C2',  
+    [t('categories.lifestyle')]: '#8D6E63',   
+    [t('categories.social')]: '#FF7043',      
+    [t('categories.home')]: '#FFA726',        
+    [t('categories.selfcare')]: '#FF6B9D',    
+  };
+  
+  return colorMap[category] || '#4CAF50'; // fallback
+};
+
 export const getAvailableHabits = (t) => ({
   common: [
     {
