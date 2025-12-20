@@ -17,6 +17,8 @@ import {
 } from "../../constants/habitFrequency.js";
 import { useTranslation } from '../../constants/translations';
 import { getFoundationalHabits } from "../../constants/foundationalHabits"
+import { PointsToast } from "../../components/PointsToast";
+
 const habits = () => {
   const { 
     user,
@@ -28,6 +30,7 @@ const habits = () => {
   } = useAuthStore();
 
   const [completedQuests, setCompletedQuests] = useState(new Set());
+  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -73,12 +76,24 @@ const habits = () => {
 
   const handleToggleQuest = (questId) => {
     // Check if it's a user habit or foundational goal
-    const isUserHabit = userHabits.some(habit => habit.id === questId);
+    const habit = userHabits.find(habit => habit.id === questId);
     const foundationalGoal = availableFoundationalGoals.find(goal => goal.id === questId);
-    
-    if (isUserHabit) {
+    const today = new Date().toISOString().split('T')[0];
+    const isCurrentlyComplete = getHabitCompletion(questId, today);
+
+    if (habit) {
       // Use store method for habits
       toggleHabitCompletion(questId);
+     
+      if (!isCurrentlyComplete) {
+       const pointsEarned = habit.points || 10; 
+       setToastConfig({
+        visible: true,
+        points: pointsEarned,
+        message: t('habits.completionMessage') || 'Great job!' 
+      });
+    }
+
     } else if (foundationalGoal) {
       // For foundational goals, offer to add as trackable habit
       handleAddFoundationalGoal(foundationalGoal);
@@ -295,6 +310,16 @@ const getHabitStatus = (habit) => {
 
           <Spacer height={30} />
         </ScrollView>
+
+        {toastConfig &&   
+          <PointsToast
+          visible={toastConfig.visible}
+          points={toastConfig.points}
+          message={toastConfig.message}
+          onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
+          duration={3000}
+        />}
+
       </SafeAreaView>
     </ThemedView>
   );
