@@ -278,18 +278,20 @@ export default function GoalIdeas() {
         </View>
         
         <View style={styles.goalTextContainer}>
-          <ThemedText style={[
+          <ThemedText title style={[
             styles.goalTitle,
             isAdded && styles.goalTitleAdded
           ]}>
             {goal.title}
           </ThemedText>
-         {/*<ThemedText style={[styles.goalDescription
+         <ThemedText style={[styles.goalDescription
          ]}>
             {goal.description}
-          </ThemedText> */}
+          </ThemedText> 
           <View style={styles.goalMeta}>
-            <ThemedText style={[styles.category]}
+            <ThemedText style={[styles.category,
+               {color:getCategoryColor(goal.category, t)}
+            ]}
             >
               {goal.category}
               </ThemedText>
@@ -441,9 +443,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
+    flexShrink:0,
   },
   goalTextContainer: {
     flex: 1,
+    marginRight:8,
+    minWidth:0,
   },
   goalText: {
     fontSize: 12,
@@ -468,13 +473,14 @@ const styles = StyleSheet.create({
   },
   goalDescription: {
     fontSize: 13,
-    //color: '#666',
-    marginBottom: 5,
+    color: '#666',
+    marginBottom: 3,
   },
   goalMeta: {
     flexDirection:'row',
-    gap:5,
-    alignItems:'center'
+    //gap:5,
+    alignItems:'center',
+    //flexWrap:'wrap'
   },
   emptyState: {
     flex: 1,

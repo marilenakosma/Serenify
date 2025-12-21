@@ -100,16 +100,21 @@ const AddHabits = () => {
       </View>
       
       <View style={styles.habitContent}>
-        <ThemedText style={[
+        <ThemedText title style={[
           styles.habitTitle,
           isSelected && styles.selectedText
         ]}>
           {habit.title}
         </ThemedText>
-        
+
+        <ThemedText style={[styles.habitDescription]}>
+          {habit.description}
+        </ThemedText> 
+
         <View style={styles.habitMeta}>
           <ThemedText style={[
             styles.habitMetaText,
+            {color:getCategoryColor(habit.category, t)},
             isSelected && styles.selectedText
           ]}>
             {habit.category}

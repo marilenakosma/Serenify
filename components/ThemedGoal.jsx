@@ -32,7 +32,10 @@ export default function ThemedGoal({
       </View>
       
       <View style={styles.content}>
-        <ThemedText style={[styles.text, completed && styles.completedText]}>
+        <ThemedText style={[styles.text, completed && styles.completedText]}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          >
           {text}
         </ThemedText>
         <View style={styles.metadata}>
@@ -99,6 +102,10 @@ const styles = StyleSheet.create({
   },
   circleContainer: {
     marginRight: 1,
+    flexShrink:0,
+    width:24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   circle: {
     width: 20,
@@ -116,10 +123,14 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    marginRight:8,
+    minWidth:0,
+
   },
   text: {
     fontSize: 15,
     marginBottom: 4,
+    flexShrink:1,
   },
   completedText: {
     textDecorationLine: 'line-through',
@@ -128,6 +139,7 @@ const styles = StyleSheet.create({
   metadata: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap:'wrap'
   },
   category: {
     fontSize: 12,
@@ -137,6 +149,7 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 12,
     color: '#666',
+    flexShrink:1
   },
   iconContainer: {
       width: 48,
@@ -145,6 +158,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 12,
+      flexShrink:0,
     },
   points: {
     fontSize: 12,

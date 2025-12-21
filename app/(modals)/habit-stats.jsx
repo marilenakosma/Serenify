@@ -418,10 +418,19 @@ const getToday = () => {
               />
             </View>
             <View style={styles.habitInfo}>
-              <ThemedText title style={styles.habitTitle}>
+              <ThemedText 
+                title 
+                style={styles.habitTitle}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+                >
                 {getHabitText()}
               </ThemedText>
-              <ThemedText style={styles.habitMeta}>
+              <ThemedText 
+                 style={styles.habitMeta}
+                 numberOfLines={2}
+                 ellipsizeMode="tail"
+                 >
                 {habit.category} • {getFrequencyDisplay(habit.frequency, t)} • {habit.duration}
               </ThemedText>
               <View style={styles.habitPointsSection}>
@@ -751,6 +760,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     color: '#2c3e50',
+    flex:1,
+    textAlign:'center',
+    marginHorizontal:8,
+    flexShrink:8,
   },
   scrollContainer: {
     flex: 1,
@@ -778,19 +791,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
+    flexShrink:0,
   },
   habitInfo: {
     flex: 1,
+    minWidth:0,
   },
   habitTitle: {
     fontSize: 16,
     color: '#2c3e50',
     marginBottom: 6,
+    flexShrink:0,
+    flexShrink:1,
   },
   habitMeta: {
     fontSize: 13,
     color: '#666',
     marginBottom: 6,
+    flexShrink:1,
   },
   habitPoints: {
     fontSize: 13,
@@ -904,7 +922,7 @@ calendar: {
   
   // Text Styles
   dayText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#2c3e50',
     textAlign:'center'
   },
@@ -1116,7 +1134,8 @@ calendar: {
      habitPointsSection: {
        flexDirection: 'row',
        justifyContent: 'space-between',
-       alignItems: 'center',
+       //alignItems: 'center',
+       //flexWrap:'wrap'
      },
      habitPointsLabel: {
        fontSize: 12,
@@ -1124,7 +1143,8 @@ calendar: {
      habitPointsValue: {
        flexDirection: 'row',
        //alignItems: 'center',
-       paddingHorizontal: 25,
+       paddingHorizontal: 5,
+       flexShrink:0,
        //paddingVertical: 3,
        //borderRadius: 15,
      },
