@@ -52,21 +52,27 @@ const kindnessActs = [
       category: 'Personal',
       text: t('kindness.callFriend'),
       icon: 'call-outline',
-      color: '#FF6B9D'
+      color: '#FF6B9D',
+      duration: t('durations.10min'),
+      points: 15
     },
     {
       id: 2, 
       category: 'Personal',
       text: t('kindness.sendThankYou'),
       icon: 'heart-outline',
-      color: '#FF6B9D'
+      color: '#FF6B9D',
+      duration: t('durations.5min'),
+      points: 15
     },
     {
       id: 3,
       category: 'Personal',
       text: t('kindness.compliment'),
       icon: 'chatbubble-outline',
-      color: '#FF6B9D'
+      color: '#FF6B9D',
+      duration: t('durations.1min'),
+      points: 15
     },
     
     // Community help
@@ -75,21 +81,27 @@ const kindnessActs = [
       category: 'Community',
       text: t('kindness.helpNeighbor'),
       icon: 'home-outline',
-      color: '#4ECDC4'
+      color: '#4ECDC4',
+      duration: t('durations.30min'),
+      points: 15
     },
     {
       id: 5,
       category: 'Community',
       text: t('kindness.volunteer'),
       icon: 'people-outline',
-      color: '#4ECDC4'
+      color: '#4ECDC4',
+      duration: t('durations.1hour'),
+      points: 15
     },
     {
       id: 6,
       category: 'Community',
       text: t('kindness.pickupLitter'),
       icon: 'trash-outline',
-      color: '#4ECDC4'
+      color: '#4ECDC4',
+      duration: t('durations.20min'),
+      points: 15
     },
     
     // Small gestures
@@ -98,21 +110,27 @@ const kindnessActs = [
       category: 'Gestures',
       text: t('kindness.holdDoor'),
       icon: 'exit-outline',
-      color: '#45B7D1'
+      color: '#45B7D1',
+      duration: t('durations.1min'),
+      points: 15
     },
     {
       id: 8,
       category: 'Gestures',
       text: t('kindness.smile'),
       icon: 'happy-outline',
-      color: '#45B7D1'
+      color: '#45B7D1',
+      duration: t('durations.varies'),
+      points: 15
     },
     {
       id: 9,
       category: 'Gestures',
       text: t('kindness.letMerge'),
       icon: 'car-outline',
-      color: '#45B7D1'
+      color: '#45B7D1',
+      duration: t('durations.1min'),
+      points: 15
     },
     
     // Financial support
@@ -121,21 +139,27 @@ const kindnessActs = [
       category: 'Support',
       text: t('kindness.donate'),
       icon: 'card-outline',
-      color: '#96CEB4'
+      color: '#96CEB4',
+      duration: t('durations.5min'),
+      points: 15
     },
     {
       id: 11,
       category: 'Support',
       text: t('kindness.tipExtra'),
       icon: 'restaurant-outline',
-      color: '#96CEB4'
+      color: '#96CEB4',
+      duration: t('durations.1min'),
+      points: 15
     },
     {
       id: 12,
       category: 'Support',
       text: t('kindness.buyMeal'),
       icon: 'fast-food-outline',
-      color: '#96CEB4'
+      color: '#96CEB4',
+      duration: t('durations.10min'),
+      points: 15
     },
     
     // Online kindness
@@ -144,21 +168,27 @@ const kindnessActs = [
       category: 'Online',
       text: t('kindness.positiveReview'),
       icon: 'star-outline',
-      color: '#FECA57'
+      color: '#FECA57',
+      duration: t('durations.5min'),
+      points: 15
     },
     {
       id: 14,
       category: 'Online',
       text: t('kindness.shareGood'),
       icon: 'share-outline',
-      color: '#FECA57'
+      color: '#FECA57',
+      duration: t('durations.3min'),
+      points: 15
     },
     {
       id: 15,
       category: 'Online',
       text: t('kindness.encourageOnline'),
       icon: 'thumbs-up-outline',
-      color: '#FECA57'
+      color: '#FECA57',
+      duration: t('durations.3min'),
+      points: 15
     }
   ];
 
@@ -198,35 +228,42 @@ const renderActItem = (act) => {
     const isCompleted = completedActs.includes(act.id);
     
     return (
-      <View key={act.id} style={[styles.actCard, { borderLeftColor: act.color }]}>
-        <View style={styles.actInfo}>
+      <View key={act.id} style={styles.actCard}>
+        <View style={styles.iconContainer}>
           <Ionicons 
             name={act.icon} 
             size={24} 
             color={isCompleted ? Colors.primary : act.color} 
           />
+        </View>
 
-          
+        <View style={styles.actTextContainer}>
           <ThemedText style={[
             styles.actText,
             isCompleted && styles.completedText
-          ]}>
+          ]}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          >
             {act.text}
           </ThemedText>
+          
+          <View style={styles.actMeta}>
+            <Ionicons name="flash" size={14} color="#FFD700" />
+            <ThemedText style={styles.metaPoints}>+{act.points}</ThemedText>
+            <ThemedText style={styles.metaText} numberOfLines={1}>
+              {act.duration}
+            </ThemedText>
+          </View>
         </View>
-
         
-        <ThemedButton
-          onPress={() => completeAct(act.id)}
-          //contentStyle={{ padding: 0 }}
-          style={[styles.checkButton,{backgroundColor:"transparent"}]}
-        >
+        <View style={styles.checkmarkContainer}>
           <Ionicons 
-                    name={isCompleted ? "checkmark-circle" : "add-circle"} 
-                    size={30} 
-                    color={isCompleted ? Colors.primary : `${act.color}80`} 
-                  />
-        </ThemedButton>
+            name={isCompleted ? "checkmark-circle" : "add-circle"} 
+            size={28} 
+            color={isCompleted ? Colors.primary : `${act.color}80`} 
+          />
+        </View>
       </View>
     );
   };
@@ -331,29 +368,61 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   actCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    //justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    padding: 8,
-    marginBottom: 10,
-    borderRadius: 12,
-    shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-  },
-  actInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  actText: {
-    marginLeft: 12,
-    fontSize: 15,
-    flex: 1,
-  },
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#fff',
+  padding: 16,
+  marginBottom: 8,
+  borderRadius: 12,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 2,
+},
+iconContainer: {
+  width: 48,
+  height: 48,
+  borderRadius: 24,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 12,
+  flexShrink:0, // Prevent icon from shrinking
+},
+actTextContainer: {
+  flex: 1,
+  marginRight: 8, // Add spacing before checkmark
+  minWidth:0, // Allow text to shrink properly
+},
+actText: {
+  fontSize: 15,
+  marginBottom: 4,
+  flexShrink: 1, // Allow text to shrink if needed
+},
+actMeta: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 5,
+  flexWrap: 'wrap', // Allow wrapping if needed
+},
+metaText: {
+  fontSize: 12,
+  color: '#666',
+  marginRight: 5,
+  flexShrink: 1, // Allow duration to shrink if needed
+},
+metaPoints: {
+  fontSize: 12,
+  color: '#666',
+  marginRight: 10,
+},
+checkmarkContainer: {
+  marginLeft: 8,
+  flexShrink: 0, // Prevent checkmark from shrinking
+  width: 28,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
   completedText: {
     textDecorationLine: 'line-through',
     color: '#666',

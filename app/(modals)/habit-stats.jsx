@@ -339,7 +339,7 @@ const getToday = () => {
     );
   }; */}
 
-  handleAlert('habitStats.deleteHabit'),t('habitStats.deleteConfirmation', { habitName: habit?.text});
+  handleAlert(t('habitStats.deleteHabit'),t('habitStats.deleteConfirmation', { habitName: habit?.text}));
 
       };
 
