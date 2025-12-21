@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
   },
   selectedFrequency: {
     backgroundColor: '#4CAF50',
-    borderColor: '#4CAF50',
+    //borderColor: '#4CAF50',
   },
   frequencyLabel: {
     marginLeft: 8,

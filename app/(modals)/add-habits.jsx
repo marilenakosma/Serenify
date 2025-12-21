@@ -134,7 +134,7 @@ const AddHabits = () => {
         {isSelected ? (
           <Ionicons name="checkmark-circle" size={28} color="#4CAF50" />
         ) : (
-          <Ionicons name="add-circle" size={28} color={`${habitColor}80`} />
+          <Ionicons name="add-circle" size={28} color={habitColor} />
         )}
       </View>
     </TouchableOpacity>

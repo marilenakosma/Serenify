@@ -302,7 +302,7 @@ export default function GoalIdeas() {
         <Ionicons 
           name={isAdded ? "checkmark-circle" : "add-circle"} 
           size={28} 
-          color={isAdded ? '#4CAF50' : `${goal.color}80`} 
+          color={isAdded ? '#4CAF50' : goal.color} 
         />
       </TouchableOpacity>
     );

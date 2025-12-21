@@ -63,8 +63,8 @@ export default function ThemedGoal({
          <View style={[
             styles.circle, 
             completed && styles.completedCircle,
-            color && { borderColor: `${color}80` },
-            color && completed && { backgroundColor: `${color}` }
+            color && { borderColor: color },
+            color && completed && { backgroundColor: color }
           ]}>
             {completed && (
               <Ionicons name="checkmark" size={16} color="white" />
