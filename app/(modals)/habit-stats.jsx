@@ -13,6 +13,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useTranslation } from '../../constants/translations';
 import { getFrequencyDisplay } from '../../constants/habitFrequency';
 import { CustomAlert } from "../../components/CustomAlert";
+import { getCategoryColor } from '../../constants/availableHabits';
 
 const HabitStats = () => {
   const { 
@@ -406,8 +407,15 @@ const getToday = () => {
           {/* Habit Info Card */}
 
           <View style={styles.habitCard}>
-            <View style={styles.habitIconContainer}>
-              <Ionicons name={getHabitIcon()} size={40} color="#4CAF50" />
+            <View style={[
+               styles.habitIconContainer,
+               { backgroundColor: `${getCategoryColor(habit.category, t)}15` }
+            ]}>
+              <Ionicons 
+                name={getHabitIcon()} 
+                size={40} 
+                color={getCategoryColor(habit.category, t)}
+              />
             </View>
             <View style={styles.habitInfo}>
               <ThemedText title style={styles.habitTitle}>
@@ -421,7 +429,7 @@ const getToday = () => {
                  {t('points.earnedFromHabit')}
                  </ThemedText>
                <View style={styles.habitPointsValue}>
-                 <Ionicons name="flash" size={18} color="#FFD700" />
+                 <Ionicons name="flash" size={16} color="#FFD700" />
                  <ThemedText style={styles.habitPointsText}>
                    {habitPointsEarned}
                  </ThemedText>
@@ -766,7 +774,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    //backgroundColor: 'rgba(76, 175, 80, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -1111,16 +1119,16 @@ calendar: {
        alignItems: 'center',
      },
      habitPointsLabel: {
-       fontSize: 13,
+       fontSize: 12,
      },
      habitPointsValue: {
        flexDirection: 'row',
-       alignItems: 'center',
-       paddingHorizontal: 12,
+       //alignItems: 'center',
+       paddingHorizontal: 25,
        //paddingVertical: 3,
-       borderRadius: 15,
+       //borderRadius: 15,
      },
      habitPointsText: {
-       fontSize: 16,
+       fontSize: 12
      },
 });

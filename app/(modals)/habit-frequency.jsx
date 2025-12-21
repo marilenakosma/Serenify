@@ -13,6 +13,7 @@ import { getAvailableHabits } from "../../constants/availableHabits";
 import { FREQUENCY_TYPES } from '../../constants/habitFrequency';
 import BackButton from "../../components/BackButton";
 import { useTranslation } from '../../constants/translations';
+import { getCategoryColor } from '../../constants/availableHabits';
 
 const HabitFrequency = () => {
   const { addHabits } = useAuthStore();
@@ -60,7 +61,7 @@ const HabitFrequency = () => {
     { value: FREQUENCY_TYPES.WEEKENDS, label: t('frequency.weekends'), icon: 'home-outline' },
     { value: FREQUENCY_TYPES.THREE_WEEKLY, label: t('frequency.threeWeekly'), icon: 'fitness-outline' },
     { value: FREQUENCY_TYPES.WEEKLY, label: t('frequency.weekly'), icon: 'calendar-outline' },
-    { value: 'Custom', label: t('frequency.custom'), icon: 'settings-outline' }
+    { value: 'Custom', label: t('frequency.customSchedule'), icon: 'settings-outline' }
   ];
 
   const customOptions = [
@@ -151,16 +152,28 @@ const HabitFrequency = () => {
                 {/*  Habit Header */}
                 <View style={styles.habitHeader}>
                   <View style={styles.habitInfo}>
-                    <View style={styles.habitIconContainer}>
-                      <Ionicons name={habit.icon} size={28} color="#4CAF50" />
+                    <View style={[
+                      styles.habitIconContainer,
+                      { backgroundColor: `${getCategoryColor(habit.category, t)}15` }
+                      ]}>
+                      <Ionicons 
+                         name={habit.icon} 
+                         size={28} 
+                         color={getCategoryColor(habit.category, t)} 
+                      />
                     </View>
                     <View style={styles.habitText}>
-                      <ThemedText title style={styles.habitTitle}>
+                      <ThemedText style={styles.habitTitle}>
                         {habit.title}
                       </ThemedText>
-                      <ThemedText style={styles.habitMeta}>
-                        {habit.category} • {habit.duration}
-                      </ThemedText>
+                      <View style={styles.habitMeta}>
+                      <ThemedText style={[styles.category]}>
+                          {habit.category}
+                       </ThemedText>
+                       <Ionicons name="flash" size={14} color="#FFD700" />
+                       <ThemedText style={styles.points}>+{habit.points}</ThemedText>
+                       <ThemedText style={styles.duration}>{habit.duration} </ThemedText>
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -270,6 +283,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f1f5eeff',
+    alignItems:'center',
     paddingTop: 20,
   },
   safeArea: {
@@ -278,13 +292,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     paddingHorizontal: 20,
-    paddingVertical:15,
+    paddingTop:15,
     paddingBottom: 10,
   },
   backButton: {
-    backgroundColor: '#f1f5eeff'
+    backgroundColor: '#f1f5eeff',
   },
   placeholder: {
     width: 40,
@@ -344,25 +358,25 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   habitIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  width: 50,
+  height: 50,
+  borderRadius: 25,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
   habitText: {
     marginLeft: 15,
     flex: 1,
   },
   habitTitle: {
-    fontSize: 18,
+    fontSize: 15,
     color: '#2c3e50',
     marginBottom: 4,
   },
   habitMeta: {
-    fontSize: 14,
-    color: '#666',
+    flexDirection:'row',
+    gap:5,
+    alignItems:'center'
   },
   
   // Frequency Grid
@@ -485,4 +499,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#2c3e50',
   },
+  category: {
+        fontSize: 12,
+        //color: getCategoryColor(goal.category, t),
+        color: '#666',
+        marginRight: 12,
+      },
+  points: {
+      fontSize: 12,
+      //color: '#FF9800',
+      //color:'#FFD700',
+      //color: '#4CAF50',
+      color: '#666',
+      marginRight: 10,
+    },
+  duration: {
+        fontSize: 12,
+        color: '#666',
+      },
 });
