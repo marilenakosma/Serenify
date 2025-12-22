@@ -505,7 +505,8 @@ const styles = StyleSheet.create({
   // Completion states
   completedHabitCard: {
     borderColor: '#4CAF50',
-    borderWidth: 1,
+    backgroundColor:'#E8F5E8',
+    borderWidth: 2,
   },
   
   //  Status indicator 

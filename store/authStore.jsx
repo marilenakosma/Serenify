@@ -692,10 +692,21 @@ checkAuth: async () => {
     const authData = getItem("authData");
     if (authData?.isAuthenticated && authData.userId) {
       set(authData);
+
+      const { ensureAuth } = require('../app/services/firebaseService');
       
-      // Sync from Firebase in background
-      const { syncFromFirebase } = get();
-      syncFromFirebase();
+      const isFirebaseAuthed = await ensureAuth();
+
+      if (isFirebaseAuthed) {
+        // Sync from Firebase in background
+        const { syncFromFirebase } = get();
+        syncFromFirebase();
+    } else {
+      // Firebase auth failed - clear MMKV and logout
+        console.log('Firebase auth expired - logging out');
+        get().logout();
+        return false;
+    }
       
       return true;
     }

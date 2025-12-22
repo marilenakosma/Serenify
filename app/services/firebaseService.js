@@ -313,7 +313,7 @@ export const updatePoints = async (userId, points, level, pointsHistory) => {
   }
 };
 
-const ensureAuth = async () => {
+export const ensureAuth = async () => {
   if (auth.currentUser) return true;
   
   // Wait up to 2 seconds for auth to initialize

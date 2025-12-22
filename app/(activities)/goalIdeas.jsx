@@ -140,7 +140,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.medium'),
       duration: t('durations.allNight'),
       points: 25,
-      color: '#9575CD'
+      color: '#a389cfff'
     },
     {
       id: 'power-nap',
@@ -151,7 +151,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.20min'),
       points: 10,
-      color: '#9575CD'
+      color: '#a389cfff'
     },
     {
       id: 'sleep-before-11',
@@ -162,7 +162,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.medium'),
       duration: t('durations.evening'),
       points: 20,
-      color: '#9575CD'
+      color: '#a389cfff'
     }
   ];
 
@@ -460,7 +460,6 @@ const styles = StyleSheet.create({
   },
   category: {
       fontSize: 12,
-      //color: getCategoryColor(goal.category, t),
       color: '#666',
       marginRight: 12,
     },

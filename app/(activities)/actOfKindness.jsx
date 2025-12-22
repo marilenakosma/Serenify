@@ -17,6 +17,7 @@ import { useAuthStore } from '../../store/authStore';
 import { CustomAlert } from "../../components/CustomAlert";
 import { PointsToast } from "../../components/PointsToast";
 import { Colors } from '../../constants/Colors';
+import { getCategoryColor } from '../../constants/availableHabits';
 
 export default function ActOfKindness() {
    
@@ -52,7 +53,7 @@ const kindnessActs = [
       category: 'Personal',
       text: t('kindness.callFriend'),
       icon: 'call-outline',
-      color: '#FF6B9D',
+      color: '#fc89afff',
       duration: t('durations.10min'),
       points: 15
     },
@@ -61,7 +62,7 @@ const kindnessActs = [
       category: 'Personal',
       text: t('kindness.sendThankYou'),
       icon: 'heart-outline',
-      color: '#FF6B9D',
+      color: '#fc89afff',
       duration: t('durations.5min'),
       points: 15
     },
@@ -70,7 +71,7 @@ const kindnessActs = [
       category: 'Personal',
       text: t('kindness.compliment'),
       icon: 'chatbubble-outline',
-      color: '#FF6B9D',
+      color: '#fc89afff',
       duration: t('durations.1min'),
       points: 15
     },
@@ -253,6 +254,11 @@ const renderActItem = (act) => {
           </ThemedText>
           
           <View style={styles.actMeta}>
+            <ThemedText style={[styles.category,
+            {color:act.color}]}
+          >
+            {t(`kindness.categories.${act.category.toLowerCase()}`)}
+          </ThemedText>
             <Ionicons name="flash" size={14} color="#FFD700" />
             <ThemedText style={styles.metaPoints}>+{act.points}</ThemedText>
             <ThemedText style={styles.metaText} numberOfLines={1}>
@@ -265,7 +271,7 @@ const renderActItem = (act) => {
           <Ionicons 
             name={isCompleted ? "checkmark-circle" : "add-circle"} 
             size={28} 
-            color={isCompleted ? Colors.primary : `${act.color}80`} 
+            color={isCompleted ? Colors.primary : act.color} 
           />
         </View>
       </Pressable>
@@ -363,6 +369,11 @@ const styles = StyleSheet.create({
   list: {
     paddingBottom: 20,
   },
+  category: {
+     fontSize: 12,
+     color: '#666',
+     marginRight: 12,
+  },
   categorySection: {
     marginBottom: 24,
   },
@@ -406,7 +417,7 @@ actText: {
 actMeta: {
   flexDirection: 'row',
   alignItems: 'center',
-  gap: 5,
+  //gap: 3,
   flexWrap: 'wrap', // Allow wrapping if needed
 },
 metaText: {

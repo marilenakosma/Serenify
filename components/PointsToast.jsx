@@ -3,7 +3,8 @@ import { Animated, StyleSheet, View,Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import { Confetti } from 'react-native-fast-confetti';
-import image from "../assets/images/rain.png";
+import streakImage from "../assets/images/rain.png";
+import pointImage from "../assets/images/sun.png";
 import { useTranslation } from '../constants/translations';
 
 export function PointsToast({ visible, points=false,title=false, message, onDismiss, duration = 3000,isWarning=false }) {
@@ -59,12 +60,15 @@ export function PointsToast({ visible, points=false,title=false, message, onDism
         <View style={styles.content}>
           <View style={styles.iconCircle}>
             {isWarning ? 
-               <Image source={image} 
+               <Image source={streakImage} 
                       style={styles.image}
-                      //onLoad={() => setImageLoaded(true)}
                       resizeMode="contain" 
                />  :
-               <Ionicons name="trophy" size={28} color="#FFD700" />}
+               <Image source={pointImage} 
+                      style={styles.image}
+                      resizeMode="contain" 
+               /> }
+               
           </View>
           
           <View style={styles.textContainer}>

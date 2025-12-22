@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View,ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/BackButton";
 import Spacer from "../../components/Spacer";
@@ -117,7 +117,11 @@ const profile = () => {
                     </View>
                 </ThemedView>*/}
 
-                
+                 <ImageBackground 
+                            source={require('../../assets/images/canola.jpg')}
+                            style={styles.backgroundImage}
+                            resizeMode="cover"
+                          >
                 <View style={styles.pointsCard}>
                   <View style={styles.pointsHeader}>
                     <View style={styles.titleRow}>
@@ -133,6 +137,7 @@ const profile = () => {
                      </View>
                    </View>
                </View>
+               
     
                 <View style={styles.progressBar}>
                    <View 
@@ -156,6 +161,7 @@ const profile = () => {
                  </View>
                </View>
               </View>
+              </ImageBackground>
 
 
                 {/* Settings List */}

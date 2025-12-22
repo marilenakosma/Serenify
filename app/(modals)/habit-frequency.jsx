@@ -446,6 +446,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     width: '100%',
+    backgroundColor:'#4CAF50'
   },
   saveButtonText: {
     color: '#f2f2f2',

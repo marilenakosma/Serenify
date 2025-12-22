@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList, TouchableOpacity,Image } from 'react-native';
+import { StyleSheet, View, FlatList, TouchableOpacity,Image,ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,9 @@ import BackButton from "../../components/BackButton";
 import Breathe from "../../assets/images/lungs.png";
 import Movements from "../../assets/images/sneakers.png";
 import Meditation from "../../assets/images/yoga-master.png";
+import Notes from "../../assets/images/Notes.png";
+import Gifts from "../../assets/images/Gifts.png";
+import Journal from "../../assets/images/Journal.png";
 
 export default function PointsHistory() {
   const router = useRouter();
@@ -17,9 +20,9 @@ export default function PointsHistory() {
   const { pointsHistory, points, level, getLevelName } = useAuthStore();
 
   const getSourceIcon = (source) => {
-    if (source.includes('habit')) return 'checkmark-circle';
-    if (source.includes('reflection')) return 'journal';
-    if (source.includes('kindness')) return 'heart';
+    if (source.includes('habit')) return Notes;
+    if (source.includes('reflection')) return Journal;
+    if (source.includes('kindness')) return Gifts;
     if (source.includes('breathe')) return 'accessibility';
     return 'star';
   };
@@ -46,12 +49,11 @@ export default function PointsHistory() {
 
     return (
       <View style={styles.historyItem}>
-        <View style={[styles.iconContainer]}>
-           {/*<Image source={require('../../assets/images/lungs.png')} style={{width:25,height:25}} />*/}
-          <Ionicons name={getSourceIcon(item.source)} size={24} color={color} /> 
+        <View style={[styles.iconContainer,{backgroundColor: `${color}15`} ]}>
+           <Image source={getSourceIcon(item.source)} style={{width:25,height:25}} />
         </View>
         <View style={styles.textContainer}>
-          <ThemedText style={styles.sourceText}>{getSourceText(item.source)}</ThemedText>
+          <ThemedText style={[styles.sourceText]}>{getSourceText(item.source)}</ThemedText>
           <ThemedText style={styles.dateText}>
             {new Date(item.timestamp).toLocaleDateString()}
           </ThemedText>
@@ -75,6 +77,11 @@ export default function PointsHistory() {
         </View>
 
         {/* Summary Card */}
+         <ImageBackground 
+            source={require('../../assets/images/canola.jpg')}
+            style={styles.backgroundImage}
+            resizeMode="cover"
+          >
          <View style={styles.pointsCard}>
                            <View style={styles.pointsHeader}>
                              <View style={styles.titleRow}>
@@ -113,6 +120,8 @@ export default function PointsHistory() {
                           </View>
                         </View>
                        </View>
+                       </ImageBackground>
+                       
 
         {/* History List */}
         {pointsHistory.length > 0 ? (
@@ -214,7 +223,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -321,5 +330,8 @@ const styles = StyleSheet.create({
      fontSize: 14,
      color: '#666',
      //fontStyle: 'italic',
+    },
+    backgroundImage: {
+        width: '100%'
     },
 });
