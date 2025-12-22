@@ -11,7 +11,8 @@ import {
   hasPointsBeenAwarded,
   markPointsAwarded,
   clearPointsAwarded,
-  canToggleHabitCompletion 
+  canToggleHabitCompletion,
+  detectStreakBreak
   } from "../constants/habitFrequency";
 import { 
   registerUser, 
@@ -526,22 +527,6 @@ logout: async () => {
      //const today = date || new Date().toISOString().split('T')[0]; //2025-11-04T00:00:00.000Z -> 2025-11-04
     
      const currentState = get();
-  
-     const habit = currentState.userHabits.find(h => h.id === habitId);
-
-     if(!habit) return;
-
-     const targetDate = date ? new Date(date) : new Date();
-     const dateStr = targetDate.toISOString().split('T')[0];
-
-     if (!shouldTrackHabitOnDate(habit.frequency, targetDate)) {
-       Alert.alert(
-       'Not Trackable',
-       `This habit (${habit.frequency}) cannot be completed on this day.`
-     );
-     return;
-     }
-
      let completions = {...currentState.habitCompletions};
      /* completions = {
         "morning-run": {
@@ -560,17 +545,36 @@ logout: async () => {
      if(!completions[habitId]) {
         completions[habitId] = {};
      }
+  
+     const habit = currentState.userHabits.find(h => h.id === habitId);
+
+     if (!habit) return { success: false, error: 'Habit not found' };
+
+     const targetDate = date ? new Date(date) : new Date();
+     const dateStr = targetDate.toISOString().split('T')[0];
+
+     if (!shouldTrackHabitOnDate(habit.frequency, targetDate)) {
+       Alert.alert(
+       'Not Trackable',
+       `This habit (${habit.frequency}) cannot be completed on this day.`
+     );
+     return;
+     }
 
      const isCurrentlyCompleted = completions[habitId][dateStr] || false; 
      const pointsAwarded = hasPointsBeenAwarded(completions, habitId, dateStr);
      // completions["morning-run"]["2025-11-04"]  
 
-    completions[habitId][dateStr] = !isCurrentlyCompleted;
+     const previousStreak = habit.streak || 0;
+
+     completions[habitId][dateStr] = !isCurrentlyCompleted;
 
     const today = new Date();
      
     const newStreak = calculateFrequencyAwareStreak(habit.frequency, completions[habitId], today);
      
+    const streakBroken = !isCurrentlyCompleted && previousStreak > 0 && newStreak < previousStreak;
+
      const updatedHabits = currentState.userHabits.map(habit => {
       if(habit.id === habitId) {
         return {
@@ -581,6 +585,8 @@ logout: async () => {
       }
       return habit;
      })
+
+     console.log('Updated habit with new streak:', updatedHabits.find(h => h.id === habitId));
 
       const pointsToAward = habit.points || 10;
 
@@ -594,6 +600,7 @@ logout: async () => {
      }
 
      if (currentState.userId) {
+      console.log('Saving to Firebase - habit streaks:', updatedHabits.map(h => ({ id: h.id, streak: h.streak })));
       await Promise.all([
         saveHabitCompletions(currentState.userId, completions),
         saveHabits(currentState.userId, updatedHabits)
@@ -613,6 +620,14 @@ logout: async () => {
                 userHabits: updatedHabits 
             });
         }
+
+     return { 
+       success: true, 
+       streakBroken,
+       previousStreak,
+       newStreak,
+       habitName: habit.text || habit.title
+     };
 
     },
 

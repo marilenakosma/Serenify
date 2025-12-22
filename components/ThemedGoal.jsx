@@ -41,7 +41,7 @@ export default function ThemedGoal({
         <View style={styles.metadata}>
           <ThemedText style={
             [styles.category,
-             color && { color: '#666'}
+             color && { color: color}
             ]}>
           {category || 'Wellness'}
           </ThemedText>

@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View,Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import { Confetti } from 'react-native-fast-confetti';
+import image from "../assets/images/rain.png";
+import { useTranslation } from '../constants/translations';
 
-export function PointsToast({ visible, points, message, onDismiss, duration = 3000 }) {
+export function PointsToast({ visible, points=false,title=false, message, onDismiss, duration = 3000,isWarning=false }) {
     const slideAnim = useRef(new Animated.Value(150)).current;
+    const { t } = useTranslation();
 
     useEffect(() => {
         if(visible) {
@@ -35,36 +38,50 @@ export function PointsToast({ visible, points, message, onDismiss, duration = 30
 
          return (
     <>
-      {visible && (
+   
+      {visible && !isWarning && (
         <View style={styles.confettiContainer} pointerEvents="none">
           <Confetti 
             //ref={confettiRef}
           />
         </View>
       )}
-      
+    
       <Animated.View
         style={[
           styles.container,
           {
             transform: [{ translateY: slideAnim }],
           },
+          isWarning && styles.warningContainer 
         ]}
       >
         <View style={styles.content}>
           <View style={styles.iconCircle}>
-            <Ionicons name="trophy" size={28} color="#FFD700" />
+            {isWarning ? 
+               <Image source={image} 
+                      style={styles.image}
+                      //onLoad={() => setImageLoaded(true)}
+                      resizeMode="contain" 
+               />  :
+               <Ionicons name="trophy" size={28} color="#FFD700" />}
           </View>
           
           <View style={styles.textContainer}>
-            <ThemedText style={styles.title}>
-              {message || 'Great Job!'}
+            <ThemedText title style={styles.title}>
+               {isWarning ? title : message || 'Great Job!' }
             </ThemedText>
             <View style={styles.pointsRow}>
-              <Ionicons name="flash" size={18} color="#FFD700" />
+             {isWarning ?  
+              <ThemedText>
+                {message || 'Great Job!'}
+              </ThemedText> :
+              <>
+             <Ionicons name="flash" size={18} color="#FFD700" />
               <ThemedText style={styles.points}>
                 +{points}
-              </ThemedText>
+              </ThemedText> 
+              </>}
             </View>
           </View>
         </View>
@@ -82,6 +99,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 9998,
   },
+  warningContainer: {
+    backgroundColor: '#bfe8f7ff', 
+    //borderColor: '#F57C00',
+  },
+  image: {
+        width:45,
+        height:40,
+      },
   container: {
     position: 'absolute',
     bottom: 20,

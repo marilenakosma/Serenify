@@ -31,7 +31,7 @@ const habits = () => {
   } = useAuthStore();
 
   const [completedQuests, setCompletedQuests] = useState(new Set());
-  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
+  const [toastConfig, setToastConfig] = useState({visible: false, points: 0, message: '',title: '',isWarning: false});
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -75,42 +75,63 @@ const habits = () => {
     }
   };
 
-  const handleToggleQuest = (questId) => {
-    // Check if it's a user habit or foundational goal
-    const habit = userHabits.find(habit => habit.id === questId);
-    const foundationalGoal = availableFoundationalGoals.find(goal => goal.id === questId);
-    const today = new Date().toISOString().split('T')[0];
-    const isCurrentlyComplete = getHabitCompletion(questId, today);
+  const handleToggleQuest = async (questId) => {
+  const habit = userHabits.find(habit => habit.id === questId);
+  const foundationalGoal = availableFoundationalGoals.find(goal => goal.id === questId);
+  const today = new Date().toISOString().split('T')[0];
+  const isCurrentlyComplete = getHabitCompletion(questId, today);
 
-    if (habit) {
-      // Use store method for habits
-      toggleHabitCompletion(questId);
-     
-      if (!isCurrentlyComplete) {
-       const pointsEarned = habit.points || 10; 
-       setToastConfig({
-        visible: true,
-        points: pointsEarned,
-        message: t('habits.completionMessage') || 'Great job!' 
-      });
-    }
+  if (habit) {
+    // Toggle and get streak info
+    const result = await toggleHabitCompletion(questId);
 
-    } else if (foundationalGoal) {
-      // For foundational goals, offer to add as trackable habit
-      handleAddFoundationalGoal(foundationalGoal);
-    } else {
-      // Handle other goals locally
-      setCompletedQuests(prev => {
-        const newSet = new Set(prev);
-        if (newSet.has(questId)) {
-          newSet.delete(questId);
-        } else {
-          newSet.add(questId);
-        }
-        return newSet;
-      });
+    console.log('Toggle result:', result);
+    console.log('isCurrentlyComplete:', isCurrentlyComplete);
+    console.log('Streak broken?:', result?.streakBroken);
+    
+    // Show points toast if completing
+    if (!isCurrentlyComplete) {
+      const pointsEarned = habit.points || 10;
+      
+      // Check if streak was broken
+      if (result?.streakBroken) {
+        setToastConfig({
+          visible: true,
+          title: t('habits.streakLost'),
+          message: t('habits.streakLostMessage', {
+            habit: result.habitName,
+            previous: result.previousStreak,
+            new: result.newStreak
+          }),
+          isWarning: true 
+        });
+      } else {
+        setToastConfig({
+          visible: true,
+          points: pointsEarned,
+          message: t('habits.completionMessage') || 'Great job!',
+          title: '',
+          isWarning: false
+        });
+      }
     }
-  };
+  } else if (foundationalGoal) {
+    // Just add it, don't toggle
+    await handleAddFoundationalGoal(foundationalGoal);
+    // Don't call toggleHabitCompletion here!
+  } else {
+    // Handle other goals locally
+    setCompletedQuests(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(questId)) {
+        newSet.delete(questId);
+      } else {
+        newSet.add(questId);
+      }
+      return newSet;
+    });
+  }
+};
 
  const handleStatsPress = (habitId) => {
     router.push({
@@ -317,7 +338,9 @@ const getHabitStatus = (habit) => {
           <PointsToast
           visible={toastConfig.visible}
           points={toastConfig.points}
+          title={toastConfig.title}
           message={toastConfig.message}
+          isWarning={toastConfig.isWarning}
           onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
           duration={3000}
         />}

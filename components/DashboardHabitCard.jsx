@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import HabitProgressRing from './HabitProgressRing';
 import { useAuthStore } from '../store/authStore';
-import { useTranslation } from '../constants/translations'; // ✅ Add this import
+import { useTranslation } from '../constants/translations';
 import { 
   isHabitCompleteForPeriod, 
   getCompletionsThisWeek, 
@@ -208,13 +208,13 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
                   progress={progress}
                   size={45}
                   strokeWidth={4}
-                  color={isComplete ? "#4CAF50" : "#2196F3"}
+                  color={isComplete ? "#4CAF50" : "#FF9800"}
                 />
               </Animated.View>
               
               {habit.type === 'incremental' ? (
                 <View style={[styles.incrementIcon]}>
-                  <Ionicons name="add" size={16} color="#2196F3" />
+                  <Ionicons name="add" size={16} color="#FF9800" />
                 </View>
               ) : (
                 <Animated.View style={[
@@ -243,7 +243,7 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
       
         <ThemedText style={[
           styles.habitProgress,
-          { color: habit.type === 'incremental' ? '#2196F3' : '#4CAF50' }
+          { color: habit.type === 'incremental' ? '#FF9800' : '#4CAF50' }
         ]}>
           {progressText}
         </ThemedText>

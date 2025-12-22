@@ -40,8 +40,8 @@ const Dashboard = () => {
         } = useAuthStore();
   const [completedGoals, setCompletedGoals] = useState(new Set());
   const [selectedMood,setSelectedMood] = useState(null);
-  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
-  
+  const [toastConfig, setToastConfig] = useState({visible: false, points: 0, message: '',title: '',isWarning: false});
+
   const router = useRouter();
   const { t } = useTranslation();
   
@@ -163,17 +163,34 @@ const Dashboard = () => {
   const today = new Date().toISOString().split('T')[0];
   const isCurrentlyComplete = getHabitCompletion(habitId, today);
   
-  // Toggle the habit
-  await toggleHabitCompletion(habitId);
+  // Toggle the habit and get streak info
+  const result = await toggleHabitCompletion(habitId);
   
   // Show toast only if completing (not uncompleting)
   if (!isCurrentlyComplete && habit) {
     const pointsEarned = habit.points || 10;
-    setToastConfig({
-      visible: true,
-      points: pointsEarned,
-      message: t('habits.completionMessage') || 'Great job!'
-    });
+    
+    // Check if streak was broken
+    if (result?.streakBroken) {
+      setToastConfig({
+        visible: true,
+        title: t('habits.streakLost'),
+        message: t('habits.streakLostMessage', {
+          habit: result.habitName,
+          previous: result.previousStreak,
+          new: result.newStreak
+        }),
+        isWarning: true 
+      });
+    } else {
+      setToastConfig({
+        visible: true,
+        points: pointsEarned,
+        message: t('habits.completionMessage') || 'Great job!',
+        title: '',
+        isWarning: false
+      });
+    }
   }
 };
 
@@ -296,15 +313,16 @@ const Dashboard = () => {
           
           </ScrollView>
 
-          {toastConfig && 
-          
-          <PointsToast
-          visible={toastConfig.visible}
-          points={toastConfig.points}
-          message={toastConfig.message}
-          onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
-          duration={3000}
-        />}
+          {toastConfig &&   
+                    <PointsToast
+                    visible={toastConfig.visible}
+                    points={toastConfig.points}
+                    title={toastConfig.title}
+                    message={toastConfig.message}
+                    isWarning={toastConfig.isWarning}
+                    onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
+                    duration={3000}
+          />}
 
       </SafeAreaView>
     </ThemedView>

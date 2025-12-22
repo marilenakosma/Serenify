@@ -155,6 +155,12 @@ export const updateUserData = async (userId, data) => {
 
 export const saveHabits = async (userId, habits) => {
   try {
+    const isAuthed = await ensureAuth();
+    if (!isAuthed) {
+      console.error('User not authenticated');
+      return { success: false, error: 'Not authenticated' };
+    }
+    
     await updateDoc(doc(db, 'users', userId), {
       userHabits: habits,
       updatedAt: serverTimestamp()
@@ -305,6 +311,23 @@ export const updatePoints = async (userId, points, level, pointsHistory) => {
     console.error('Update points error:', error);
     return { success: false, error: error.message };
   }
+};
+
+const ensureAuth = async () => {
+  if (auth.currentUser) return true;
+  
+  // Wait up to 2 seconds for auth to initialize
+  return new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(!!user);
+    });
+    
+    setTimeout(() => {
+      unsubscribe();
+      resolve(false);
+    }, 2000);
+  });
 };
 
 export default function firebaseService() {

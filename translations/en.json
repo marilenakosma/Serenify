@@ -203,11 +203,14 @@
     "addNewHabits": "Add New",
     "chooseHabits": "Choose habits for {{focusArea}}",
     "completionMessage":"Good job completing a habit!",
+
     "foundation": {
      "dailyGoal":"Complete a goal",
      "writeReflection":"Write a reflection",
      "affirmations":"Practice positive affirmations",
-     "exercise":"Do some form of exercise"
+     "exercise":"Do some form of exercise",
+     "streakLost": "Streak Lost!",
+     "streakLostMessage": "Your {{habit}} streak dropped from {{previous}} to {{new}}. Try again tomorrow!"
     },
     "common": {
       "waterIntake": {
