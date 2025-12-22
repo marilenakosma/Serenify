@@ -71,26 +71,25 @@ const profile = () => {
 
     const handleSettingPress = (settingId, settingText) => {
         switch (settingId) {
-            case 4: // Logout
+            case 2: // Logout
                 handleLogout();
                 break;
-            case 3:
+            case 1:
                 handleRetakeQuestionnaire();
                 break;
             default:
-                // For now, just show which setting was pressed
                 break;
         }
     };
 
     const settingData = [
        // { id: 1, name: "trophy-outline", text: t('profile.myBadges') },
-        { id: 1, name: "time-outline", text: t('profile.dailyReminder') },
-        { id: 2, name: "settings-outline", text: t('profile.preferences') },
+      //  { id: 1, name: "time-outline", text: t('profile.dailyReminder') },
+      //  { id: 2, name: "settings-outline", text: t('profile.preferences') },
     //    { id: 4, name: "accessibility-outline", text: t('profile.accountSecurity')},
        // { id: 5, name: "stats-chart-outline", text: t('profile.dataAnalytics') },
-        { id: 3, name: "albums-outline", text: t('profile.retakeQuiz') },
-        { id: 4, name: "log-out-outline", text: t('profile.logout') }, 
+        { id: 1, name: "albums-outline", text: t('profile.retakeQuiz') },
+        { id: 2, name: "log-out-outline", text: t('profile.logout') }, 
     ];
 
     const renderSettings = ({ item }) => (
@@ -98,7 +97,7 @@ const profile = () => {
             name={item.name}
             text={item.text}
             onPress={() => handleSettingPress(item.id, item.text)} //  Add press handler
-            isLogout={item.id === 4} //  Mark logout for special styling.TODO:dynamic
+            isLogout={item.id === 2} //  Mark logout for special styling.TODO:dynamic
         />
     );
 

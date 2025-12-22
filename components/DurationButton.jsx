@@ -2,18 +2,34 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { useRouter } from "expo-router";
 
 import ThemedText from './ThemedText'
-const DurationButton = ({text,style,length,onPress}) => {
 
+const DurationButton = ({text, style, length, onPress, duration, label = 'min'}) => {
+  // If duration is provided, show stacked layout
+  if (duration !== undefined) {
+    return (
+      <View style={[styles.container, style]}>
+        <Pressable 
+          style={styles.button} 
+          onPress={onPress}
+        >
+          <ThemedText style={styles.durationNumber}>{duration}</ThemedText>
+          <ThemedText style={styles.durationLabel}>{length}</ThemedText>
+        </Pressable>
+      </View>
+    );
+  }
+
+  // Fallback to original layout
   return (
     <View style={[styles.container, style]}>
       <Pressable 
         style={styles.button} 
         onPress={onPress}
       >
-        <ThemedText title= {true} style={styles.text}>{length || text}</ThemedText>
+        <ThemedText title={true} style={styles.text}>{length || text}</ThemedText>
       </Pressable>
     </View>
-  )
+  );
 }
 
 export default DurationButton
@@ -29,7 +45,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: "transparent",
-        padding: 15,
+        padding: 20,
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 12,
@@ -38,6 +54,15 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
         fontSize: 12,
-        fontWeight: '500',
+    },
+    durationNumber: {
+        fontSize: 32,
+        textAlign: 'center',
+        marginBottom: 4,
+    },
+    durationLabel: {
+        fontSize: 12,
+        textAlign: 'center',
+        color: '#666',
     }
 })

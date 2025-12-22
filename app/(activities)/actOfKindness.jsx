@@ -1,5 +1,5 @@
 import { useState,useEffect } from 'react';
-import { StyleSheet,View,FlatList } from 'react-native';
+import { StyleSheet,View,FlatList,Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import Spacer from '../../components/Spacer';
@@ -228,7 +228,11 @@ const renderActItem = (act) => {
     const isCompleted = completedActs.includes(act.id);
     
     return (
-      <View key={act.id} style={styles.actCard}>
+      <Pressable 
+        key={act.id} 
+        style={styles.actCard}
+        onPress={() => completeAct(act.id)}
+      >
         <View style={styles.iconContainer}>
           <Ionicons 
             name={act.icon} 
@@ -264,7 +268,7 @@ const renderActItem = (act) => {
             color={isCompleted ? Colors.primary : `${act.color}80`} 
           />
         </View>
-      </View>
+      </Pressable>
     );
   };
 

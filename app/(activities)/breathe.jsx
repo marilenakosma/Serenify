@@ -27,11 +27,11 @@ export default function Breathe() {
   const [alertConfig, setAlertConfig] = useState(null);
 
   const durationData = [
-    { id: 1, text: t('durations.1min'), duration: 1 },
-    { id: 2, text: t('durations.3min'), duration: 3 },
-    { id: 3, text: t('durations.5min'), duration: 5 },
-    { id: 4, text: t('durations.10min'), duration: 10 },
-    { id: 5, text: 'DEBUG', duration: 0 },
+    { id: 1, text: t('durations.min'), duration: 1 },
+    { id: 2, text: t('durations.mins'), duration: 3 },
+    { id: 3, text: t('durations.mins'), duration: 5 },
+    { id: 4, text: t('durations.mins'), duration: 10 },
+   // { id: 5, text: 'DEBUG', duration: 0 },
   ]
 
 const handleAnimationFrame = (event) => {
@@ -62,6 +62,7 @@ const getPhaseText = () => {
    const renderDurations = ({item}) => (
    <DurationButton
      length={item.text}
+     duration={item.duration}
      style={styles.durationItem}
      onPress={() => handlePress(item)}
    />
@@ -145,7 +146,7 @@ const getPhaseText = () => {
               <View style={styles.buttonContainer}>
               <ThemedButton onPress={handleStartSession}>
                 <ThemedText title={true} style={{ color: '#f2f2f2' }}>
-                   {t('activities.start')} ({selectedDuration.text})
+                   {t('activities.start')} 
                 </ThemedText>
               </ThemedButton>
               </View>

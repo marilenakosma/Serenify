@@ -337,6 +337,8 @@
     "hard": "Hard"
   },
   "durations": {
+    "min":"min",
+    "mins":"mins",
     "1min": "1 min",
     "3min": "3 min",
     "5min": "5 min",
