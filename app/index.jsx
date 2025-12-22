@@ -10,11 +10,13 @@ import ThemedText from "../components/ThemedText";
 import ThemedView from "../components/ThemedView";
 import { useTranslation } from '../constants/translations';
 import LanguagePicker from '../components/LanguagePicker';
+import { useAuthStore } from '../store/authStore';
 
 export default function Index() {
   const [showCustomSplash, setShowCustomSplash] = useState(true);
   const router = useRouter();
   const { t } = useTranslation();
+  const { isAuthenticated, hasCompletedQuestionnaire } = useAuthStore();
   
   useEffect(() => {
     // Hide BootSplash immediately and show custom Lottie splash
@@ -25,13 +27,30 @@ export default function Index() {
     init();
   }, []);
 
+  useEffect(() => {
+    if (isAuthenticated && hasCompletedQuestionnaire) {
+      router.replace('/(dashboard)');
+    } else if (isAuthenticated && !hasCompletedQuestionnaire) {
+      router.replace('/(questionnaire)');
+    }
+  }, [isAuthenticated, hasCompletedQuestionnaire]);
+
   const handleSplashFinish = () => {
     setShowCustomSplash(false);
   };
 
-  if (showCustomSplash) {
-    return <SplashScreen onFinish={handleSplashFinish} />;
-  }
+  const handleGetStarted = () => {
+    // Check auth before navigating
+    if (isAuthenticated && hasCompletedQuestionnaire) {
+      router.replace('/(dashboard)');
+    } else if (isAuthenticated && !hasCompletedQuestionnaire) {
+      router.replace('/(questionnaire)');
+    } else {
+      router.navigate("/(auth)/register");
+    }
+  };
+
+  
   
   return (
     <ThemedView style={styles.container}>

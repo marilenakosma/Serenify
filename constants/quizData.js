@@ -4,7 +4,7 @@ export const getQuizData = (t) => {
     
     // Safety check - if questionsData is not an array, use fallback
     if (!questionsData || !Array.isArray(questionsData)) {
-      console.log('Questions data not available, using fallback');
+      //console.log('Questions data not available, using fallback');
       return quizData; // Use the hardcoded fallback
     }
     
@@ -14,7 +14,7 @@ export const getQuizData = (t) => {
       selectedAnswer: null
     }));
   } catch (error) {
-    console.log('Error loading quiz data:', error);
+  //  console.log('Error loading quiz data:', error);
     return quizData; // Use fallback on error
   }
 };

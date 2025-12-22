@@ -185,10 +185,10 @@ export const useAuthStore = create((set,get) => ({
       // Update state (this triggers navigation)
       set(authData);
       
-      console.log('Auth state updated:', { 
-        isAuthenticated: true, 
-        hasCompletedQuestionnaire: false 
-      });
+      //console.log('Auth state updated:', { 
+      //  isAuthenticated: true, 
+      //  hasCompletedQuestionnaire: false 
+     // });
       
       return { success: true };
     }
@@ -472,7 +472,7 @@ logout: async () => {
 
     const updatedHistory = [...(currentState.pointsHistory || []), pointEntry];
 
-    console.log(`${amount > 0 ? '+' : ''}${amount} points from ${source}! Total: ${newPoints} (Level ${newLevel})`);
+   // console.log(`${amount > 0 ? '+' : ''}${amount} points from ${source}! Total: ${newPoints} (Level ${newLevel})`);
 
     // Save to Firebase
     if (currentState.userId) {
@@ -586,7 +586,7 @@ logout: async () => {
       return habit;
      })
 
-     console.log('Updated habit with new streak:', updatedHabits.find(h => h.id === habitId));
+     //console.log('Updated habit with new streak:', updatedHabits.find(h => h.id === habitId));
 
       const pointsToAward = habit.points || 10;
 
@@ -600,7 +600,7 @@ logout: async () => {
      }
 
      if (currentState.userId) {
-      console.log('Saving to Firebase - habit streaks:', updatedHabits.map(h => ({ id: h.id, streak: h.streak })));
+      //console.log('Saving to Firebase - habit streaks:', updatedHabits.map(h => ({ id: h.id, streak: h.streak })));
       await Promise.all([
         saveHabitCompletions(currentState.userId, completions),
         saveHabits(currentState.userId, updatedHabits)
@@ -835,7 +835,7 @@ checkAuth: async () => {
       });
     }
      
-     console.log('Kindness act completed!');
+    // console.log('Kindness act completed!');
     },
   
     getTodayKindnessCount: () => {

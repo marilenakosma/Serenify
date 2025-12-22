@@ -251,7 +251,7 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
   let streak = 0;
   const today = new Date(endDate);
 
-  console.log('Calculating streak for:', frequency, 'Required per week:', requiredPerWeek);
+ // console.log('Calculating streak for:', frequency, 'Required per week:', requiredPerWeek);
    
   if (frequency === FREQUENCY_TYPES.DAILY || frequency === 'daily' || frequency === 'Everyday' ||
       frequency === FREQUENCY_TYPES.WEEKDAYS || frequency === 'weekdays' || frequency === 'Weekdays only' ||
@@ -274,7 +274,7 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
       if (streak > 365) break;
     }
     
-    console.log('Daily/weekday streak result:', streak);
+    //console.log('Daily/weekday streak result:', streak);
     return streak;
   }
   
@@ -285,17 +285,17 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
     const weekCompletions = getCompletionsInWeek(completions, currentWeekStart);
     const isCurrentWeek = isSameWeek(currentWeekStart, today);
 
-    console.log(`Week starting ${currentWeekStart.toDateString()}: ${weekCompletions}/${requiredPerWeek} completions, isCurrentWeek: ${isCurrentWeek}`);
+   // console.log(`Week starting ${currentWeekStart.toDateString()}: ${weekCompletions}/${requiredPerWeek} completions, isCurrentWeek: ${isCurrentWeek}`);
     
     if (weekCompletions >= requiredPerWeek) {
       streak++;
-      console.log(`Week completed! Streak now: ${streak}`);
+      //console.log(`Week completed! Streak now: ${streak}`);
     } else {
       if (isCurrentWeek && weekCompletions > 0) {
-        console.log('Current week with partial progress - not breaking streak yet');
+       // console.log('Current week with partial progress - not breaking streak yet');
         break;
       } else {
-        console.log(`Week not completed, breaking streak at: ${streak}`);
+        //console.log(`Week not completed, breaking streak at: ${streak}`);
         break;
       }
     }
@@ -305,7 +305,7 @@ export const calculateFrequencyAwareStreak = (frequency, completions, endDate = 
     if (streak > 104) break;
   }
   
-  console.log('Weekly streak final result:', streak);
+  //console.log('Weekly streak final result:', streak);
   return streak;
 };
 

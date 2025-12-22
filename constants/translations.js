@@ -13,13 +13,13 @@ const languageDetector = {
       // First check saved language
       const savedLanguage = getItem('selectedLanguage');
       if (savedLanguage && ['en', 'el'].includes(savedLanguage)) {
-        console.log('Found saved language:', savedLanguage);
+        //console.log('Found saved language:', savedLanguage);
         return savedLanguage;
       }
       
       // Get device locale
       const deviceLocale = Localization.locale;
-      console.log('Device locale full:', deviceLocale);
+     // console.log('Device locale full:', deviceLocale);
       
       // Extract language code
       let deviceLanguage = 'en'; // default
@@ -31,32 +31,32 @@ const languageDetector = {
         }
       }
       
-      console.log('Detected device language:', deviceLanguage);
+     // console.log('Detected device language:', deviceLanguage);
       
       // Save the detected language
       setItem('selectedLanguage', deviceLanguage);
       return deviceLanguage;
     } catch (error) {
-      console.log('Error detecting language:', error);
+     // console.log('Error detecting language:', error);
       return 'en';
     }
   },
   init: () => {
-    console.log('Language detector initialized');
+  //  console.log('Language detector initialized');
   },
   cacheUserLanguage: (language) => {
     try {
-      console.log('Caching language:', language);
+     // console.log('Caching language:', language);
       setItem('selectedLanguage', language);
     } catch (error) {
-      console.log('Error caching language:', error);
+     // console.log('Error caching language:', error);
     }
   }
 };
 
 // Clear any existing instance and initialize fresh
 if (i18n.isInitialized) {
-  console.log('i18next already initialized, creating new instance');
+ // console.log('i18next already initialized, creating new instance');
 }
 
 const initializeI18n = () => {
@@ -97,7 +97,7 @@ const initializeI18n = () => {
 let initPromise;
 if (!i18n.isInitialized) {
   initPromise = initializeI18n().then(() => {
-    console.log('i18next initialized successfully with language:', i18n.language);
+   // console.log('i18next initialized successfully with language:', i18n.language);
     return i18n;
   });
 } else {
@@ -108,13 +108,13 @@ export const useTranslation = () => {
   const result = useReactI18nextTranslation();
   
   const changeLanguage = async (languageCode) => {
-    console.log('Changing language to:', languageCode);
+   // console.log('Changing language to:', languageCode);
     try {
       await result.i18n.changeLanguage(languageCode);
       setItem('selectedLanguage', languageCode);
-      console.log('Language changed successfully to:', languageCode);
+    //  console.log('Language changed successfully to:', languageCode);
     } catch (error) {
-      console.log('Error changing language:', error);
+     // console.log('Error changing language:', error);
     }
   };
 

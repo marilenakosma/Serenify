@@ -96,7 +96,7 @@ const getPhaseText = () => {
   }
 
    const handlePress = (duration) => {
-    console.log('Duration selected:', duration);
+    //console.log('Duration selected:', duration);
     setSelectedDuration(duration);
   }
 

@@ -47,7 +47,7 @@ const profile = () => {
                         setAlertConfig(null);
                     }
                 } catch (error) {
-                    console.log('Logout error:', error);
+                   // console.log('Logout error:', error);
                     setAlertConfig(null);
                 }
             },
@@ -57,16 +57,10 @@ const profile = () => {
     
     
     const handleRetakeQuestionnaire = () => {
-       console.log('🚀 handleRetakeQuestionnaire called');
-        // Use the authStore function which handles both storage and state
-        retakeQuestionnaire();
-        //console.log('retakeQuestionnaire completed');
-        //router.push('/(questionnaire)/?retake=true&timestamp=' + Date.now());
+       console.log('handleRetakeQuestionnaire called');
+         retakeQuestionnaire();
          const navigationPath = '/(questionnaire)/?retake=true';
-       //  console.log('🎯 About to navigate to:', navigationPath);
-    
          router.push(navigationPath);
-        // console.log('Navigation called');
     }
 
     const handleSettingPress = (settingId, settingText) => {

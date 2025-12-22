@@ -58,7 +58,7 @@ const HabitStats = () => {
         }
         setAlertConfig(null);
       } catch (error) {
-        console.log('Alert action error:', error);
+        //console.log('Alert action error:', error);
         setAlertConfig(null);
       }
     }, 
@@ -94,7 +94,7 @@ const HabitStats = () => {
     return;
   }
 
-    console.log('Before update - streak:', habit.streak, 'lastCompleted:', habit.lastCompleted);
+   // console.log('Before update - streak:', habit.streak, 'lastCompleted:', habit.lastCompleted);
 
     const updatedHabit = {
       ...habit,
@@ -103,12 +103,12 @@ const HabitStats = () => {
       duration: editedDuration,
     };
     
-    console.log('Updating habit with:', updatedHabit);
+   // console.log('Updating habit with:', updatedHabit);
 
     updateHabit(habitId, updatedHabit);
     setShowEditModal(false);
 
-    console.log('After update - should preserve streak');
+   // console.log('After update - should preserve streak');
   };
 
   const frequencyOptions = [
