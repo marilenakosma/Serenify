@@ -118,7 +118,7 @@ export default function Soundscapes() {
   const renderSoundscape = ({ item }) => (
     <View style={[styles.soundCard, { borderLeftColor: item.color }]}>
       <View style={styles.soundInfo}>
-        <Ionicons name={item.icon} size={32} color={item.color} />
+        <Ionicons name={item.icon} size={26} color={item.color} />
         <View style={styles.soundText}>
           <ThemedText title={true} style={styles.soundName}>{item.name}</ThemedText>
           <ThemedText style={styles.soundDescription}>{item.description}</ThemedText>
@@ -127,11 +127,7 @@ export default function Soundscapes() {
       
       <ThemedButton 
         onPress={() => toggleSound(item)}
-        style={[styles.playButton, 
-          { 
-            backgroundColor: playingId === item.id ? '#FF5722' : item.color 
-          }
-        ]}
+        style={[styles.playButton]}
       >
         <Ionicons 
           name={playingId === item.id ? 'stop' : 'play'} 
@@ -233,17 +229,18 @@ const styles = StyleSheet.create({
     flex: 1 
   },
   soundName: { 
-    fontSize: 18,
-    marginBottom: 4 
+    fontSize: 16,
+    marginBottom: 3
   },
   soundDescription: { 
     fontSize: 14, 
     color: '#666' 
   },
   playButton: { 
-    width: 50, 
-    height: 50, 
-    borderRadius: 25,
+    width: 40, 
+    height: 40, 
+    borderRadius: 20,
+    padding:0,
     alignItems: 'center',
     justifyContent: 'center' 
   },
