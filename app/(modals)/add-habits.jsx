@@ -176,8 +176,8 @@ const AddHabits = () => {
           <View style={styles.placeholder} />
         </View>
         
-        <ThemedText style={styles.subtitle}>
-          {t('habits.chooseHabits', { focusArea })}
+      <ThemedText style={styles.subtitle}>
+          {t('habits.chooseHabits', { focusArea: t(`questionnaire.focusAreas.${focusArea}`) || focusArea })}
         </ThemedText>
 
         {/* Completely safe rendering using Object.entries with guaranteed unique keys */}

@@ -722,10 +722,12 @@
     "journeyStartsNow": "Your personalized wellness journey starts now.",
     "viewDashboard": "View My Dashboard",
     "focusAreas": {
-      "anxietyManagement": "Anxiety Management",
-      "stressRelief": "Stress Relief", 
-      "maintainingBalance": "Maintaining Balance",
-      "generalWellness": "General Wellness"
+      "Anxiety Management": "Anxiety Management",
+      "Stress Relief": "Stress Relief",
+      "Maintaining Balance": "Maintaining Balance",
+      "General Wellness": "General Wellness",
+      "Depression Support": "Depression Support",
+      "Sleep Issues": "Sleep Issues"
     },
     "questions": [
       {

@@ -130,10 +130,10 @@ const HabitStats = () => {
     t('durations.15min'),
     t('durations.20min'),
     t('durations.30min'),
-    '45 min', //
+    t('durations.45min'),
     t('durations.1hour'),
-    '1.5 hours', // 
-    '2 hours', // Add to translations!!
+    t('durations.1.5hours'),
+    t('durations.2hours'),
     t('durations.allDay')
   ];
 
@@ -627,7 +627,7 @@ const getToday = () => {
               <ScrollView style={styles.editModalScroll}>
                 {/* Habit Name */}
                 <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>
+                  <ThemedText title style={styles.editLabel}>
                     {t('habitStats.habitName')}
                   </ThemedText>
                   <TextInput
@@ -642,7 +642,7 @@ const getToday = () => {
 
                 {/* Frequency */}
                 <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>
+                  <ThemedText title style={styles.editLabel}>
                     {t('habitStats.frequency')}
                   </ThemedText>
                   <View style={styles.optionsGrid}>
@@ -669,7 +669,7 @@ const getToday = () => {
 
                 {/* Duration */}
                 <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>
+                  <ThemedText title style={styles.editLabel}>
                     {t('habitStats.duration')}
                   </ThemedText>
                   <View style={styles.optionsGrid}>
@@ -695,22 +695,7 @@ const getToday = () => {
                 </View>
 
                 {/* Habit Info */}
-                <View style={styles.editSection}>
-                  <ThemedText style={styles.editLabel}>
-                    {t('habitStats.categoryAndPoints')}
-                  </ThemedText>
-                  <View style={styles.infoRow}>
-                    <ThemedText style={styles.infoText}>
-                      {t('habitStats.category')}: {habit.category}
-                    </ThemedText>
-                    <ThemedText style={styles.infoText}>
-                      {t('habitStats.points')}: {habit.points} {t('habitStats.perCompletion')}
-                    </ThemedText>
-                  </View>
-                  <ThemedText style={styles.infoHint}>
-                    {t('habitStats.categoryPointsCannotChange')}
-                  </ThemedText>
-                </View>
+                
 
                 <Spacer height={30} />
               </ScrollView>
@@ -1017,6 +1002,7 @@ calendar: {
   },
   modalTitle: {
     fontSize: 18,
+    textAlign:'center',
     color: '#2c3e50',
   },
   modalCloseButton: {

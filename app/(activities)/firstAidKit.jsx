@@ -84,7 +84,7 @@ export default function FirstAidKit() {
       </View>
       
       <View style={styles.exerciseContent}>
-        <ThemedText style={styles.exerciseTitle}>
+        <ThemedText title style={styles.exerciseTitle}>
           {exercise.title}
         </ThemedText>
         <ThemedText style={styles.exerciseDescription}>

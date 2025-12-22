@@ -17,10 +17,10 @@ const results = () => {
     
     const getTranslatedFocusArea = (englishFocusArea) => {
         const focusAreaMap = {
-            'Anxiety Management': t('questionnaire.focusAreas.anxietyManagement'),
-            'Stress Relief': t('questionnaire.focusAreas.stressRelief'),
-            'Maintaining Balance': t('questionnaire.focusAreas.maintainingBalance'),
-            'General Wellness': t('questionnaire.focusAreas.generalWellness')
+            'Anxiety Management': t('questionnaire.focusAreas.Anxiety Management'),
+            'Stress Relief': t('questionnaire.focusAreas.Stress Relief'),
+            'Maintaining Balance': t('questionnaire.focusAreas.Maintaining Balance'),
+            'General Wellness': t('questionnaire.focusAreas.General Wellness')
         };
         return focusAreaMap[englishFocusArea] || englishFocusArea;
     };
