@@ -23,7 +23,7 @@ export function PointsToast({ visible, points=false,title=false, message, onDism
             const timer = setTimeout(() => {
                 Animated.timing(slideAnim,{
                     toValue:150,
-                    duration:300,
+                    duration:600,
                     useNativeDriver:true,
                 }).start(() => {
                     onDismiss();

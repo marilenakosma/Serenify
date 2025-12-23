@@ -20,7 +20,7 @@ const LanguagePicker = ({ style }) => {
       await setItem('selectedLanguage', newLanguage);
       changeLanguage(newLanguage);
 
-      // ✅ Updated to pass getExtraGoals
+      // getExtraGoals
       const { refreshHabitTranslations } = useAuthStore.getState();
       refreshHabitTranslations(
         i18n.t, 

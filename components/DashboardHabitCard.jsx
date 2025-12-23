@@ -208,13 +208,13 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
                   progress={progress}
                   size={45}
                   strokeWidth={4}
-                  color={isComplete ? "#4CAF50" : "#FF9800"}
+                  color={isComplete ? "#4CAF50" : '#2196F3'}
                 />
               </Animated.View>
               
               {habit.type === 'incremental' ? (
                 <View style={[styles.incrementIcon]}>
-                  <Ionicons name="add" size={16} color="#FF9800" />
+                  <Ionicons name="add" size={16} color='#2196F3' />
                 </View>
               ) : (
                 <Animated.View style={[

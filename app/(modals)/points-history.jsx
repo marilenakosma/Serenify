@@ -58,6 +58,7 @@ export default function PointsHistory() {
             {new Date(item.timestamp).toLocaleDateString()}
           </ThemedText>
         </View>
+        <Ionicons name="flash" size={20} color="#FFD700" />
         <ThemedText style={[styles.pointsText, { color }]}>
           {isNegative ? '' : '+'}{item.amount}
         </ThemedText>
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
    pointsCard: {
-      backgroundColor: '#fff',
+      backgroundColor: '#ffffffff',
       marginHorizontal: 20,
       marginTop: 10,
       marginBottom: 15,

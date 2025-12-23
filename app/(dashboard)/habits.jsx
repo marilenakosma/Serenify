@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, ScrollView, TouchableOpacity,ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Spacer from "../../components/Spacer";
 import BackButton from "../../components/BackButton";
@@ -197,6 +197,12 @@ const getHabitStatus = (habit) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
+
+          <ImageBackground 
+                      source={require('../../assets/images/canola.jpg')}
+                      style={styles.backgroundImage}
+                      resizeMode="cover"
+                    >
           {/* Habits Overview */}
           <View style={styles.habitsOverview}>
             <View style={styles.overviewHeader}>
@@ -225,7 +231,7 @@ const getHabitStatus = (habit) => {
                       key={habit.id} 
                       style={[
                         styles.habitCard,
-                        status.isComplete && styles.completedHabitCard
+                        status.isComplete && styles.completedHabitCard,
                       ]}
                       onPress={() => handleStatsPress(habit.id)}
                     >
@@ -235,7 +241,7 @@ const getHabitStatus = (habit) => {
                         status.isComplete ? styles.completeIndicator : styles.pendingIndicator
                       ]}>
                         <Ionicons 
-                          name={status.isComplete ? "checkmark-circle" : "time-outline"} 
+                          name={status.isComplete ? "checkmark-circle" : "hourglass-outline"} 
                           size={16} 
                           color="#fff" 
                         />
@@ -285,6 +291,8 @@ const getHabitStatus = (habit) => {
               </View>
             )}
           </View>
+
+          </ImageBackground>
 
           {/* Categories with Goals */}
           {Object.entries(goalsByCategory).map(([categoryicon, categoryGoals]) => {
@@ -526,6 +534,13 @@ const styles = StyleSheet.create({
   },
   
   pendingIndicator: {
-    backgroundColor: '#FF9800',
+    //backgroundColor: '#FF9800',
+    backgroundColor:'#2196F3',
   },
+  backgroundImage: {
+          flex:1,
+          width: '100%',
+          minHeight: 100,
+          justifyContent: 'center',
+      },
 });
