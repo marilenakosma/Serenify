@@ -7,12 +7,14 @@ import ThemedText from '../../components/ThemedText';
 import { useAuthStore } from '../../store/authStore';
 import { useTranslation } from '../../constants/translations';
 import BackButton from "../../components/BackButton";
-import Breathe from "../../assets/images/lungs.png";
-import Movements from "../../assets/images/sneakers.png";
-import Meditation from "../../assets/images/yoga-master.png";
+//import Breathe from "../../assets/images/lungs.png";
+import Movements from "../../assets/images/Athletics.png";
+import Meditation from "../../assets/images/Yoga.png";
 import Notes from "../../assets/images/Notes.png";
 import Gifts from "../../assets/images/Gifts.png";
 import Journal from "../../assets/images/Journal.png";
+import Breathe from "../../assets/images/Nose.png";
+import Star from "../../assets/images/Star.png";
 
 export default function PointsHistory() {
   const router = useRouter();
@@ -23,8 +25,10 @@ export default function PointsHistory() {
     if (source.includes('habit')) return Notes;
     if (source.includes('reflection')) return Journal;
     if (source.includes('kindness')) return Gifts;
-    if (source.includes('breathe')) return 'accessibility';
-    return 'star';
+    if (source.includes('breathe')) return Breathe;
+    if (source.includes('meditation')) return Meditation;
+    if (source.includes('movements')) return Movements;
+    return Star;
   };
 
   const getSourceColor = (source) => {
@@ -32,6 +36,8 @@ export default function PointsHistory() {
     if (source.includes('reflection')) return '#2196F3';
     if (source.includes('kindness')) return '#FF6B6B';
     if (source.includes('breathe')) return '#9C27B0';
+    if (source.includes('meditation')) return '#f5c941';
+    if (source.includes('movements')) return '#6bb219';
     return '#FFD700';
   };
 
@@ -40,6 +46,8 @@ export default function PointsHistory() {
     if (source.includes('reflection')) return t('points.fromReflection');
     if (source.includes('kindness')) return t('points.fromKindness');
     if (source.includes('breathe')) return t('points.fromBreathing');
+    if (source.includes('meditation')) return t('points.fromMeditation');
+    if (source.includes('movements')) return t('points.fromMovement');
     return t('points.fromActivity');
   };
 

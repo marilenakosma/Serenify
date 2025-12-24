@@ -172,6 +172,8 @@ const Login = () => {
                         <ThemedText title={true} style={styles.title}>
                            {t('auth.login')}
                         </ThemedText>
+
+                        
                         
                         {/* Email Input */}
                         <View style={styles.inputContainer}>

@@ -204,7 +204,7 @@ const getHabitStatus = (habit) => {
 
           <ImageBackground 
                       source={require('../../assets/images/canola.jpg')}
-                      style={styles.backgroundImage}
+                      style={[styles.backgroundImage]}
                       resizeMode="cover"
                     >
           {/* Habits Overview */}
@@ -293,7 +293,7 @@ const getHabitStatus = (habit) => {
                       </ThemedText>
 
                       {/*  Frequency-aware progress text */}
-                      {!isDailyType(habit.frequency) && status.requiredPerWeek > 1 &&  (
+                      {!isDailyType(habit.frequency) && status.requiredPerWeek > 1 &&  status.weeklyCompletions < status.requiredPerWeek && (
                         <ThemedText style={styles.weeklyProgress}>
                           {t('habitCard.weeklyProgress', {
                             completed: status.weeklyCompletions,
@@ -527,7 +527,7 @@ const styles = StyleSheet.create({
   
   // Empty state
   emptyHabitsContainer: {
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    backgroundColor: 'white',
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',

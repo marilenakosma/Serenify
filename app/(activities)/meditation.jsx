@@ -29,7 +29,7 @@ export default function Meditation() {
     { id: 2, text: t('durations.mins'), duration: 10 },
     { id: 3, text: t('durations.mins'), duration: 15 },
     { id: 4, text: t('durations.mins'), duration: 20 },
-   // { id: 5, text: 'DEBUG', duration: 0 },
+    { id: 5, text: 'DEBUG', duration: 0 },
   ]
 
 const handleAnimationFrame = (event) => {
