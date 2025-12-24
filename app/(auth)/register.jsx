@@ -63,9 +63,9 @@ const Register = () => {
                         ]} 
                     />
                 </View>
-                <Text style={[styles.strengthText, { color: getStrengthColor() }]}>
+                <ThemedText title style={[styles.strengthText, { color: getStrengthColor() }]}>
                     {getStrengthText()}
-                </Text>
+                </ThemedText>
             </View>
         );
     };
@@ -256,8 +256,8 @@ const Register = () => {
                         />
                         {touched.name && errors.name && (
                             <View style={styles.validationContainer}>
-                                <Text style={styles.invalidMark}>⚠</Text>
-                                <Text style={styles.errorMessage}>{errors.name}</Text>
+                                <ThemedText style={styles.invalidMark}>⚠</ThemedText>
+                                <ThemedText style={styles.errorMessage}>{errors.name}</ThemedText>
                             </View>
                         )}
                     </View>
@@ -277,17 +277,10 @@ const Register = () => {
                             onBlur={handleEmailBlur}
                             value={email}
                         />
-                        {touched.email && (
-                            <View style={styles.validationContainer}>
-                                {errors.email ? (
-                                    <>
-                                        <Text style={styles.invalidMark}>⚠</Text>
-                                        <Text style={styles.errorMessage}>{errors.email}</Text>
-                                    </>
-                                ) : email && validator.isEmail(email) ? (
-                                    <Text style={styles.validMark}>{t('validation.validEmail')}</Text> 
-                                ) : null}
-                            </View>
+                        {touched.email && errors.email && (
+                           <View style={styles.validationContainer}>
+                               <ThemedText style={styles.errorMessage}>⚠ {errors.email}</ThemedText>
+                           </View>
                         )}
                     </View>
 
@@ -307,12 +300,13 @@ const Register = () => {
                         />
                         
                         {/* Password Strength Meter */}
-                        <PasswordStrengthMeter strength={passwordStrength} password={password} />
+                        {touched.password && errors.password &&
+                        <PasswordStrengthMeter strength={passwordStrength} password={password} />}
                         
                         {touched.password && errors.password && (
                             <View style={styles.validationContainer}>
-                                <Text style={styles.invalidMark}>⚠</Text>
-                                <Text style={styles.errorMessage}>{errors.password}</Text>
+                                <ThemedText style={styles.invalidMark}>⚠</ThemedText>
+                                <ThemedText style={styles.errorMessage}>{errors.password}</ThemedText>
                             </View>
                         )}
                     </View>
@@ -332,20 +326,13 @@ const Register = () => {
                             secureTextEntry 
                         />
                         
-                        {touched.confirmPassword && (
+                        {touched.confirmPassword && errors.confirmPassword && (
                             <View style={styles.validationContainer}>
-                                {errors.confirmPassword ? (
-                                    <>
-                                        <Text style={styles.invalidMark}>⚠</Text>
-                                        <Text style={styles.errorMessage}>{errors.confirmPassword}</Text>
-                                    </>
-                                ) : confirmPassword && confirmPassword === password ? (
-                                    <Text style={styles.validMark}>{t('validation.passwordsMatch')}</Text>
-                                ) : null}
+                                <ThemedText style={styles.invalidMark}>⚠</ThemedText>
+                                <ThemedText style={styles.errorMessage}>{errors.confirmPassword}</ThemedText>
                             </View>
                         )}
                     </View>
-
 
                     <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
@@ -377,20 +364,21 @@ const Register = () => {
                     <Spacer height={RD.isSmallScreen ? 5 : 8}/>
   
                     {/* Or Divider */}
-                   { /*<View style={styles.orContainer}>
+                    <View style={styles.orContainer}>
                         <View style={styles.orLine} />
                         <ThemedText style={styles.orText}>{t('auth.continue')}</ThemedText>
                         <View style={styles.orLine} />
-                    </View> */}
+                    </View>
                     
                     {/* Social Login */}
-                   {/* <View style={styles.socialContainer}>
+                    <View style={styles.socialContainer}>
                         <TouchableOpacity style={styles.image}>
                             <Image source={require('../../assets/images/google.png')}
                                  style={styles.socialIcon} />  
+                            <ThemedText>Google</ThemedText>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.image}>
+                        {/*<TouchableOpacity style={styles.image}>
                             <Image source={require('../../assets/images/apple.png')}
                                  style={styles.socialIcon} />  
                         </TouchableOpacity>
@@ -398,8 +386,8 @@ const Register = () => {
                         <TouchableOpacity style={styles.image}>
                             <Image source={require('../../assets/images/facebook.png')}
                                  style={styles.socialIcon} />  
-                        </TouchableOpacity>
-                    </View> */}
+                        </TouchableOpacity>*/}
+                    </View>
                <Spacer height={RD.isSmallScreen ? 10 : 20}/>
 
                     {/* Login Link */}
@@ -423,7 +411,7 @@ export default Register;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         alignItems: 'center',
         backgroundColor: "white",
         paddingHorizontal: 32,
@@ -440,8 +428,8 @@ const styles = StyleSheet.create({
     headerImage: {
         width: RD.wp(30), // 25% of screen width
         height: RD.wp(30), // Keep it square
-       // maxWidth: 100,    // Don't get too big on tablets
-        //maxHeight: 100,
+        maxWidth: 90,    // Don't get too big on tablets
+        maxHeight: 90,
         resizeMode: 'contain',
     },
     title: {
@@ -526,16 +514,20 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#666',
     },
-    image: {
-        backgroundColor: Colors.uiBackground,
-        width: RD.wp(13), 
+     image: {
+        backgroundColor: Colors.background,
+        width: RD.wp(5), 
         height: RD.wp(13), 
         borderRadius: RD.wp(3),
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: RD.wp(3),
+        borderColor:Colors.primary,
         borderWidth: 1,
-        borderColor: '#e1e1e1',
+        flex:1,
+        flexDirection:'row',
+        gap:8,
+        padding:5
     },
     loginContainer: {
         flexDirection: 'row',
@@ -552,7 +544,7 @@ const styles = StyleSheet.create({
     },
     strengthMeter: {
         marginTop: 8,
-        //marginBottom: 3,
+        marginBottom: 8,
     },
     strengthBarContainer: {
         height: 4,

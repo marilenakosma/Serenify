@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: 'rgba(76, 175, 80, 0.2)',
   },
   emptyHabitsText: {

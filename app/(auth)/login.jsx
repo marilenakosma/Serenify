@@ -14,6 +14,7 @@ import { Colors } from "../../constants/Colors";
 import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from '../../constants/translations';
 import { CustomAlert } from "../../components/CustomAlert";
+import { useRouter } from "expo-router";
 
 const Login = () => {
     const {login,isLoading} = useAuthStore();
@@ -22,6 +23,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [alertConfig, setAlertConfig] = useState(null);
+    const router = useRouter();
     const { t } = useTranslation();
     
     
@@ -172,8 +174,6 @@ const Login = () => {
                         <ThemedText title={true} style={styles.title}>
                            {t('auth.login')}
                         </ThemedText>
-
-                        
                         
                         {/* Email Input */}
                         <View style={styles.inputContainer}>
@@ -191,18 +191,14 @@ const Login = () => {
                                 onFocus={handleEmailFocus}
                                 value={email}
                             />
-                            {touched.email && (
+                            
+
+                            {touched.email && errors.email && (
                                 <View style={styles.validationContainer}>
-                                    {errors.email ? (
-                                        <>
-                                            <Text style={styles.invalidMark}>⚠</Text>
-                                            <Text style={styles.errorMessage}>{errors.email}</Text>
-                                        </>
-                                    ) : email && validator.isEmail(email) ? (
-                                        <Text style={styles.validMark}>{t('validation.validEmail')}</Text>
-                                    ) : null}
+                                     <ThemedText style={styles.errorMessage}>⚠ {errors.email}</ThemedText>
                                 </View>
                             )}
+                    
                         </View>
 
                         {/* Password Input */}
@@ -227,7 +223,10 @@ const Login = () => {
                         </View>
 
                         {/* Forgot Password */}
-                        <TouchableOpacity style={styles.forgotPasswordContainer}>
+                        <TouchableOpacity 
+                            style={styles.forgotPasswordContainer}
+                            onPress={() => router.push('/forgot-password')}
+                        >
                             <ThemedText style={styles.forgotPasswordText}>
                                 {t('auth.forgotPassword')}
                             </ThemedText>
@@ -262,20 +261,21 @@ const Login = () => {
                         <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
                         {/* Or Divider */}
-                        {/*<View style={styles.orContainer}>
+                        <View style={styles.orContainer}>
                             <View style={styles.orLine} />
                             <ThemedText style={styles.orText}>{t('auth.continue')}</ThemedText>
                             <View style={styles.orLine} />
-                        </View>*/}
+                        </View>
                         
                         {/* Social Login */}
-                       {/* <View style={styles.socialContainer}>
+                        <View style={styles.socialContainer}>
                                                 <TouchableOpacity style={styles.image}>
                                                     <Image source={require('../../assets/images/google.png')}
                                                          style={styles.socialIcon} />  
+                                                    <ThemedText>Google</ThemedText>
                                                 </TouchableOpacity>
                         
-                                                <TouchableOpacity style={styles.image}>
+                                                {/*<TouchableOpacity style={styles.image}>
                                                     <Image source={require('../../assets/images/apple.png')}
                                                          style={styles.socialIcon} />  
                                                 </TouchableOpacity>
@@ -283,8 +283,8 @@ const Login = () => {
                                                 <TouchableOpacity style={styles.image}>
                                                     <Image source={require('../../assets/images/facebook.png')}
                                                          style={styles.socialIcon} />  
-                                                </TouchableOpacity>
-                        </View> */}
+                                                </TouchableOpacity>*/}
+                        </View>
 
                         <Spacer height={RD.isSmallScreen ? 10 : 20}/>
 
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     },
     headerImage: {
         width: RD.wp(40), // 25% of screen width
-        height: RD.wp(60), // Keep it square
+        height: RD.wp(50), // Keep it square
         //maxWidth: 150,    // Don't get too big on tablets
         //maxHeight: 150,
         resizeMode: 'contain',
@@ -416,9 +416,9 @@ const styles = StyleSheet.create({
     },
     orContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
+        //alignItems: 'center',
         marginVertical: 15,
-        width: '100%',
+        //width: '100%',
     },
     orLine: {
         flex: 1,
@@ -431,15 +431,19 @@ const styles = StyleSheet.create({
         color: '#666',
     },
     image: {
-        backgroundColor: Colors.uiBackground,
-        width: RD.wp(13), 
+        backgroundColor: Colors.background,
+        width: RD.wp(5), 
         height: RD.wp(13), 
         borderRadius: RD.wp(3),
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: RD.wp(3),
+        borderColor:Colors.primary,
         borderWidth: 1,
-        borderColor: '#e1e1e1',
+        flex:1,
+        flexDirection:'row',
+        gap:8,
+        padding:5
     },
     socialContainer: {
         flexDirection: 'row',

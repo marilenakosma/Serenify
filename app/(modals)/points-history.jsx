@@ -13,7 +13,7 @@ import Meditation from "../../assets/images/Yoga.png";
 import Notes from "../../assets/images/Notes.png";
 import Gifts from "../../assets/images/Gifts.png";
 import Journal from "../../assets/images/Journal.png";
-import Breathe from "../../assets/images/Nose.png";
+import Breathe from "../../assets/images/Heart4.png";
 import Star from "../../assets/images/Star.png";
 
 export default function PointsHistory() {
@@ -35,7 +35,7 @@ export default function PointsHistory() {
     if (source.includes('habit')) return '#4CAF50';
     if (source.includes('reflection')) return '#2196F3';
     if (source.includes('kindness')) return '#FF6B6B';
-    if (source.includes('breathe')) return '#9C27B0';
+    if (source.includes('breathe')) return '#e04f5f';
     if (source.includes('meditation')) return '#f5c941';
     if (source.includes('movements')) return '#6bb219';
     return '#FFD700';
@@ -58,7 +58,10 @@ export default function PointsHistory() {
     return (
       <View style={styles.historyItem}>
         <View style={[styles.iconContainer,{backgroundColor: `${color}15`} ]}>
-           <Image source={getSourceIcon(item.source)} style={{width:25,height:25}} />
+           <Image source={getSourceIcon(item.source)} style={{
+             width: item.source.includes('breathe') ? 42 : 25, 
+             height: item.source.includes('breathe') ? 42 : 25
+           }} />
         </View>
         <View style={styles.textContainer}>
           <ThemedText style={[styles.sourceText]}>{getSourceText(item.source)}</ThemedText>

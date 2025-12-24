@@ -3,7 +3,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updateProfile
+  updateProfile,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithCredential
 } from 'firebase/auth';
 import { 
   doc, 
@@ -101,6 +104,66 @@ export const loginUser = async (email, password) => {
     const errorKey = errorMap[error.code] || 'errors.unknownError';
     
     return { success: false, error: error.code, errorKey };
+  }
+};
+
+export const signInWithGoogle = async (idToken) => {
+  try {
+    console.log('Attempting Google sign-in with token...');
+    
+    // Create credential with Google ID token
+    const credential = GoogleAuthProvider.credential(idToken);
+    
+    // Sign in with credential
+    const userCredential = await signInWithCredential(auth, credential);
+    const user = userCredential.user;
+    
+    console.log('Google sign-in successful:', user.uid);
+    
+    // Check if user document exists
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    
+    // If new user, create their document
+    if (!userDoc.exists()) {
+      console.log('Creating new user document for Google user...');
+      
+      await setDoc(userDocRef, {
+        username: user.email?.split('@')[0] || 'user',
+        email: user.email,
+        displayName: user.displayName || user.email?.split('@')[0],
+        photoURL: user.photoURL || null,
+        createdAt: serverTimestamp(),
+        hasCompletedQuestionnaire: false,
+        points: 0,
+        level: 1,
+        userHabits: [],
+        habitCompletions: {},
+        kindnessCompletions: {},
+        pointsHistory: [],
+        todayMood: null,
+      });
+      
+      console.log('Google user document created');
+    }
+    
+    return { success: true, user, isNewUser: !userDoc.exists() };
+    
+  } catch (error) {
+    console.error('Google sign-in error:', error);
+    
+    const errorMap = {
+      'auth/account-exists-with-different-credential': 'errors.accountExistsWithDifferentCredential',
+      'auth/invalid-credential': 'errors.invalidCredential',
+      'auth/operation-not-allowed': 'errors.operationNotAllowed',
+      'auth/user-disabled': 'errors.userDisabled',
+      'auth/user-not-found': 'errors.userNotFound',
+      'auth/network-request-failed': 'errors.networkError',
+    };
+    
+    const errorKey = errorMap[error.code] || 'errors.unknownError';
+    
+    return { success: false, error: error.message, errorKey };
   }
 };
 

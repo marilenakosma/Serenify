@@ -24,7 +24,15 @@
   "accountCreatedSuccess": "Account created successfully!",
   "loginSuccessful": "Login successful",
   "invalidCredentials": "Invalid email or password. Please try again.",
-  "loginFailed": "Failed to login. Please try again"
+  "loginFailed": "Failed to login. Please try again",
+  "resetPassword": "Reset Password",
+  "resetPasswordTitle": "Reset Your Password",
+  "resetPasswordSubtitle": "Enter your email and we'll send you instructions",
+  "sendResetLink": "Send Reset Link",
+  "sendingResetLink": "Sending...",
+  "backToLogin": "Back to Login",
+  "resetEmailSent": "Reset email sent! Check your inbox.",
+  "resetEmailError": "Failed to send reset email. Please try again."
 },
 "points": {
     "points": "Points",
@@ -43,6 +51,8 @@
     "fromReflection": "Reflection Saved",
     "fromKindness": "Act of Kindness",
     "fromBreathing": "Breathing Exercise",
+    "fromMeditation": "Meditation Exercise",
+    "fromMovement": "Fitness Exercise",
     "fromActivity": "Activity",
     "noHistory": "No points history yet. Complete habits and activities to earn points!"
   },
