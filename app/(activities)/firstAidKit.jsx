@@ -52,8 +52,9 @@ export default function FirstAidKit() {
       description: t('firstAid.worryJournal.description'),
       color: '#FFA726',
       route: '/(activities)/firstaid/worry-journal'
-    },
-    {
+    }
+  ];
+   /* {
       id: 'emergency-contacts',
       icon: 'call-outline',
       title: t('firstAid.emergency.title'),

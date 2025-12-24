@@ -53,7 +53,7 @@ const kindnessActs = [
       category: 'Personal',
       text: t('kindness.callFriend'),
       icon: 'call-outline',
-      color: '#fc89afff',
+      color: '#D989AA',
       duration: t('durations.10min'),
       points: 15
     },
@@ -62,7 +62,7 @@ const kindnessActs = [
       category: 'Personal',
       text: t('kindness.sendThankYou'),
       icon: 'heart-outline',
-      color: '#fc89afff',
+      color: '#D989AA',
       duration: t('durations.5min'),
       points: 15
     },
@@ -71,7 +71,7 @@ const kindnessActs = [
       category: 'Personal',
       text: t('kindness.compliment'),
       icon: 'chatbubble-outline',
-      color: '#fc89afff',
+      color: '#D989AA',
       duration: t('durations.1min'),
       points: 15
     },
@@ -234,11 +234,13 @@ const renderActItem = (act) => {
         style={styles.actCard}
         onPress={() => completeAct(act.id)}
       >
-        <View style={styles.iconContainer}>
+        <View style={[styles.iconContainer,
+           {backgroundColor: isCompleted ? `${'#4CAF50'}15`: `${act.color}15`}
+        ]}>
           <Ionicons 
             name={act.icon} 
             size={24} 
-            color={isCompleted ? Colors.primary : act.color} 
+            color={isCompleted ? '#4CAF50' : act.color} 
           />
         </View>
 
@@ -255,7 +257,7 @@ const renderActItem = (act) => {
           
           <View style={styles.actMeta}>
             <ThemedText style={[styles.category,
-            {color:act.color}]}
+            {color: isCompleted ? '#4CAF50': act.color}]}
           >
             {t(`kindness.categories.${act.category.toLowerCase()}`)}
           </ThemedText>
@@ -271,7 +273,7 @@ const renderActItem = (act) => {
           <Ionicons 
             name={isCompleted ? "checkmark-circle" : "add-circle"} 
             size={28} 
-            color={isCompleted ? Colors.primary : act.color} 
+            color={isCompleted ? '#4CAF50' : act.color} 
           />
         </View>
       </Pressable>

@@ -26,7 +26,7 @@ export default function ThemedGoal({
 
       <View style={[
         styles.iconContainer,
-        //color && { backgroundColor : `${color}15`}
+         {backgroundColor : `${accentColor}15`}
         ]}>
         <Ionicons name={iconName} size={24} color={accentColor} />
       </View>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   iconContainer: {
       width: 48,
       height: 48,
-      borderRadius: 24,
+      borderRadius: 28,
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 12,

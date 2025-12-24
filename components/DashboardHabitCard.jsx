@@ -63,7 +63,7 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
     if (isComplete) {
       progressText += ' ✅';
     }
-  } else if (habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' || habit.frequency === 'Weekends only') {
+  } else if (habit.frequency === 'daily' || habit.frequency === 'weekdays' || habit.frequency === 'weekends') {
     isComplete = Boolean(thisHabitCompletions[today]);
     progress = isComplete ? 1 : 0;
     progressText = isComplete ? t('habitCard.doneToday') : t('habitCard.tapToComplete');
@@ -172,20 +172,11 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
     outputRange: ['transparent', '#4CAF50'] // Transparent to green border
   });
 
-  // Get streak label based on frequency
-  const getStreakLabel = (frequency) => {
-    if (frequency === 'Everyday' || frequency === 'Weekdays only' || frequency === 'Weekends only') {
-      return t('habitCard.days');
-    } else {
-      return t('habitCard.weeks');
-    }
-  };
-
   return (
     <Animated.View style={[
       styles.habitCard,
       { 
-        backgroundColor: cardBackgroundColor,
+        backgroundColor: 'white',
         borderColor: cardBorderColor,
         borderWidth: 2,
       }
@@ -253,8 +244,14 @@ const DashboardHabitCard = ({ habit, onPress, onToggleCompletion }) => {
             {habit.streak || 0}
           </ThemedText>
           <ThemedText style={styles.streakLabel}>
-            {getStreakLabel(habit.frequency)}
-          </ThemedText>
+              {habit.streak === 1 && (habit.frequency === 'daily' || habit.frequency === 'weekdays' || habit.frequency === 'weekends')
+              ? t('habitCard.day')
+              : habit.frequency === 'daily' || habit.frequency === 'weekdays' || habit.frequency === 'weekends'
+              ? t('habitCard.days')
+              : habit.streak === 1
+              ? t('habitCard.week')
+              : t('habitCard.weeks')}
+        </ThemedText>
         </View>
       </TouchableOpacity>
     </Animated.View>

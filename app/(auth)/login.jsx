@@ -260,14 +260,14 @@ const Login = () => {
                         <Spacer height={RD.isSmallScreen ? 5 : 8}/>
 
                         {/* Or Divider */}
-                        <View style={styles.orContainer}>
+                        {/*<View style={styles.orContainer}>
                             <View style={styles.orLine} />
                             <ThemedText style={styles.orText}>{t('auth.continue')}</ThemedText>
                             <View style={styles.orLine} />
-                        </View>
+                        </View>*/}
                         
                         {/* Social Login */}
-                        <View style={styles.socialContainer}>
+                       {/* <View style={styles.socialContainer}>
                                                 <TouchableOpacity style={styles.image}>
                                                     <Image source={require('../../assets/images/google.png')}
                                                          style={styles.socialIcon} />  
@@ -282,7 +282,7 @@ const Login = () => {
                                                     <Image source={require('../../assets/images/facebook.png')}
                                                          style={styles.socialIcon} />  
                                                 </TouchableOpacity>
-                        </View>
+                        </View> */}
 
                         <Spacer height={RD.isSmallScreen ? 10 : 20}/>
 
@@ -323,10 +323,10 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     headerImage: {
-        width: RD.wp(50), // 25% of screen width
-        height: RD.wp(50), // Keep it square
-        maxWidth: 150,    // Don't get too big on tablets
-        maxHeight: 150,
+        width: RD.wp(40), // 25% of screen width
+        height: RD.wp(60), // Keep it square
+        //maxWidth: 150,    // Don't get too big on tablets
+        //maxHeight: 150,
         resizeMode: 'contain',
     },
     title: {

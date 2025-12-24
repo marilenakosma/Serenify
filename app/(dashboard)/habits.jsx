@@ -182,6 +182,10 @@ const getHabitStatus = (habit) => {
 
         return habit.text || habit.title || habit.icon || 'Habit';
       };
+    
+    const isDailyType = (frequency) => {
+     return frequency === 'daily' || frequency === 'weekdays' || frequency === 'weekends';
+    }; 
 
   return (
     <ThemedView style={styles.container}>
@@ -239,19 +243,26 @@ const getHabitStatus = (habit) => {
                       <View style={[
                         styles.statusIndicator,
                         status.isComplete ? styles.completeIndicator : styles.pendingIndicator
+                        
                       ]}>
                         <Ionicons 
-                          name={status.isComplete ? "checkmark-circle" : "hourglass-outline"} 
+                          name={status.isComplete ? "checkmark-outline" : "hourglass-outline"} 
                           size={16} 
-                          color="#fff" 
+                          color={"#fff"} 
                         />
                       </View>
-
+                     
+                     <View style={[
+                             styles.iconContainer,
+                              status.isComplete && {backgroundColor : `${"#4CAF50"}15`}
+                             ]}>
+                              
                       <Ionicons 
                         name={getHabitIcon(habit)} 
                         size={32} 
                         color={status.isComplete ? "#4CAF50" : "#666"} 
                       />
+                      </View>
                       
                       <View style={styles.streakRow}>
                         <ThemedText title={true} style={styles.habitStreak}>
@@ -259,19 +270,30 @@ const getHabitStatus = (habit) => {
                         </ThemedText>
                        <ThemedText style={styles.habitStreakLabel}>
                          {/* Show correct unit based on frequency type */}
-                        {habit.frequency === 'Everyday' || habit.frequency === 'Weekdays only' || habit.frequency === 'Weekends only' 
-                         ? t('habitCard.days')  : t('habitCard.weeks')}
-                       </ThemedText>
+                        {habit.streak === 1 && (habit.frequency === 'daily' || habit.frequency === 'weekdays' || habit.frequency === 'weekends')
+                         ? t('habitCard.day')
+                         : habit.frequency === 'daily' || habit.frequency === 'weekdays' || habit.frequency === 'weekends'
+                         ? t('habitCard.days')
+                         : habit.streak === 1
+                         ? t('habitCard.week')
+                         : t('habitCard.weeks')
+                        }
+                        </ThemedText>
                       </View>
                       
-                      <ThemedText style={styles.habitTitle}>{getHabitText(habit)}</ThemedText>
+                      <ThemedText style={
+                        styles.habitTitle}>
+                        {getHabitText(habit)}
+                      </ThemedText>
                       
-                      <ThemedText style={styles.habitFrequency}>
+                      <ThemedText style={[styles.habitFrequency,
+                        status.isComplete && {color:'#4CAF50'}
+                      ]}>
                         {getFrequencyDisplay(habit.frequency, t)}
                       </ThemedText>
 
                       {/*  Frequency-aware progress text */}
-                      {status.requiredPerWeek > 1 && (
+                      {!isDailyType(habit.frequency) && status.requiredPerWeek > 1 &&  (
                         <ThemedText style={styles.weeklyProgress}>
                           {t('habitCard.weeklyProgress', {
                             completed: status.weeklyCompletions,
@@ -470,6 +492,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 18,
   },
+
+  habitTitleComplete: {
+    fontSize: 14,
+    //color: '#4CAF50',
+    textAlign: 'center',
+    marginBottom: 8,
+    lineHeight: 18,
+  },
   
   habitFrequency: {
     fontSize: 12,
@@ -513,7 +543,8 @@ const styles = StyleSheet.create({
   // Completion states
   completedHabitCard: {
     borderColor: '#4CAF50',
-    backgroundColor:'#E8F5E8',
+    //backgroundColor:'#E8F5E8',
+    //borderColor:'#61ad71',
     borderWidth: 2,
   },
   
@@ -530,7 +561,7 @@ const styles = StyleSheet.create({
   },
   
   completeIndicator: {
-    backgroundColor: '#4CAF50',
+   backgroundColor: '#4CAF50',
   },
   
   pendingIndicator: {
@@ -542,5 +573,14 @@ const styles = StyleSheet.create({
           width: '100%',
           minHeight: 100,
           justifyContent: 'center',
+      },
+  iconContainer: {
+        width: 48,
+        height: 48,
+        borderRadius: 28,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+        flexShrink:0,
       },
 });

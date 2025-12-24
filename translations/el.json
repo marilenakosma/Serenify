@@ -136,8 +136,10 @@
     "weeklyProgress": "{{completed}}/{{required}} αυτή την εβδομάδα",
     "weeklyProgressDoneToday": "{{completed}}/{{required}} αυτή την εβδομάδα - Ολοκληρώθηκε σήμερα!",
     "weeklyProgressTapToComplete": "{{completed}}/{{required}} αυτή την εβδομάδα - Πατήστε για ολοκλήρωση",
-    "days": "ημέρες",
-    "weeks": "εβδομάδες"
+    "days": "μέρες",
+    "day":"μέρα",
+    "weeks": "εβδομάδες",
+    "week":"εβδομάδα"
   },
   "goals": {
     "breathing": "Κάντε ασκήσεις αναπνοής",

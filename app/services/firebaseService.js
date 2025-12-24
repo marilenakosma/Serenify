@@ -161,8 +161,19 @@ export const saveHabits = async (userId, habits) => {
       return { success: false, error: 'Not authenticated' };
     }
     
+    // Clean undefined values from each habit
+    const cleanedHabits = habits.map(habit => {
+      const cleaned = {};
+      Object.entries(habit).forEach(([key, value]) => {
+        if (value !== undefined) {
+          cleaned[key] = value;
+        }
+      });
+      return cleaned;
+    });
+    
     await updateDoc(doc(db, 'users', userId), {
-      userHabits: habits,
+      userHabits: cleanedHabits,
       updatedAt: serverTimestamp()
     });
     return { success: true };

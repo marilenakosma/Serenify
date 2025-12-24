@@ -2,18 +2,18 @@ import { FREQUENCY_TYPES } from './habitFrequency';
 
 export const getCategoryColor = (category, t) => {
   const colorMap = {
-    [t('categories.foundation')]:'#F5C26B',
-    [t('categories.health')]:'#a389cfff',      
-    [t('categories.fitness')]: '#66BB6A',    
-    [t('categories.mindfulness')]: '#42A5F5', 
-    [t('categories.learning')]: '#FFA726',    
-    [t('categories.reflection')]: '#EC407A',  
-    [t('categories.productivity')]: '#26A69A',
-    [t('categories.meditation')]: '#7E57C2',  
-    [t('categories.lifestyle')]: '#8D6E63',   
-    [t('categories.social')]: '#FF7043',      
-    [t('categories.home')]: '#FFA726',        
-    [t('categories.selfcare')]: '#FF6B9D',    
+    [t('categories.foundation')]:'#E8B86D',
+    [t('categories.health')]:'#A5B68D',      
+    [t('categories.fitness')]: '#6B9E78',    
+    [t('categories.mindfulness')]: '#7BA3C1', 
+    [t('categories.learning')]: '#E89D6B',    
+    [t('categories.reflection')]: '#C17BA3',  
+    [t('categories.productivity')]: '#6B9E9E',
+    [t('categories.meditation')]: '#9E8BC1',  
+    [t('categories.lifestyle')]: '#A89C94',   
+    [t('categories.social')]: '#E89C7B',      
+    [t('categories.home')]: '#E89C7B',        
+    [t('categories.selfcare')]: '#D989AA',    
   };
   
   return colorMap[category] || '#4CAF50'; // fallback

@@ -91,7 +91,8 @@ const AddHabits = () => {
       onPress={() => toggleHabit(habit.id)}
       activeOpacity={0.7}
     >
-      <View style={styles.habitIcon}>
+      <View style={[styles.habitIcon, {
+        backgroundColor : isSelected ? `${'#4CAF50'}15`: `${habitColor}15`}]}>
         <Ionicons 
           name={habit.icon || 'checkmark-outline'} 
           size={28} 

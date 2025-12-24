@@ -24,7 +24,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.15min'),
       points: 15,
-      color: '#FFA726'
+      color: '#D4A574'
     },
     {
       id: 'tidy-kitchen',
@@ -35,7 +35,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.15min'),
       points: 15,
-      color: '#FFA726'
+      color: '#D4A574'
     },
     {
       id: 'tidy-bathroom',
@@ -46,7 +46,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.10min'),
       points: 10,
-      color: '#FFA726'
+      color: '#D4A574'
     },
     {
       id: 'tidy-livingroom',
@@ -57,7 +57,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.15min'),
       points: 15,
-      color: '#FFA726'
+      color: '#D4A574'
     },
     
     // Self Care
@@ -70,7 +70,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.10min'),
       points: 15,
-      color: '#FF6B9D'
+      color: '#D989AA'
     },
     {
       id: 'take-bath',
@@ -81,7 +81,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.30min'),
       points: 20,
-      color: '#FF6B9D'
+      color: '#D989AA'
     },
     {
       id: 'pamper-day',
@@ -92,7 +92,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.medium'),
       duration: t('durations.1hour'),
       points: 25,
-      color: '#FF6B9D'
+      color: '#D989AA'
     },
     
     // Exercise specific
@@ -105,7 +105,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.medium'),
       duration: t('durations.30min'),
       points: 25,
-      color: '#66BB6A'
+      color: '#6B9E78'
     },
     {
       id: 'walk-10k-steps',
@@ -116,7 +116,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.medium'),
       duration: t('durations.allDay'),
       points: 30,
-      color: '#66BB6A'
+      color: '#6B9E78'
     },
     {
       id: 'stretch-routine',
@@ -127,7 +127,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.10min'),
       points: 15,
-      color: '#66BB6A'
+      color: '#6B9E78'
     },
     
     // Sleep specific
@@ -140,7 +140,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.medium'),
       duration: t('durations.allNight'),
       points: 25,
-      color: '#a389cfff'
+      color: '#A5B68D'
     },
     {
       id: 'power-nap',
@@ -151,7 +151,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.easy'),
       duration: t('durations.20min'),
       points: 10,
-      color: '#a389cfff'
+      color: '#A5B68D'
     },
     {
       id: 'sleep-before-11',
@@ -162,7 +162,7 @@ import { getCategoryColor } from '../../constants/availableHabits';
       difficulty: t('difficulties.medium'),
       duration: t('durations.evening'),
       points: 20,
-      color: '#a389cfff'
+      color: '#A5B68D'
     }
   ];
 
@@ -268,7 +268,7 @@ export default function GoalIdeas() {
         disabled={isAdded}
       >
         <View style={[styles.iconContainer
-          //,{ backgroundColor: `${goal.color}15` }
+          ,{ backgroundColor: `${goal.color}15` }
           ]}>
           <Ionicons 
             name={goal.icon} 

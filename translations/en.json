@@ -137,7 +137,9 @@
     "weeklyProgressDoneToday": "{{completed}}/{{required}} this week - Done today!",
     "weeklyProgressTapToComplete": "{{completed}}/{{required}} this week - Tap to complete",
     "days": "days",
-    "weeks": "weeks"
+    "day":"day",
+    "weeks": "weeks",
+    "week":"week"
   },
   "goals": {
     "breathing": "Practice deep breathing exercises",

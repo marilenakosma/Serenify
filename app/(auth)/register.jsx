@@ -375,16 +375,16 @@ const Register = () => {
                     </ThemedButton>
                     
                     <Spacer height={RD.isSmallScreen ? 5 : 8}/>
-
+  
                     {/* Or Divider */}
-                    <View style={styles.orContainer}>
+                   { /*<View style={styles.orContainer}>
                         <View style={styles.orLine} />
                         <ThemedText style={styles.orText}>{t('auth.continue')}</ThemedText>
                         <View style={styles.orLine} />
-                    </View>
+                    </View> */}
                     
                     {/* Social Login */}
-                    <View style={styles.socialContainer}>
+                   {/* <View style={styles.socialContainer}>
                         <TouchableOpacity style={styles.image}>
                             <Image source={require('../../assets/images/google.png')}
                                  style={styles.socialIcon} />  
@@ -399,9 +399,8 @@ const Register = () => {
                             <Image source={require('../../assets/images/facebook.png')}
                                  style={styles.socialIcon} />  
                         </TouchableOpacity>
-                    </View>
-
-                    <Spacer height={RD.isSmallScreen ? 10 : 20}/>
+                    </View> */}
+               <Spacer height={RD.isSmallScreen ? 10 : 20}/>
 
                     {/* Login Link */}
                     <View style={styles.loginContainer}>
@@ -424,7 +423,7 @@ export default Register;
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
+        flex: 1,
         alignItems: 'center',
         backgroundColor: "white",
         paddingHorizontal: 32,
@@ -441,8 +440,8 @@ const styles = StyleSheet.create({
     headerImage: {
         width: RD.wp(30), // 25% of screen width
         height: RD.wp(30), // Keep it square
-        maxWidth: 90,    // Don't get too big on tablets
-        maxHeight: 90,
+       // maxWidth: 100,    // Don't get too big on tablets
+        //maxHeight: 100,
         resizeMode: 'contain',
     },
     title: {
@@ -553,7 +552,7 @@ const styles = StyleSheet.create({
     },
     strengthMeter: {
         marginTop: 8,
-        marginBottom: 8,
+        //marginBottom: 3,
     },
     strengthBarContainer: {
         height: 4,
