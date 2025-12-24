@@ -4,9 +4,8 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
-  updateProfile,
   GoogleAuthProvider,
-  signInWithCredential
+  signInWithCredential,
 } from 'firebase/auth';
 import { 
   doc, 

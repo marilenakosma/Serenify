@@ -15,6 +15,13 @@ import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from '../../constants/translations';
 import { CustomAlert } from "../../components/CustomAlert";
 import { useRouter } from "expo-router";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GOOGLE_WEB_CLIENT_ID } from '../config/firebaseConfig';
+
+
+GoogleSignin.configure({
+  webClientId: GOOGLE_WEB_CLIENT_ID,
+});
 
 const Login = () => {
     const {login,isLoading} = useAuthStore();
@@ -25,6 +32,25 @@ const Login = () => {
     const [alertConfig, setAlertConfig] = useState(null);
     const router = useRouter();
     const { t } = useTranslation();
+
+    const handleGoogleSignIn = async () => {
+     try {
+       await GoogleSignin.hasPlayServices();
+       const userInfo = await GoogleSignin.signIn();
+    
+       if (userInfo.data?.idToken) {
+        const result = await loginWithGoogle(userInfo.data.idToken);
+      
+       if (!result.success) {
+         const errorMessage = result.errorKey ? t(result.errorKey) : result.error;
+         handleAlert(t('common.error'), errorMessage);
+       }
+      }
+     } catch (error) {
+       console.error('Google Sign-In Error:', error);
+       handleAlert(t('common.error'), t('errors.googleSignInFailed'));
+     }
+   };
     
     
     const debounce = (func, wait) => {

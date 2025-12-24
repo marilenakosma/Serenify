@@ -32,8 +32,12 @@
   "sendingResetLink": "Sending...",
   "backToLogin": "Back to Login",
   "resetEmailSent": "Reset email sent! Check your inbox.",
-  "resetEmailError": "Failed to send reset email. Please try again."
-},
+  "resetEmailError": "Failed to send reset email. Please try again.",
+  "googleSignInFailed": "Google sign-in failed. Please try again.",
+  "accountExistsWithDifferentCredential": "An account already exists with this email using a different sign-in method.",
+  "invalidCredential": "Invalid credentials. Please try again.",
+  "operationNotAllowed": "This operation is not allowed. Please contact support."
+  },
 "points": {
     "points": "Points",
     "level": "Level",

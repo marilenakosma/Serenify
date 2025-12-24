@@ -29,7 +29,8 @@ import {
   getReflections as getReflectionsFromFirebase,
   saveWorryEntry as saveWorryToFirebase,
   getWorryEntries as getWorriesFromFirebase,
-  deleteWorryEntry as deleteWorryFromFirebase
+  deleteWorryEntry as deleteWorryFromFirebase,
+  signInWithGoogle 
 } from '../app/services/firebaseService';
 
 const removeUndefined = (obj) => {
@@ -143,6 +144,90 @@ export const useAuthStore = create((set,get) => ({
       return { success: false, error: error.message || 'Login failed' };
     }
   },
+
+  // ==================== GOOGLE SIGN-IN ====================
+loginWithGoogle: async (idToken) => {
+  set({ isLoading: true });
+
+  try {
+    const result = await signInWithGoogle(idToken);
+
+    if (result.success) {
+      const user = result.user;
+      const isNewUser = result.isNewUser;
+
+      // Fetch user data
+      const userDataResult = await getUserData(user.uid);
+
+      const userData = userDataResult.success ? userDataResult.data : {
+        username: user.email.split('@')[0],
+        displayName: user.displayName || user.email.split('@')[0],
+        hasCompletedQuestionnaire: false,
+        points: 0,
+        level: 1,
+      };
+
+      // Fetch subcollections
+      const [moodResult, reflectionsResult, worriesResult] = await Promise.allSettled([
+        getMoodHistory(user.uid),
+        getReflectionsFromFirebase(user.uid),
+        getWorriesFromFirebase(user.uid)
+      ]);
+
+      const moodHistory = moodResult.status === 'fulfilled' && moodResult.value.success 
+        ? moodResult.value.data 
+        : {};
+
+      const reflections = reflectionsResult.status === 'fulfilled' && reflectionsResult.value.success
+        ? reflectionsResult.value.data
+        : [];
+
+      const worryEntries = worriesResult.status === 'fulfilled' && worriesResult.value.success
+        ? worriesResult.value.data
+        : [];
+
+      set({
+        isAuthenticated: true,
+        userId: user.uid,
+        user: {
+          uid: user.uid,
+          email: user.email,
+          displayName: userData.displayName,
+          username: userData.username,
+          photoURL: user.photoURL,
+          hasCompletedQuestionnaire: userData.hasCompletedQuestionnaire || false,
+          focusArea: userData.focusArea || null,
+        },
+        hasCompletedQuestionnaire: userData.hasCompletedQuestionnaire || false,
+        questionnaireResults: userData.questionnaireResults || null,
+        userHabits: userData.userHabits || [],
+        habitCompletions: userData.habitCompletions || {},
+        kindnessCompletions: userData.kindnessCompletions || {},
+        points: userData.points || 0,
+        level: userData.level || 1,
+        pointsHistory: userData.pointsHistory || [],
+        todayMood: userData.todayMood || null,
+        moodHistory: moodHistory,
+        reflections: reflections,
+        worryEntries: worryEntries,
+        isLoading: false,
+      });
+
+      return { success: true, isNewUser };
+    } else {
+      set({ isLoading: false });
+      return result;
+    }
+  } catch (error) {
+    console.error('Google login error in store:', error);
+    set({ isLoading: false });
+    return { 
+      success: false, 
+      error: error.message,
+      errorKey: 'errors.unknownError'
+    };
+  }
+},
 
   // ==================== REGISTER ====================
   register: async (name, email, password) => {
@@ -1026,7 +1111,7 @@ checkAuth: async () => {
       worryEntries: [],
     });
   },
-}))
+}));
 
 const calculateStreak = (habitId, completions) => {
     if (!completions[habitId]) return 0;

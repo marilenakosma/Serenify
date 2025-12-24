@@ -32,7 +32,11 @@
   "sendingResetLink": "Αποστολή...",
   "backToLogin": "Επιστροφή στη Σύνδεση",
   "resetEmailSent": "Email επαναφοράς στάλθηκε! Ελέγξτε τα εισερχόμενά σας.",
-  "resetEmailError": "Αποτυχία αποστολής email. Δοκιμάστε ξανά."
+  "resetEmailError": "Αποτυχία αποστολής email. Δοκιμάστε ξανά.",
+  "googleSignInFailed": "Η σύνδεση με Google απέτυχε. Δοκιμάστε ξανά.",
+  "accountExistsWithDifferentCredential": "Υπάρχει ήδη λογαριασμός με αυτό το email χρησιμοποιώντας διαφορετική μέθοδο σύνδεσης.",
+  "invalidCredential": "Μη έγκυρα διαπιστευτήρια. Δοκιμάστε ξανά.",
+  "operationNotAllowed": "Αυτή η λειτουργία δεν επιτρέπεται. Επικοινωνήστε με την υποστήριξη."
 },
 "points": {
     "points": "Πόντοι",

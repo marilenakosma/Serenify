@@ -16,6 +16,12 @@ import { useAuthStore } from "../../store/authStore";
 import { useTranslation } from '../../constants/translations';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CustomAlert } from "../../components/CustomAlert";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GOOGLE_WEB_CLIENT_ID } from '../config/firebaseConfig';
+
+GoogleSignin.configure({
+  webClientId: GOOGLE_WEB_CLIENT_ID,
+});
 
 const Register = () => {
     const { register, isLoading } = useAuthStore();
@@ -31,7 +37,25 @@ const Register = () => {
     const { t } = useTranslation();
     
     const router = useRouter();
-
+     
+    const handleGoogleSignIn = async () => {
+      try {
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+    
+        if (userInfo.data?.idToken) {
+          const result = await loginWithGoogle(userInfo.data.idToken);
+      
+        if (!result.success) {
+           const errorMessage = result.errorKey ? t(result.errorKey) : result.error;
+            handleAlert(t('common.error'), errorMessage);
+         }
+       }
+     } catch (error) {
+      console.error('Google Sign-In Error:', error);
+      handleAlert(t('common.error'), t('errors.googleSignInFailed'));
+    }
+  };
     // Password Strength Component 
     const PasswordStrengthMeter = ({ strength, password }) => {
         const getStrengthText = () => {
