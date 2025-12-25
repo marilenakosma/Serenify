@@ -398,7 +398,7 @@ const Register = () => {
                     
                     {/* Social Login */}
                     <View style={styles.socialContainer}>
-                        <TouchableOpacity style={styles.image}>
+                        <TouchableOpacity style={styles.image} onPress={handleGoogleSignIn}>
                             <Image source={require('../../assets/images/google.png')}
                                  style={styles.socialIcon} />  
                             <ThemedText>Google</ThemedText>

@@ -29,7 +29,10 @@ const HabitStats = () => {
     } = useAuthStore();
   const params = useLocalSearchParams();
 
-  const habitId = params.habitId;
+  const habitId = Array.isArray(params.habitId)
+  ? params.habitId[0]
+  : params.habitId;
+
   const { t,currentLanguage } = useTranslation();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -76,69 +79,7 @@ const HabitStats = () => {
   [pointsHistory, habitId]
 );
 
-  const openEditModal = () => {
-    if (!habit) {
-    handleAlert(t('common.error'), t('habitStats.habitDataNotAvailable')); 
-    return;
-  }
-
-    setEditedName(habit.text || '');
-    setEditedFrequency(habit.frequency || 'Everyday');
-    setEditedDuration(habit.duration || '5 min'); // Add fallback
-    setShowEditModal(true);
-  };
-
-  const handleSaveEdit = () => {
-    if (!editedName.trim()) {
-    handleAlert(t('common.error'), t('habitStats.habitNameRequired')); 
-    return;
-  }
-
-   // console.log('Before update - streak:', habit.streak, 'lastCompleted:', habit.lastCompleted);
-
-    const updatedHabit = {
-      ...habit,
-      text: editedName.trim(),
-      frequency: editedFrequency,
-      duration: editedDuration,
-    };
-    
-   // console.log('Updating habit with:', updatedHabit);
-
-    updateHabit(habitId, updatedHabit);
-    setShowEditModal(false);
-
-   // console.log('After update - should preserve streak');
-  };
-
-  const frequencyOptions = [
-    t('frequency.daily'),
-    t('frequency.weekdays'),
-    t('frequency.weekends'),
-    t('frequency.threeWeekly'),
-    t('frequency.weekly'),
-    t('frequency.twoWeekly'),
-    t('frequency.fourWeekly'),
-    t('frequency.fiveWeekly'),
-    t('frequency.biweekly'),
-    t('frequency.monthly')
-  ];
-
-  const durationOptions = [
-    t('durations.5min'),
-    t('durations.10min'),
-    t('durations.15min'),
-    t('durations.20min'),
-    t('durations.30min'),
-    t('durations.45min'),
-    t('durations.1hour'),
-    t('durations.1.5hours'),
-    t('durations.2hours'),
-    t('durations.allDay')
-  ];
-
-  // Calculate stats
-  const stats = useMemo(() => {
+const stats = useMemo(() => {
     if (!habit || !habitCompletions[habitId]) {
       return {
         currentStreak: 0,
@@ -220,7 +161,7 @@ const HabitStats = () => {
     };
   }, [habit, habitCompletions, habitId]);
 
-  const getDaysInMonth = (date) => {
+    const getDaysInMonth = (date) => {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 };
 
@@ -305,9 +246,86 @@ const getToday = () => {
     days: calendar
   };
 }, [habitCompletions, habitId, currentLanguage]);
-    
-    
 
+
+if (!habit) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <ThemedView style={styles.container}>
+          <View style={styles.header}>
+            <BackButton />
+            <ThemedText title style={styles.headerTitle}>
+              {t('common.error')}
+            </ThemedText>
+            <View style={{ width: 24 }} />
+          </View>
+          <View style={styles.errorContainer}>
+            <ThemedText>{t('habitStats.habitDataNotAvailable')}</ThemedText>
+          </View>
+        </ThemedView>
+      </SafeAreaView>
+    );
+  }
+
+  const openEditModal = () => {
+    setEditedName(habit.text || '');
+    setEditedFrequency(habit.frequency || 'Everyday');
+    setEditedDuration(habit.duration || '5 min'); // Add fallback
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editedName.trim()) {
+    handleAlert(t('common.error'), t('habitStats.habitNameRequired')); 
+    return;
+  }
+
+   // console.log('Before update - streak:', habit.streak, 'lastCompleted:', habit.lastCompleted);
+
+    const updatedHabit = {
+      ...habit,
+      text: editedName.trim(),
+      frequency: editedFrequency,
+      duration: editedDuration,
+    };
+    
+   // console.log('Updating habit with:', updatedHabit);
+
+    updateHabit(habitId, updatedHabit);
+    setShowEditModal(false);
+
+   // console.log('After update - should preserve streak');
+  };
+
+  const frequencyOptions = [
+    t('frequency.daily'),
+    t('frequency.weekdays'),
+    t('frequency.weekends'),
+    t('frequency.threeWeekly'),
+    t('frequency.weekly'),
+    t('frequency.twoWeekly'),
+    t('frequency.fourWeekly'),
+    t('frequency.fiveWeekly'),
+    t('frequency.biweekly'),
+    t('frequency.monthly')
+  ];
+
+  const durationOptions = [
+    t('durations.5min'),
+    t('durations.10min'),
+    t('durations.15min'),
+    t('durations.20min'),
+    t('durations.30min'),
+    t('durations.45min'),
+    t('durations.1hour'),
+    t('durations.1.5hours'),
+    t('durations.2hours'),
+    t('durations.allDay')
+  ];
+
+  // Calculate stats
+    
+  
   const handleDelete = () => {
     //if (!habit) {
     //  handleAlert(t('common.error'), t('habitStats.habitNotFound'));
@@ -348,15 +366,7 @@ const getToday = () => {
     toggleHabitCompletion(habitId, dateStr);
   };
 
-  if (!habit) {
-    return (
-      <ThemedView style={styles.container}>
-        <SafeAreaView style={styles.safeArea}>
-          <ThemedText>Habit not found</ThemedText>
-        </SafeAreaView>
-      </ThemedView>
-    );
-  }
+  
 
   const getHabitIcon = () => {
         if (habit.icon && typeof habit.icon === 'string' && habit.icon.includes('-')) {

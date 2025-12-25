@@ -186,7 +186,7 @@ loginWithGoogle: async (idToken) => {
         ? worriesResult.value.data
         : [];
 
-      set({
+      const authData = {
         isAuthenticated: true,
         userId: user.uid,
         user: {
@@ -211,7 +211,9 @@ loginWithGoogle: async (idToken) => {
         reflections: reflections,
         worryEntries: worryEntries,
         isLoading: false,
-      });
+      };
+
+      setItem("authData", authData);
 
       return { success: true, isNewUser };
     } else {
@@ -596,9 +598,8 @@ logout: async () => {
     return currentLevel * 100;
   },
 
-   getLevelName: () => {
+   getLevelName: (t) => {
     const level = get().level || 1;
-    const { t } = useTranslation();
 
     if (level < 5) return t('level.beginner');
     if (level < 10) return t('level.intermediate');

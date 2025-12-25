@@ -62,6 +62,14 @@ const Dashboard = () => {
     initMood();
   }, []);
 
+  if (!isAuthenticated) {
+    return (
+        <ThemedView style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ThemedText>Please log in to continue</ThemedText>
+        </ThemedView>
+    );
+  }
+
   const handleMoodSelect = async (moodId, moodText) => {
     setSelectedMood(moodId);
     
@@ -111,14 +119,6 @@ const Dashboard = () => {
     }
     return t('dashboard.howAreYouFeeling');
   };
-
-  if (!isAuthenticated) {
-    return (
-        <ThemedView style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <ThemedText>Please log in to continue</ThemedText>
-        </ThemedView>
-    );
-}
 
   const moodData = [
     { id: 1, image: Angry, text: t('moods.angry') },

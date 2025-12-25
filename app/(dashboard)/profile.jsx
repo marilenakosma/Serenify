@@ -156,7 +156,7 @@ const profile = () => {
                      </ThemedText>
                   </View>
                   <ThemedText style={styles.levelName}>
-                    {getLevelName()}
+                    {getLevelName(t)}
                  </ThemedText>
                  </View>
                </View>

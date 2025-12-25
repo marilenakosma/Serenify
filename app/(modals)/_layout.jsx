@@ -24,6 +24,13 @@ export default function ModalsLayout() {
           animation: 'slide_from_right',
         }}
       />
+      <Stack.Screen 
+        name="points-history"
+        options={{
+          presentation: 'card',
+          animation: 'slide_from_right',
+        }}
+      />
     </Stack>
   );
 }

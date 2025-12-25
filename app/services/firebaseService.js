@@ -141,6 +141,7 @@ export const signInWithGoogle = async (idToken) => {
         todayMood: null,
       });
       
+      await new Promise(resolve => setTimeout(resolve, 500));
       console.log('Google user document created');
     }
     

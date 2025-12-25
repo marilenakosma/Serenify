@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo,useEffect } from "react";
 import { StyleSheet, View, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -47,13 +47,15 @@ const HabitFrequency = () => {
   }, [selectedHabitIds,t]);
 
   // State: habitId -> frequency
-  const [habitFrequencies, setHabitFrequencies] = useState(() => {
+  const [habitFrequencies, setHabitFrequencies] = useState({});
+  
+  useEffect(() => {
     const initial = {};
     selectedHabits.forEach(habit => {
-      initial[habit.id] = FREQUENCY_TYPES.DAILY; // Default
-    });
-    return initial;
-  });
+    initial[habit.id] = FREQUENCY_TYPES.DAILY;
+   });
+   setHabitFrequencies(initial);
+  }, [selectedHabits]);
 
   const frequencyOptions = [
     { value: FREQUENCY_TYPES.DAILY, label: t('frequency.daily'), icon: 'calendar-outline' },
