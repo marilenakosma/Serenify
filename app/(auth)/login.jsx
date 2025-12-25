@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useState,useEffect } from "react";
 import { Alert, Image, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import validator from 'validator';
@@ -18,13 +18,8 @@ import { useRouter } from "expo-router";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GOOGLE_WEB_CLIENT_ID } from '../config/firebaseConfig';
 
-
-GoogleSignin.configure({
-  webClientId: GOOGLE_WEB_CLIENT_ID,
-});
-
 const Login = () => {
-    const {login,isLoading} = useAuthStore();
+    const {login,isLoading,loginWithGoogle} = useAuthStore();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
@@ -32,6 +27,12 @@ const Login = () => {
     const [alertConfig, setAlertConfig] = useState(null);
     const router = useRouter();
     const { t } = useTranslation();
+
+     useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: GOOGLE_WEB_CLIENT_ID,
+        });
+    }, []);
 
     const handleGoogleSignIn = async () => {
      try {

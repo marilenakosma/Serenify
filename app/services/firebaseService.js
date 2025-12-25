@@ -28,8 +28,6 @@ const removeUndefined = (obj) => {
   );
 };
 
-
-
 // ==================== AUTH FUNCTIONS ====================
 
 export const registerUser = async (name, email, password) => {
