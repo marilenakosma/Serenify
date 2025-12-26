@@ -267,7 +267,7 @@ if (!habit) {
     );
   }
 
-  const openEditModal = (t) => {
+  const openEditModal = (habit,t) => {
     setEditedName(getHabitText() || '');
     setEditedFrequency(getFrequencyDisplay(habit.frequency, t)|| t('frequency.daily'));
     setEditedDuration(habit.duration || t('durations.5min')); // Add fallback
@@ -387,15 +387,10 @@ if (!habit) {
         return fallbackIcons[habit.id] || 'checkmark-outline';  // Fallback
       };
 
-    const getHabitText = () => {
-      // First check for titleKey and translate it
-
-      const text = habit.text || habit.title;
-      if (text && !text.includes('.') && text.length > 2) { // Changed check to avoid translation keys
-       return text;
-      }    
-      return habit.id || 'Habit';
-    };
+      const getHabitText = (habit) => {
+      
+        return habit.text || habit.title || habit.icon || 'Habit';
+      };
 
   return (
     <ThemedView style={styles.container}>
@@ -408,7 +403,7 @@ if (!habit) {
             {t('habitStats.habitDetails')}
           </ThemedText>
           
-          <TouchableOpacity onPress={openEditModal(t)} style={styles.editButton}>
+          <TouchableOpacity onPress={() => openEditModal(habit,t)} style={styles.editButton}>
             <Ionicons name="create-outline" size={24} color="#4CAF50" />
           </TouchableOpacity>
         </View>
@@ -434,7 +429,7 @@ if (!habit) {
                 numberOfLines={2}
                 ellipsizeMode="tail"
                 >
-                {getHabitText()}
+                {getHabitText(habit)}
               </ThemedText>
               <ThemedText 
                  style={styles.habitMeta}

@@ -224,14 +224,21 @@ export default function GoalIdeas() {
       console.log('Adding goal as habit:', goal.title);
 
       const newHabit = {
-        ...goal,
-        text: goal.title,
+        id: goal.id,
+        icon: goal.icon,
+        category: goal.category,
+        difficulty: goal.difficulty,
+        duration: goal.duration,
+        points: goal.points,
+        color: goal.color,
+        text: goal.title,  // Store the translated title
+        title: goal.title, // Also keep title for compatibility
         name: goal.icon,
         createdAt: new Date().toISOString(),
         isActive: true,
         streak: 0,
         lastCompleted: null,
-        frequency: 'daily' // Default to daily
+        frequency: 'daily'
       };
 
       const result = await addHabits(newHabit);
