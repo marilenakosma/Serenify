@@ -267,10 +267,10 @@ if (!habit) {
     );
   }
 
-  const openEditModal = () => {
-    setEditedName(habit.text || '');
-    setEditedFrequency(habit.frequency || 'Everyday');
-    setEditedDuration(habit.duration || '5 min'); // Add fallback
+  const openEditModal = (t) => {
+    setEditedName(getHabitText() || '');
+    setEditedFrequency(getFrequencyDisplay(habit.frequency, t)|| t('frequency.daily'));
+    setEditedDuration(habit.duration || t('durations.5min')); // Add fallback
     setShowEditModal(true);
   };
 
@@ -408,7 +408,7 @@ if (!habit) {
             {t('habitStats.habitDetails')}
           </ThemedText>
           
-          <TouchableOpacity onPress={() => setShowEditModal(true)} style={styles.editButton}>
+          <TouchableOpacity onPress={openEditModal(t)} style={styles.editButton}>
             <Ionicons name="create-outline" size={24} color="#4CAF50" />
           </TouchableOpacity>
         </View>
