@@ -313,7 +313,6 @@ const styles = StyleSheet.create({
    },
    levelText: {
      fontSize: 14,
-     fontWeight: '600',
      color: '#333',
    },
    levelName: {

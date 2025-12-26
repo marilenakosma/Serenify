@@ -439,7 +439,6 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: '#4CAF50',
     fontSize: 16,
-    fontWeight: '600',
     marginRight: 4,
   },
 
@@ -511,7 +510,6 @@ const styles = StyleSheet.create({
   weeklyProgress: {
     fontSize: 11,
     color: '#4CAF50',
-    fontWeight: '600',
     textAlign: 'center',
   },
   

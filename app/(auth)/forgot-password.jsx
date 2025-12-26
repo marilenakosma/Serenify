@@ -281,7 +281,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#f2f2f2',
     fontSize: 16,
-    fontWeight: '600',
   },
   backButton: {
     paddingVertical: 10,
@@ -289,6 +288,5 @@ const styles = StyleSheet.create({
   backText: {
     color: Colors.primary,
     fontSize: 14,
-    fontWeight: '500',
   },
 });

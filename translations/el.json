@@ -6,8 +6,8 @@
 },
 "auth": {
   "register":"Δημιουργήστε το λογαριασμό σας",
-  "fullName":" Πλήρες Όνομα",
-  "email":"Διεύθυνση email",
+  "fullName":"Όνομα",
+  "email":"Email",
   "password":"Κωδικός",
   "confirmPassword":"Επιβεβαίωση Κωδικού",
   "creatingAccount":"Δημιουργία Λογαριασμού...",

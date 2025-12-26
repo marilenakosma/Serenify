@@ -210,7 +210,7 @@ const Login = () => {
                                     touched.email && (errors.email ? styles.inputError : styles.inputFocused)
                                 ]}
                                 placeholder = {t('auth.email')}
-                                //placeholderTextColor="#999999"
+                                placeholderTextColor="#666"
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 autoCorrect={false}
@@ -414,7 +414,6 @@ const styles = StyleSheet.create({
     validMark: {
         color: '#4CAF50',
         fontSize: 13,
-        fontWeight: '500',
     },
     invalidMark: {
         color: '#ff6b6b',
@@ -428,10 +427,10 @@ const styles = StyleSheet.create({
     forgotPasswordText: {
         color: Colors.primary,
         fontSize: 14,
-        fontWeight: '500',
     },
     loginButton: {
         opacity: 1,
+        //borderRadius:8
     },
     buttonDisabled: {
         opacity: 0.6,
@@ -439,13 +438,12 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#f2f2f2',
         fontSize: 16,
-        fontWeight: '600',
     },
     orContainer: {
         flexDirection: 'row',
-        //alignItems: 'center',
+        alignItems: 'center',
         marginVertical: 15,
-        //width: '100%',
+        width: '100%',
     },
     orLine: {
         flex: 1,
@@ -459,18 +457,18 @@ const styles = StyleSheet.create({
     },
     image: {
         backgroundColor: Colors.background,
-        width: RD.wp(5), 
-        height: RD.wp(13), 
-        borderRadius: RD.wp(3),
+        height: RD.wp(10), 
+        borderRadius: RD.wp(2),
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: RD.wp(3),
+        marginTop:RD.wp(1),
+        marginBottom:RD.wp(0.5),
         borderColor:Colors.primary,
         borderWidth: 1,
-        flex:1,
         flexDirection:'row',
         gap:8,
-        padding:5
+        padding:8
     },
     socialContainer: {
         flexDirection: 'row',
@@ -499,7 +497,6 @@ const styles = StyleSheet.create({
     registerLink: {
         fontSize: 14,
         color: Colors.primary,
-        fontWeight: '600',
         marginLeft: 4,
     },
     socialContainer: {

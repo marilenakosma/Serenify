@@ -18,8 +18,59 @@ import Star from "../../assets/images/Star.png";
 
 export default function PointsHistory() {
   const router = useRouter();
-  const { t } = useTranslation();
-  const { pointsHistory, points, level, getLevelName } = useAuthStore();
+  const { t,currentLanguage } = useTranslation();
+  const { pointsHistory, points, level, getLevelName,userHabits } = useAuthStore();
+  
+  const toCamel = (id = '') =>
+    id
+      .split(/[^a-zA-Z0-9]+/)
+      .filter(Boolean)
+      .map((part, i) =>
+        i === 0 ? part.toLowerCase() : part.charAt(0).toUpperCase() + part.slice(1)
+      )
+      .join('');
+
+  // Get habit name from habit ID
+  const getHabitName = (habitId) => {
+    const habit = userHabits.find(h => h.id === habitId);
+    if (!habit) {
+      // Try to get from translations if habit was removed
+      const key = `goals.${toCamel(habitId)}`;
+      const translated = t(key);
+      if (translated !== key) return translated;
+      
+      // Fallback: prettify the ID
+      return habitId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+
+    // Use the same logic as habit-stats getHabitText
+    if (habit.titleKey && typeof habit.titleKey === 'string') {
+      const translated = t(habit.titleKey);
+      if (translated !== habit.titleKey) return translated;
+    }
+
+    if (habit.text && typeof habit.text === 'string' && habit.text.includes('.')) {
+      const translated = t(habit.text);
+      if (translated !== habit.text) return translated;
+    }
+
+    if (habit.id) {
+      const key = `goals.${toCamel(habit.id)}`;
+      const translated = t(key);
+      if (translated !== key) return translated;
+    }
+
+    if (habit.title && typeof habit.title === 'string' && habit.title.length > 0) {
+      return habit.title;
+    }
+    if (habit.text && typeof habit.text === 'string' && habit.text.length > 0) {
+      return habit.text;
+    }
+
+    return habit.id
+      ? habit.id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+      : 'Habit';
+  };
 
   const getSourceIcon = (source) => {
     if (source.includes('habit')) return Notes;
@@ -42,7 +93,12 @@ export default function PointsHistory() {
   };
 
   const getSourceText = (source) => {
-    if (source.includes('habit')) return t('points.fromHabit');
+    // Extract habit ID from source if it's a habit
+    if (source.includes('habit-')) {
+      const habitId = source.replace('habit-', '').replace('-undo', '');
+      return getHabitName(habitId);
+    }
+    
     if (source.includes('reflection')) return t('points.fromReflection');
     if (source.includes('kindness')) return t('points.fromKindness');
     if (source.includes('breathe')) return t('points.fromBreathing');
@@ -51,7 +107,68 @@ export default function PointsHistory() {
     return t('points.fromActivity');
   };
 
+  // Update the groupedHistory section (around line 85):
+  const groupedHistory = pointsHistory.reduce((groups, item) => {
+    const date = new Date(item.timestamp);
+  
+  // Use user's locale and timezone for date formatting
+    const locale = currentLanguage === 'el' ? 'el-GR' : 'en-US';
+    const timeZone = currentLanguage === 'el' ? 'Europe/Athens' : Intl.DateTimeFormat().resolvedOptions().timeZone;
+  
+    const formattedDate = new Intl.DateTimeFormat(locale, {
+     timeZone: timeZone,
+     weekday: 'long',
+     year: 'numeric', 
+     month: 'long',
+     day: 'numeric'
+    }).format(date);
+
+    if (!groups[formattedDate]) {
+      groups[formattedDate] = [];
+    }
+
+    groups[formattedDate].push(item);
+    return groups;
+  }, {});
+
+  // Flattened list with date headers
+  const flattenedData = Object.entries(groupedHistory)
+    .sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA)) // Sort by date desc
+    .flatMap(([date, items]) => {
+      const habitCount = items.filter(item => item.source.includes('habit-') && !item.source.includes('-undo')).length;
+      const totalPoints = items.reduce((sum, item) => sum + item.amount, 0);
+      
+      return [
+        { type: 'header', date, habitCount, totalPoints, items },
+        ...items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map(item => ({ type: 'item', ...item }))
+      ];
+    });
+
   const renderItem = ({ item }) => {
+    if (item.type === 'header') {
+      return (
+        <View style={styles.dateHeader}>
+          <View style={styles.dateHeaderLeft}>
+            <ThemedText title style={styles.dateText}>{item.date}</ThemedText>
+           { /*{item.habitCount > 0 && (
+              <ThemedText style={styles.habitCountText}>
+                {item.habitCount} {item.habitCount === 1 ? 
+                  (currentLanguage === 'el' ? 'συνήθεια ολοκληρώθηκε' : 'habit completed') : 
+                  (currentLanguage === 'el' ? 'συνήθειες ολοκληρώθηκαν' : 'habits completed')
+                }
+              </ThemedText>
+            )} */}
+          </View>
+          <View style={styles.dateHeaderRight}>
+            <Ionicons name="flash" size={16} color="#FFD700" />
+            <ThemedText style={[styles.totalPointsText, { color: item.totalPoints >= 0 ? '#4CAF50' : '#FF6B6B' }]}>
+              {item.totalPoints >= 0 ? '+' : ''}{item.totalPoints}
+            </ThemedText>
+          </View>
+        </View>
+      );
+    }
+
     const isNegative = item.amount < 0;
     const color = isNegative ? '#FF6B6B' : getSourceColor(item.source);
 
@@ -65,9 +182,16 @@ export default function PointsHistory() {
         </View>
         <View style={styles.textContainer}>
           <ThemedText style={[styles.sourceText]}>{getSourceText(item.source)}</ThemedText>
-          <ThemedText style={styles.dateText}>
-            {new Date(item.timestamp).toLocaleDateString()}
-          </ThemedText>
+          <ThemedText style={styles.timeText}>
+           {new Date(item.timestamp).toLocaleTimeString(
+           currentLanguage === 'el' ? 'el-GR' : 'en-US', 
+           { 
+             hour: '2-digit', 
+             minute: '2-digit',
+             timeZone: currentLanguage === 'el' ? 'Europe/Athens' : Intl.DateTimeFormat().resolvedOptions().timeZone
+           }
+          )}
+         </ThemedText>
         </View>
         <Ionicons name="flash" size={20} color="#FFD700" />
         <ThemedText style={[styles.pointsText, { color }]}>
@@ -138,9 +262,9 @@ export default function PointsHistory() {
         {/* History List */}
         {pointsHistory.length > 0 ? (
           <FlatList
-            data={[...pointsHistory].reverse()}
+            data={flattenedData}
             renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item, index) => `${item.type}-${index}`}
             contentContainerStyle={styles.list}
           />
         ) : (
@@ -177,6 +301,41 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
   },
+
+  dateHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    //backgroundColor: '#f8f9fa',
+    //borderBottomWidth: 1,
+    //borderBottomColor: '#e0e0e0',
+    marginTop: 10,
+    
+  },
+  dateHeaderLeft: {
+    flex: 1,
+  },
+  dateHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  dateText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  habitCountText: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  totalPointsText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
   summaryCard: {
     backgroundColor: '#fff',
     margin: 20,
@@ -244,13 +403,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sourceText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  dateText: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 2,
+    fontSize: 15,
+    flexShrink:1,
+    flexWrap:'wrap'
   },
   pointsText: {
     fontSize: 20,
@@ -294,8 +449,13 @@ const styles = StyleSheet.create({
    titleContent: {
      flex: 1,
    },
+   timeText:{
+    fontSize:13,
+    color: '#999',
+    marginTop:2,
+   },
    cardTitle: {
-     fontSize: 16,
+     fontSize: 15,
      color: '#999',
      marginBottom: 4,
    },
