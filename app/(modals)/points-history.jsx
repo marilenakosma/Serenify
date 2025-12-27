@@ -15,62 +15,26 @@ import Gifts from "../../assets/images/Gifts.png";
 import Journal from "../../assets/images/Journal.png";
 import Breathe from "../../assets/images/Heart4.png";
 import Star from "../../assets/images/Star.png";
+import { getHabitTranslation } from '../../constants/habitTranslations';
+
 
 export default function PointsHistory() {
   const router = useRouter();
   const { t,currentLanguage } = useTranslation();
   const { pointsHistory, points, level, getLevelName,userHabits } = useAuthStore();
   
-  const toCamel = (id = '') =>
-    id
-      .split(/[^a-zA-Z0-9]+/)
-      .filter(Boolean)
-      .map((part, i) =>
-        i === 0 ? part.toLowerCase() : part.charAt(0).toUpperCase() + part.slice(1)
-      )
-      .join('');
-
-  // Get habit name from habit ID
   const getHabitName = (habitId) => {
-    const habit = userHabits.find(h => h.id === habitId);
-    if (!habit) {
-      // Try to get from translations if habit was removed
-      const key = `goals.${toCamel(habitId)}`;
-      const translated = t(key);
-      if (translated !== key) return translated;
-      
-      // Fallback: prettify the ID
-      return habitId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    }
-
-    // Use the same logic as habit-stats getHabitText
-    if (habit.titleKey && typeof habit.titleKey === 'string') {
-      const translated = t(habit.titleKey);
-      if (translated !== habit.titleKey) return translated;
-    }
-
-    if (habit.text && typeof habit.text === 'string' && habit.text.includes('.')) {
-      const translated = t(habit.text);
-      if (translated !== habit.text) return translated;
-    }
-
-    if (habit.id) {
-      const key = `goals.${toCamel(habit.id)}`;
-      const translated = t(key);
-      if (translated !== key) return translated;
-    }
-
-    if (habit.title && typeof habit.title === 'string' && habit.title.length > 0) {
-      return habit.title;
-    }
-    if (habit.text && typeof habit.text === 'string' && habit.text.length > 0) {
-      return habit.text;
-    }
-
-    return habit.id
-      ? habit.id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-      : 'Habit';
-  };
+  const habit = userHabits.find(h => h.id === habitId);
+  
+  // If habit exists and has stored text/title, use it
+  if (habit) {
+    if (habit.text && !habit.text.includes('.')) return habit.text;
+    if (habit.title && !habit.title.includes('.')) return habit.title;
+  }
+  
+  // Otherwise use the centralized translation helper
+  return getHabitTranslation(habitId, t);
+};
 
   const getSourceIcon = (source) => {
     if (source.includes('habit')) return Notes;
@@ -133,7 +97,12 @@ export default function PointsHistory() {
 
   // Flattened list with date headers
   const flattenedData = Object.entries(groupedHistory)
-    .sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA)) // Sort by date desc
+    .sort(([dateA, itemsA], [dateB, itemsB]) => {
+  // Compare using the actual timestamps from the items
+  const timeA = new Date(itemsA[0].timestamp).getTime();
+  const timeB = new Date(itemsB[0].timestamp).getTime();
+  return timeB - timeA; // Newest (today) first
+}) // Sort by date desc
     .flatMap(([date, items]) => {
       const habitCount = items.filter(item => item.source.includes('habit-') && !item.source.includes('-undo')).length;
       const totalPoints = items.reduce((sum, item) => sum + item.amount, 0);
@@ -312,6 +281,7 @@ const styles = StyleSheet.create({
     //borderBottomWidth: 1,
     //borderBottomColor: '#e0e0e0',
     marginTop: 10,
+    marginBottom:10
     
   },
   dateHeaderLeft: {
@@ -325,6 +295,7 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 16,
     color: '#333',
+    alignItems: 'center',
   },
   habitCountText: {
     fontSize: 12,

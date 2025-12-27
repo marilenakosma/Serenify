@@ -13,6 +13,8 @@ function RootLayoutNav() {
     isAuthenticated, 
     hasCompletedQuestionnaire, 
     questionnaireResults, 
+    userId,
+    isLoading,
     checkAuth } = useAuthStore();
   const segments = useSegments();
   const [isNavigationReady, setIsNavigationReady] = useState(false);
@@ -69,7 +71,7 @@ function RootLayoutNav() {
      if (!isNavigationReady || navigationInProgressRef.current) return;
 
     const navigationTimeout = setTimeout(() => {
-      const { showingResults } = useAuthStore.getState();
+      const { showingResults, userId, isLoading  } = useAuthStore.getState();
       const currentRoute = segments.join('/');
 
       const inAuthGroup = segments[0] === '(auth)';
@@ -114,7 +116,7 @@ function RootLayoutNav() {
       },200);
 
       return () => clearTimeout(navigationTimeout);
-  }, [isAuthenticated, hasCompletedQuestionnaire, segments, isNavigationReady]);
+  }, [isAuthenticated, hasCompletedQuestionnaire,questionnaireResults, segments, isNavigationReady]);
 
   return <Slot />;
 }

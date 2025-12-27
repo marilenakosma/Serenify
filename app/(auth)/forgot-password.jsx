@@ -109,7 +109,7 @@ const ForgotPassword = () => {
           <BackButton />
           <ThemedView style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: 15 }}>
             <Image 
-              source={require('../../assets/images/leaf-green.png')}
+              source={require('../../assets/images/fallLeaf.png')}
               style={styles.headerImage} 
             />
           </ThemedView>
@@ -124,6 +124,10 @@ const ForgotPassword = () => {
           <ThemedView style={styles.container}>
             <ThemedText title={true} style={styles.title}>
               {t('auth.resetPasswordTitle')}
+            </ThemedText>
+
+            <ThemedText style={styles.subtitle}>
+              {t('auth.resetPasswordSubtitle')}
             </ThemedText>
             
 
@@ -224,10 +228,11 @@ const styles = StyleSheet.create({
     color: Colors.title,
   },
   subtitle: {
-    textAlign: "center",
-    fontSize: RD.wp(3.8),
+    //textAlign: "center",
+    fontSize: RD.wp(3.7),
     color: '#666',
-    paddingHorizontal: 20,
+    //flexWrap:'wrap',
+    //paddingHorizontal: 20,
   },
   inputContainer: {
     width: '100%',

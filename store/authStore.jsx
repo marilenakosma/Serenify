@@ -215,6 +215,8 @@ loginWithGoogle: async (idToken) => {
 
       setItem("authData", authData);
 
+      set(authData);
+
       return { success: true, isNewUser };
     } else {
       set({ isLoading: false });

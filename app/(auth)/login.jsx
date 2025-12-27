@@ -243,8 +243,8 @@ const Login = () => {
                             />
                             {touched.password && errors.password && (
                                 <View style={styles.validationContainer}>
-                                    <Text style={styles.invalidMark}>⚠</Text>
-                                    <Text style={styles.errorMessage}>{errors.password}</Text>
+                                    <ThemedText style={styles.invalidMark}>⚠</ThemedText>
+                                    <ThemedText style={styles.errorMessage}>{errors.password}</ThemedText>
                                 </View>
                             )}
                         </View>
