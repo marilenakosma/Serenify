@@ -181,34 +181,26 @@ export default function GoalIdeas() {
     !existingHabitIds.includes(goal.id)
   );
 
-  const handleAlert = (title,message) => {
-        setAlertConfig({
-                type: 'error',
-                title: title,
-                message: message,
-                showCancel: true,
-            
-                onConfirm: async () => {
-                try {
-                    const result = await logout();
-                    if (!result.success) {
-                        setAlertConfig({
-                            type: 'error',
-                            title: t('common.error'),
-                            message: t('profile.logoutError'),
-                            onClose: () => setAlertConfig(null)
-                        });
-                    } else {
-                        setAlertConfig(null);
-                    }
-                } catch (error) {
-                    console.log('Logout error:', error);
-                    setAlertConfig(null);
-                }
-            }, 
-            onClose: () => setAlertConfig(null)
-        });
-    }
+  const handleAlert = (title, message, onConfirmAction) => {
+  setAlertConfig({
+    type: 'error',
+    title: title,
+    message: message,
+    showCancel: true,
+    onConfirm: async () => {
+      try {
+        if (onConfirmAction) {
+          await onConfirmAction();
+        }
+        setAlertConfig(null);
+      } catch (error) {
+        //console.log('Alert action error:', error);
+        setAlertConfig(null);
+      }
+    }, 
+    onClose: () => setAlertConfig(null)
+  });
+}
 
   const groupedGoals = availableGoals.reduce((groups, goal) => {
     const category = goal.category;
@@ -247,7 +239,7 @@ export default function GoalIdeas() {
         setAddedGoals(prev => new Set([...prev, goal.id]));
         setToastConfig({
           visible: true,
-          points: goal.points,
+         // points: goal.points,
           message: t('goals.addedMessage', { habit: goal.title })
         });
       } else {
@@ -379,7 +371,7 @@ export default function GoalIdeas() {
         {toastConfig &&   
           <PointsToast
           visible={toastConfig.visible}
-          points={toastConfig.points}
+          //points={toastConfig.points}
           message={toastConfig.message}
           onDismiss={() => setToastConfig({ visible: false, points: 0, message: '' })}
           duration={3000}

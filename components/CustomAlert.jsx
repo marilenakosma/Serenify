@@ -23,8 +23,8 @@ export function CustomAlert({
     success: {
       wave: '#47ff7733',
       iconBg: '#47ff7748',
-      icon: '#12ff44',
-      title: '#12ff44',
+      icon: '#4CAF50',
+      title: '#4CAF50',
       text: '#555',
     },
     error: {

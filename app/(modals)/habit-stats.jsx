@@ -268,7 +268,7 @@ if (!habit) {
   }
 
   const openEditModal = (habit,t) => {
-    setEditedName(getHabitText() || '');
+    setEditedName(getHabitText(habit) || '');
     setEditedFrequency(getFrequencyDisplay(habit.frequency, t)|| t('frequency.daily'));
     setEditedDuration(habit.duration || t('durations.5min')); // Add fallback
     setShowEditModal(true);

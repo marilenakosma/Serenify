@@ -8,7 +8,7 @@ export default function QuestionnaireLayout() {
     return <Redirect href="/(auth)/login" />;
   }
 
-  // ✅ Remove the hasCompletedQuestionnaire redirect - let main layout handle it
+  //  hasCompletedQuestionnaire redirect - let main layout handle it
   
   return (
     <Stack screenOptions={{ headerShown: false }}>

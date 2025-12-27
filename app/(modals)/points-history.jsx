@@ -98,11 +98,11 @@ export default function PointsHistory() {
   // Flattened list with date headers
   const flattenedData = Object.entries(groupedHistory)
     .sort(([dateA, itemsA], [dateB, itemsB]) => {
-  // Compare using the actual timestamps from the items
-  const timeA = new Date(itemsA[0].timestamp).getTime();
-  const timeB = new Date(itemsB[0].timestamp).getTime();
-  return timeB - timeA; // Newest (today) first
-}) // Sort by date desc
+      // Compare using the actual timestamps from the items
+      const timeA = new Date(itemsA[0].timestamp).getTime();
+      const timeB = new Date(itemsB[0].timestamp).getTime();
+       return timeB - timeA; // Newest (today) first
+     }) // Sort by date desc
     .flatMap(([date, items]) => {
       const habitCount = items.filter(item => item.source.includes('habit-') && !item.source.includes('-undo')).length;
       const totalPoints = items.reduce((sum, item) => sum + item.amount, 0);

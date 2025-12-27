@@ -9,6 +9,7 @@ import BackButton from '../../../components/BackButton';
 import { useTranslation } from '../../../constants/translations';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../../store/authStore';
+import { CustomAlert } from "../../../components/CustomAlert";
 
 export default function WorryJournal() {
   const router = useRouter();
@@ -17,14 +18,36 @@ export default function WorryJournal() {
 
   const [worry, setWorry] = useState('');
   const [worryList, setWorryList] = useState([]);
+  const [alertConfig, setAlertConfig] = useState(null);
 
   useEffect(() => {
     setWorryList(getWorryEntries());
   }, [getWorryEntries]);
 
+  const handleAlert = (type,title, message, onConfirmAction) => {
+    setAlertConfig({
+      type: type,
+      title: title,
+      message: message,
+      showCancel: true,
+      onConfirm: async () => {
+        try {
+          if (onConfirmAction) {
+            await onConfirmAction();
+          }
+          setAlertConfig(null);
+        } catch (error) {
+          //console.log('Alert action error:', error);
+          setAlertConfig(null);
+        }
+      }, 
+      onClose: () => setAlertConfig(null)
+    });
+  }
+
   const handleSave = () => {
     if (worry.trim().length === 0) {
-      Alert.alert(t('common.error'), t('firstAid.worryJournal.emptyError'));
+      handleAlert('error',t('common.error'), t('firstAid.worryJournal.emptyError'));
       return;
     }
 
@@ -38,7 +61,7 @@ export default function WorryJournal() {
     setWorry('');
     setWorryList(getWorryEntries());
 
-    Alert.alert(
+    handleAlert('success',
       t('firstAid.worryJournal.saved'),
       t('firstAid.worryJournal.savedMessage')
     );
@@ -130,6 +153,17 @@ export default function WorryJournal() {
           }
           contentContainerStyle={styles.list}
         />
+
+        {alertConfig && (
+           <CustomAlert
+               type={alertConfig.type}
+               title={alertConfig.title}
+               message={alertConfig.message}
+               showCancel={alertConfig.showCancel}
+               onConfirm={alertConfig.onConfirm}
+               onClose={alertConfig.onClose}
+            />
+        )}
       </ThemedView>
     </SafeAreaView>
   );
