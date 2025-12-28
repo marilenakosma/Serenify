@@ -541,7 +541,10 @@
     "unhappiness": "What triggered unhappiness today?",
     "worries": "Will your worries today matter a year from now?",
     "newExperience": "What was a new experience and how did you feel?",
-    "free": "Write anything you want."
+    "free": "Write anything you want.",
+    "saved": "Reflection Saved!",
+    "savedMessage": "Your reflection has been recorded.",
+    "saveError": "Failed to save reflection. Please try again."
   },
   "firstAid": {
   "title": "First Aid Kit",

@@ -10,19 +10,18 @@ import { useTranslation } from '../../../constants/translations';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../../store/authStore';
 import { CustomAlert } from "../../../components/CustomAlert";
+import { formatDate } from "../../../constants/dateFormatter";
 
 export default function WorryJournal() {
   const router = useRouter();
-  const { t } = useTranslation();
-  const { addWorryEntry, getWorryEntries } = useAuthStore();
+  const { t,currentLanguage } = useTranslation();
+  const { addWorryEntry, getWorryEntries,worryEntries } = useAuthStore();
 
   const [worry, setWorry] = useState('');
-  const [worryList, setWorryList] = useState([]);
+  //const [worryList,setWorryList] = useState([]);
   const [alertConfig, setAlertConfig] = useState(null);
 
-  useEffect(() => {
-    setWorryList(getWorryEntries());
-  }, [getWorryEntries]);
+  
 
   const handleAlert = (type,title, message, onConfirmAction) => {
     setAlertConfig({
@@ -52,34 +51,19 @@ export default function WorryJournal() {
     }
 
     const newEntry = {
-      id: Date.now().toString(),
+      //id: Date.now().toString(),
       text: worry.trim(),
       timestamp: new Date().toISOString(),
     };
 
     addWorryEntry(newEntry);
     setWorry('');
-    setWorryList(getWorryEntries());
+    //setWorryList(getWorryEntries());
 
     handleAlert('success',
       t('firstAid.worryJournal.saved'),
       t('firstAid.worryJournal.savedMessage')
     );
-  };
-
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return t('durations.today') + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return t('durations.yesterday') + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } else {
-      return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
   };
 
   return (
@@ -98,51 +82,45 @@ export default function WorryJournal() {
         </View>
 
 
-          <View style={styles.infoBox}>
-            <Ionicons name="information-circle-outline" size={24} color="#42A5F5" />
-            <ThemedText style={styles.infoText}>
-              {t('firstAid.worryJournal.info')}
+        <View style={styles.inputSection}>
+          <ThemedText style={styles.inputLabel}>
+            {t('firstAid.worryJournal.prompt')}
+          </ThemedText>
+          
+          <TextInput
+            style={styles.input}
+            multiline
+            numberOfLines={6}
+            value={worry}
+            onChangeText={setWorry}
+            placeholder={t('firstAid.worryJournal.placeholder')}
+            placeholderTextColor="#999"
+            textAlignVertical="top"
+          />
+
+          <ThemedButton
+            style={styles.saveButton}
+            onPress={handleSave}
+            disabled={worry.trim().length === 0}
+          >
+            <Ionicons name="save-outline" size={20} color="#fff" />
+            <ThemedText style={styles.saveButtonText}>
+              {t('firstAid.worryJournal.save')}
             </ThemedText>
-          </View>
+          </ThemedButton>
+        </View>
 
-          <View style={styles.inputSection}>
-            <ThemedText style={styles.inputLabel}>
-              {t('firstAid.worryJournal.prompt')}
-            </ThemedText>
-            
-            <TextInput
-              style={styles.input}
-              multiline
-              numberOfLines={6}
-              value={worry}
-              onChangeText={setWorry}
-              placeholder={t('firstAid.worryJournal.placeholder')}
-              placeholderTextColor="#999"
-              textAlignVertical="top"
-            />
-
-            <ThemedButton
-              style={styles.saveButton}
-              onPress={handleSave}
-              disabled={worry.trim().length === 0}
-            >
-              <Ionicons name="save-outline" size={20} color="#fff" />
-              <ThemedText style={styles.saveButtonText}>
-                {t('firstAid.worryJournal.save')}
-              </ThemedText>
-            </ThemedButton>
-          </View>
-
-
-          <FlatList
-          data={worryList}
+        <FlatList
+          data={worryEntries}
           renderItem={({ item }) => (
             <View style={styles.worryCard}>
               <ThemedText style={styles.worryText}>{item.text}</ThemedText>
-              <ThemedText style={styles.worryDate}>{formatDate(item.timestamp)}</ThemedText>
+              <ThemedText style={styles.worryDate}>
+                {formatDate(item.timestamp, currentLanguage, true)}
+              </ThemedText>
             </View>
           )}
-          keyExtractor={(item, idx) => item.id || idx.toString()}
+          keyExtractor={(item) => item.id || item.timestamp}
           ListEmptyComponent={
             <View style={styles.emptyState}>
               <Ionicons name="cloud-outline" size={64} color="#E0E0E0" />
@@ -185,7 +163,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     marginTop: 12,
     marginBottom: 8,
     textAlign: 'center',
