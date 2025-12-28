@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView,Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from '../../../components/ThemedText';
@@ -9,12 +9,16 @@ import BackButton from '../../../components/BackButton';
 import { useTranslation } from '../../../constants/translations';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../../constants/Colors';
+import { PointsToast } from "../../../components/PointsToast";
+import { Confetti } from 'react-native-fast-confetti';
+import completionImage from "../../../assets/images/sun.png";
 
 export default function Grounding() {
   const router = useRouter();
   const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
+  const [showCompletion,setShowCompletion] = useState(false);
 
   const steps = [
     {
@@ -56,6 +60,7 @@ export default function Grounding() {
 
   const handleStart = () => {
     setIsStarted(true);
+    setShowCompletion(false);
     setCurrentStep(0);
   };
 
@@ -63,13 +68,18 @@ export default function Grounding() {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Finished
-      setIsStarted(false);
-      setCurrentStep(0);
+      // Last step completed - show toast and completion screen
+      setShowCompletion(true);
     }
   };
 
+  const handleComplete = () => {
+    router.back();
+  }
+
   const handleRestart = () => {
+    setIsStarted(true);
+    setShowCompletion(false);
     setCurrentStep(0);
   };
 
@@ -114,6 +124,50 @@ export default function Grounding() {
     );
   }
 
+  // Completion screen
+  if (showCompletion) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <BackButton style={{backgroundColor: '#f1f5eeff'}}
+          onPress={() => router.back()} />
+        
+        <ThemedView style={styles.container}>
+          <Confetti/>
+          <View style={styles.completionContainer}>
+            <Image source={completionImage} 
+                   style={styles.image}
+                   resizeMode="contain" 
+            />
+            
+            <ThemedText title={true} style={styles.completionTitle}>
+              {t('firstAid.grounding.complete')}
+            </ThemedText>
+
+            <View style={styles.completionButtonContainer}>
+              <ThemedButton
+                style={styles.completeButton}
+                onPress={handleComplete}
+              >
+                <ThemedText style={styles.completeButtonText}>
+                  {t('common.complete')}
+                </ThemedText>
+              </ThemedButton>
+
+              <ThemedButton
+                style={styles.restartButton}
+                onPress={handleRestart}
+              >
+                <ThemedText style={styles.restartButtonText}>
+                  {t('activities.again')}
+                </ThemedText>
+              </ThemedButton>
+            </View>
+          </View>
+        </ThemedView>
+      </SafeAreaView>
+    );
+  }
+
   const step = steps[currentStep];
   const isLastStep = currentStep === steps.length - 1;
 
@@ -145,7 +199,7 @@ export default function Grounding() {
             <Ionicons name={step.icon} size={60} color={step.color} />
           </View>
           
-          <View style={{flexDirection:'row',alignItems:'flex-end',paddingHorizontal:27,gap:15}}>
+          {/*<View style={{flexDirection:'row',alignItems:'flex-end',paddingHorizontal:27,gap:15}}>*/}
           <ThemedText title={true} style={[styles.stepNumber,{color:step.color}]}>
             {step.number}
           </ThemedText>
@@ -153,20 +207,13 @@ export default function Grounding() {
           <ThemedText style={styles.stepSense}>
             {step.sense}
           </ThemedText>
-          </View>
+         {/* </View> */}
+
 
           <ThemedText style={styles.stepPrompt}>
             {step.prompt}
           </ThemedText>
 
-          {isLastStep && (
-            <View style={styles.completionBox}>
-              <Ionicons name="checkmark-circle" size={30} color="#4CAF50" />
-              <ThemedText style={styles.completionText}>
-                {t('firstAid.grounding.complete')}
-              </ThemedText>
-            </View>
-          )}
         </ScrollView>
 
         <View style={styles.buttonContainer}>
@@ -175,20 +222,9 @@ export default function Grounding() {
             onPress={handleNext}
           >
             <ThemedText style={styles.nextButtonText}>
-              {isLastStep ? t('common.done') : t('common.next')}
+              {t('common.next')}
             </ThemedText>
           </ThemedButton>
-
-          {isLastStep && (
-            <ThemedButton
-              style={styles.restartButton}
-              onPress={handleRestart}
-            >
-              <ThemedText style={styles.restartButtonText}>
-                {t('activities.again')}
-              </ThemedText>
-            </ThemedButton>
-          )}
         </View>
       </ThemedView>
     </SafeAreaView>
@@ -271,11 +307,11 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    //backgroundColor: '#4CAF50',
-    backgroundColor:Colors.primary,
+    backgroundColor: '#4CAF50',
+    //backgroundColor:Colors.primary,
   },
   stepContainer: {
-    //flexGrow: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 30,
@@ -287,19 +323,19 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    //marginBottom: 30,
+    marginBottom: 20,
   },
   stepNumber: {
-    fontSize: 60,
+    fontSize: 55,
     color: '#66BB6A',
-    marginBottom: 10,
-    marginLeft:30,
+    marginBottom: 5,
+    //marginLeft:30,
     
   },
   stepSense: {
-    fontSize: 20,
-    marginBottom: 23,
-    //textAlign: 'center',
+    fontSize: 18,
+    marginBottom: 15,
+    textAlign: 'center',
   },
   stepPrompt: {
     fontSize: 15,
@@ -328,7 +364,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   nextButton: {
-    //backgroundColor: '#66BB6A',
+    backgroundColor: '#66BB6A',
     paddingVertical: 16,
     borderRadius: 12,
   },
@@ -347,4 +383,52 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  completionContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 30,
+  },
+  completionTitle: {
+    fontSize: 24,
+    marginTop: 20,
+    marginBottom: 30,
+    textAlign: 'center',
+    color: '#333',
+  },
+  completionDescription: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: '#555',
+    marginBottom: 40,
+    lineHeight: 22,
+  },
+  completionButtonContainer: {
+    width: '100%',
+    gap: 12,
+  },
+  completeButton: {
+    backgroundColor: '#66BB6A',
+    paddingVertical: 16,
+    borderRadius: 12,
+  },
+  completeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  restartButton: {
+    backgroundColor: '#E0E0E0',
+    paddingVertical: 16,
+    borderRadius: 12,
+  },
+  restartButtonText: {
+    color: '#666',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  image: {
+          width:175,
+          height:170,
+        },
 });

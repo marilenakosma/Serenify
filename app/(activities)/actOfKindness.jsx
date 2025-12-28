@@ -33,7 +33,7 @@ export default function ActOfKindness() {
 
   const [completedActs,setCompletedActs] = useState([]);
   const [todayCount, setTodayCount] = useState(0);
-  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
+  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '',isWarning:false });
 
   //console.log('Current pathname:', pathname);
   //console.log('Attempting to go back to: /(dashboard)/activities');

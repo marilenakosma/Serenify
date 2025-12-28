@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView,Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from '../../../components/ThemedText';
@@ -8,6 +8,8 @@ import ThemedButton from '../../../components/ThemedButton';
 import BackButton from '../../../components/BackButton';
 import { useTranslation } from '../../../constants/translations';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Confetti } from 'react-native-fast-confetti';
+import completionImage from "../../../assets/images/sun.png";
 
 export default function MuscleRelaxation() {
   const router = useRouter();
@@ -15,6 +17,7 @@ export default function MuscleRelaxation() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const [phase, setPhase] = useState('tense'); // 'tense' or 'relax'
+  const [showCompletion,setShowCompletion] = useState(false);
 
   const muscleGroups = [
     {
@@ -70,6 +73,7 @@ export default function MuscleRelaxation() {
 
   const handleStart = () => {
     setIsStarted(true);
+    setShowCompletion(false);
     setCurrentStep(0);
     setPhase('tense');
   };
@@ -83,15 +87,18 @@ export default function MuscleRelaxation() {
         setPhase('tense');
       } else {
         // Finished
-        setIsStarted(false);
-        setCurrentStep(0);
-        setPhase('tense');
+        setShowCompletion(true);
       }
     }
   };
 
+  const handleComplete = () => {
+      router.back();
+    }
+
   const handleRestart = () => {
     setCurrentStep(0);
+    setShowCompletion(false);
     setPhase('tense');
   };
 
@@ -142,6 +149,51 @@ export default function MuscleRelaxation() {
     );
   }
 
+  // Completion screen
+    if (showCompletion) {
+      return (
+        <SafeAreaView style={styles.safeArea}>
+          <BackButton style={{backgroundColor: '#f1f5eeff'}}
+            onPress={() => router.back()} />
+          
+          <ThemedView style={styles.container}>
+            <Confetti/>
+            <View style={styles.completionContainer}>
+              <Image source={completionImage} 
+                     style={styles.image}
+                     resizeMode="contain" 
+              />
+              
+              <ThemedText title={true} style={styles.completionTitle}>
+                {t('firstAid.muscleRelaxation.complete')}
+              </ThemedText>
+  
+              <View style={styles.completionButtonContainer}>
+                <ThemedButton
+                  style={styles.completeButton}
+                  onPress={handleComplete}
+                >
+                  <ThemedText style={styles.completeButtonText}>
+                    {t('common.complete')}
+                  </ThemedText>
+                </ThemedButton>
+  
+                <ThemedButton
+                  style={styles.restartButton}
+                  onPress={handleRestart}
+                >
+                  <ThemedText style={styles.restartButtonText}>
+                    {t('activities.again')}
+                  </ThemedText>
+                </ThemedButton>
+              </View>
+            </View>
+          </ThemedView>
+        </SafeAreaView>
+      );
+    }
+
+
   const muscleGroup = muscleGroups[currentStep];
   const isLastStep = currentStep === muscleGroups.length - 1 && phase === 'relax';
 
@@ -181,7 +233,7 @@ export default function MuscleRelaxation() {
 
           <View style={[
             styles.phaseIndicator,
-            { backgroundColor: phase === 'tense' ? '#FF6B6B' : '#4CAF50' }
+            { backgroundColor: phase === 'tense' ? '#f79595ff' : '#86ce88ff'  }
           ]}>
             <ThemedText style={styles.phaseText}>
               {phase === 'tense' ? t('firstAid.muscleRelaxation.tensePhase') : t('firstAid.muscleRelaxation.relaxPhase')}
@@ -215,22 +267,13 @@ export default function MuscleRelaxation() {
               </ThemedText>
             </View>
           )}
-
-          {isLastStep && (
-            <View style={styles.completionBox}>
-              <Ionicons name="checkmark-circle" size={40} color="#4CAF50" />
-              <ThemedText style={styles.completionText}>
-                {t('firstAid.muscleRelaxation.complete')}
-              </ThemedText>
-            </View>
-          )}
         </ScrollView>
 
         <View style={styles.buttonContainer}>
           <ThemedButton
             style={[
               styles.nextButton,
-              { backgroundColor: phase === 'tense' ? '#FF6B6B' : '#4CAF50' }
+              { backgroundColor: phase === 'tense' ? '#f79595ff' : '#86ce88ff' }
             ]}
             onPress={handleNext}
           >
@@ -239,16 +282,6 @@ export default function MuscleRelaxation() {
             </ThemedText>
           </ThemedButton>
 
-          {isLastStep && (
-            <ThemedButton
-              style={styles.restartButton}
-              onPress={handleRestart}
-            >
-              <ThemedText style={styles.restartButtonText}>
-                {t('activities.again')}
-              </ThemedText>
-            </ThemedButton>
-          )}
         </View>
       </ThemedView>
     </SafeAreaView>
@@ -272,17 +305,17 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     marginTop: 20,
     marginBottom: 16,
     textAlign: 'center',
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
     color: '#666',
     marginBottom: 30,
-    lineHeight: 24,
+    lineHeight: 22,
   },
   instructionsBox: {
     backgroundColor: '#E3F2FD',
@@ -300,7 +333,7 @@ const styles = StyleSheet.create({
   instructions: {
     fontSize: 14,
     color: '#42A5F5',
-    lineHeight: 22,
+    lineHeight: 20,
   },
   tipsBox: {
     flexDirection: 'row',
@@ -327,8 +360,7 @@ const styles = StyleSheet.create({
   },
   startButtonText: {
     color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 16,
     textAlign: 'center',
   },
   progressContainer: {
@@ -380,8 +412,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   muscleName: {
-    fontSize: 28,
-    fontWeight: '600',
+    fontSize: 24,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -397,7 +428,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   instruction: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
     color: '#333',
     lineHeight: 24,
@@ -433,6 +464,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     gap: 12,
+    flexGrow:1,
   },
   nextButton: {
     paddingVertical: 16,
@@ -440,7 +472,7 @@ const styles = StyleSheet.create({
   },
   nextButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -455,4 +487,53 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
+  completionContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 30,
+    },
+    completionTitle: {
+      fontSize: 24,
+      marginTop: 20,
+      marginBottom: 30,
+      textAlign: 'center',
+      color: '#333',
+    },
+    completionDescription: {
+      fontSize: 15,
+      textAlign: 'center',
+      color: '#555',
+      marginBottom: 40,
+      lineHeight: 22,
+    },
+    completionButtonContainer: {
+      width: '100%',
+      gap: 12,
+    },
+    completeButton: {
+      //backgroundColor: '#66BB6A',
+      backgroundColor:'#42A5F5',
+      paddingVertical: 16,
+      borderRadius: 12,
+    },
+    completeButtonText: {
+      color: '#fff',
+      fontSize: 16,
+      textAlign: 'center',
+    },
+    restartButton: {
+      backgroundColor: '#E0E0E0',
+      paddingVertical: 16,
+      borderRadius: 12,
+    },
+    restartButtonText: {
+      color: '#666',
+      fontSize: 16,
+      textAlign: 'center',
+    },
+    image: {
+       width:175,
+       height:170,
+    },
 });

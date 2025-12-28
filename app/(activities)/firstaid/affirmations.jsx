@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 36,
     textAlign: 'center',
-    fontStyle: 'italic',
+    //fontStyle: 'italic',
     color: '#333',
   },
   instructionBox: {
