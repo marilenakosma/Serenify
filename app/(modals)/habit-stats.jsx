@@ -541,7 +541,7 @@ if (!habit) {
           </View>
           </View>
           
-          <ThemedText style={styles.calendarHint}>
+          <ThemedText title style={styles.calendarHint}>
             {t('habitStats.calendarHint', { month: calendarData.monthName.split(' ')[0] })}
           </ThemedText>
         </View>
@@ -599,7 +599,6 @@ if (!habit) {
              }}
           />
         )} */}
-
 
           <Spacer height={50} />
         </ScrollView>
@@ -949,7 +948,7 @@ calendar: {
     fontSize: 12,
     color: '#999',
     textAlign: 'center',
-    fontStyle: 'italic',
+    //fontStyle: 'italic',
   },
 
   // Action Buttons

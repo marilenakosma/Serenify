@@ -8,6 +8,7 @@ import ThemedButton from '../../../components/ThemedButton';
 import BackButton from '../../../components/BackButton';
 import { useTranslation } from '../../../constants/translations';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../../constants/Colors';
 
 export default function Grounding() {
   const router = useRouter();
@@ -21,35 +22,35 @@ export default function Grounding() {
       sense: t('firstAid.grounding.see'),
       prompt: t('firstAid.grounding.seePrompt'),
       icon: 'eye-outline',
-      color: '#66BB6A'
+      color: '#6B9E78'
     },
     {
       number: 4,
       sense: t('firstAid.grounding.touch'),
       prompt: t('firstAid.grounding.touchPrompt'),
       icon: 'hand-left-outline',
-      color: '#42A5F5'
+      color: '#7BA3C1'
     },
     {
       number: 3,
       sense: t('firstAid.grounding.hear'),
       prompt: t('firstAid.grounding.hearPrompt'),
       icon: 'ear-outline',
-      color: '#9575CD'
+      color: '#9E8BC1'
     },
     {
       number: 2,
       sense: t('firstAid.grounding.smell'),
       prompt: t('firstAid.grounding.smellPrompt'),
       icon: 'flower-outline',
-      color: '#FF6B9D'
+      color: '#D989AA'
     },
     {
       number: 1,
       sense: t('firstAid.grounding.taste'),
       prompt: t('firstAid.grounding.tastePrompt'),
       icon: 'ice-cream-outline',
-      color: '#FFA726'
+      color: '#E8B86D'
     }
   ];
 
@@ -143,14 +144,16 @@ export default function Grounding() {
           <View style={[styles.iconCircle, { backgroundColor: `${step.color}15` }]}>
             <Ionicons name={step.icon} size={60} color={step.color} />
           </View>
-
-          <ThemedText title={true} style={styles.stepNumber}>
+          
+          <View style={{flexDirection:'row',alignItems:'flex-end',paddingHorizontal:27,gap:15}}>
+          <ThemedText title={true} style={[styles.stepNumber,{color:step.color}]}>
             {step.number}
           </ThemedText>
 
           <ThemedText style={styles.stepSense}>
             {step.sense}
           </ThemedText>
+          </View>
 
           <ThemedText style={styles.stepPrompt}>
             {step.prompt}
@@ -158,7 +161,7 @@ export default function Grounding() {
 
           {isLastStep && (
             <View style={styles.completionBox}>
-              <Ionicons name="checkmark-circle" size={40} color="#4CAF50" />
+              <Ionicons name="checkmark-circle" size={30} color="#4CAF50" />
               <ThemedText style={styles.completionText}>
                 {t('firstAid.grounding.complete')}
               </ThemedText>
@@ -208,17 +211,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     marginTop: 20,
-    marginBottom: 16,
+    marginBottom: 12,
     textAlign: 'center',
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
-    color: '#666',
+    color: '#555',
     marginBottom: 30,
-    lineHeight: 24,
+    lineHeight: 22,
   },
   instructionsBox: {
     backgroundColor: '#E8F5E9',
@@ -228,25 +231,25 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   instructionsTitle: {
-    fontSize: 18,
-    marginBottom: 12,
+    fontSize: 17,
+    marginBottom: 8,
     color: '#2E7D32',
   },
   instructions: {
     fontSize: 14,
     color: '#4CAF50',
-    lineHeight: 22,
+    lineHeight: 20,
   },
   startButton: {
     backgroundColor: '#66BB6A',
-    paddingVertical: 16,
+    paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 12,
     width: '100%',
   },
   startButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
   },
   progressContainer: {
@@ -268,7 +271,8 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#66BB6A',
+    //backgroundColor: '#4CAF50',
+    backgroundColor:Colors.primary,
   },
   stepContainer: {
     //flexGrow: 1,
@@ -286,17 +290,19 @@ const styles = StyleSheet.create({
     //marginBottom: 30,
   },
   stepNumber: {
-    fontSize: 72,
+    fontSize: 60,
     color: '#66BB6A',
     marginBottom: 10,
+    marginLeft:30,
+    
   },
   stepSense: {
-    fontSize: 24,
-    marginBottom: 10,
-    textAlign: 'center',
+    fontSize: 20,
+    marginBottom: 23,
+    //textAlign: 'center',
   },
   stepPrompt: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
     color: '#666',
     lineHeight: 24,
@@ -311,7 +317,6 @@ const styles = StyleSheet.create({
   completionText: {
     fontSize: 18,
     color: '#4CAF50',
-    fontWeight: '600',
     marginTop: 12,
     textAlign: 'center',
   },
@@ -319,16 +324,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     gap: 12,
-    //flex:1,
+    flexGrow:1,
+    justifyContent: 'center',
   },
   nextButton: {
-    backgroundColor: '#66BB6A',
+    //backgroundColor: '#66BB6A',
     paddingVertical: 16,
     borderRadius: 12,
   },
   nextButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
   },
   restartButton: {

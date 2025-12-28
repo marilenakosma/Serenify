@@ -121,7 +121,7 @@ export default function Soundscapes() {
         <Ionicons name={item.icon} size={26} color={item.color} />
         <View style={styles.soundText}>
           <ThemedText title={true} style={styles.soundName}>{item.name}</ThemedText>
-          <ThemedText style={styles.soundDescription}>{item.description}</ThemedText>
+          {<ThemedText style={styles.soundDescription}>{item.description}</ThemedText>}
         </View>
       </View>
       
@@ -155,7 +155,7 @@ export default function Soundscapes() {
           <View style={styles.nowPlaying}>
             <Ionicons name="musical-note" size={20} color="#2E7D32" />
             <ThemedText style={styles.nowPlayingText}>
-              Playing: {currentSound.name}
+              {t('soundscapes.nowPlaying')}: {currentSound.name}
             </ThemedText>
           </View>
         )}

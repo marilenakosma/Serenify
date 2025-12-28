@@ -131,34 +131,25 @@ const Login = () => {
         return !emailError && !passwordError;
     };
 
-    const handleAlert = (title,message) => {
+    const handleAlert = (title, message, onConfirmAction) => {
         setAlertConfig({
-                type: 'error',
-                title: title,
-                message: message,
-                showCancel: true,
-            
-                onConfirm: async () => {
-                try {
-                    const result = await logout();
-                    if (!result.success) {
-                        setAlertConfig({
-                            type: 'error',
-                            title: t('common.error'),
-                            message: t('profile.logoutError'),
-                            onClose: () => setAlertConfig(null)
-                        });
-                    } else {
-                        setAlertConfig(null);
-                    }
-                } catch (error) {
-                    console.log('Logout error:', error);
-                    setAlertConfig(null);
-                }
-            }, 
-            onClose: () => setAlertConfig(null)
+          type: 'error',
+          title: title,
+          message: message,
+          showCancel: !!onConfirmAction,
+          onConfirm: async () => {
+            try {
+              if (onConfirmAction) {
+                await onConfirmAction();
+              }
+              setAlertConfig(null);
+            } catch (error) {
+              setAlertConfig(null);
+            }
+          }, 
+          onClose: () => setAlertConfig(null)
         });
-    }
+      };
 
     const handleLogin = async () => {
         if (!validateForm()) {
@@ -290,7 +281,7 @@ const Login = () => {
                         {/* Or Divider */}
                         <View style={styles.orContainer}>
                             <View style={styles.orLine} />
-                            <ThemedText style={styles.orText}>{t('auth.continue')}</ThemedText>
+                            <ThemedText style={styles.orText}>{t('auth.loginWith')}</ThemedText>
                             <View style={styles.orLine} />
                         </View>
                         

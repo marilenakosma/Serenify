@@ -1,13 +1,13 @@
 {
   "welcome": {
     "title": "Serenify",
-    "subtitle":"Find your inner peace...",
+    "subtitle":"Calm your inner world",
     "getStarted":"Get Started"
 },
 "auth": {
   "register":"Create Your Account",
-  "fullName":"Full Name",
-  "email":"Email Address",
+  "fullName":"Name",
+  "email":"Email",
   "password":"Password",
   "confirmPassword":"Confirm Password",
   "creatingAccount":"Creating Account...",
@@ -101,7 +101,8 @@
     "tooManyRequests": "Too many attempts. Please try again later.",
     "unknownError": "Something went wrong. Please try again.",
     "permissionDenied": "You don't have permission to access this data.",
-    "dataNotFound": "Requested data not found."
+    "dataNotFound": "Requested data not found.",
+    "googleSignInFailed":"Google Sign-In was unsuccessful.Try again later"
   },
 "tabs":{
   "home":"Home",
@@ -502,6 +503,7 @@
   "kindness": {
     "title": "Acts of Kindness",
     "actsToday": "kind acts today",
+    "actToday": "kind act today",
     "categories": {
       "personal": "Personal Connections",
       "community": "Community Help", 
@@ -516,9 +518,9 @@
     "volunteer": "Volunteer for 1 hour",
     "pickupLitter": "Pick up litter in your area",
     "holdDoor": "Hold the door for someone",
-    "smile": "Smile at 5 strangers", 
+    "smile": "Smile at a stranger", 
     "letMerge": "Let someone merge in traffic",
-    "donate": "Donate $5 to charity",
+    "donate": "Donate to charity",
     "tipExtra": "Tip your server extra",
     "buyMeal": "Buy a meal for someone in need",
     "positiveReview": "Write a positive review",

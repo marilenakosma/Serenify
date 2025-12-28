@@ -305,7 +305,7 @@ const renderActItem = (act) => {
           <View style={styles.progressCard}>
             <Ionicons name="heart" size={24} color="#FF6B9D" />
             <ThemedText style={styles.progressText}>
-              {todayCount} {t('kindness.actsToday')}
+             {todayCount} { todayCount > 1 || todayCount === 0 ? t('kindness.actsToday') : t('kindness.actToday') }
             </ThemedText>
           </View>
         </View>
