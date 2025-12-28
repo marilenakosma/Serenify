@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/authStore';
 import { Ionicons } from '@expo/vector-icons';
 import { CustomAlert } from "../../components/CustomAlert";
 import { formatDate } from '../../constants/dateFormatter';
+import { Colors } from '../../constants/Colors';
 
 export default function Reflections() {
   const router = useRouter();
@@ -70,12 +71,6 @@ export default function Reflections() {
 
         <ThemedView style={styles.container}>
             <View style={styles.header}>
-              <View style={[
-                      styles.iconContainer,
-                        {backgroundColor: `${"#C17BA3"}15`}
-                      ]}>
-              <Ionicons name="journal-outline" size={40} color={'#d68db6ff'}/>
-                </View>
                 <ThemedText title={true} style={styles.title}>
                   {t('reflections.title')}
                 </ThemedText>
@@ -116,7 +111,7 @@ export default function Reflections() {
               <View style={styles.reflectionPointsBadge}>
                 <Ionicons name="flash" size={18} color="#FFD700" />
                 <ThemedText style={styles.reflectionPointsText}>
-                  20
+                  +20
                 </ThemedText>
               </View>
             </View>
@@ -179,7 +174,7 @@ const styles = StyleSheet.create({
       fontFamily:'MontserratZ-Regular'
     },
   saveButton: { 
-    backgroundColor: '#d68db6ff',
+    backgroundColor: Colors.primary,
      padding: 12, 
      borderRadius: 8, 
      marginBottom: 16 
@@ -189,11 +184,17 @@ const styles = StyleSheet.create({
     marginTop:16,
   },
   reflectionItem: { 
-    paddingTop: 20,
-    backgroundColor: '#E8F5E8', 
-    borderRadius: 8,
-    padding: 12, 
-    marginBottom: 10 
+     backgroundColor: '#fff',
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 12,
+      borderLeftWidth: 4,
+      borderLeftColor: Colors.primary,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.1,
+      shadowRadius: 2,
+      elevation: 2, 
   },
   reflectionText: { 
     fontSize: 16 
@@ -209,6 +210,9 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     paddingVertical:4,
     alignSelf:'flex-end'
+  },
+  reflectionPointsText:{
+    color:'#4CAF50'
   },
   iconContainer: {
         width: 48,
