@@ -171,7 +171,7 @@ export default function GoalIdeas() {
   const { t } = useTranslation();
   const { userHabits, addHabits } = useAuthStore();
   const [addedGoals, setAddedGoals] = useState(new Set());
-  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '' });
+  const [toastConfig, setToastConfig] = useState({ visible: false, points: 0, message: '',isWarning:false });
   const [alertConfig, setAlertConfig] = useState(null);
 
   const extraGoals = getExtraGoals(t);

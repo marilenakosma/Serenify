@@ -40,11 +40,9 @@ export function PointsToast({ visible, points=false,title=false, message, onDism
          return (
     <>
    
-      {visible && !isWarning && (
+      {visible && !isWarning && points && (
         <View style={styles.confettiContainer} pointerEvents="none">
-          <Confetti 
-            //ref={confettiRef}
-          />
+          <Confetti />
         </View>
       )}
     
@@ -80,12 +78,14 @@ export function PointsToast({ visible, points=false,title=false, message, onDism
               <ThemedText>
                 {message || 'Great Job!'}
               </ThemedText> :
+              points ? (
               <>
              <Ionicons name="flash" size={18} color="#FFD700" />
               <ThemedText style={styles.points}>
                 +{points}
               </ThemedText> 
-              </>}
+              </>
+              ) : null}
             </View>
           </View>
         </View>

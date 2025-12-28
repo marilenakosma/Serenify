@@ -641,13 +641,13 @@ logout: async () => {
      const targetDate = date ? new Date(date) : new Date();
      const dateStr = targetDate.toISOString().split('T')[0];
 
-     if (!shouldTrackHabitOnDate(habit.frequency, targetDate)) {
-       Alert.alert(
-       'Not Trackable',
-       `This habit (${habit.frequency}) cannot be completed on this day.`
-     );
-     return;
-     }
+     //if (!shouldTrackHabitOnDate(habit.frequency, targetDate)) {
+      // Alert.alert(
+     //  'Not Trackable',
+     //  `This habit (${habit.frequency}) cannot be completed on this day.`
+     //);
+    // return;
+    // }
 
      const isCurrentlyCompleted = completions[habitId][dateStr] || false; 
      const pointsAwarded = hasPointsBeenAwarded(completions, habitId, dateStr);

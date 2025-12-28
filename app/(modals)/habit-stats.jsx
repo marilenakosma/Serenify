@@ -1045,12 +1045,12 @@ calendar: {
 
   // Edit Sections
   editSection: {
-    marginBottom: 30,
+    marginTop:30,
   },
   editLabel: {
     fontSize: 16,
     color: '#2c3e50',
-    marginBottom: 12,
+    marginBottom: 17,
   },
   textInput: {
     backgroundColor: '#f8f9fa',
