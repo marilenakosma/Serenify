@@ -102,7 +102,7 @@ const profile = () => {
             <LanguagePicker/>
              <SafeAreaView style={styles.safeArea}> 
                <View style={styles.header}> 
-                 <BackButton style={{backgroundColor: '#f1f5eeff'}}/>
+                 <BackButton style={{backgroundColor: '#f1f5eeff'}} route="/(dashboard)"/>
                </View>
 
                 {/* User Info Section 

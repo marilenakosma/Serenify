@@ -61,7 +61,7 @@ const LanguagePicker = ({ style }) => {
 const styles = StyleSheet.create({
   toggleContainer: {
     position: 'absolute',
-    top: 70, 
+    top: 45, 
     right: 20, 
     zIndex: 10, 
     flexDirection: 'row',
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 20,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },

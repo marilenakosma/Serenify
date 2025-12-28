@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, TextInput, FlatList, View } from 'react-native';
+import { StyleSheet, TextInput, FlatList, View, TouchableOpacity } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import ThemedButton from '../../components/ThemedButton';
 import ThemedText from "../../components/ThemedText";
@@ -16,19 +16,19 @@ import { Colors } from '../../constants/Colors';
 export default function Reflections() {
   const router = useRouter();
   const { t, currentLanguage } = useTranslation();
-  const { saveReflection, reflections, addPoints } = useAuthStore();
+  const { saveReflection, reflections, addPoints, deleteReflection } = useAuthStore();
   
   const [reflection, setReflection] = useState('');
   const [alertConfig, setAlertConfig] = useState(null);
   const params = useLocalSearchParams();
   const prompt = t(params.prompt) || t('reflections.defaultPrompt');
 
-  const handleAlert = (type, title, message) => {
+  const handleAlert = (type, title, message, onConfirmAction) => {
     setAlertConfig({
           type: type,
           title: title,
           message: message,
-          showCancel: true,
+          showCancel: !!onConfirmAction,
           onConfirm: async () => {
             try {
               if (onConfirmAction) {
@@ -36,7 +36,6 @@ export default function Reflections() {
               }
               setAlertConfig(null);
             } catch (error) {
-              //console.log('Alert action error:', error);
               setAlertConfig(null);
             }
           }, 
@@ -63,6 +62,17 @@ export default function Reflections() {
         );
       }
     }
+  };
+
+  const handleDelete = (item) => {
+    handleAlert(
+      'error',
+      t('common.delete') || 'Delete',
+      t('reflections.deleteConfirm') || 'Are you sure you want to delete this reflection?',
+      async () => {
+        await deleteReflection(item.id);
+      }
+    );
   };
 
   return (
@@ -102,21 +112,37 @@ export default function Reflections() {
           data={reflections}
           renderItem={({ item }) => (
             <View style={styles.reflectionItem}>
-              <ThemedText style={styles.reflectionText}>
-                {item.text}
-              </ThemedText>
-              <ThemedText style={styles.reflectionDate}>
-                {formatDate(item.timestamp, currentLanguage, true)}
-              </ThemedText>
-              <View style={styles.reflectionPointsBadge}>
-                <Ionicons name="flash" size={18} color="#FFD700" />
-                <ThemedText style={styles.reflectionPointsText}>
-                  +20
+              <View style={styles.reflectionContent}>
+                <ThemedText style={styles.reflectionText}>
+                  {item.text}
                 </ThemedText>
+                <ThemedText style={styles.reflectionDate}>
+                  {formatDate(item.timestamp, currentLanguage, true)}
+                </ThemedText>
+                <View style={styles.reflectionPointsBadge}>
+                  <Ionicons name="flash" size={18} color="#FFD700" />
+                  <ThemedText style={styles.reflectionPointsText}>
+                    +20
+                  </ThemedText>
+                </View>
               </View>
+              <TouchableOpacity 
+                onPress={() => handleDelete(item)}
+                style={styles.deleteButton}
+              >
+                <Ionicons name="trash-outline" size={20} color="#FF5252" />
+              </TouchableOpacity>
             </View>
           )}
           keyExtractor={(item) => item.id || item.timestamp}
+          ListEmptyComponent={
+                      <View style={styles.emptyState}>
+                        <Ionicons name="cloud-outline" size={64} color="#E0E0E0" />
+                        <ThemedText style={styles.emptyText}>
+                          {t('reflections.noReflections') || t('firstAid.worryJournal.noWorries')}
+                        </ThemedText>
+                      </View>
+                    }
           contentContainerStyle={styles.list}
         />
 
@@ -194,7 +220,13 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.1,
       shadowRadius: 2,
-      elevation: 2, 
+      elevation: 2,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+  },
+  reflectionContent: {
+    flex: 1,
   },
   reflectionText: { 
     fontSize: 16 
@@ -207,12 +239,14 @@ const styles = StyleSheet.create({
   reflectionPointsBadge: {
     flexDirection:'row',
     alignItems:'center',
-    paddingHorizontal:10,
-    paddingVertical:4,
-    alignSelf:'flex-end'
+    marginTop: 4,
   },
   reflectionPointsText:{
     color:'#4CAF50'
+  },
+  deleteButton: {
+    padding: 8,
+    marginLeft: 8,
   },
   iconContainer: {
         width: 48,
@@ -222,6 +256,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 12,
         flexShrink:0,
-        //color: '#C17BA3'
       },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+ },
+  emptyText: {
+   marginTop: 16,
+   fontSize: 16,
+   color: '#999',
+   textAlign: 'center',
+  },
 });

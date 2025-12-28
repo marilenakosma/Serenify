@@ -297,12 +297,12 @@ export const getMoodHistory = async (userId) => {
 
 export const saveReflection = async (userId, reflectionText) => {
   try {
-    await addDoc(collection(db, 'users', userId, 'reflections'), {
+    const docRef = await addDoc(collection(db, 'users', userId, 'reflections'), {
       text: reflectionText,
       date: new Date().toDateString(),
       timestamp: serverTimestamp()
     });
-    return { success: true };
+    return { success: true, id: docRef.id }; // Return the Firebase-generated ID
   } catch (error) {
     console.error('Save reflection error:', error);
     return { success: false, error: error.message };
@@ -326,15 +326,25 @@ export const getReflections = async (userId) => {
   }
 };
 
+export const deleteReflection = async (userId, reflectionId) => {
+  try {
+    await deleteDoc(doc(db, 'users', userId, 'reflections', reflectionId));
+    return { success: true };
+  } catch (error) {
+    console.error('Delete reflection error:', error);
+    return { success: false, error: error.message };
+  }
+};
+
 // ==================== WORRY ENTRIES FUNCTIONS ====================
 
 export const saveWorryEntry = async (userId, entry) => {
   try {
-    await addDoc(collection(db, 'users', userId, 'worries'), {
-      ...entry,
+    const docRef = await addDoc(collection(db, 'users', userId, 'worries'), {
+      text: entry.text,
       timestamp: serverTimestamp()
     });
-    return { success: true };
+    return { success: true, id: docRef.id }; // Return the Firebase-generated ID
   } catch (error) {
     console.error('Save worry error:', error);
     return { success: false, error: error.message };

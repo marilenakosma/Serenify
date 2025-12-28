@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, View, Alert, FlatList,ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedText from '../../../components/ThemedText';
@@ -14,21 +14,18 @@ import { formatDate } from "../../../constants/dateFormatter";
 
 export default function WorryJournal() {
   const router = useRouter();
-  const { t,currentLanguage } = useTranslation();
-  const { addWorryEntry, getWorryEntries,worryEntries } = useAuthStore();
+  const { t, currentLanguage } = useTranslation();
+  const { addWorryEntry, worryEntries, deleteWorryEntry } = useAuthStore();
 
   const [worry, setWorry] = useState('');
-  //const [worryList,setWorryList] = useState([]);
   const [alertConfig, setAlertConfig] = useState(null);
 
-  
-
-  const handleAlert = (type,title, message, onConfirmAction) => {
+  const handleAlert = (type, title, message, onConfirmAction) => {
     setAlertConfig({
       type: type,
       title: title,
       message: message,
-      showCancel: true,
+      showCancel: !!onConfirmAction,
       onConfirm: async () => {
         try {
           if (onConfirmAction) {
@@ -36,33 +33,41 @@ export default function WorryJournal() {
           }
           setAlertConfig(null);
         } catch (error) {
-          //console.log('Alert action error:', error);
           setAlertConfig(null);
         }
       }, 
       onClose: () => setAlertConfig(null)
     });
-  }
+  };
 
   const handleSave = () => {
     if (worry.trim().length === 0) {
-      handleAlert('error',t('common.error'), t('firstAid.worryJournal.emptyError'));
+      handleAlert('error', t('common.error'), t('firstAid.worryJournal.emptyError'));
       return;
     }
 
     const newEntry = {
-      //id: Date.now().toString(),
       text: worry.trim(),
       timestamp: new Date().toISOString(),
     };
 
     addWorryEntry(newEntry);
     setWorry('');
-    //setWorryList(getWorryEntries());
 
     handleAlert('success',
       t('firstAid.worryJournal.saved'),
       t('firstAid.worryJournal.savedMessage')
+    );
+  };
+
+  const handleDelete = (item) => {
+    handleAlert(
+      'error',
+      t('common.delete') || 'Delete',
+      t('firstAid.worryJournal.deleteConfirm') || 'Are you sure you want to delete this entry?',
+      async () => {
+        await deleteWorryEntry(item.id);
+      }
     );
   };
 
@@ -80,7 +85,6 @@ export default function WorryJournal() {
             {t('firstAid.worryJournal.subtitle')}
           </ThemedText>
         </View>
-
 
         <View style={styles.inputSection}>
           <ThemedText style={styles.inputLabel}>
@@ -114,10 +118,18 @@ export default function WorryJournal() {
           data={worryEntries}
           renderItem={({ item }) => (
             <View style={styles.worryCard}>
-              <ThemedText style={styles.worryText}>{item.text}</ThemedText>
-              <ThemedText style={styles.worryDate}>
-                {formatDate(item.timestamp, currentLanguage, true)}
-              </ThemedText>
+              <View style={styles.worryContent}>
+                <ThemedText style={styles.worryText}>{item.text}</ThemedText>
+                <ThemedText style={styles.worryDate}>
+                  {formatDate(item.timestamp, currentLanguage, true)}
+                </ThemedText>
+              </View>
+              <TouchableOpacity 
+                onPress={() => handleDelete(item)}
+                style={styles.deleteButton}
+              >
+                <Ionicons name="trash-outline" size={20} color="#FF5252" />
+              </TouchableOpacity>
             </View>
           )}
           keyExtractor={(item) => item.id || item.timestamp}
@@ -173,25 +185,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#666',
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-  infoBox: {
-    flexDirection: 'row',
-    backgroundColor: '#E3F2FD',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-    alignItems: 'flex-start',
-  },
-  infoText: {
-    marginLeft: 12,
-    fontSize: 14,
-    color: '#1976D2',
-    flex: 1,
-    lineHeight: 20,
-  },
   inputSection: {
     marginBottom: 24,
   },
@@ -227,15 +220,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft:8
   },
-  historySection: {
-    marginBottom: 24,
-  },
-  historyTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    color: '#333',
-  },
   worryCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -248,21 +232,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
-  },
-  worryHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  worryContent: {
+    flex: 1,
   },
   worryDate: {
-    marginLeft: 6,
     fontSize: 12,
     color: '#999',
+    marginTop: 4,
   },
   worryText: {
     fontSize: 14,
     color: '#666',
     lineHeight: 20,
+  },
+  deleteButton: {
+    padding: 8,
+    marginLeft: 8,
   },
   emptyState: {
     alignItems: 'center',

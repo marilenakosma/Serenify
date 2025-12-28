@@ -30,6 +30,7 @@ import {
   saveWorryEntry as saveWorryToFirebase,
   getWorryEntries as getWorriesFromFirebase,
   deleteWorryEntry as deleteWorryFromFirebase,
+  deleteReflection as deleteReflectionFromFirebase,
   signInWithGoogle 
 } from '../app/services/firebaseService';
 
@@ -960,40 +961,43 @@ checkAuth: async () => {
   // ==================== REFLECTIONS ====================
 
   saveReflection: async (text) => {
-    const currentState = get();
-    
-    const newReflection = {
-      id: Date.now().toString(),
-      text: text,
-      date: new Date().toDateString(),
-      timestamp: new Date().toISOString(),
-    };
-
-    const updatedReflections = [newReflection, ...currentState.reflections];
-
-    // Save to Firebase
-    if (currentState.userId) {
-      const result = await saveReflectionToFirebase(currentState.userId, text);
-      if (!result.success) {
-        console.error('Failed to save reflection to Firebase');
-        return false;
-      }
+  const currentState = get();
+  
+  // Save to Firebase first to get the real ID
+  let firebaseId = null;
+  if (currentState.userId) {
+    const result = await saveReflectionToFirebase(currentState.userId, text);
+    if (result.success) {
+      firebaseId = result.id;
+    } else {
+      console.error('Failed to save reflection to Firebase');
+      return false;
     }
+  }
 
-    // Update local state
-    set({ reflections: updatedReflections });
+  const newReflection = {
+    id: firebaseId || Date.now().toString(), // Use Firebase ID if available
+    text: text,
+    date: new Date().toDateString(),
+    timestamp: new Date().toISOString(),
+  };
 
-    // Update MMKV cache
-    const currentAuthData = getItem("authData");
-    if (currentAuthData) {
-      setItem("authData", {
-        ...currentAuthData,
-        reflections: updatedReflections
-      });
-    }
+  const updatedReflections = [newReflection, ...currentState.reflections];
 
-    return true;
-  },
+  // Update local state
+  set({ reflections: updatedReflections });
+
+  // Update MMKV cache
+  const currentAuthData = getItem("authData");
+  if (currentAuthData) {
+    setItem("authData", {
+      ...currentAuthData,
+      reflections: updatedReflections
+    });
+  }
+
+  return true;
+},
 
   getReflections: () => {
     return get().reflections || [];
@@ -1006,32 +1010,39 @@ checkAuth: async () => {
   },
 
   addWorryEntry: async (entry) => {
-    const currentState = get();
-    const newEntry = {
-      ...entry,
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString()
-    };
-
-    const updatedEntries = [newEntry, ...currentState.worryEntries];
-
-    // Save to Firebase
-    if (currentState.userId) {
-      await saveWorryToFirebase(currentState.userId, newEntry);
+  const currentState = get();
+  
+  // Save to Firebase first to get the real ID
+  let firebaseId = null;
+  if (currentState.userId) {
+    const result = await saveWorryToFirebase(currentState.userId, {
+      text: entry.text  // Only send text, let Firebase handle timestamp
+    });
+    if (result.success) {
+      firebaseId = result.id;
     }
+  }
 
-    // Update local state
-    set({ worryEntries: updatedEntries });
+  const newEntry = {
+    id: firebaseId || Date.now().toString(),
+    text: entry.text,
+    timestamp: new Date().toISOString()  // Local ISO timestamp for immediate display
+  };
 
-    // Update MMKV cache
-    const currentAuthData = getItem("authData");
-    if (currentAuthData) {
-      setItem("authData", {
-        ...currentAuthData,
-        worryEntries: updatedEntries
-      });
-    }
-  },
+  const updatedEntries = [newEntry, ...currentState.worryEntries];
+
+  // Update local state
+  set({ worryEntries: updatedEntries });
+
+  // Update MMKV cache
+  const currentAuthData = getItem("authData");
+  if (currentAuthData) {
+    setItem("authData", {
+      ...currentAuthData,
+      worryEntries: updatedEntries
+    });
+  }
+},
 
   loadWorryEntries: async () => {
     const currentState = get();
@@ -1073,6 +1084,28 @@ checkAuth: async () => {
       });
     }
   },
+
+  deleteReflection: async (reflectionId) => {
+  const currentState = get();
+  const updatedReflections = currentState.reflections.filter(r => r.id !== reflectionId);
+
+  // Delete from Firebase
+  if (currentState.userId) {
+    await deleteReflectionFromFirebase(currentState.userId, reflectionId);
+  }
+
+  // Update local state
+  set({ reflections: updatedReflections });
+
+  // Update MMKV cache
+  const currentAuthData = getItem("authData");
+  if (currentAuthData) {
+    setItem("authData", {
+      ...currentAuthData,
+      reflections: updatedReflections
+    });
+  }
+},
 
 
   // Helper getters - using username instead of fullName

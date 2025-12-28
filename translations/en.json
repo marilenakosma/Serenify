@@ -544,7 +544,9 @@
     "free": "Write anything you want.",
     "saved": "Reflection Saved!",
     "savedMessage": "Your reflection has been recorded.",
-    "saveError": "Failed to save reflection. Please try again."
+    "saveError": "Failed to save reflection. Please try again.",
+    "noReflections":"No reflections recorded yet",
+    "deleteConfirm":"Are you sure you want to delete this entry?"
   },
   "firstAid": {
   "title": "First Aid Kit",
@@ -647,7 +649,8 @@
     "savedMessage": "Your worry has been recorded. Remember, acknowledging your worries is a step toward managing them.",
     "emptyError": "Please write something before saving.",
     "previousWorries": "Previous Entries",
-    "noWorries": "No worries recorded yet"
+    "noWorries": "No worries recorded yet",
+    "deleteConfirm":"Are you sure you want to delete this entry?"
   },
   "distraction": {
     "title": "Distraction Activities",
