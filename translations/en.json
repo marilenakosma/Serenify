@@ -145,7 +145,7 @@
   },
   "habitCard": {
     "doneToday": "Done today!",
-    "tapToComplete": "Tap to complete",
+    "tapToComplete": "Tap the circle to complete",
     "weekComplete": "Week complete! 🎉",
     "weeklyProgress": "{{completed}}/{{required}} this week",
     "weeklyProgressDoneToday": "{{completed}}/{{required}} this week - Done today!",

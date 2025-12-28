@@ -190,7 +190,7 @@ const getHabitStatus = (habit) => {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <BackButton style={{ backgroundColor: '#f1f5eeff' }} />
+        
         
         <ThemedText title={true} style={styles.title}>
           {t('habits.title')}
@@ -202,11 +202,7 @@ const getHabitStatus = (habit) => {
           contentContainerStyle={styles.scrollContent}
         >
 
-          <ImageBackground 
-                      source={require('../../assets/images/canola.jpg')}
-                      style={[styles.backgroundImage]}
-                      resizeMode="cover"
-                    >
+          
           {/* Habits Overview */}
           <View style={styles.habitsOverview}>
             <View style={styles.overviewHeader}>
@@ -314,7 +310,7 @@ const getHabitStatus = (habit) => {
             )}
           </View>
 
-          </ImageBackground>
+          
 
           {/* Categories with Goals */}
           {Object.entries(goalsByCategory).map(([categoryicon, categoryGoals]) => {

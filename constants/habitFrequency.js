@@ -37,10 +37,23 @@ export const migrateFrequencyToKey = (frequency) => {
 };
 
 export const getFrequencyDisplay = (frequency, t) => {
-  // First migrate if needed
+  if (!frequency) return '';
+  
+  
+  // First try to migrate if it's a key
   const key = migrateFrequencyToKey(frequency);
+  
+  // Try to translate
   const translationKey = `frequency.${key}`;
-  return t(translationKey) || frequency;
+  const translated = t(translationKey);
+  
+  // If translation returns the key itself (meaning no translation found),
+  // the frequency might already be translated, so just return it
+  if (translated === translationKey || translated === `frequency.${key}`) {
+    return frequency; // Return as-is (already translated)
+  }
+  
+  return translated;
 };
 
 export const shouldTrackHabitOnDate = (frequency, date) => {

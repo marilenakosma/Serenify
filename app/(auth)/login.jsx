@@ -193,7 +193,7 @@ const Login = () => {
 
                 <ScrollView 
                     style={{flex: 1}}
-                    contentContainerStyle={{flexGrow: 1}}
+                    contentContainerStyle={{flex: 1}}
                     keyboardShouldPersistTaps="handled"
                     showsVerticalScrollIndicator={false}
                 >

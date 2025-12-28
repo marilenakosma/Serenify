@@ -269,7 +269,7 @@ if (!habit) {
 
   const openEditModal = (habit,t) => {
     setEditedName(getHabitText(habit) || '');
-    setEditedFrequency(getFrequencyDisplay(habit.frequency, t)|| t('frequency.daily'));
+    setEditedFrequency(getFrequencyDisplay(habit.frequency,t));
     setEditedDuration(habit.duration || t('durations.5min')); // Add fallback
     setShowEditModal(true);
   };
@@ -301,9 +301,9 @@ if (!habit) {
     t('frequency.daily'),
     t('frequency.weekdays'),
     t('frequency.weekends'),
-    t('frequency.threeWeekly'),
     t('frequency.weekly'),
     t('frequency.twoWeekly'),
+    t('frequency.threeWeekly'),
     t('frequency.fourWeekly'),
     t('frequency.fiveWeekly'),
     t('frequency.biweekly'),
@@ -320,7 +320,12 @@ if (!habit) {
     t('durations.1hour'),
     t('durations.1.5hours'),
     t('durations.2hours'),
-    t('durations.allDay')
+    t('durations.8hours'),
+    t('durations.allDay'),
+    t('durations.allNight'),
+    t('durations.afternoon'),
+    t('durations.evening'),
+    t('durations.varies')
   ];
 
   // Calculate stats

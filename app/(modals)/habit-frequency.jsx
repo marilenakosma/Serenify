@@ -10,7 +10,7 @@ import ThemedView from "../../components/ThemedView";
 import Spacer from "../../components/Spacer";
 import { useAuthStore } from "../../store/authStore";
 import { getAvailableHabits } from "../../constants/availableHabits";
-import { FREQUENCY_TYPES } from '../../constants/habitFrequency';
+import { FREQUENCY_TYPES,getFrequencyDisplay } from '../../constants/habitFrequency';
 import BackButton from "../../components/BackButton";
 import { useTranslation } from '../../constants/translations';
 import { getCategoryColor } from '../../constants/availableHabits';
@@ -61,13 +61,15 @@ const HabitFrequency = () => {
     { value: FREQUENCY_TYPES.DAILY, label: t('frequency.daily'), icon: 'calendar-outline' },
     { value: FREQUENCY_TYPES.WEEKDAYS, label: t('frequency.weekdays'), icon: 'business-outline' },
     { value: FREQUENCY_TYPES.WEEKENDS, label: t('frequency.weekends'), icon: 'home-outline' },
-    { value: FREQUENCY_TYPES.THREE_WEEKLY, label: t('frequency.threeWeekly'), icon: 'fitness-outline' },
-    { value: FREQUENCY_TYPES.WEEKLY, label: t('frequency.weekly'), icon: 'calendar-outline' },
+   // { value: FREQUENCY_TYPES.THREE_WEEKLY, label: t('frequency.threeWeekly'), icon: 'fitness-outline' },
+   // { value: FREQUENCY_TYPES.WEEKLY, label: t('frequency.weekly'), icon: 'calendar-outline' },
     { value: 'Custom', label: t('frequency.customSchedule'), icon: 'settings-outline' }
   ];
 
   const customOptions = [
+    { value: FREQUENCY_TYPES.WEEKLY, label: t('frequency.weekly')},
     { value: FREQUENCY_TYPES.TWO_WEEKLY, label: t('frequency.twoWeekly') },
+    { value: FREQUENCY_TYPES.THREE_WEEKLY, label: t('frequency.threeWeekly')},
     { value: FREQUENCY_TYPES.FOUR_WEEKLY, label: t('frequency.fourWeekly') },
     { value: FREQUENCY_TYPES.FIVE_WEEKLY, label: t('frequency.fiveWeekly') },
     { value: FREQUENCY_TYPES.BIWEEKLY, label: t('frequency.biweekly') },
@@ -207,7 +209,7 @@ const HabitFrequency = () => {
                             isSelected && styles.selectedFrequencyText
                           ]}>
                             {option.value === 'Custom' && !frequencyOptions.some(opt => opt.value === habitFrequencies[habit.id])
-                              ? habitFrequencies[habit.id] 
+                              ? getFrequencyDisplay(habitFrequencies[habit.id], t)
                               : option.label}
                           </ThemedText>
                         </TouchableOpacity>
@@ -480,11 +482,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e0e0e0',
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 15,
     color: '#2c3e50',
+    alignText:'center',
   },
   modalCloseButton: {
-    padding: 4,
+    paddingHorizontal:10,
   },
   modalScrollView: {
     maxHeight: 250,
