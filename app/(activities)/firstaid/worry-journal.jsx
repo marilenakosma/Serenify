@@ -56,7 +56,7 @@ export default function WorryJournal() {
 
     handleAlert('success',
       t('firstAid.worryJournal.saved'),
-      t('firstAid.worryJournal.savedMessage')
+      t('firstAid.worryJournal.savedMessage'),
     );
   };
 

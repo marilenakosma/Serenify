@@ -53,14 +53,21 @@ const Dashboard = () => {
   //const content = dashboardContent[focusArea];
 
   useEffect(() => {
-    const initMood = async () => {
-      const mood = await loadTodayMood();
-      if (mood) {
-        setSelectedMood(mood.moodId);
-      }
-    };
-    initMood();
-  }, []);
+  const initMood = async () => {
+    const mood = await loadTodayMood();
+    if (mood) {
+      setSelectedMood(mood.moodId);
+    }
+  };
+  initMood();
+}, [loadTodayMood]);
+
+// useEffect to keep selectedMood in sync with todayMood
+useEffect(() => {
+  if (todayMood) {
+    setSelectedMood(todayMood.moodId);
+  }
+}, [todayMood]);
 
   if (!isAuthenticated) {
     return (
