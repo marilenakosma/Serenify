@@ -41,7 +41,7 @@ const handleAnimationFrame = (event) => {
       setMovementPhase('prepare');     
     } else if (progress < 0.50) {
       setMovementPhase('down');   
-    } else if (progress < 0.75) {
+    } else if (progress < 0.55) {
       setMovementPhase('hold');   
     } else {
       setMovementPhase('up');    
