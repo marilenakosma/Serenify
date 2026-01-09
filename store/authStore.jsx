@@ -656,13 +656,16 @@ logout: async () => {
 
      const previousStreak = habit.streak || 0;
 
-     completions[habitId][dateStr] = !isCurrentlyCompleted;
+     const tempCompletions = { ...completions[habitId] };
+     tempCompletions[dateStr] = !isCurrentlyCompleted;
 
     const today = new Date();
      
-    const newStreak = calculateFrequencyAwareStreak(habit.frequency, completions[habitId], today);
+    const newStreak = calculateFrequencyAwareStreak(habit.frequency, tempCompletions, today);
      
     const streakBroken = !isCurrentlyCompleted && previousStreak > 0 && newStreak < previousStreak;
+    
+    completions[habitId][dateStr] = !isCurrentlyCompleted;
 
      const updatedHabits = currentState.userHabits.map(habit => {
       if(habit.id === habitId) {

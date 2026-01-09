@@ -13,6 +13,8 @@
   "creatingAccount":"Creating Account...",
   "createAccount":"Create Account",
   "continue":"Or continue with",
+  "loginWith":"Or login with",
+  "signUpWith":"Or sign up with",
   "haveAccount":"Already have an account?",
   "signin":"Sign In",
   "signInBtn":"Sign In",
@@ -227,7 +229,7 @@
      "affirmations":"Practice positive affirmations",
      "exercise":"Do some form of exercise",
      "streakLost": "Streak Lost!",
-     "streakLostMessage": "Your {{habit}} streak dropped from {{previous}} to {{new}}. Try again tomorrow!"
+     "streakLostMessage": "Your streak for this habit was lost. Try again tomorrow!"
     },
     "common": {
       "waterIntake": {

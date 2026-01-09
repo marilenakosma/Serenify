@@ -869,15 +869,15 @@ const styles = StyleSheet.create({
   calendarWrapper: {
   borderRadius: 12,
   backgroundColor: 'white',
-  overflow: 'hidden', // This should work on the wrapper
+  overflow: 'hidden', 
   shadowColor: '#000',
   shadowOffset: { width: 0, height: 1 },
   shadowOpacity: 0.1,
   shadowRadius: 4,
   elevation: 2,
   marginBottom: 12,
-  padding:5,
-  height:305,
+  padding:7,
+  height:315,
 },
 calendar: {
   flexDirection: 'row',
@@ -886,13 +886,13 @@ calendar: {
   justifyContent: 'space-between',
 },
   calendarDay: {
-    width: '13%', 
+    width: '12%', 
     aspectRatio: 0.8,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 6,
+    borderRadius: 30,
     padding:5,
-    margin:1,
+    margin:4,
     position: 'relative',
     borderWidth: 0.5,
     borderColor: 'transparent',
@@ -934,15 +934,15 @@ calendar: {
   },
   
   // Completion Indicator
-  completionDot: {
-    position: 'absolute',
-    bottom: 2,
-    right: 2,
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-  },
+ // completionDot: {
+ //   position: 'absolute',
+  //  bottom: 2,
+ //   right: 2,
+ //   width: 6,
+  //  height: 6,
+ //   borderRadius: 3,
+ //   backgroundColor: 'rgba(255, 255, 255, 0.8)',
+ // },
   
   calendarHint: {
     fontSize: 12,

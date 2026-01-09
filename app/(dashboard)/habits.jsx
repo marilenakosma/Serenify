@@ -97,13 +97,15 @@ const habits = () => {
       if (result?.streakBroken) {
         setToastConfig({
           visible: true,
-          title: t('habits.streakLost'),
-          message: t('habits.streakLostMessage', {
-            habit: result.habitName,
-            previous: result.previousStreak,
-            new: result.newStreak
-          }),
-          isWarning: true 
+          title: t('habits.foundation.streakLost'),
+           message: t('habits.foundation.streakLostMessage'),
+         // message: t('habits.foundation.streakLostMessage', {
+        //    habit: result.habitName,
+        //    previous: result.previousStreak,
+        //    new: result.newStreak
+        //  }),
+          isWarning: true,
+          points:0,
         });
       } else {
         setToastConfig({
