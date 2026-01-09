@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../store/authStore';
 import LottieView from 'lottie-react-native';
 import { useTranslation } from '../../constants/translations';
+import { Confetti } from 'react-native-fast-confetti';
 
 const results = () => {
     const router = useRouter();
@@ -135,6 +136,7 @@ const results = () => {
 
     return (
         <ThemedView style={styles.container}>
+             <Confetti />
             <SafeAreaView style={styles.content}>
                 <ThemedText title={true} style={styles.title}>
                     {t('questionnaire.quizComplete')}

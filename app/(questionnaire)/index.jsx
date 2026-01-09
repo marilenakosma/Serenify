@@ -21,19 +21,6 @@ const Questionnaire = () => {
     const isRetake = params.retake === 'true';
 
     const existingQuestionnaire = getItem(`questionnaire_${user?.id}`);
- /*
-    console.log('🐛 Debug Everything:', {
-        userId: user?.id,
-        params: params,
-        allKeys: Object.keys(params),
-        paramCount: Object.keys(params).length,
-        retakeFromParams: params.retake,
-        testFromParams: params.test,
-        retakeFromStore: isRetakingQuestionnaire, 
-        existingQuestionnaire: existingQuestionnaire,
-        currentPath: router.pathname
-    });
-*/
     
     const handleStartQuiz = () => {
       router.navigate("questions");
@@ -57,8 +44,8 @@ const Questionnaire = () => {
 
           <LottieView
                 source={require('../../assets/animations/Dog.json')} 
-                autoPlay
-                loop={true}
+               // autoPlay
+                //loop={true}
                 style={styles.animation}
               />
        
@@ -91,6 +78,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         paddingVertical: 40,
         paddingBottom: 80,
+        
     },
     title: {
         textAlign:"center",
@@ -103,17 +91,18 @@ const styles = StyleSheet.create({
     height: 400,
   },
   button: {
-    //width: '100%',
+    //width: '80%',
     paddingVertical: 16,
   },
   buttonText: {
     color: '#f2f2f2',
   },
   description: {
-        textAlign: 'center',
+        //textAlign: 'center',
         fontSize: 16,
         lineHeight: 24,
         paddingHorizontal: 20,
         marginVertical: 20,
+        maxWidth:317,
     },
 })

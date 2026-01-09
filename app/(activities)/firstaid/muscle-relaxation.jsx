@@ -312,10 +312,12 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 15,
-    textAlign: 'center',
+    //textAlign: 'center',
     color: '#666',
     marginBottom: 30,
+    marginLeft:20,
     lineHeight: 22,
+    maxWidth:310,
   },
   instructionsBox: {
     backgroundColor: '#E3F2FD',

@@ -95,7 +95,7 @@ function RootLayoutNav() {
         if (showingResults && !onResultsPage) {
           shouldNavigate = true;
           targetRoute = '/(questionnaire)/results';
-        } else if (!showingResults && (inAuthGroup || inQuestionnaireGroup)) {
+        } else if (!showingResults && (inAuthGroup || inQuestionnaireGroup) && !onResultsPage) {
           shouldNavigate = true;
           targetRoute = '/(dashboard)';
         }
