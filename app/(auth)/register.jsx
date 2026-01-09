@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: RD.wp(3),
-        marginTop:RD.wp(1),
+        marginTop:RD.wp(2),
         marginBottom:RD.wp(0.5),
         borderColor:Colors.primary,
         borderWidth: 1,

@@ -284,6 +284,7 @@ const Login = () => {
                             <ThemedText style={styles.orText}>{t('auth.loginWith')}</ThemedText>
                             <View style={styles.orLine} />
                         </View>
+
                         
                         {/* Social Login */}
                         <View style={styles.socialContainer}>
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: RD.wp(3),
-        marginTop:RD.wp(1),
+        marginTop:RD.wp(2),
         marginBottom:RD.wp(0.5),
         borderColor:Colors.primary,
         borderWidth: 1,
@@ -488,7 +489,7 @@ const styles = StyleSheet.create({
     registerLink: {
         fontSize: 14,
         color: Colors.primary,
-        marginLeft: 4,
+        padding:5,
     },
     socialContainer: {
         flexDirection: 'row',
