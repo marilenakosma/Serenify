@@ -783,7 +783,13 @@ logout: async () => {
 checkAuth: async () => {
     const authData = getItem("authData");
     if (authData?.isAuthenticated && authData.userId) {
-      set(authData);
+      const today = new Date().toISOString().split('T')[0];
+      const moodIsFromToday = authData.moodHistory?.[today];
+      
+      set({
+        ...authData,
+        todayMood: moodIsFromToday ? authData.moodHistory[today] : null
+      });
 
       const { ensureAuth } = require('../app/services/firebaseService');
       
