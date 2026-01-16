@@ -134,7 +134,7 @@
       "maintainingBalance": "Staying Consistent",
       "generalWellness": "Building Healthy Habits"
     },
-    "hello": "Hello, {{username}}!",
+    "hello": "Hello, {{displayName}}!",
     "yourHabits": "Your Habits",
     "recommendedForYou": "Recommended for You",
     "moodLoggedToday": "Thanks for sharing how you feel!"

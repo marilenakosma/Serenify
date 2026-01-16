@@ -226,7 +226,7 @@ useEffect(() => {
             <View style={styles.overlay}>
               <ThemedView style={styles.moodSection}>  
                 <ThemedText style={styles.greeting}>
-                  {t('dashboard.hello', { username: user?.username || 'User' })} 
+                  {t('dashboard.hello', { displayName: user?.displayName || user?.username || 'User' })} 
                 </ThemedText>
                 <ThemedText title={true} style={styles.moodTitle}>
                  {getMoodGreeting()} 

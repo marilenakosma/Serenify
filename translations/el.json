@@ -134,7 +134,7 @@
       "maintainingBalance": "Διατήρηση της συνέχειας",
       "generalWellness": "Χτίζοντας Υγιείς Συνήθειες"
     },
-    "hello": "Γεια, {{username}}!",
+    "hello": "Γεια, {{displayName}}!",
     "yourHabits": "Οι συνήθειές σας",
     "recommendedForYou": "Συνίσταται για εσάς",
     "moodLoggedToday": "Ευχαριστούμε που μοιραστήκατε πως αισθάνεστε!"
@@ -734,7 +734,7 @@
     "language": "Γλώσσα"
   },
   "questionnaire": {
-    "welcome": "Καλώς ήρθατε στο Serenify",
+    "welcome": "Καλώς ήρθατε στη Serenify",
     "welcomeBack": "Καλώς ήρθατε!",
     "description": "Χαιρόμαστε που σας βλέπουμε! Ας εξατομικεύσουμε το ταξίδι ευεξίας σας με μερικές ερωτήσεις.",
     "startQuiz": "Έναρξη Quiz",
