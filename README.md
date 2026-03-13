@@ -14,7 +14,7 @@ mental well-being through daily self-care practices.
  - Physical,breathing and meditation interactive exercises
  - Diary entries
  - A music player
- - An emergency kit with various techniques(e.g, 5-4-3-2-1)
+ - An emergency kit with different relaxation techniques(e.g, 5-4-3-2-1)
 - Bilingual support(English and Greek)
 
 ---
