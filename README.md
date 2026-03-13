@@ -1,15 +1,13 @@
 # Serenify
 
-A gamified mental health helper application for mobile devices, based on the React Native library. The app aims to support the user’s
-mental well-being through daily self-care practices. 
+A gamified mental health helper application for mobile devices, based on the React Native library. The app aims to support the user’s mental well-being through daily self-care practices. 
 
 ---
 
 ## 🚀 Features
 
 - Gamification elements(points,levels,streaks,toast messages)
-- Mood tracking 
-- Habit tracking
+- Mood and habit tracking 
 - Various activities such as:
  - Physical,breathing and meditation interactive exercises
  - Diary entries
@@ -25,19 +23,17 @@ mental well-being through daily self-care practices.
 - **Firebase** – Database Management
 - **MMKV**  – Caching (cache-first architecture)
 - **Zustand** - State Management
-- **Async Storage** - Authentication tokens(sync with Firebase)
+- **Async Storage** - Authentication tokens
 
 ---
 
+## Screenshots(Greek)
 
-### 
-![Main Menu](Serenify/assets/pictures/Screenshot_1.png)
+**Menu Screens**
+![Menu Screens](assets/pictures/collage.png)
 
-### Accomodation Page
-![Accomodation Page](TouristGuide/src/Images/AccomodationPnl.png)
+**Activity Screens**
+![Activity Screens](assets/pictures/collage2.png)
 
-### Tourist Attractions Page
-![Tourist Attractions Page](TouristGuide/src/Images/AttractionPnl.png)
-
-### Transportation Page
-![Transportation Page](TouristGuide/src/Images/TransportationPnl.png)
+**Login and Questionnaire Screens**
+![Login and Questionnaire Screense](assets/pictures/collage3.png)
