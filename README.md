@@ -9,10 +9,10 @@ A gamified mental health helper application for mobile devices, based on the Rea
 - Gamification elements(points,levels,streaks,toast messages)
 - Mood and habit tracking 
 - Various activities such as:
- - Physical,breathing and meditation interactive exercises
- - Diary entries
- - A music player
- - An emergency kit with different relaxation techniques(e.g, 5-4-3-2-1)
+  - Physical,breathing and meditation interactive exercises
+  - Diary entries
+  - A music player
+  - An emergency kit with different relaxation techniques(e.g, 5-4-3-2-1)
 - Bilingual support(English and Greek)
 
 ---
