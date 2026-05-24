@@ -103,7 +103,6 @@ Serenify/
 │   ├── Colors.js             # Calm pastel color definitions
 │   ├── habitFrequency.js     # Complex formulas for frequency, streaks, and points
 │   └── translations.js       # Localization hooks & setup
-├── diagrams/                 # UML documentation files (.puml specifications)
 ├── store/                    # Zustand global stores (authStore) & MMKV storage driver
 ├── translations/             # i18next translation resource files (en.json, el.json)
 ├── serenify-automation.ps1  # Developer setup & script runner (PowerShell)
@@ -113,7 +112,7 @@ Serenify/
 
 ---
 
-## ⚙️ Environment Configuration
+## Environment Configuration
 
 Before running the application, you must configure a local `.env` file at the root of the project containing your Firebase project variables:
 
