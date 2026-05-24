@@ -1,6 +1,6 @@
 # Serenify
 
-**Serenify** is a comprehensive mobile self-care helper designed to support users' mental well-being. Built on **React Native** and powered by **Expo**, it encourages positive daily habits, mindfulness exercises, and emotional reflections through gamified progression (points, levels, streaks, and achievements). 
+**Serenify** is a comprehensive mobile self-care helper designed to support users' mental well-being. Built on **React Native**, it encourages positive daily habits, mindfulness exercises, and emotional reflections through gamified progression (points, levels, streaks, and achievements). 
 
 
 ## Key Features
