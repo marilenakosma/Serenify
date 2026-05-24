@@ -11,7 +11,7 @@
 
 ###  2. Gamified Habit Tracking
 *   **Frequency-Aware Scheduling:** Supports habits trackable on specific days, multiple times a week, or daily.
-*   **Resilient Streaks:** Custom frequency formulas calculate streaks accurately - streaks only break if the habit’s specific interval is missed.
+*   **Resilient Streaks:** Custom frequency formulas calculate streaks accurately,streaks only break if the habit’s specific interval is missed.
 *   **Leveling System:** Gain points (+10 or category bonus) for completing activities. Every 100 points triggers a Level Up, advancing through ranks (Beginner ➔ Intermediate ➔ Advanced ➔ Master) with celebratory confetti.
 *   **Optimistic Feedback:** Screen actions register instantly on the UI, updating points and progress rings before waiting on database roundtrips.
 
