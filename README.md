@@ -31,8 +31,6 @@
 *   **5-4-3-2-1 Grounding:** A sensory-based walkthrough (seeing, feeling, hearing, smelling, tasting) to arrest active panic attacks.
 *   **Progressive Muscle Relaxation (PMR):** Guided animations and steps to release physical tension.
 *   **Worry Journal:** Write down racing worries, and physically tap to delete/destroy them—symbolizing letting go.
-*   **Count Backwards:** Focusing activity to anchor the user during sudden anxiety.
-*   **Emergency Contact Dialing:** Quick-dial shortcuts to local mental health lines.
 
 ### 6. Engineering Quality & Localisation
 *   **Cache-First Syncing:** Immediate local persistence via MMKV with asynchronous background Firestore database sync.
