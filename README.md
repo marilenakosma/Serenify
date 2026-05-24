@@ -48,8 +48,6 @@
 ---
 
 ## System Architecture
-
-Designed with a **local-first (cache) architecture**, Serenify uses ultra-fast local MMKV storage for instant page responses, syncing data to **Firebase (Firestore/Auth)** in the background.
 Serenify is structured around a clean **4-Layer Architecture** that isolates visual layouts from business logic, cloud communication, and device storage.
 
 ### Layer Diagram
