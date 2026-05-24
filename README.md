@@ -38,6 +38,12 @@
 ---
 
 ## Technologies Used
+[![React Native](https://img.shields.io/badge/React_Native-v0.81-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/) 
+[![Expo](https://img.shields.io/badge/Expo-v54-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/) 
+[![Firebase](https://img.shields.io/badge/Firebase-v12-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/) 
+[![Zustand](https://img.shields.io/badge/Zustand-v5-4F3423?style=for-the-badge&logo=react&logoColor=white)](https://github.com/pmndrs/zustand) 
+[![MMKV](https://img.shields.io/badge/MMKV-v4-1A1A1A?style=for-the-badge&logo=databricks&logoColor=white)](https://github.com/mrousavy/react-native-mmkv) 
+[![Async Storage](https://img.shields.io/badge/Async_Storage-v2-47A248?style=for-the-badge)](https://react-native-async-storage.github.io/async-storage/) 
 
 - **React Native** – UI components
 - **Firebase** – Database Management
