@@ -88,21 +88,25 @@ Serenify/
 │   ├── (dashboard)/          # Main dashboard screens (Daily index, Profile, Habits, Activities hub)
 │   ├── (activities)/         # Interactive exercises (Kindness logger, Breathing, Soundscapes)
 │   │   └── firstaid/         # Emergency interventions (Grounding, Muscle relaxation, Worry journal)
+│   │
 │   ├── (questionnaire)/      # Initial diagnostic onboarding flow & results analysis
 │   ├── (modals)/             # Full-screen dialogs (Add habits, Habit frequencies, Stats, Points history)
 │   ├── config/               # Firebase app/auth initialization
 │   ├── services/             # firebaseService.js (Firestore & Google Sign-In wrapper)
 │   └── utils/                # customAlert.js utility wrapper
+│
 ├── assets/                   # Static resources
 │   ├── animations/           # Lottie animations for celebrations, breathing, & grounding
 │   ├── pictures/             # Application screenshot collages & visual assets
 │   ├── sounds/               # Audio files for soundscapes & meditation
 │   └── fonts/                # Custom brand typography
+│
 ├── components/               # Reusable styled UI elements (DailySummary, RadarChart, ProgressRing, Themed UI)
 ├── constants/                # App constants & business rules
 │   ├── Colors.js             # Calm pastel color definitions
 │   ├── habitFrequency.js     # Complex formulas for frequency, streaks, and points
 │   └── translations.js       # Localization hooks & setup
+│
 ├── store/                    # Zustand global stores (authStore) & MMKV storage driver
 ├── translations/             # i18next translation resource files (en.json, el.json)
 ├── serenify-automation.ps1  # Developer setup & script runner (PowerShell)
