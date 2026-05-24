@@ -17,7 +17,6 @@
 
 ### 3. Daily Mood Logging
 *   **Expressive Mood Picker:** Log how you feel with dynamic emotion tags.
-*   **Analytics Visualizations:** Interactive **Radar Charts** map dimensions of wellness (Energy, Stress, Mood patterns) over time to help users spot habits-to-mood correlations.
 
 ### 4. Interactive Wellness Hub
 *   **Paced Breathing:** Animated breathe-in/breathe-out guiding layouts to reduce anxiety.
