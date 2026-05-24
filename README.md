@@ -60,7 +60,7 @@ Serenify is structured around a clean **4-Layer Architecture** that isolates vis
 ```mermaid
 graph TD
   subgraph Presentation Layer [Presentation Layer: React Native & Expo]
-    A[Screen View Templates] -->|Renders| B[Themed Components: RadarChart, PointsToast, DailySummary]
+    A[Screen View Templates] -->|Renders| B[Themed Components: PointsToast, DailySummary]
   end
 
   subgraph State Layer [State Management Layer: Zustand]
